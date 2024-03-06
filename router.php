@@ -13,7 +13,7 @@ class Router
         if($currentMethod != $method ){
             require $filename;
         }
-        // $root = $_ENV['PROXY_ADDRESS'];
+        // $root = getenv('PROXY_ADDRESS');
         $root = "/Master";
         $pattern = '#^'.$root.$path.'$#sD';
         if(preg_match($pattern, $currentUri)){

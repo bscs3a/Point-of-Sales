@@ -4,5 +4,6 @@
 // php -r "require 'public\finance\functions\functionTesting.php';"  
 
     require_once "assets/foo.php";
-    echo BoughtInventory(); //change this to the function you want to test
+
+    echo "hello";
 ?>

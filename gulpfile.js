@@ -8,7 +8,9 @@ var directories = ['admin', 'delivery', 'finance', 'humanResources', 'inventory'
 // Static server
 gulp.task('serve', function() {
     browserSync.init({
+
         // proxy: 'localhost/' + process.env.PROXY_ADDRESS,
+
         proxy: 'localhost/master',
         browser: "brave",
         middleware: function (req, res, next) {
