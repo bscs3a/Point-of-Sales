@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
     <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
         .sidebar-open {
             grid-template-columns: 1fr 300px;
         }
@@ -90,7 +93,7 @@
                 </div>
                 <div class=" right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200" x-show="!sidebarOpen">
                     <div class="flex items-center">
-                        <button type="button" @click="sidebarOpen = !sidebarOpen; cartOpen = !cartOpen" class="items-center flex bg-gray-200  py-2 w-full justify-between">
+                        <button type="button" @click="sidebarOpen = !sidebarOpen; cartOpen = !cartOpen" class="items-center flex bg-gray-200 hover:bg-gray-300 hover:px-3 transition-all ease-in-out hover:font-bold  py-2 w-full justify-between">
                             <i class="ri-arrow-left-s-line ml-5 mr-5 text-xl"></i>
                             <div class="border-r border-gray-400 h-6"></div>
                             <div class="px-5">
@@ -107,7 +110,7 @@
                 <div>
                     <div class="text-xl font-bold divide-y ml-3">Most Sold</div>
                     <hr class="w-full border-gray-300 my-2"> <!-- Horizontal line -->
-                    <div :class="cartOpen ? 'grid grid-cols-5 gap-4' : 'grid grid-cols-6 gap-4'">
+                    <div :class="cartOpen ? 'grid grid-cols-4 gap-4' : 'grid grid-cols-6 gap-4'">
                         <div class="w-52 h-70 p-6 flex flex-col items-center border rounded-lg border-solid border-gray-300 shadow-lg">
                             <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
                                 <!-- SVG icon -->
@@ -240,7 +243,7 @@
             </div>
 
             <!-- Sidebar -->
-            <div class="fixed right-0 top-10 w-96 overflow-auto sidebar rounded-l-lg border-2 border-gray-300 bg-white shadow" style="height: 94vh;" x-show="sidebarOpen">
+            <div class="fixed right-0 top-12 w-96 overflow-auto sidebar rounded-l-lg border-2 border-gray-300 bg-white shadow" style="height: 94vh;" x-show="sidebarOpen">
                 <!-- Close Sidebar Button -->
                 <div @click="sidebarOpen = false; cartOpen = !cartOpen" class="flex items-center py-2 text-black no-underline bg-gray-200 border-b border-gray-300 cursor-pointer">
                     <i class="ri-arrow-right-s-line text-xl ml-5 mr-5"></i>

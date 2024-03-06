@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
     <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
         .sidebar-open {
             grid-template-columns: 1fr 300px;
         }
@@ -90,7 +94,7 @@
                 </div>
                 <div class=" right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200" x-show="!sidebarOpen">
                     <div class="flex items-center">
-                        <button type="button" @click="sidebarOpen = !sidebarOpen; cartOpen = !cartOpen" class="items-center flex bg-gray-200  py-2 w-full justify-between">
+                        <button type="button" @click="sidebarOpen = !sidebarOpen; cartOpen = !cartOpen" class="items-center flex bg-gray-200   hover:bg-gray-300 hover:px-3 transition-all ease-in-out hover:font-bold  py-2 w-full justify-between">
                             <i class="ri-arrow-left-s-line ml-5 mr-5 text-xl"></i>
                             <div class="border-r border-gray-400 h-6"></div>
                             <div class="px-5">

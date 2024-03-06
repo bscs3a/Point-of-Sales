@@ -723,6 +723,34 @@ video {
   top: 1.5rem;
 }
 
+.top-20{
+  top: 5rem;
+}
+
+.top-16{
+  top: 4rem;
+}
+
+.top-24{
+  top: 6rem;
+}
+
+.top-\[200px\]{
+  top: 200px;
+}
+
+.top-\[100px\]{
+  top: 100px;
+}
+
+.top-\[80px\]{
+  top: 80px;
+}
+
+.top-12{
+  top: 3rem;
+}
+
 .isolate{
   isolation: isolate;
 }
@@ -906,14 +934,6 @@ video {
 
 .mt-6{
   margin-top: 1.5rem;
-}
-
-.ml-0{
-  margin-left: 0px;
-}
-
-.ml-64{
-  margin-left: 16rem;
 }
 
 .box-border{
@@ -1119,10 +1139,6 @@ video {
   width: 100%;
 }
 
-.w-\[calc\(100\%-256px\)\]{
-  width: calc(100% - 256px);
-}
-
 .min-w-full{
   min-width: 100%;
 }
@@ -1195,8 +1211,28 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.translate-x-0{
-  --tw-translate-x: 0px;
+.translate-x-6{
+  --tw-translate-x: 1.5rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-x-6{
+  --tw-translate-x: -1.5rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-x-8{
+  --tw-translate-x: -2rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-x-4{
+  --tw-translate-x: -1rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-x-2{
+  --tw-translate-x: -0.5rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -2326,6 +2362,11 @@ video {
   background-color: rgb(161 98 7 / var(--tw-bg-opacity));
 }
 
+.bg-gray-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-30{
   --tw-bg-opacity: 0.3;
 }
@@ -3206,6 +3247,21 @@ video {
   }
 }
 
+.hover\:translate-x-1:hover{
+  --tw-translate-x: 0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:-translate-x-1:hover{
+  --tw-translate-x: -0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:border-gray-500:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
+}
+
 .hover\:bg-amber-300:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(252 211 77 / var(--tw-bg-opacity));
@@ -3234,6 +3290,21 @@ video {
 .hover\:bg-slate-400:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(148 163 184 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-gray-500:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+
+.hover\:py-3:hover{
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.hover\:px-3:hover{
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .hover\:font-bold:hover{
@@ -3293,24 +3364,8 @@ video {
     grid-column: span 2 / span 2;
   }
 
-  .md\:ml-0{
-    margin-left: 0px;
-  }
-
   .md\:ml-64{
     margin-left: 16rem;
-  }
-
-  .md\:ml-10{
-    margin-left: 2.5rem;
-  }
-
-  .md\:ml-14{
-    margin-left: 3.5rem;
-  }
-
-  .md\:ml-16{
-    margin-left: 4rem;
   }
 
   .md\:hidden{
@@ -3335,10 +3390,6 @@ video {
 
   .md\:grid-rows-2{
     grid-template-rows: repeat(2, minmax(0, 1fr));
-  }
-
-  .md\:pl-64{
-    padding-left: 16rem;
   }
 }
 
