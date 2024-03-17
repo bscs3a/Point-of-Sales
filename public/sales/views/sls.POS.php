@@ -163,10 +163,10 @@
                 });
             </script>
 
-            <div class="right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200">
+            <div class="right-0 fixed flex items-center border-2 rounded-l-md bg-gray-200">
                 <div class="flex items-center">
                     <!-- Button to toggle the cart view -->
-                    <button type="button" @click="if (sidebarOpen) { sidebarOpen = false; cartOpen = !cartOpen; } else { cartOpen = !cartOpen; }" x-show="!cartOpen" class="items-center flex bg-gray-200 py-2 w-full justify-between sidebar-toggle2 hover:bg-gray-300 ease-in-out transition">
+                    <button type="button" @click="if (sidebarOpen) { sidebarOpen = false; cartOpen = !cartOpen; } else { cartOpen = !cartOpen; }" x-show="!cartOpen" class="items-center flex bg-gray-200 border-gray-300 border py-2 w-full justify-between sidebar-toggle2 hover:bg-green-800 hover:border-white hover:text-white hover:font-bold ease-in-out transition-all">
                         <!-- Icon indicating going back to the previous view -->
                         <i class="ri-arrow-left-s-line ml-5 mr-5 text-xl"></i>
                         <!-- Vertical separator line -->
@@ -187,7 +187,7 @@
         <!-- Cart -->
         <div id="cart" x-show="cartOpen" class="fixed right-0 top-10 w-96 overflow-auto rounded-l-lg border-2 border-gray-300 bg-white shadow" x-bind:style="isFullScreen ? 'height: 94vh;' : 'height: 88vh;'" :class="{ '': isFullScreen, 'mt-12': !isFullScreen }">
             <!-- Close Sidebar Button -->
-            <div @click="sidebarOpen = false; cartOpen = !cartOpen" class="flex items-center py-2 text-black no-underline bg-gray-200 border-b hover:bg-gray-300 border-gray-300 cursor-pointer">
+            <div @click="sidebarOpen = false; cartOpen = !cartOpen" class="flex items-center py-2 text-black no-underline bg-gray-200 border-b hover:bg-green-800 hover:text-white border-gray-300 cursor-pointer">
                 <i class="ri-arrow-right-s-line text-xl ml-5 mr-5"></i>
                 <div class="border-r border-gray-400 h-6"></div>
                 <div class="mx-3">
