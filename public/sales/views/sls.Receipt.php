@@ -82,7 +82,7 @@
                     </div>
 
                     <div class="p-10">
-                    <ul id="cart-items">
+                    <ul id="cart-items" class="">
                         <!-- Cart items will be added here by JavaScript -->
                     </ul>
 
