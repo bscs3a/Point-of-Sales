@@ -93,7 +93,7 @@
                         </ul>
                     </div>
                     <div class="relative w-full">
-                        <input type="search" id="search-dropdown" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Hardware, Tools, Supplies..." required /> <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                        <input type="search" id="search-dropdown" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Hardware, Tools, Supplies..." required /> <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-green-800 rounded-e-lg border border-green-800 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-blue-300">
                             <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
@@ -134,7 +134,7 @@
                 <div id="grid" x-bind:class="cartOpen ? 'grid grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? 'grid grid-cols-6 gap-4' : (!cartOpen && !sidebarOpen) ? 'grid grid-cols-6 gap-4' : 'grid grid-cols-5 gap-4'">
                     <?php foreach ($products as $product) : ?>
                         <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
-                            <div class="w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg">
+                            <button data-open-modal class="w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out">
                                 <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
                                     <!-- SVG icon -->
                                 </div>
@@ -143,12 +143,71 @@
                                 <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
                                 <div class="mt-6 text-lg font-semibold text-gray-700"><?= $product['Price'] ?></div>
                                 <div class="text-gray-500 text-sm">Stocks: <?= $product['Quantity'] ?></div>
-                            </div>
+                          </button>
+
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
             <?php endforeach; ?>
         </div>
+
+            <!-- MODAL SECTION -->
+            <dialog data-modal class="rounded-lg shadow-xl  w-1/4 max-h-full">
+            <div class="w-full bg-green-800 h-10 flex justify-end items-center">     
+         <button data-close-modal> <i class="ri-close-fill text-2xl font-bold text-white p-2"></i></button>        
+            </div>
+     
+                <div class="relative p-4">
+         
+                 <div class="relative bg-white">
+                    <div class="flex justify-center">
+                 <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4"></div>
+                 </div>
+                <div class="flex justify-between pt-4">
+
+                     <h3 class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800">Nose Pliers</h3>
+                    <h3 class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800">Php123</h3>
+                    
+                </div>
+
+                <div class="text-justify ">
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda quo obcaecati unde perspiciatis voluptatibus exercitationem esse, culpa et? Nostrum aperiam repudiandae suscipit praesentium. Vitae placeat in blanditiis commodi ab amet.
+                </div>
+                
+                <div class="flex justify-between pt-6">
+                        <h3 class="pt-3 text-xl text-gray-500 font-medium">Stocks : 123</h3>
+                        <button class="p-3 border border-green-900 bg-green-800 text-white rounded-lg font-medium">Add to Cart</button>
+                </div>
+
+
+
+                </div>
+                </div>
+                    </dialog>
+
+
+                <!-- MODAL SCRIPT -->
+                <script>
+                    const openButtons = document.querySelector('[data-open-modal]');
+                    const closeButtons = document.querySelector('[data-close-modal]');
+                    const closeButton2 = document.querySelector('[data-close-modal2]');
+                    const modal = document.querySelector('[data-modal]');
+
+                    openButtons.addEventListener('click', () => {
+                        modal.showModal();
+                    });
+
+                    closeButtons.addEventListener('click', () => {
+                        modal.close();
+                    });
+
+                    closeButton2.addEventListener('click', () => {
+                        modal.close();
+                    });
+                </script>
+
+            </div>
+
 
 
     </main>
