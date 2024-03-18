@@ -104,7 +104,7 @@
                     </div>
 
 
-                    <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 w-1/2 h-full">
+                    <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 w-1/2 h-full mb-10">
                         <form action="/addSales" method="POST" onsubmit="clearCart()">
                             <div class="font-medium text-xl mb-4 text-gray-500 border-b pb-2">Shipping Information</div>
                             <!-- Form for delivery address and date -->
@@ -130,30 +130,42 @@
                                 <label class="block mb-2 font-semibold">Delivery or Pick-up:</label>
                                 <select name="SalePreference" id="SalePreference" class="cursor-pointer w-full p-2 border border-gray-300 rounded" onchange="toggleSaleDetails(this.value)">
                                     <option value="delivery">Delivery</option>
-                                    <option value="pick-up">Pick-up</option>
+                                    <option value="pick-up" selected>Pick-up</option>
                                 </select>
                             </div>
 
                             <div id="sale-details">
                                 <label for="address" class="block mb-2">Delivery Address:</label>
-                                <input type="text" id="address" name="address" class="w-full p-2 border border-gray-300 rounded mb-4">
+                                <input type="text" id="deliveryAddress" name="deliveryAddress" class="w-full p-2 border border-gray-300 rounded mb-4">
 
                                 <label for="deliveryDate" class="block mb-2">Delivery Date:</label>
                                 <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>">
                             </div>
 
                             <script>
+                                // Get cart from local storage
+                                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+                                // Check if any product requires delivery
+                                const deliveryRequired = cart.some(item => item.deliveryRequired === 'Yes');
+
+                                const salePreference = document.getElementById('SalePreference');
+                                if (deliveryRequired) {
+                                    salePreference.value = 'delivery';
+                                    const pickupOption = salePreference.querySelector('option[value="pick-up"]');
+                                    pickupOption.disabled = true;
+                                } else {
+                                    salePreference.value = 'pick-up';
+                                }
+                                toggleSaleDetails(salePreference.value);
+
                                 function toggleSaleDetails(salePreference) {
-                                    const addressInput = document.getElementById('address');
-                                    const deliveryDateInput = document.getElementById('deliveryDate');
+                                    const saleDetails = document.getElementById('sale-details');
 
                                     if (salePreference == 'delivery') {
-                                        addressInput.required = true;
-                                        deliveryDateInput.required = true;
+                                        saleDetails.style.display = 'block';
                                     } else {
-                                        addressInput.required = false;
-                                        deliveryDateInput.required = false;
-                                        deliveryDateInput.value = '';
+                                        saleDetails.style.display = 'none';
                                     }
                                 }
 
@@ -218,13 +230,6 @@
                             <button type="submit" value="Submit" class="bg-green-800 text-white rounded px-4 py-2 mt-4 w-full hover:bg-gray-200 hover:text-green-800 hover:font-bold transition-colors ease-in-out">Complete Sale</button>
                         </form>
 
-                        <!-- <script>
-                            function clearCart() {
-                                // Clear the cart in localStorage
-                                localStorage.removeItem('cart');
-                            }
-                        </script> -->
-
                     </div>
                 </div>
             </div>
@@ -242,30 +247,24 @@
 
             // Set the value of the hidden input field
             document.getElementById('totalAmount').value = totalAmount.toFixed(2);
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Get the cart from localStorage
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             // Set the value of the hidden input field
             document.getElementById('cartData').value = JSON.stringify(cart);
-        });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            window.cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            // Ensure cart items are properly displayed in the HTML
+            // Assign the cart to a global variable
+            window.cart = cart;
         });
 
         window.onload = function() {
+            // Get the delivery option select element
             var deliveryOption = document.getElementById('SalePreference');
+            // Get the delivery details element
             var deliveryDetails = document.getElementById('sale-details');
 
+            // Add an event listener for the change event
             deliveryOption.addEventListener('change', function() {
+                // If the selected value is 'delivery', show the delivery details
+                // Otherwise, hide the delivery details
                 if (this.value === 'delivery') {
                     deliveryDetails.style.display = 'block';
                 } else {
@@ -273,10 +272,15 @@
                 }
             });
 
+            // Get the payment option select element
             var paymentOption = document.getElementById('payment-mode');
+            // Get the payment details element
             var paymentDetails = document.getElementById('payment-details');
 
+            // Add an event listener for the change event
             paymentOption.addEventListener('change', function() {
+                // If the selected value is 'card', show the payment details
+                // Otherwise, hide the payment details
                 if (this.value === 'card') {
                     paymentDetails.style.display = 'block';
                 } else {
@@ -284,13 +288,15 @@
                 }
             });
         };
-    </script>
 
-    <script>
+        // Add an event listener for the click event
         document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            // Toggle the hidden, transform, and -translate-x-full classes
             document.getElementById('sidebar-menu').classList.toggle('hidden');
             document.getElementById('sidebar-menu').classList.toggle('transform');
             document.getElementById('sidebar-menu').classList.toggle('-translate-x-full');
+
+            // Toggle the md:w-full and md:ml-64 classes
             document.getElementById('mainContent').classList.toggle('md:w-full');
             document.getElementById('mainContent').classList.toggle('md:ml-64');
         });

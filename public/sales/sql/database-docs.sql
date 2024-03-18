@@ -4,9 +4,9 @@ CREATE TABLE IF NOT EXISTS Products (
     ProductName VARCHAR(255),
     Description TEXT,
     Category VARCHAR(100),
-    Size VARCHAR(50),
+    DeliveryRequired ENUM('Yes', 'No') DEFAULT 'No',
     Price DECIMAL(10, 2),
-    Quantity INT,
+    Stocks INT,
     TaxRate DECIMAL(5, 2) DEFAULT 0 
 );
 
@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS Customers (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(100),
     LastName VARCHAR(100),
-    Address TEXT,
     Phone VARCHAR(20),
     Email VARCHAR(100)
 );
@@ -35,7 +34,6 @@ CREATE TABLE IF NOT EXISTS Sales (
     SaleID INT AUTO_INCREMENT PRIMARY KEY,
     SaleDate DATETIME,
     SalePreference ENUM('Delivery', 'Pick-up'),
-    DeliveryDate DATE, 
     PaymentMode ENUM('Cash', 'Card'),
     CardNumber VARCHAR(16),
     ExpiryDate TEXT,
@@ -57,6 +55,34 @@ CREATE TABLE IF NOT EXISTS SaleDetails (
     FOREIGN KEY (SaleID) REFERENCES Sales(SaleID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
+
+-- DeliveryOrders Table
+CREATE TABLE IF NOT EXISTS DeliveryOrders (
+    DeliveryOrderID INT AUTO_INCREMENT PRIMARY KEY,
+    SaleID INT,  
+    ProductID INT,
+    Quantity INT,
+    DeliveryAddress TEXT,
+    DeliveryDate DATE,
+    ReceivedDate DATE,  
+    DeliveryStatus ENUM('Pending', 'In Transit', 'Delivered') DEFAULT 'Pending',
+    FOREIGN KEY (SaleID) REFERENCES Sales(SaleID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+-- Inserting sample data into Products table
+INSERT INTO Products (ProductName, Description, Category, DeliveryRequired, Price, Stocks, TaxRate) 
+VALUES 
+    ('Hammer', 'Heavy-duty hammer for construction work', 'Tools', 'No', 299.00, 50, 0.12),
+    ('Screwdriver Set', 'Set of 6 screwdrivers with various sizes', 'Tools', 'No', 199.00, 30, 0.12),
+    ('Cement', 'Portland cement for construction purposes', 'Building Materials', 'Yes', 220.00, 100, 0.12),
+    ('Gravel', 'Crushed stone for construction projects', 'Building Materials', 'Yes', 500.00, 50, 0.12),
+    ('Paint Brush Set', 'Set of 10 paint brushes for art projects', 'Art Supplies', 'No', 99.00, 20, 0.12),
+    ('Safety Helmet', 'Hard hat helmet for construction safety', 'Safety Gear', 'No', 150.00, 40, 0.12),
+    ('Drill Machine', 'Cordless drill machine with rechargeable batteries', 'Tools', 'No', 599.00, 15, 0.12),
+    ('Plywood', 'Plywood sheets for carpentry and construction', 'Building Materials', 'Yes', 600.00, 30, 0.12),
+    ('Steel Bar', 'Deformed steel bars for reinforcement in concrete construction', 'Building Materials', 'Yes', 50.00, 200, 0.12),
+    ('Paint Thinner', 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'Paints and Chemicals', 'No', 150.00, 50, 0.12);
 
 
 INSERT INTO `products` (`ProductID`, `ProductName`, `Description`, `Category`, `Size`, `Price`, `Quantity`) VALUES
@@ -85,3 +111,5 @@ INSERT INTO `products` (`ProductID`, `ProductName`, `Description`, `Category`, `
 (23, 'Acrylic Paint Set', 'Set of 6 acrylic paint tubes for painting projects', 'Paints and Chemicals', '', 399.00, 30),
 (24, 'Brush Cleaner', 'Solvent for cleaning paint brushes and other painting tools', 'Paints and Chemicals', '', 249.00, 20),
 (25, 'Paint Tray', 'Paint tray for holding paint during painting tasks', 'Paints and Chemicals', '', 99.00, 40);
+
+

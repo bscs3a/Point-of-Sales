@@ -34,7 +34,7 @@
 
         <!-- receipt -->
         <div class="flex flex-col items-center min-h-screen">
-            <div class="w-1/2 mt-10">
+            <div class="w-1/2 mt-10 mb-10">
 
                 <!-- Add receipt details here -->
                 <div id="receipt" class="bg-white rounded-xl shadow-md">

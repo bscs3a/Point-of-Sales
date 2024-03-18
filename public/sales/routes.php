@@ -10,100 +10,116 @@ $sls = [
     '/sls/Transaction-Details' => "$path/sls.TransactionDetails.php",
     '/sls/Dashboard' => "$path/sls.Dashboard.php",
     '/sls/POS' => "$path/sls.POS.php",
+    '/sls/POS2' => "$path/sls.POS2.php",
     '/sls/POS/Checkout' => "$path/sls.checkout.php",
     '/sls/POS/Receipt' => "$path/sls.Receipt.php",
     '/sls/Audit-Trail' => "$path/sls.AuditTrail.php",
     // ... other routes ...
 ];
-Router::post('/addSales', function () {
-    // Get database instance and connection
-    $db = Database::getInstance();
-    $conn = $db->connect();
 
-    // Get form data
-    $customerFirstName = $_POST['customerFirstName'];
-    $customerLastName = $_POST['customerLastName'];
-    $customerEmail = $_POST['customerEmail'];
-    $customerPhone = $_POST['customerPhone'];
-    $address = $_POST['address'];
-    $saleDate = date('Y-m-d H:i:s');
-    $salePreference = $_POST['SalePreference'];
-    $deliveryOption = $_POST['delivery-option'];
-    $deliveryDate = $_POST['deliveryDate'];
-    $paymentMode = $_POST['payment-mode'];
-    $cardNumber = $_POST['cardNumber'];
-    $expiryDate = $_POST['expiryDate'];
-    $cvv = $_POST['cvv'];
-    $totalAmount = $_POST['totalAmount'];
 
-    // Prepare SQL statement to insert customer data
-    $stmt = $conn->prepare("INSERT INTO Customers (FirstName, LastName, Address, Phone, Email) VALUES (:firstName, :lastName, :address, :phone, :email)");
 
-    // Bind parameters
-    $stmt->bindParam(':firstName', $customerFirstName);
-    $stmt->bindParam(':lastName', $customerLastName);
-    $stmt->bindParam(':phone', $customerPhone);
-    $stmt->bindParam(':email', $customerEmail);
+// START: Add Sales
+class Customer {
+    public function create($firstName, $lastName, $phone, $email) {
+        $db = Database::getInstance();
+        $conn = $db->connect();
 
-    // Conditionally bind Address
-    if ($salePreference == 'delivery') {
-        $stmt->bindParam(':address', $address);
-    } else {
-        $emptyAddress = '';
-        $stmt->bindParam(':address', $emptyAddress);
-    }
-
-    // Execute the SQL statement
-    $stmt->execute();
-
-    // Get the last inserted customer ID
-    $customerId = $conn->lastInsertId();
-
-    // Prepare SQL statement to insert sale data
-    $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, DeliveryDate, SalePreference, PaymentMode, TotalAmount, EmployeeID, CustomerID, CardNumber, ExpiryDate, CVV) VALUES (:saleDate, :deliveryDate, :salePreference, :paymentMode, :totalAmount, :employeeId, :customerId, :cardNumber, :expiryDate, :cvv)");
-    $stmt->bindParam(':saleDate', $saleDate);
-    $stmt->bindParam(':deliveryDate', $deliveryDate);
-    $stmt->bindParam(':salePreference', $salePreference);
-    $stmt->bindParam(':paymentMode', $paymentMode);
-    $stmt->bindParam(':totalAmount', $totalAmount); // Bind the total amount from the form data
-    $stmt->bindParam(':employeeId', $employeeId); // You need to get this
-    $stmt->bindParam(':customerId', $customerId);
-    $stmt->bindParam(':cardNumber', $cardNumber);
-    $stmt->bindParam(':expiryDate', $expiryDate);
-    $stmt->bindParam(':cvv', $cvv);
-    $stmt->execute();
-
-    // Get the last inserted sale ID
-    $saleId = $conn->lastInsertId();
-
-    // Get the cart data from the form data
-    $cartData = $_POST['cartData'];
-
-    // Decode the cart data
-    $cart = json_decode($cartData, true);
-
-    // Prepare the SQL statement to insert sale details
-    $stmt = $conn->prepare("INSERT INTO SaleDetails (SaleID, ProductID, Quantity, UnitPrice) VALUES (:saleId, :productId, :quantity, :unitPrice)");
-
-    // Bind the SaleID parameter
-    $stmt->bindParam(':saleId', $saleId);
-
-    // Loop through the cart and insert each item
-    foreach ($cart as $item) {
-        // Bind the product ID, quantity, and unit price
-        $stmt->bindParam(':productId', $item['id']);
-        $stmt->bindParam(':quantity', $item['quantity']);
-        $stmt->bindParam(':unitPrice', $item['price']);
-
-        // Execute the SQL statement
+        $stmt = $conn->prepare("INSERT INTO Customers (FirstName, LastName, Phone, Email) VALUES (:firstName, :lastName, :phone, :email)");
+        $stmt->bindParam(':firstName', $firstName);
+        $stmt->bindParam(':lastName', $lastName);
+        $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
+
+        return $conn->lastInsertId();
+    }
+}
+
+class Sale {
+    public function create($saleDate, $salePreference, $paymentMode, $totalAmount, $employeeId, $customerId, $cardNumber, $expiryDate, $cvv) {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, CustomerID, CardNumber, ExpiryDate, CVV) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :customerId, :cardNumber, :expiryDate, :cvv)");
+        $stmt->bindParam(':saleDate', $saleDate);
+        $stmt->bindParam(':salePreference', $salePreference);
+        $stmt->bindParam(':paymentMode', $paymentMode);
+        $stmt->bindParam(':totalAmount', $totalAmount);
+        $stmt->bindParam(':customerId', $customerId);
+        $stmt->bindParam(':cardNumber', $cardNumber);
+        $stmt->bindParam(':expiryDate', $expiryDate);
+        $stmt->bindParam(':cvv', $cvv);
+        $stmt->execute();
+
+        return $conn->lastInsertId();
+    }
+}
+
+class SaleDetail {
+    public function create($saleId, $productId, $quantity, $unitPrice) {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("INSERT INTO SaleDetails (SaleID, ProductID, Quantity, UnitPrice) VALUES (:saleId, :productId, :quantity, :unitPrice)");
+        $stmt->bindParam(':saleId', $saleId);
+        $stmt->bindParam(':productId', $productId);
+        $stmt->bindParam(':quantity', $quantity);
+        $stmt->bindParam(':unitPrice', $unitPrice);
+        $stmt->execute();
+    }
+}
+
+class DeliveryOrder {
+    public function create($saleId, $productId, $quantity, $deliveryAddress, $deliveryDate) {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("INSERT INTO DeliveryOrders (SaleID, ProductID, Quantity, DeliveryAddress, DeliveryDate, DeliveryStatus) VALUES (:saleId, :productId, :quantity, :deliveryAddress, :deliveryDate, 'Pending')");
+        $stmt->bindParam(':saleId', $saleId);
+        $stmt->bindParam(':productId', $productId);
+        $stmt->bindParam(':quantity', $quantity);
+        $stmt->bindParam(':deliveryAddress', $deliveryAddress);
+        $stmt->bindParam(':deliveryDate', $deliveryDate);
+        $stmt->execute();
+    }
+}
+
+class Product {
+    public function decreaseQuantity($productId, $quantity) {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare("UPDATE Products SET Stocks = Stocks - :quantity WHERE ProductID = :productId");
+        $stmt->bindParam(':quantity', $quantity);
+        $stmt->bindParam(':productId', $productId);
+        $stmt->execute();
+    }
+}
+
+Router::post('/addSales', function () {
+    $customer = new Customer();
+    $customerId = $customer->create($_POST['customerFirstName'], $_POST['customerLastName'], $_POST['customerPhone'], $_POST['customerEmail']);
+
+    $sale = new Sale();
+    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], '1', $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv']);
+
+    $saleDetail = new SaleDetail();
+    $deliveryOrder = new DeliveryOrder();
+    $product = new Product();
+    $cart = json_decode($_POST['cartData'], true);
+    foreach ($cart as $item) {
+        $saleDetail->create($saleId, $item['id'], $item['quantity'], $item['price']);
+        $product->decreaseQuantity($item['id'], $item['quantity']); // Decrease product quantity
+        if ($_POST['SalePreference'] === 'delivery') {
+            $deliveryOrder->create($saleId, $item['id'], $item['quantity'], $_POST['deliveryAddress'], $_POST['deliveryDate']);
+        }
     }
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-
-    // Redirect to the receipt page
     header("Location: $rootFolder/sls/POS/Receipt");
 });
+// END: Add Sales
 
 Router::post('/remove', function () {
     $db = Database::getInstance();
