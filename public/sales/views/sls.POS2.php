@@ -208,7 +208,7 @@
 
 
                 <!-- MODAL SECTION -->
-                <dialog data-modal class="rounded-lg shadow-xl">
+                <!-- <dialog data-modal class="rounded-lg shadow-xl">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white">
                             <div class="p-4 md:p-5 text-center">
@@ -223,17 +223,22 @@
                             </div>
                         </div>
                     </div>
-                </dialog>
+                </dialog> -->
 
 
                 <!-- MODAL SCRIPT -->
-                <script>
+                <!-- <script>
                     const openButtons = document.querySelector('[data-open-modal]');
+                    const openButtons2 = document.querySelector('[data-open-modal2]');
                     const closeButtons = document.querySelector('[data-close-modal]');
                     const closeButton2 = document.querySelector('[data-close-modal2]');
                     const modal = document.querySelector('[data-modal]');
 
                     openButtons.addEventListener('click', () => {
+                        modal.showModal();
+                    });
+
+                    openButtons2.addEventListener('click', () => {
                         modal.showModal();
                     });
 
@@ -244,7 +249,7 @@
                     closeButton2.addEventListener('click', () => {
                         modal.close();
                     });
-                </script>
+                </script> -->
 
             </div>
 
@@ -380,12 +385,83 @@
                 <div class="text-xl font-bold divide-y ml-3 mt-5"><?= $category ?></div>
                 <!-- Horizontal line -->
                 <hr class="w-full border-gray-300 my-2">
-                <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
+                <div id="grid" x-bind:class="cartOpen ? 'grid grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? 'grid grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? 'grid grid-cols-6 gap-4' : 'grid grid-cols-5 gap-4'">
+                    <!-- Loop through Products -->
                     <?php foreach ($products as $product) : ?>
-                        <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
-                            <button type="button" flareFire class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" @click="
+                        <?php if ($product['Category'] === $category) : ?>
+                            <button data-open-modal class="w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" data-product='<?= json_encode($product) ?>'>
+                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
+                                    <!-- SVG icon -->
+                                </div>
+                                <hr class="w-full border-gray-300 my-2">
+                                <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
+                                    <span x-text="productName"></span>
+                                </div>
+                                <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
+                                <?php
+                                // Compute the price with tax
+                                $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
+                                ?>
+                                <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
+                                <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
+                            </button>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+          <!-- Modal Section -->
+          <dialog data-modal class="rounded-lg shadow-xl  w-1/4 max-h-full">
+            <!-- Modal Header -->
+            <div class="w-full bg-green-800 h-10 flex justify-end items-center">
+                <button data-close-modal> <i class="ri-close-fill text-2xl font-bold text-white p-2"></i></button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="relative p-4">
+                <div class="relative bg-white">
+                    <?php foreach ($products as $product) : ?>
+                        <?php if ($product['Category'] === $category) : ?>
+                            <button data-open-modal class="w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" data-product='<?= json_encode($product) ?>'>
+                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
+                                    <!-- SVG icon -->
+                                </div>
+                                <hr class="w-full border-gray-300 my-2">
+                                <div id="modal-product-name" class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
+                                    <span x-text="productName"></span>
+                                </div>
+                                <div id="modal-product-category"  class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
+                                <?php
+                                // Compute the price with tax
+                                $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
+                                ?>
+                                <div id="modal-product-price" class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
+                                <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
+                                <div class="text-justify ">
+                                 <div id="modal-product-description" class="text-justify"></div>
+                                 </div>
+                            </button>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+
+                    <div class="flex justify-between pt-6">
+                        <h3 id="modal-product-stocks" class="pt-3 text-xl text-gray-500 font-medium"></h3>
+                        <button class="p-3 border border-green-900 bg-green-800 text-white rounded-lg font-medium"
+                        
+                        x-for="(item, index) in cart" :key="index"
+                        
+                        
+                        @click="
                                     if (<?= $product['Stocks'] ?> > 0) { 
-                                      addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true; 
+                                      addToCart({ id: <?= $product['ProductID'] ?>, 
+                                        name: '<?= $product['ProductName'] ?>', 
+                                        price: <?= $product['Price'] ?>, 
+                                        stocks: <?= $product['Stocks'] ?>, 
+                                        priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), 
+                                        TaxRate: <?= $product['TaxRate'] ?>, deliveryRequired: 
+                                        '<?= $product['DeliveryRequired'] ?>' }); 
+                                        cartOpen = true; 
                                     
                                         const Toast = Swal.mixin({
                                         toast: true,
@@ -408,30 +484,56 @@
                                     } else { 
                                         alert('This product is out of stock.'); 
                                     }">
+                            
+                        
+                        Add to Cart
+                    
+                    
+                    
+                    
+                    </button>
 
-                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                    <!-- SVG icon -->
-                                </div>
+                                    
 
-
-                                <!-- Horizontal line -->
-                                <hr class="w-full border-gray-300 my-2">
-                                <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
-                                    <span x-text="productName"></span>
-                                </div>
-                                <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
-                                <?php
-                                // Compute the price with tax
-                                $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
-                                ?>
-                                <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
-                                <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
-                            </button>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                    </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
+            </div>
+        </dialog>
+
+
+           <!-- Modal Script -->
+           <script>
+            const openButtons = document.querySelectorAll('[data-open-modal]');
+            const closeButtons = document.querySelector('[data-close-modal]');
+            const modal = document.querySelector('[data-modal]');
+            const modalProductName = document.getElementById('modal-product-name');
+            const modalProductPrice = document.getElementById('modal-product-price');
+            const modalProductDescription = document.getElementById('modal-product-description');
+            const modalProductCategory = document.getElementById('modal-product-category');
+            const modalProductStocks = document.getElementById('modal-product-stocks');
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const product = JSON.parse(button.dataset.product);
+                    modalProductName.textContent = product.ProductName;
+                    modalProductPrice.textContent = 'Php' + product.Price;
+                    modalProductCategory.textContent = product.Category;
+                    modalProductDescription.textContent = product.Description;
+                    modalProductStocks.textContent = 'Stocks: ' + product.Stocks + ' ' + product.UnitOfMeasurement; 
+                    modal.showModal();
+                });
+            });
+
+            closeButtons.addEventListener('click', () => {
+                modal.close();
+            });
+        </script>
+
+
+
+
+
+
     </main>
     <script src="./../src/route.js"></script>
 </body>

@@ -61,8 +61,8 @@
                         </svg>
                     </div>
                 </div>
-
-                <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg text-center">
+                <div class="flex flex-row gap-10">
+                <table class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
                     <thead class="bg-gray-200">
                         <tr>
                             <th class="px-4 py-2 font-semibold">Customer Name</th>
@@ -116,6 +116,39 @@
                         <?php endwhile; ?>
                     </tbody>
                 </table>
+
+                <div class="flex flex-col gap-4 justify-start items-start">
+        
+                    <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        
+                    
+                    <i class="ri-shake-hands-line"></i>Transaction Rates
+
+                   
+                    </div> 
+                    
+                    <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        
+                    Raw Sales
+
+                   
+                    </div>
+
+                    <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        
+                    
+                    <i class="ri-box-2-line text-lg mx-2"></i>Stocks Sold
+
+                   
+                    </div>
+
+                    
+                    
+                </div>
+                            
+
+
+                </div>
             </div>
         </div>
     </main>
