@@ -1,4 +1,5 @@
 <?php
+//testing
 $path = './public/finance/views';
 
 $basePath = "$path/fin.";
