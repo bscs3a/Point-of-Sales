@@ -430,7 +430,7 @@
                                       addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true; 
                                 
                                     } else { 
-                                        alert('This product is out of stock.'); 
+                                        showAlertBox(); 
                                     }">
 
 
