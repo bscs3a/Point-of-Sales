@@ -159,6 +159,24 @@
                         </svg>
                     </div>
                 </div>
+
+                <?php
+                // Get PDO instance
+                $database = Database::getInstance();
+                $pdo = $database->connect();
+
+                // Query for sale details
+                $sqlSaleDetails = "
+                    SELECT SaleDetails.*, Sales.SaleDate, Sales.CustomerID, Products.ProductName, Customers.FirstName, Customers.LastName 
+                    FROM SaleDetails 
+                    JOIN Sales ON SaleDetails.SaleID = Sales.SaleID 
+                    JOIN Products ON SaleDetails.ProductID = Products.ProductID 
+                    JOIN Customers ON Sales.CustomerID = Customers.CustomerID
+                ";
+                $stmtSaleDetails = $pdo->query($sqlSaleDetails);
+                $saleDetails = $stmtSaleDetails->fetchAll(PDO::FETCH_ASSOC);
+                ?>
+
                 <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
                     <thead class="bg-gray-200">
                         <tr>
@@ -170,48 +188,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border border-gray-200 bg-white">
-                            <td class="px-4 py-2 flex items-start">
-                                <img src="https://via.placeholder.com/150" alt="Product Image" class="w-20 h-20 object-cover mr-4">
-                                <div>
-                                    <div>Product Name</div>
-                                    <div>Quantity: 2</div>
-                                    <div>Price: $100</div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-2">123456</td>
-                            <td class="px-4 py-2">2022-03-01 12:00:00</td>
-                            <td class="px-4 py-2">John Doe</td>
-                            <td class="px-4 py-2">View</td>
-                        </tr>
-                        <tr class="border border-gray-200 bg-white">
-                            <td class="px-4 py-2 flex items-start">
-                                <img src="https://via.placeholder.com/150" alt="Product Image" class="w-20 h-20 object-cover mr-4">
-                                <div>
-                                    <div>Hammer</div>
-                                    <div>Quantity: 5</div>
-                                    <div>Price: $25</div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-2">123457</td>
-                            <td class="px-4 py-2">2022-03-02 14:00:00</td>
-                            <td class="px-4 py-2">Jane Doe</td>
-                            <td class="px-4 py-2">View</td>
-                        </tr>
-                        <tr class="border border-gray-200 bg-white">
-                            <td class="px-4 py-2 flex items-start">
-                                <img src="https://via.placeholder.com/150" alt="Product Image" class="w-20 h-20 object-cover mr-4">
-                                <div>
-                                    <div>Screwdriver</div>
-                                    <div>Quantity: 3</div>
-                                    <div>Price: $15</div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-2">123458</td>
-                            <td class="px-4 py-2">2022-03-03 16:00:00</td>
-                            <td class="px-4 py-2">Jim Doe</td>
-                            <td class="px-4 py-2">View</td>
-                        </tr>
+                        <?php foreach ($saleDetails as $saleDetail) : ?>
+                            <tr class="border border-gray-200 bg-white">
+                                <td class="px-4 py-2 flex items-start">
+                                    <img src="https://via.placeholder.com/150" alt="Product Image" class="w-20 h-20 object-cover mr-4">
+                                    <div>
+                                        <div><?= $saleDetail["ProductName"] ?></div>
+                                        <div>Quantity: <?= $saleDetail["Quantity"] ?></div>
+                                        <div>Price: $<?= $saleDetail["UnitPrice"] ?></div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2"><?= $saleDetail["SaleID"] ?></td>
+                                <td class="px-4 py-2"><?= date("F j, Y, g:i a", strtotime($saleDetail["SaleDate"])) ?></td>
+                                <td class="px-4 py-2"><?= $saleDetail["FirstName"] . " " . $saleDetail["LastName"] ?></td>
+                                <td class="px-4 py-2">View</td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -297,7 +289,7 @@
             document.getElementById('mainContent').classList.toggle('md:ml-64');
         });
     </script>
-    <script  src="./../src/route.js"></script>
+    <script src="./../src/route.js"></script>
 </body>
 
 </html>
