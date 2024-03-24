@@ -892,6 +892,11 @@ video {
   margin-bottom: 2rem;
 }
 
+.my-auto{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .-mb-px{
   margin-bottom: -1px;
 }
@@ -1062,6 +1067,10 @@ video {
 
 .mt-9{
   margin-top: 2.25rem;
+}
+
+.mb-8{
+  margin-bottom: 2rem;
 }
 
 .box-border{
@@ -3373,6 +3382,14 @@ video {
 
 .pt-6{
   padding-top: 1.5rem;
+}
+
+.pb-6{
+  padding-bottom: 1.5rem;
+}
+
+.pb-10{
+  padding-bottom: 2.5rem;
 }
 
 .text-left{

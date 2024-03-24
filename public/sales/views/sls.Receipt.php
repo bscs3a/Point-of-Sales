@@ -90,7 +90,7 @@
 
                 <!-- Add receipt details here -->
                 <div id="receipt" class="bg-white rounded-xl shadow-md">
-                    <div class=" bg-green-800 text-white p-10">
+                    <div class="bg-green-800 text-white p-10">
                         <!-- Display the sale details -->
                         <div class="flex justify-between">
                             <h2 class="text-6xl font-medium">Receipt</h2>
@@ -105,13 +105,29 @@
 
                     </div>
 
-                    <div class="p-10">
+                    <div class="p-8">
+                        
 
-                        <ul id="cart-items">
-                            <?php foreach ($sale_items as $item) : ?>
-                                <li><?= $item['Quantity'] ?> x <?= $item['ProductName'] ?>: ₱<?= number_format($item['TotalAmount'], 2) ?></li>
-                            <?php endforeach; ?>
-                        </ul>
+                                <table id="cart-items" class="table-auto w-full text-left">
+                                    <tr class=" text-gray-500 text-xl border-b">
+                                        <th class="pb-2">Product</th>
+                                        <th class="pb-2">Quantity</th>
+                                        <th class="px-6 pb-2">Pcs Price</th>
+                                        <th class="pb-2">Total</th>
+                                    </tr>
+                                    <?php foreach ($sale_items as $item) : ?>
+                                    <tr class="">
+                                        <td class="flex flex-row items-center pb-6 pt-4 ">
+                                        <img class="h-12 w-12 mr-6" :src="" :alt="item.name">
+                                        <?= $item['ProductName'] ?>
+                                        </td>
+                                        <td class="pt-4 pb-6"><?= $item['Quantity'] ?></td>
+                                        <td class="pt-4 pb-6 px-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                        <td class="pt-4 pb-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                
 
                         <div class="<?= $sale_preferences == 'Delivery' ? 'grid grid-cols-2' : 'grid grid-cols-1' ?> gap-6 mt-6">
                             <?php if ($sale_preferences != 'Pick-up') : ?>
@@ -133,7 +149,7 @@
                                 $tax = $subtotal * 0.12; // Assuming a tax rate of 12%
                                 ?>
 
-                                <div id="subtotal" class="flex justify-between border-b text-lg pb-4 mb-2 text-gray-400">
+                                <div id="subtotal" class="flex justify-between border-b text-lg pb-2 mb-2 text-gray-400">
                                     <span>Subtotal</span>
                                     <span>₱<?= number_format($subtotal, 2) ?></span>
                                 </div>
@@ -186,6 +202,15 @@
                 var originalContent = document.body.innerHTML;
 
                 document.body.innerHTML = receipt;
+
+                   window.onbeforeprint = function() {
+                            document.querySelector('.print-button').style.display = 'none';
+                        };
+
+                       
+                    window.onafterprint = function() {
+                        document.querySelector('.print-button').style.display = 'block';
+                        };
 
                 window.print();
 
