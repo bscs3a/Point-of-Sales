@@ -27,7 +27,7 @@
           <td class="px-6 py-4">
             <div class="text-sm">
                 <!-- THIS IS FROM EMPLOYEES TABLE -->
-              <div class="font-medium text-gray-700"><?php echo $leaveRequest['first_name'] . ' ' . $leaveRequest['middle_name'] . ' ' . $leaveRequest['last_name']; ?></div>
+                  <div class="text-sm font-medium leading-5 text-gray-900"><?php echo $leaveRequest['first_name'] . ' ' . substr($leaveRequest['middle_name'], 0, 1) . '. ' . $leaveRequest['last_name']; ?></div>
               <div class="text-gray-400"><?php echo $leaveRequest['position']; ?></div>
             </div>
           </td>
