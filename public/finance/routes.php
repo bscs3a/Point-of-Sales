@@ -1,4 +1,9 @@
 <?php
+
+$_SESSION['user'] = 'admin';
+$_SESSION['role'] = 'admin';
+$_SESSION['fullname'] = "Tagle, Aries";
+
 $path = './public/finance/views';
 
 $basePath = "$path/fin.";

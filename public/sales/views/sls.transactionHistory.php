@@ -80,8 +80,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
-
                             <!-- Fetch data from the result set -->
                             <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
                                 <?php $saleId = $row['SaleID']; ?>

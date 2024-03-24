@@ -269,7 +269,73 @@
                         <!-- Cart item rows -->
                         <template x-for="(item, index) in cart" :key="index">
                             <tr class="bg-gray-100">
-                                <td class="text-left px-3 py-2 rounded-l-lg max-w-36" x-text="item.quantity + ' x ' + item.name"></td>
+                                <td class="text-left px-3 py-2 rounded-l-lg max-w-36" 
+                                    x-data="{ editing: false, newQuantity: item.quantity }"
+                                    x-effect="newQuantity = item.quantity"
+                                    @click="editing = true"
+                                    @click.away="if (editing) {
+                                                     console.log('Old quantity:', item.quantity);
+                                                     console.log('New quantity:', newQuantity);
+
+                                                     if (newQuantity <= item.stocks) { 
+                                                        let quantity;
+                                                        if (item.quantity > newQuantity) {
+                                                            quantity = item.quantity - newQuantity;
+                                                            for (let i = 0; i < quantity; i++) {
+                                                                item.quantity--;
+                                                            }
+                                                            newQuantity = item.quantity;
+                                                            localStorage.setItem('cart', JSON.stringify(cart));
+                                                        } else {
+                                                            quantity = newQuantity - item.quantity;
+                                                            for (let i = 0; i < quantity; i++) {
+                                                                item.quantity++;
+                                                            }
+                                                            newQuantity = item.quantity;
+                                                            localStorage.setItem('cart', JSON.stringify(cart));
+                                                        }
+                                                        
+                                                    } else { 
+                                                        alert('The requested quantity exceeds available stocks.'); 
+                                                    }
+                                                    // Update the cart quantity display when the page loads
+                                                    updateCartQuantity();
+                                                }
+                                                editing = false;"
+                                    @blur="editing = false; item.quantity = newQuantity"
+                                    @keydown.enter="if (editing) {
+                                                     console.log('Old quantity:', item.quantity);
+                                                     console.log('New quantity:', newQuantity);
+
+                                                     if (newQuantity <= item.stocks) { 
+                                                        let quantity;
+                                                        if (item.quantity > newQuantity) {
+                                                            quantity = item.quantity - newQuantity;
+                                                            for (let i = 0; i < quantity; i++) {
+                                                                item.quantity--;
+                                                            }
+                                                            newQuantity = item.quantity;
+                                                            localStorage.setItem('cart', JSON.stringify(cart));
+                                                        } else {
+                                                            quantity = newQuantity - item.quantity;
+                                                            for (let i = 0; i < quantity; i++) {
+                                                                item.quantity++;
+                                                            }
+                                                            newQuantity = item.quantity;
+                                                            localStorage.setItem('cart', JSON.stringify(cart));
+                                                        }
+                                                        
+                                                    } else { 
+                                                        alert('The requested quantity exceeds available stocks.'); 
+                                                    }
+                                                    // Update the cart quantity display when the page loads
+                                                    updateCartQuantity();
+                                                }
+
+                                                editing = false;">
+                                    <span x-show="!editing" x-text="item.quantity + ' x ' + item.name"></span>
+                                    <input x-show="editing" type="number" x-model="newQuantity" min="1" step="1" x-autofocus class="w-28">
+                                </td>
                                 <td class="text-left border-l border-gray-400 pl-2 px-3 py-2" x-text="'₱' + Number(item.priceWithTax).toFixed(2)"></td>
                                 <td class="px-3 py-2 rounded-r-lg">
                                     <i class="ri-close-circle-fill cursor-pointer" @click="removeFromCart(index)"></i>
@@ -425,6 +491,7 @@
                 <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
                     <?php foreach ($products as $product) : ?>
                         <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
+                            
                             <button type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" @click="
                                     if (<?= $product['Stocks'] ?> > 0) { 
                                       addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true; 
