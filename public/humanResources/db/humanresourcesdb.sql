@@ -62,7 +62,7 @@ CREATE TABLE attendance (
     id INT(10) NOT NULL AUTO_INCREMENT,
     attendance_date DATETIME NOT NULL,
     clock_in TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    clock_out TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    clock_out TIMESTAMP,
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id)
@@ -113,9 +113,11 @@ CREATE TABLE session (
     id INT(10) NOT NULL AUTO_INCREMENT,
     username VARCHAR(30) NOT NULL UNIQUE,
     login_time TIMESTAMP DEFAULT current_timestamp(),
-    logout_time TIMESTAMP DEFAULT current_timestamp(),
+    logout_time TIMESTAMP,
     role ENUM('Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery') NOT NULL,
+    account_info_id INT(10) NOT NULL,
     PRIMARY KEY (id)
+    FOREIGN KEY (account_info_id) REFERENCES account_info (id)
 );
 
 -- EXAMPLE DATA
