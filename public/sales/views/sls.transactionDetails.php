@@ -132,7 +132,7 @@
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryAddress']; ?></span>
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryDate']; ?></span>
                             <span class="p-2 bg-gray-200 px-4 rounded-full font-bold flex flex-row items-center">
-                                <div changeColor class="bg-yellow-400 size-4 rounded-full mr-2"></div>
+                                <div changeColor class="size-4 rounded-full mr-2"></div>
                                 <?php echo $deliveryOrder['DeliveryStatus']; ?>
                             </span>
                             <span class="p-2"><?php echo $deliveryOrder['ReceivedDate']; ?></span>
