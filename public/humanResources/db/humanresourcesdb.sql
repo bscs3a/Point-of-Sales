@@ -136,3 +136,6 @@ INSERT INTO benefit_info (philhealth, sss_fund, pagibig_fund, thirteenth_month, 
 
 INSERT INTO leave_requests (type, details, start_date, end_date, status, employees_id) VALUES
 ('Sick Leave', 'Enjoy this moon necklace. I got it for you. You remind me of the moon, because it\'s always there and it\'s beautiful.', '2022-08-28 08:00:00', '2022-08-28 08:00:00', 'Pending', 1);
+
+INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, applyingForDepartment, contact_no, email, applyingForPosition) VALUES
+('https://pbs.twimg.com/profile_images/1762475736345067521/C-4MMKJQ_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', '09123456789', 'foxwriter@example.com', 'HR Coordinator');

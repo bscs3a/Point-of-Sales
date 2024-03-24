@@ -49,13 +49,13 @@
             <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-yellow-600">
             <?php echo $leaveRequest['status']; ?>
             </span>
-          </td>   
+          </td>
           <td class="px-6 py-4">
             <div class="flex justify-end gap-4">
-              <a x-data="{ tooltip: 'Delete' }" href="#">   
+              <a x-data="{ tooltip: 'Accept' }" href="#">   
                 <i class="ri-check-line"></i>     
               </a>
-              <a x-data="{ tooltip: 'Edit' }" href="#">
+              <a x-data="{ tooltip: 'Reject' }" href="#">
                 <i class="ri-close-line"></i>     
               </a>
             </div>

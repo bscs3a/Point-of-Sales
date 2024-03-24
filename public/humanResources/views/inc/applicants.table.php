@@ -47,6 +47,16 @@
             <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
               <a route="/hr/employees/profile" class="text-indigo-600 hover:text-indigo-900">View</a>
             </td>
+            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
+              <div class="flex justify-end gap-4">
+                <a x-data="{ tooltip: 'Accept' }" route="/hr/employees/add">   
+                  <i class="ri-check-line"></i>     
+                </a>
+                <a x-data="{ tooltip: 'Reject' }" href="#">
+                  <i class="ri-close-line"></i>     
+                </a>
+              </div>
+            </td>
           </tr>
           <?php endforeach; ?>
         </tbody>
