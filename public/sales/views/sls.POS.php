@@ -336,7 +336,7 @@
                                     <span x-show="!editing" x-text="item.quantity + ' x ' + item.name"></span>
                                     <input x-show="editing" type="number" x-model="newQuantity" min="1" step="1" x-autofocus class="w-28">
                                 </td>
-                                <td class="text-left border-l border-gray-400 pl-2 px-3 py-2" x-text="'₱' + Number(item.priceWithTax).toFixed(2)"></td>
+                                <td class="text-left border-l border-gray-400 pl-2 px-3 py-2" x-text="'₱' + Number(item.priceWithTax * item.quantity).toFixed(2)"></td>
                                 <td class="px-3 py-2 rounded-r-lg">
                                     <i class="ri-close-circle-fill cursor-pointer" @click="removeFromCart(index)"></i>
                                 </td>
