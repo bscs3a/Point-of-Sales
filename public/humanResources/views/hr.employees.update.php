@@ -1,5 +1,5 @@
 <?php
-  require_once './public/humanResources/func/add-employee.php';
+  // require_once './public/humanResources/func/add-employee.php';
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
   <link href="./../../src/tailwind.css" rel="stylesheet">
-  <title>New Employee</title>
+  <title>Update Employee</title>
 </head>
 <body class="text-gray-800 font-sans">
 
@@ -33,7 +33,7 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a route="/hr/employees" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Employees</a>
   <li class="text-[#151313] mr-2 font-medium">/</li>
-  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Add New</a>
+  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Update</a>
    </ul>
    <ul class="ml-auto flex items-center">
   <li class="mr-1">
@@ -64,14 +64,9 @@
       </span>
     </div>
 
-    <?php 
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        insertEmployee($_POST);
-      }
-      ?>
   <!-- Employee Information -->
   
-                            <form action= "/hr/employes/add" method="post">
+                            <form action= "/hr/employees/add" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">
@@ -118,13 +113,13 @@
     <div class="mb-4">
       <div class="flex">
         <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="birthday">
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="dateofbirth">
               Date of Birth
             </label>
             <input
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="birthday"
-              id="birthday"
+              name="dateofbirth"
+              id="dateofbirth"
               type="date"
             />
         </div>
@@ -167,10 +162,11 @@
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               id="civilstatus"
               name="civilstatus">
-              <option value="">Single</option>
-              <option value="Female">Married</option>
-              <option value="Male">Widowed</option>
-              <option value="">Divorced</option>
+              <option value="">Select Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Divorced">Divorced</option>
           </select>
           </div>
           <div class="mr-2">
@@ -212,7 +208,7 @@
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="email"
               id="email"
-              placeholder="example@gmail.com">
+              placeholder="example@example.com">
           </div>
           <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="department">
@@ -229,7 +225,6 @@
                         <option value="Human Resources">Human Resources</option>
                         <option value="Point of Sales">Point of Sales</option>
                         <option value="Finance">Finance/Accounting</option>
-                      
                       </select>
           </div>
           <div>
@@ -246,6 +241,50 @@
           </div>
         </div>
       </div>
+
+    <!-- Employee Information 5 : EMPLOYMENT INFO-->
+    <div class="flex flex-col">
+      <div class="mb-4">
+        <div class="flex">
+          <div class="mr-2">
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="dateofhire">
+              Date of Hire
+            </label>
+            <input  
+            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+            name="dateofhire"
+            id="dateofhire"
+            type="date"
+            placeholder="Date of Hire"
+          />
+          </div>
+          <div class="mr-2">
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="startdate">
+              Start of Employment
+            </label>
+            <input  
+            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+            name="startdate"
+            id="startdate"
+            type="date"
+            placeholder="Start Date"
+          />
+          </div>
+          <div>
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="enddate">
+              End of Employment
+            </label>
+            <input  
+              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              name="enddate"
+              id="enddate"
+              type="date"
+              placeholder="enddate"
+            />
+          </div>
+        </div>
+      </div>
+
                   <!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>
@@ -253,17 +292,20 @@
                 <div class="mb-4 mt-4">
                   <div class="flex">
                     <div class="mr-2">
-                        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="basesalary">
-                          Base Salary
+                        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="monthlysalary">
+                          Monthly Salary
                         </label>
                         <input
                           class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                          name="basesalary"
-                          id="basesalary"
-                          type="number"
-                          placeholder="Base Salary"
+                          name="monthlysalary"
+                          id="monthlysalary"
+                          type="text"
+                          placeholder="0.00"
+                          oninput="calculateTax()"
+                          
                         />
                     </div>
+                    <!-- TAX INFO -->
                     <div class="mr-2">
                         <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="incometax">
                           Income Tax
@@ -272,8 +314,9 @@
                           class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                           name="incometax"
                           id="incometax"
-                          type="number"
-                          placeholder="Income Tax"
+                          type="text"
+                          placeholder="0.00"
+                          readonly
                         />
                     </div>
                     <div>
@@ -285,12 +328,14 @@
                           name="withholdingtax"
                           id="withholdingtax"
                           type="number"
-                          placeholder="Withholding Tax"
+                          placeholder="0.00"
+                          readonly
                         />
                     </div>
                   </div>
                 </div>
                 <div>
+                  <!-- BENEFIT INFO -->
                   <div class="flex flex-col">
                     <div class="mb-4">
                       <div class="flex">
@@ -303,7 +348,8 @@
                               name="sss"
                               id="sss"
                               type="text"
-                              placeholder="SSS"
+                              placeholder="0.00"
+                              readonly
                             />
                         </div>
                         <div class="mr-2">
@@ -315,7 +361,8 @@
                               name="pagibig"
                               id="pagibig"
                               type="text"
-                              placeholder="PAG-IBIG Fund"
+                              placeholder="0.00"
+                              readonly
                             />
                         </div>
                         <div>
@@ -327,7 +374,8 @@
                               name="philhealth"
                               id="philhealth"
                               type="text"
-                              placeholder="Philhealth"
+                              placeholder="0.00"
+                              readonly
                             />
                         </div>
                       </div>
@@ -336,44 +384,82 @@
                       <div class="mb-4">
                         <div class="flex">
                           <div class="mr-2">
-                              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="thirteenththmonth">
+                              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="thirteenthmonth">
                                 13th Month Pay
                               </label>
                               <input
                                 class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                name="thirteenththmonth"
-                                id="thirteenththmonth"
+                                name="thirteenthmonth"
+                                id="thirteenthmonth"
                                 type="number"
-                                placeholder="13th Month Pay"
+                                placeholder="0.00"
+                                readonly
                               />
                           </div>
                           <div class="mr-2">
                               <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="totalsalary">
-                                Total Salary
+                                Total Salary (with Tax reductions)
                               </label>
                               <input
                                 class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                                 name="totalsalary"
                                 id="totalsalary"
                                 type="number"
-                                placeholder="Total Salary"
+                                placeholder="0.00"
+                                readonly
                               />
                           </div>
                       </div>
-                      
-  </form>
+
+                            <!-- Account Information -->
+            <div>
+              <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Account Information</h2>
+              <div class="flex flex-col">
+                <div class="mb-4 mt-4">
+                  <div class="flex">
+                    <div class="mr-2">
+                        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="username">
+                          Username
+                        </label>
+                        <input
+                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                          name="username"
+                          id="username"
+                          type="text"
+                          placeholder="Username"
+                        />
+                    </div>
+                    <!-- TAX INFO -->
+                    <div class="mr-2">
+                        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="incometax">
+                          Password
+                        </label>
+                        <input
+                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                          name="password"
+                          id="password"
+                          type="password"
+                          placeholder="Password"
+                        />
+                        <input type="checkbox" id="togglePassword"> Show Password
+                    </div>
+                  </div>
+                </div>
+              </div>
                       <div>
                       </div>
                       <div class="flex flex-row mt-8 justify-center">
-                        <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Save</button>
+                        <button type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Save</button>
                         <button route="/hr/employees" type="button" class="focus:outline-none text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Cancel</button>
                       </div>
+                      </form>
     </div>
   </div>
 </div> 
 </main>
 
 <script  src="./../../src/route.js"></script>
+<script  src="./../../src/form.js"></script>
 
 <!-- Sidebar active/inactive -->
 <script>
@@ -384,6 +470,84 @@
     document.getElementById('mainContent').classList.toggle('md:w-full');
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
+
+  document.getElementById('togglePassword').addEventListener('change', function () {
+    const passwordInput = document.getElementById('password');
+    if (this.checked) {
+        passwordInput.type = 'text';
+    } else {
+        passwordInput.type = 'password';
+    }
+  });
+
+  // Automatic Tax Calculation for UI
+  function calculateTax() {
+      const monthlySalary = document.getElementById('monthlysalary').value;
+
+      // TAX DEDUCTIONS
+      // FIX INCOME TAX. THIS IS JUST A TEST
+      let incomeTax;
+      if (monthlySalary <= 20833.33) {
+        incomeTax = 0;
+      } else if (monthlySalary <= 33333.33) {
+          incomeTax = (monthlySalary - 20833.33) * 0.20;
+      } else if (monthlySalary <= 66666.67) {
+          incomeTax = 2500 + (monthlySalary - 33333.33) * 0.25;
+      } else if (monthlySalary <= 166666.67) {
+          incomeTax = 10833.33 + (monthlySalary - 66666.67) * 0.30;
+      } else if (monthlySalary <= 666666.67) {
+          incomeTax = 40833.33 + (monthlySalary - 166666.67) * 0.32;
+      } else {
+          incomeTax = 200833.33 + (monthlySalary - 666666.67) * 0.35;
+      }
+      document.getElementById('incometax').value = incomeTax.toFixed(2);
+
+      let withholdingTax;
+      if (monthlySalary <= 20833.33) {
+        // 20,833.33 and below
+        withholdingTax = 0;
+      } else if (monthlySalary <= 33333.33) {
+          // 20,833.34 to 33,333.33
+          withholdingTax = 0 + (monthlySalary - 20833.33) * 0.15;
+      } else if (monthlySalary <= 66666.67) {
+          // 33,333.34 to 66,666.67
+          withholdingTax = 1875 + (monthlySalary - 33333.33) * 0.20;
+      } else if (monthlySalary <= 166666.67) {
+          // 66,666.68 to 166,666.67
+          withholdingTax = 8541.80 + (monthlySalary - 66666.67) * 0.25;
+      } else if (monthlySalary <= 666666.67) {
+          // 166,666.68 to 666,666.67
+          withholdingTax = 33541.80 + (monthlySalary - 166666.67) * 0.30;
+      } else {
+          // 666,666.68 and above
+          withholdingTax = 183541.80 + (monthlySalary - 666666.67) * 0.35;
+      }
+      document.getElementById('withholdingtax').value = withholdingTax.toFixed(2);
+      
+      // BENEFIT DEDUCTIONS
+      const pagibig = 200.00;
+      document.getElementById('pagibig').value = pagibig;
+
+      const sss = (monthlySalary * 0.14) * 0.32;
+      document.getElementById('sss').value = sss.toFixed(2);
+      
+      let philhealth;
+      if (monthlySalary <= 10000.00) {
+          philhealth = 500.00;
+      } else if (monthlySalary <= 99999.99) {
+          philhealth = 500.00 + (monthlySalary - 10000.00) * 0.05;
+      } else {
+          philhealth = 5000.00;
+      }
+      document.getElementById('philhealth').value = philhealth.toFixed(2);
+
+      const thirteenthmonth = monthlySalary;
+      document.getElementById('thirteenthmonth').value = thirteenthmonth;
+
+      // TOTAL SALARY
+      const totalsalary = monthlySalary - (incomeTax + withholdingTax + pagibig + sss + philhealth);
+      document.getElementById('totalsalary').value = totalsalary.toFixed(2);
+  }
 </script>
 </body>
 </html> 

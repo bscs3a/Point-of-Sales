@@ -3,12 +3,14 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT * FROM leave_requests;";
+$query = "SELECT leave_requests.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM leave_requests";
+$query .= " LEFT JOIN employees ON leave_requests.employees_id = employees.id";
+
 $params = [];
 
 if (!empty($search)) {
-    $query .= " WHERE first_name = :search OR last_name = :search OR position = :search OR department = :search OR id = :search OR type = :search;";
-    $params[':search'] = $search;
+  $query .= " WHERE employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.employees_id = :search;";
+  $params[':search'] = $search;
 }
 
 $stmt = $conn->prepare($query);
@@ -65,7 +67,7 @@ $stmt = null;
   <div class="flex flex-wrap">
     <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3>
 
-    <form action="/hr/leave-requests" method="get" class="mt-6 ml-auto mr-4 flex">
+    <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
@@ -73,15 +75,15 @@ $stmt = null;
 
   <!-- UNCOMMENT THIS AFTER FINISHING THE BACKEND FOR LEAVE REQUESTS -->
   <?php 
-    // if (empty($leaveRequests)) {
-    //     require_once 'inc/noResult.php';
-    // } 
-    // else {
-    //     require_once 'inc/leave-requests.table.php';
-    // } 
+    if (empty($leaveRequests)) {
+        require_once 'inc/noResult.php';
+    } 
+    else {
+        require_once 'inc/leave-requests.table.php';
+    } 
   ?>
 
-  <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+  <!-- <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
     <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
       <thead class="bg-gray-50">
         <tr>
@@ -116,16 +118,13 @@ $stmt = null;
               MM/DD/YYYY
             </span>
           </td>
-          <!-- TYPE OF LEAVE -->
           <td class="px-6 py-4"> 
             <div class="font-medium text-gray-700">Sick Leave</div>
-            <!-- DESCRIPTION/REASON -->
             <div>
               Ever since one fated day, my world's been fading to gray. Despite the unclouded sky, staining the Earth with its dye. Afraid of taking the leap or to forevermore sleep. With cowardice as my guard, I'll keep enduring these scars.
             </div>
           </td>
           <td class="px-6 py-4">
-            <!-- STATUS -->
             <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-yellow-600">
               Pending
             </span>
@@ -190,7 +189,7 @@ $stmt = null;
         </tr>               
       </tbody>
     </table>
-  </div>
+  </div> -->
 </div>
 <!-- End Leave Requests -->
   

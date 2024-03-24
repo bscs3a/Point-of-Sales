@@ -18,7 +18,7 @@
                 <!-- THIS IS FROM EMPLOYEES TABLE -->
               <img
                 class="h-full w-full rounded-full object-cover object-center"
-                src="https://pbs.twimg.com/media/GJMnNhcXoAEM1Es?format=png"
+                src="<?php echo $leaveRequest['image_url']; ?>"
                 alt=""
               />
               <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
@@ -27,8 +27,8 @@
           <td class="px-6 py-4">
             <div class="text-sm">
                 <!-- THIS IS FROM EMPLOYEES TABLE -->
-              <div class="font-medium text-gray-700">Employee Name</div>
-              <div class="text-gray-400">Employee Position</div>
+              <div class="font-medium text-gray-700"><?php echo $leaveRequest['first_name'] . ' ' . $leaveRequest['middle_name'] . ' ' . $leaveRequest['last_name']; ?></div>
+              <div class="text-gray-400"><?php echo $leaveRequest['position']; ?></div>
             </div>
           </td>
           <td class="px-6 py-4">

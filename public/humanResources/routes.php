@@ -412,6 +412,31 @@ Router::post('/hr/applicants', function () {
     include './public/humanResources/views/hr.applicants.php';
 });
 
+// search leave_requrests
+Router::post('/hr/leave-requests', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $search = $_POST['search'];
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    if (empty($search)) {
+        header("Location: $rootFolder/hr/leave-requests");
+        return;
+    }
+
+    $query = "SELECT leave_requests.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM leave_requests LEFT JOIN employees ON leave_requests.employees_id = employees.id WHERE employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.employees_id = :search;";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":search", $search);
+
+    // Execute the statement
+    $stmt->execute();
+    $leaveRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    include './public/humanResources/views/hr.leave-requests.php';
+});
+
 // EXAMPLE DELETE
 Router::post('/delete', function () {
     $db = Database::getInstance();
