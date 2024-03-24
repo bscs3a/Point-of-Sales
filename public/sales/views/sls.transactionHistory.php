@@ -60,14 +60,14 @@
                 <div class="flex justify-between items-center">
                     <h1 class="mb-3 text-xl font-bold text-black">Transaction History</h1>
                     <div class="relative mb-3">
-                        <input type="text" placeholder="Search by ID..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
+                        <input type="text" id="searchInput" placeholder="Search..." title="Search by ID, Name, Sale Preferences, Payment Mode..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
                 </div>
                 <div class="flex flex-row gap-10">
-                    <table class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
+                    <table id="salesTable" class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
                         <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-4 py-2 font-semibold">Customer Name</th>
@@ -120,7 +120,6 @@
                                 <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
                             </div>
 
-
                         </div>
 
                         <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
@@ -132,21 +131,40 @@
                                 <div class="text-5xl font-semibold ml-5">53</div>
                                 <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
                             </div>
-
-
                         </div>
-
-
-
                     </div>
-
-
-
                 </div>
             </div>
         </div>
     </main>
     <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            // Get the search input value
+            var searchValue = this.value.toLowerCase();
+
+            // Get all table rows
+            var rows = document.querySelectorAll('#salesTable tbody tr');
+
+            // Loop through the rows
+            rows.forEach(function(row) {
+                // Get the Customer Name, Sale ID, Sale Preference and Payment Mode cells
+                var customerNameCell = row.querySelector('td:nth-child(1)');
+                var saleIdCell = row.querySelector('td:nth-child(2)');
+                var salePreferenceCell = row.querySelector('td:nth-child(4)');
+                var paymentModeCell = row.querySelector('td:nth-child(5)');
+
+                // If any of the cells includes the search value, show the row, otherwise hide it
+                if (customerNameCell.textContent.toLowerCase().includes(searchValue) || 
+                    saleIdCell.textContent.toLowerCase().includes(searchValue) ||
+                    salePreferenceCell.textContent.toLowerCase().includes(searchValue) ||
+                    paymentModeCell.textContent.toLowerCase().includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
         document.querySelector('.sidebar-toggle').addEventListener('click', function() {
             document.getElementById('sidebar-menu').classList.toggle('hidden');
             document.getElementById('sidebar-menu').classList.toggle('transform');
