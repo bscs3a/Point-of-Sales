@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS Customers (
     Email VARCHAR(100)
 );
 
--- Employees Table -- Filler onLy
+-- Employees Table -- Filler OnLy
 CREATE TABLE IF NOT EXISTS Employees (
     EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(100),
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS SaleDetails (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
--- Trucks Table
+-- Trucks Table -- Filler Only
 CREATE TABLE IF NOT EXISTS Trucks (
     TruckID INT AUTO_INCREMENT PRIMARY KEY,
     TruckName VARCHAR(100),

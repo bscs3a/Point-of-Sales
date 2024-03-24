@@ -151,12 +151,15 @@
 
             <div>
                 <div class="flex justify-between items-center">
-                    <h1 class="mb-3 text-xl font-bold text-black">Transactions</h1>
+                    <h1 class="mb-3 text-xl font-bold text-black">Product Transactions</h1>
                     <div class="relative mb-3">
-                        <input type="text" placeholder="Search by ID..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
+                        <select id="searchType" class="px-3 py-2 border rounded-lg mr-2">
+                            <option value="product">Product</option>
+                            <option value="orderId">Order ID</option>
+                            <option value="customer">Customer</option>
+                        </select>
+                        <input type="text" id="productSearchInput" placeholder="Search..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
+                        <!-- ... -->
                     </div>
                 </div>
 
@@ -177,13 +180,13 @@
                 $saleDetails = $stmtSaleDetails->fetchAll(PDO::FETCH_ASSOC);
                 ?>
 
-                <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
+                <table id="productTransactionsTable" class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg">
                     <thead class="bg-gray-200">
                         <tr>
                             <th class="px-4 py-2 font-semibold">Product</th>
                             <th class="px-4 py-2 font-semibold">Order ID</th>
                             <th class="px-4 py-2 font-semibold">Date and Time</th>
-                            <th class="px-4 py-2 font-semibold">Buyer</th>
+                            <th class="px-4 py-2 font-semibold">Customer</th>
                             <th class="px-4 py-2 font-semibold">Action</th>
                         </tr>
                     </thead>
@@ -211,7 +214,42 @@
         </div>
     </main>
 
+    <script>
+        document.getElementById('productSearchInput').addEventListener('keyup', function() {
+            // Get the search input value
+            var searchValue = this.value.toLowerCase();
 
+            // Get the selected search type
+            var searchType = document.getElementById('searchType').value;
+
+            // Get all table rows
+            var rows = document.querySelectorAll('#productTransactionsTable tbody tr');
+
+            // Loop through the rows
+            rows.forEach(function(row) {
+                // Get the cell based on the search type
+                var cell;
+                switch (searchType) {
+                    case 'product':
+                        cell = row.querySelector('td:nth-child(1)');
+                        break;
+                    case 'orderId':
+                        cell = row.querySelector('td:nth-child(2)');
+                        break;
+                    case 'customer':
+                        cell = row.querySelector('td:nth-child(4)');
+                        break;
+                }
+
+                // If the cell includes the search value, show the row, otherwise hide it
+                if (cell.textContent.toLowerCase().includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 
     <!-- Chart.js configurations -->
     <script>
