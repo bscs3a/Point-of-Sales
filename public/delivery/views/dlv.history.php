@@ -92,8 +92,8 @@ $result = $conn->query($query);
                             {
                             ?>
                              <!-- detail result -->
-                                <td class="border px-4 py-2">#<?php echo $row['DeliveryOrderID']; ?></td>
-                                <td class="border px-4 py-2"><?php echo $row['SaleID']; ?></td>
+                                <td class="border px-4 py-2"><?php echo $row['DeliveryOrderID']; ?></td>
+                                <td class="border px-4 py-2">#<?php echo $row['SaleID']; ?></td>
                                 <td class="border px-4 py-2"><?php echo $row['DeliveryDate']; ?></td>
                                 <td class="border px-4 py-2"><?php echo $row['ReceivedDate']; ?></td>
                                 <td class="border px-4 py-2"><?php echo $row['DeliveryStatus']; ?></td>

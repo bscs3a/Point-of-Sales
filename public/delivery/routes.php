@@ -64,3 +64,29 @@ Router::post('/statusupdateview', function () {
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/dlv/viewdetails/id=$orderId");
 });
+
+Router::post('/truckassign', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Get the selected order IDs from the form submission
+    $orderIds = $_POST['orderIds'] ?? [];
+
+    // Get the TruckID from the form submission
+    $truckId = $_POST['truckId'];
+
+    // Update the TruckStatus of the truck
+    $stmt = $conn->prepare("UPDATE trucks SET TruckStatus = 'In Transit' WHERE TruckID = :truckId");
+    $stmt->execute([':truckId' => $truckId]);
+
+    // Update the DeliveryStatus and TruckID of the selected orders
+    $stmt = $conn->prepare("UPDATE deliveryorders SET DeliveryStatus = 'In Transit', TruckID = :truckId WHERE DeliveryOrderID = :orderId");
+    foreach ($orderIds as $orderId) {
+        $stmt->execute([':orderId' => $orderId, ':truckId' => $truckId]);
+    }
+
+    // Redirect to the dashboard
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/dlv/history");
+    exit;
+});
