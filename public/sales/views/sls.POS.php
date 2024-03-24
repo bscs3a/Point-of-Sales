@@ -298,6 +298,8 @@
                                                     } else { 
                                                         alert('The requested quantity exceeds available stocks.'); 
                                                     }
+                                                    // Update the cart quantity display when the page loads
+                                                    updateCartQuantity();
                                                 }
                                                 editing = false;"
                                     @blur="editing = false; item.quantity = newQuantity"
@@ -326,7 +328,10 @@
                                                     } else { 
                                                         alert('The requested quantity exceeds available stocks.'); 
                                                     }
+                                                    // Update the cart quantity display when the page loads
+                                                    updateCartQuantity();
                                                 }
+
                                                 editing = false;">
                                     <span x-show="!editing" x-text="item.quantity + ' x ' + item.name"></span>
                                     <input x-show="editing" type="number" x-model="newQuantity" min="1" step="1" x-autofocus class="w-28">
