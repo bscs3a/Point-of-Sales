@@ -109,21 +109,21 @@
                         
 
                                 <table id="cart-items" class="table-auto w-full text-left">
-                                    <tr class="pb-6 text-gray-500 text-xl">
-                                        <th class="pb-6">Product</th>
-                                        <th class="pb-6">Quantity</th>
-                                        <th class="px-6 pb-6">Pcs Price</th>
-                                        <th class="pb-6">Total</th>
+                                    <tr class=" text-gray-500 text-xl border-b">
+                                        <th class="pb-2">Product</th>
+                                        <th class="pb-2">Quantity</th>
+                                        <th class="px-6 pb-2">Pcs Price</th>
+                                        <th class="pb-2">Total</th>
                                     </tr>
                                     <?php foreach ($sale_items as $item) : ?>
                                     <tr class="">
-                                        <td class="flex flex-row items-center pb-6">
+                                        <td class="flex flex-row items-center pb-6 pt-4 ">
                                         <img class="h-12 w-12 mr-6" :src="" :alt="item.name">
                                         <?= $item['ProductName'] ?>
                                         </td>
-                                        <td class="pb-6"><?= $item['Quantity'] ?></td>
-                                        <td class="pb-6 px-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
-                                        <td class="pb-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                        <td class="pt-4 pb-6"><?= $item['Quantity'] ?></td>
+                                        <td class="pt-4 pb-6 px-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                        <td class="pt-4 pb-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </table>
