@@ -269,7 +269,7 @@
                         <!-- Cart item rows -->
                         <template x-for="(item, index) in cart" :key="index">
                             <tr class="bg-gray-100">
-                                <td class="text-left px-3 py-2 rounded-l-lg max-w-36" 
+                                <td class="text-left px-3 py-2 rounded-l-lg max-w-36 cursor-pointer hover:bg-gray-300 transition-colors ease-in-out" 
                                     x-data="{ editing: false, newQuantity: item.quantity }"
                                     x-effect="newQuantity = item.quantity"
                                     @click="editing = true"
@@ -332,9 +332,13 @@
                                                     updateCartQuantity();
                                                 }
 
-                                                editing = false;">
+                                                editing = false;"
+                                    x-bind:class="{ 'bg-gray-300': editing, 'transition-all' : editing }">
+
+
+                                    
                                     <span x-show="!editing" x-text="item.quantity + ' x ' + item.name"></span>
-                                    <input x-show="editing" type="number" x-model="newQuantity" min="1" step="1" x-autofocus class="w-28">
+                                    <input x-show="editing" type="number" x-model="newQuantity" min="1" step="1" x-autofocus class="w-full rounded-md">
                                 </td>
                                 <td class="text-left border-l border-gray-400 pl-2 px-3 py-2" x-text="'₱' + Number(item.priceWithTax * item.quantity).toFixed(2)"></td>
                                 <td class="px-3 py-2 rounded-r-lg">
