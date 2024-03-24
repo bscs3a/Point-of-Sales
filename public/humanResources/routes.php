@@ -14,7 +14,6 @@ $hr = [
     '/hr/employees/update' => $basePath . "employees.update.php",
     '/hr/employees/profile' => $basePath . "employees.profile.php",
 
-
     // departments
     '/hr/employees/departments' => $basePath . "departments.php", // 'departments.php
     '/hr/employees/departments/product-order' => $basePath . "departments.PO.php", // 'departments.PO.php
@@ -31,7 +30,6 @@ $hr = [
     '/hr/dtr' => $basePath . "daily-time-record.php",
 
     //tests
-    '/hr/test' => $basePath . "test-add.php",
     '/hr/test/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
         include $basePath . "test-add.php";
@@ -412,31 +410,6 @@ Router::post('/hr/applicants', function () {
     $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     include './public/humanResources/views/hr.applicants.php';
-});
-
-// example [test]
-Router::post('/add', function () {
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-
-    $stmt = $conn->prepare("INSERT INTO test_table (first_name, last_name) VALUES (:firstName, :lastName)");
-    $stmt->bindParam(':firstName', $firstName, PDO::PARAM_STR);
-    $stmt->bindParam(':lastName', $lastName, PDO::PARAM_STR);
-
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-
-    if (empty($firstName) || empty($lastName)) {
-        header("Location: $rootFolder/hr/test");
-        return;
-    }
-
-    // Execute the statement
-    $stmt->execute();
-
-    header("Location: $rootFolder/hr/test");
 });
 
 // EXAMPLE DELETE

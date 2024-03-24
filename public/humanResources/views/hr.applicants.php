@@ -7,7 +7,7 @@
   $params = [];
 
   if (!empty($search)) {
-      $query .= " WHERE first_name = :search OR last_name = :search OR position = :search OR department = :search OR id = :search;";
+      $query .= " WHERE first_name = :search OR last_name = :search OR applyingForPosition = :search OR id = :search;";
       $params[':search'] = $search;
   }
 
