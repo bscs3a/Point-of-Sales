@@ -40,7 +40,7 @@
               <div class="text-sm leading-5 text-gray-500"><?php echo $employee['department']; ?></div>
             </td>
             <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a route="/hr/employees/profile" class="text-indigo-600 hover:text-indigo-900">View</a>
+              <a route="/hr/employees/id=<?php echo htmlspecialchars($employee['id']); ?>" class="text-indigo-600 hover:text-indigo-900">View</a>
             </td>
           </tr>
           <?php endforeach; ?>

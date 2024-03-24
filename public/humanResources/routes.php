@@ -30,9 +30,9 @@ $hr = [
     '/hr/dtr' => $basePath . "daily-time-record.php",
 
     //tests
-    '/hr/test/id={id}' => function($id) use ($basePath) {
+    '/hr/employees/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
-        include $basePath . "test-add.php";
+        include $basePath . "employees.profile.php";
     },
 ];
 
@@ -412,7 +412,7 @@ Router::post('/hr/applicants', function () {
     include './public/humanResources/views/hr.applicants.php';
 });
 
-// search leave_requrests
+// search leave_requests
 Router::post('/hr/leave-requests', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
