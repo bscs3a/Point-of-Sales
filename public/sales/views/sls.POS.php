@@ -76,7 +76,7 @@
 
         <!-- Start: Full Screen Icon -->
         <div class="absolute top-0 right-0">
-            <i id="fullscreenIcon" class="fas fa-expand" @click="isFullScreen = !isFullScreen; sidebarOpen = false; sidebarOpen = false;" :class="{ 'p-3 text-lg': isFullScreen, 'pt-14 pr-3 text-lg': !isFullScreen }"></i>
+            <i id="fullscreenIcon" class="fas fa-expand" @click="isFullScreen = !isFullScreen; sidebarOpen = false; cartOpen = !cartOpen;" :class="{ 'p-3 text-lg': isFullScreen, 'pt-14 pr-3 text-lg': !isFullScreen }"></i>
         </div>
         <!-- End: Full Screen Icon -->
 
@@ -159,7 +159,7 @@
                 });
             </script>
 
-            <div class="right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200">
+            <div class="right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200 z-50">
                 <div class="flex items-center">
                     <!-- Button to toggle the cart view -->
                     <button type="button" @click="if (sidebarOpen) { sidebarOpen = false; cartOpen = !cartOpen; } else { cartOpen = !cartOpen; }" x-show="!cartOpen" class="items-center flex bg-gray-200 py-2 w-full justify-between sidebar-toggle2 hover:bg-gray-300 ease-in-out transition">
