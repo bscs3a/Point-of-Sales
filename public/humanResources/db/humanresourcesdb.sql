@@ -120,18 +120,23 @@ CREATE TABLE session (
 
 -- EXAMPLE DATA
 INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, address, contact_no, email, civil_status, department, position) VALUES
-('https://pbs.twimg.com/profile_images/1761013959287623680/tzx6DEES_400x400.jpg', 'Jarelle Anne', 'Cañada', 'Pamintuan', '2001-08-31', 'Female', 'Filipino', 'Rias-Eveland Boulevard', '09123456789', 'jarelleannepamintuan@gmail.com','Single', 'Human Resources', 'HR Manager');
+('https://pbs.twimg.com/profile_images/1761013959287623680/tzx6DEES_400x400.jpg', 'Jarelle Anne', 'Cañada', 'Pamintuan', '2001-08-31', 'Female', 'Filipino', 'Rias-Eveland Boulevard', '09123456789', 'jarelleannepamintuan@gmail.com','Single', 'Human Resources', 'HR Manager'),
+('https://pbs.twimg.com/profile_images/1556154158860107776/1eTSWQJx_400x400.jpg', 'Ziggy', 'Castro', 'Co', '2001-12-19', 'Female', 'Filipino', 'Pampanga', '09123456789', 'ziggyco@example.com','Single', 'Human Resources', 'Compensation and Benefits Specialist');
 
 INSERT INTO employment_info (dateofhire, startdate, enddate, employees_id) VALUES
+('2021-01-01 08:00:00', '2021-01-01 08:00:00', NULL, 1),
 ('2021-01-01 08:00:00', '2021-01-01 08:00:00', NULL, 1);
 
 INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
+(40000.00, 28633.00, 1),
 (40000.00, 28633.00, 1);
 
 INSERT INTO tax_info (income_tax, withholding_tax, employees_id) VALUES
+(4166.67, 3208.33, 1),
 (4166.67, 3208.33, 1);
 
 INSERT INTO benefit_info (philhealth, sss_fund, pagibig_fund, thirteenth_month, employees_id) VALUES
+(2000.00, 1792.00, 200.00, 40000.00, 1),
 (2000.00, 1792.00, 200.00, 40000.00, 1);
 
 INSERT INTO leave_requests (type, details, start_date, end_date, status, employees_id) VALUES
