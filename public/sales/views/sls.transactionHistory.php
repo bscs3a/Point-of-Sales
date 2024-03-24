@@ -7,6 +7,11 @@
     <title>Transaction History</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+
+    <?php
+    require_once 'function/fetchSalesData.php';
+    ?>
+
 </head>
 
 <body>
@@ -61,61 +66,85 @@
                         </svg>
                     </div>
                 </div>
-
-                <table class="table-auto w-full mx-auto text-left rounded-lg overflow-hidden shadow-lg text-center">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="px-4 py-2 font-semibold">Customer Name</th>
-                            <th class="px-4 py-2 font-semibold">Sale ID</th>
-                            <th class="px-4 py-2 font-semibold">Sale Date</th>
-                            <th class="px-4 py-2 font-semibold">Sale Preference</th>
-                            <th class="px-4 py-2 font-semibold">Payment Mode</th>
-                            <th class="px-4 py-2 font-semibold">Total Amount</th>
-                            <th class="px-4 py-2 font-semibold">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        // Include your database connection file
-                        require_once './src/dbconn.php';
-
-                        // Get PDO instance
-                        $database = Database::getInstance();
-                        $pdo = $database->connect();
-
-                        // SQL query to fetch sales data along with customer name
-                        $sql = "SELECT 
-                                    Sales.SaleID,
-                                    Sales.SaleDate,
-                                    Sales.SalePreference,
-                                    Sales.PaymentMode,
-                                    Sales.TotalAmount,
-                                    Customers.FirstName AS CustomerFirstName,
-                                    Customers.LastName AS CustomerLastName
-                                FROM 
-                                    Sales
-                                JOIN 
-                                    Customers ON Sales.CustomerID = Customers.CustomerID";
-
-                        // Execute the query
-                        $stmt = $pdo->query($sql);
-                        ?>
-
-                        <!-- Fetch data from the result set -->
-                        <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
-                            <?php $saleId = $row['SaleID']; ?>
-                            <tr class='border border-gray-200 bg-white' data-sale-id='<?php echo $saleId; ?>'>
-                                <td class='px-4 py-2'><?php echo $row['CustomerFirstName'] . " " . $row['CustomerLastName']; ?></td>
-                                <td class='px-4 py-2'><?php echo $saleId; ?></td>
-                                <td class='px-4 py-2'><?php echo $row['SaleDate']; ?></td>
-                                <td class='px-4 py-2'><?php echo $row['SalePreference']; ?></td>
-                                <td class='px-4 py-2'><?php echo $row['PaymentMode']; ?></td>
-                                <td class='px-4 py-2'><?php echo $row['TotalAmount']; ?></td>
-                                <td class='px-4 py-2'><a route='/sls/Transaction-Details/sale=<?php echo $saleId; ?>' class='text-blue-500 hover:underline view-link'>View</a></td>
+                <div class="flex flex-row gap-10">
+                    <table class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="px-4 py-2 font-semibold">Customer Name</th>
+                                <th class="px-4 py-2 font-semibold">Sale ID</th>
+                                <th class="px-4 py-2 font-semibold">Sale Date</th>
+                                <th class="px-4 py-2 font-semibold">Sale Preference</th>
+                                <th class="px-4 py-2 font-semibold">Payment Mode</th>
+                                <th class="px-4 py-2 font-semibold">Total Amount</th>
+                                <th class="px-4 py-2 font-semibold">Action</th>
                             </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+
+
+                            <!-- Fetch data from the result set -->
+                            <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+                                <?php $saleId = $row['SaleID']; ?>
+                                <tr class='border border-gray-200 bg-white' data-sale-id='<?php echo $saleId; ?>'>
+                                    <td class='px-4 py-2'><?php echo $row['CustomerFirstName'] . " " . $row['CustomerLastName']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $saleId; ?></td>
+                                    <td class='px-4 py-2'><?php echo date('F j, Y, g:i a', strtotime($row['SaleDate'])); ?></td>
+                                    <td class='px-4 py-2'><?php echo $row['SalePreference']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $row['PaymentMode']; ?></td>
+                                    <td class='px-4 py-2'>₱<?php echo number_format($row['TotalAmount'], 2); ?></td>
+                                    <td class='px-4 py-2'><a route='/sls/Transaction-Details/sale=<?php echo $saleId; ?>' class='text-blue-500 hover:underline view-link'>View</a></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+
+                    <div class="flex flex-col gap-4 justify-start items-start">
+
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+
+                            <div class="flex flex-col gap-5">
+                                <div class="text-lg font-semibold text-gray-800">
+                                    <i class="ri-shake-hands-fill text-lg mx-2"></i> Transaction Rate
+                                </div>
+                                <div class="text-5xl font-semibold ml-5">53</div>
+                                <div class="text-sm font-semibold ml-5 text-green-700">+10% more than average</div>
+                            </div>
+
+                        </div>
+
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+
+                            <div class="flex flex-col gap-5">
+                                <div>
+                                    <i class="ri-funds-line text-lg mx-2"></i>Raw Sales
+                                </div>
+                                <div class="text-5xl font-semibold ml-5">53</div>
+                                <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+
+                            <div class="flex flex-col gap-5">
+                                <div>
+                                    <i class="ri-funds-line text-lg mx-2"></i>Raw Sales
+                                </div>
+                                <div class="text-5xl font-semibold ml-5">53</div>
+                                <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
             </div>
         </div>
     </main>

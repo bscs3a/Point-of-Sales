@@ -83,43 +83,26 @@
                                     </li>
                                 </template>
 
+                                <!-- Cart item Total -->
                                 <div class="ml-16">
                                     <li class="mt-4 pb-4 pt-6 font-semibold border-t border-b mb-4 flex justify-between">
                                         <span x-text="'Subtotal:'"></span>
-                                        <span x-text="'₱' + subtotal.toFixed(2)"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + item.price * item.quantity, 0)).toFixed(2)"></span>
                                     </li>
-                                    <li id="shipping-fee" class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between" x-show="salePreference === 'delivery'">
+                                    <li id="shipping-fee-toggle" class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between" x-show="salePreference === 'delivery'">
                                         <span x-text="'Shipping Fee:'"></span>
-                                        <span>₱50.00</span> <!-- Replace with the actual shipping fee -->
+                                        <span x-text="'₱' + (localStorage.getItem('shippingFee') || '0')"></span>
                                     </li>
                                     <li class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between">
                                         <span x-text="'Tax:'"></span>
-                                        <span x-text="'₱' + tax.toFixed(2)"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + item.price * item.quantity * item.TaxRate, 0)).toFixed(2)"></span>
                                     </li>
                                     <li class="py-4 font-semibold  text-green-800 flex justify-between">
                                         <span x-text="'Total:'"></span>
-                                        <span x-text="'₱' + total.toFixed(2)"></span>
+                                        <span x-text="'₱' + ((cart.reduce((total, item) => total + item.price * item.quantity * (1 + item.TaxRate), 0)) + parseFloat(localStorage.getItem('shippingFee') || '0')).toFixed(2)"></span>
                                     </li>
                                 </div>
-                            </ul>
 
-                            <script>
-                                function cartData() {
-                                    return {
-                                        cart: JSON.parse(localStorage.getItem('cart')) || [],
-                                        salePreference: 'delivery', // Replace with the actual sale preference
-                                        get subtotal() {
-                                            return this.cart.reduce((total, item) => total + item.price * item.quantity, 0);
-                                        },
-                                        get tax() {
-                                            return this.cart.reduce((total, item) => total + item.price * item.quantity * item.TaxRate, 0);
-                                        },
-                                        get total() {
-                                            return this.cart.reduce((total, item) => total + item.price * item.quantity * (1 + item.TaxRate), 0);
-                                        }
-                                    };
-                                }
-                            </script>
                         </div>
                     </div>
 
@@ -161,42 +144,6 @@
                                 <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>">
                             </div>
 
-                            <script>
-                                // Get cart from local storage
-                                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-                                // Check if any product requires delivery
-                                const deliveryRequired = cart.some(item => item.deliveryRequired === 'Yes');
-
-                                const salePreference = document.getElementById('SalePreference');
-                                if (deliveryRequired) {
-                                    salePreference.value = 'delivery';
-                                    const pickupOption = salePreference.querySelector('option[value="pick-up"]');
-                                    pickupOption.disabled = true;
-                                } else {
-                                    salePreference.value = 'pick-up';
-                                }
-                                toggleSaleDetails(salePreference.value);
-
-                                function toggleSaleDetails(salePreference) {
-                                    const saleDetails = document.getElementById('sale-details');
-                                    const shippingFee = document.getElementById('shipping-fee');
-
-                                    if (salePreference == 'delivery') {
-                                        saleDetails.style.display = 'block';
-                                        shippingFee.style.display = 'flex';
-                                    } else {
-                                        saleDetails.style.display = 'none';
-                                        shippingFee.style.display = 'none';
-                                    }
-                                }
-
-                                // Call the function on page load to set the initial state
-                                document.addEventListener('DOMContentLoaded', () => {
-                                    toggleSaleDetails(document.getElementById('SalePreference').value);
-                                });
-                            </script>
-
                             <!-- Mode of payment -->
                             <div class="mb-4">
                                 <label class="block mb-2 font-semibold">Mode of Payment:</label>
@@ -220,35 +167,6 @@
                                 </div>
                             </div>
 
-                            <script>
-                                function togglePaymentDetails(paymentMode) {
-                                    const cardNumberInput = document.getElementById('cardNumber');
-                                    const expiryDateInput = document.getElementById('expiryDate');
-                                    const cvvInput = document.getElementById('cvv');
-                                    const paymentDetailsDiv = document.getElementById('payment-details');
-
-                                    if (paymentMode == 'card') {
-                                        cardNumberInput.required = true;
-                                        expiryDateInput.required = true;
-                                        cvvInput.required = true;
-                                        paymentDetailsDiv.style.display = 'block';
-                                    } else {
-                                        cardNumberInput.required = false;
-                                        expiryDateInput.required = false;
-                                        cvvInput.required = false;
-                                        cardNumberInput.value = '';
-                                        expiryDateInput.value = '';
-                                        cvvInput.value = '';
-                                        paymentDetailsDiv.style.display = 'none';
-                                    }
-                                }
-
-                                // Call the function on page load to set the initial state
-                                document.addEventListener('DOMContentLoaded', () => {
-                                    togglePaymentDetails(document.getElementById('payment-mode').value);
-                                });
-                            </script>
-
                             <input type="hidden" id="totalAmount" name="totalAmount">
                             <input type="hidden" id="cartData" name="cartData">
                             <input type="hidden" id="subtotal" name="subtotal">
@@ -265,6 +183,102 @@
         </div>
     </main>
 
+    <!-- Option for delivery or pick-up -->
+    <script>
+        // Get cart from local storage
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+        // Compute weight for each item in the cart
+        cart.forEach(item => item.totalWeight = item.ProductWeight * item.quantity);
+
+        // Compute total weight of all products in the cart
+        const totalWeight = cart.reduce((total, item) => total + item.totalWeight, 0);
+
+        const salePreference = document.getElementById('SalePreference');
+        if (totalWeight >= 300) { // Check if total weight is 300 or more
+            salePreference.value = 'delivery';
+            const pickupOption = salePreference.querySelector('option[value="pick-up"]');
+            pickupOption.disabled = true;
+        } else {
+            salePreference.value = 'pick-up';
+        }
+
+        // Add shipping fee if customer chooses 'delivery' and total weight is less than 300
+        salePreference.addEventListener('change', function() {
+            const shippingFeeElement = document.getElementById('ShippingFee');
+            const shippingFeeInput = document.getElementById('shippingFee');
+            if (this.value === 'delivery' && totalWeight < 300) {
+                localStorage.setItem('shippingFee', '50');
+                console.log('Shipping Fee:', localStorage.getItem('shippingFee')); // Log the shipping fee
+            } else {
+                localStorage.setItem('shippingFee', '0');
+                console.log('Shipping Fee:', localStorage.getItem('shippingFee')); // Log the shipping fee
+            }
+            location.reload(); // Refresh the page
+        });
+
+        if (parseFloat(localStorage.getItem('shippingFee')) > 0) { // Check if shippingFee is greater than 0
+            salePreference.value = 'delivery';
+        }
+
+        // Get the shippingFee from localStorage
+        const shippingFee = localStorage.getItem('shippingFee') || '0';
+        // Get the hidden input field
+        const shippingFeeInput = document.getElementById('shippingFee');
+        // Set the value of the hidden input field
+        shippingFeeInput.value = shippingFee;
+
+        toggleSaleDetails(salePreference.value);
+
+        function toggleSaleDetails(salePreference) {
+            const saleDetails = document.getElementById('sale-details');
+            const shippingFee = document.getElementById('shipping-fee-toggle');
+
+            if (salePreference == 'delivery') {
+                saleDetails.style.display = 'block';
+                shippingFee.style.display = 'flex';
+            } else {
+                saleDetails.style.display = 'none';
+                shippingFee.style.display = 'none';
+            }
+        }
+
+        // Call the function on page load to set the initial state
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleSaleDetails(document.getElementById('SalePreference').value);
+        });
+    </script>
+
+    <!-- Mode of payment -->
+    <script>
+        function togglePaymentDetails(paymentMode) {
+            const cardNumberInput = document.getElementById('cardNumber');
+            const expiryDateInput = document.getElementById('expiryDate');
+            const cvvInput = document.getElementById('cvv');
+            const paymentDetailsDiv = document.getElementById('payment-details');
+
+            if (paymentMode == 'card') {
+                cardNumberInput.required = true;
+                expiryDateInput.required = true;
+                cvvInput.required = true;
+                paymentDetailsDiv.style.display = 'block';
+            } else {
+                cardNumberInput.required = false;
+                expiryDateInput.required = false;
+                cvvInput.required = false;
+                cardNumberInput.value = '';
+                expiryDateInput.value = '';
+                cvvInput.value = '';
+                paymentDetailsDiv.style.display = 'none';
+            }
+        }
+
+        // Call the function on page load to set the initial state
+        document.addEventListener('DOMContentLoaded', () => {
+            togglePaymentDetails(document.getElementById('payment-mode').value);
+        });
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Get the cart from localStorage
@@ -274,52 +288,19 @@
             const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
             const tax = cart.reduce((total, item) => total + item.price * item.quantity * item.TaxRate, 0);
             const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity * (1 + item.TaxRate), 0);
-            const shippingFee = document.getElementById('SalePreference').value === 'delivery' ? 0 : 0; // Replace 50 with the actual shipping fee
 
             // Set the value of the hidden input fields
             document.getElementById('subtotal').value = subtotal.toFixed(2);
             document.getElementById('tax').value = tax.toFixed(2);
-            document.getElementById('shippingFee').value = shippingFee.toFixed(2);
             document.getElementById('totalAmount').value = totalAmount.toFixed(2);
             document.getElementById('cartData').value = JSON.stringify(cart);
 
             // Assign the cart to a global variable
             window.cart = cart;
+
+            // Create a shippingFee variable in localStorage and set its value to 0
+            localStorage.setItem('shippingFee', '0');
         });
-
-        window.onload = function() {
-            // Get the delivery option select element
-            var deliveryOption = document.getElementById('SalePreference');
-            // Get the delivery details element
-            var deliveryDetails = document.getElementById('sale-details');
-
-            // Add an event listener for the change event
-            deliveryOption.addEventListener('change', function() {
-                // If the selected value is 'delivery', show the delivery details
-                // Otherwise, hide the delivery details
-                if (this.value === 'delivery') {
-                    deliveryDetails.style.display = 'block';
-                } else {
-                    deliveryDetails.style.display = 'none';
-                }
-            });
-
-            // Get the payment option select element
-            var paymentOption = document.getElementById('payment-mode');
-            // Get the payment details element
-            var paymentDetails = document.getElementById('payment-details');
-
-            // Add an event listener for the change event
-            paymentOption.addEventListener('change', function() {
-                // If the selected value is 'card', show the payment details
-                // Otherwise, hide the payment details
-                if (this.value === 'card') {
-                    paymentDetails.style.display = 'block';
-                } else {
-                    paymentDetails.style.display = 'none';
-                }
-            });
-        };
 
         // Add an event listener for the click event
         document.querySelector('.sidebar-toggle').addEventListener('click', function() {

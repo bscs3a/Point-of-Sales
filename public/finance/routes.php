@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
 $_SESSION['fullname'] = "Tagle, Aries";

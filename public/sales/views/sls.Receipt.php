@@ -32,6 +32,7 @@
     $total_price = $sale['TotalAmount'];
     $payment_method = $sale['PaymentMode'];
     $sale_preferences = $sale['SalePreference'];
+    $shippingFee = $sale['ShippingFee'];
 
     // Query the database for the sale items
     $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, Products.ProductName 
@@ -130,7 +131,6 @@
                                     return $carry + $item['UnitPrice'] * $item['Quantity'];
                                 }, 0);
                                 $tax = $subtotal * 0.12; // Assuming a tax rate of 12%
-                                $shippingFee = $sale_preferences === 'Delivery' ? 50 : 0; // Replace 50 with the actual shipping fee
                                 ?>
 
                                 <div id="subtotal" class="flex justify-between border-b text-lg pb-4 mb-2 text-gray-400">
