@@ -11,8 +11,6 @@ $hr = [
     '/hr/employees' => $basePath . "employees.php",
     '/hr/employees/search' => $basePath . "employees.php",
     '/hr/employees/add' => $basePath . "employees.add.php",
-    '/hr/employees/update' => $basePath . "employees.update.php",
-    '/hr/employees/profile' => $basePath . "employees.profile.php",
 
     // departments
     '/hr/employees/departments' => $basePath . "departments.php", // 'departments.php
@@ -29,10 +27,16 @@ $hr = [
     '/hr/leave-requests' => $basePath . "leave-requests.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
 
-    //tests
+    //view profile
     '/hr/employees/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
         include $basePath . "employees.profile.php";
+    },
+
+    //update profile
+    '/hr/employees/update={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "employees.update.php";
     },
 ];
 

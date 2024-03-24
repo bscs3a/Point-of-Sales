@@ -1,5 +1,30 @@
 <?php
-  // require_once './public/humanResources/func/add-employee.php';
+    // Check if the id is set in the URL
+    // Start a new session or resume the existing one
+    if (isset($_SESSION['id'])) {
+        // Get the id from the session
+        $id = $_SESSION['id'];
+
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        // Prepare the SQL statement
+        $query = "SELECT employees.*, employment_info.*, salary_info.*, tax_info.*, benefit_info.*, account_info.* FROM employees
+        LEFT JOIN employment_info ON employment_info.employees_id = employees.id
+        LEFT JOIN salary_info ON salary_info.employees_id = employees.id
+        LEFT JOIN tax_info ON tax_info.employees_id = employees.id
+        LEFT JOIN benefit_info ON benefit_info.employees_id = employees.id
+        LEFT JOIN account_info ON account_info.employees_id = employees.id
+        WHERE employees.id = :id;";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $employees = $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        header('Location: /hr/dashboard');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -48,14 +73,14 @@
 
   
   <div class="flex items-center flex-wrap">
-    <h3 class="ml-6 mt-8 text-xl font-bold">Employee Information</h3>
+    <h3 class="ml-6 mt-8 text-xl font-bold">Update Employee Information</h3>
   </div>
   
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
   <div class="flex">
     <div class="mr-4">
-      <img src="#" alt="Profile Picture" class="w-48 h-48 object-cover">
+      <img src="<?php echo $employees['image_url']; ?>" alt="Profile Picture" class="w-48 h-48 object-cover">
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
@@ -79,6 +104,7 @@
               name="firstName"
               id="firstName"
               type="text"
+              value="<?php echo $employees['first_name']; ?>"
               placeholder="First Name"
             />
         </div>
@@ -91,6 +117,7 @@
               name="middleName"
               id="middleName"
               type="text"
+              value="<?php echo $employees['middle_name']; ?>"
               placeholder="Middle Name"
             />
         </div>
@@ -103,6 +130,7 @@
               name="lastName"
               id="lastName"
               type="text"
+              value="<?php echo $employees['last_name']; ?>"
               placeholder="Last Name"
             />
         </div>
@@ -120,6 +148,7 @@
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="dateofbirth"
               id="dateofbirth"
+              value="<?php echo $employees['dateofbirth']; ?>"
               type="date"
             />
         </div>
@@ -145,6 +174,7 @@
               name="nationality"
               id="nationality"
               type="text"
+              value="<?php echo $employees['nationality']; ?>"
               placeholder="Nationality"
             />
         </div>
@@ -178,6 +208,7 @@
             name="address"
             id="address"
             type="text"
+              value="<?php echo $employees['address']; ?>"
             placeholder="Address"
           />
           </div>
@@ -190,6 +221,7 @@
               name="contactnumber"
               id="contactnumber"
               type="tel"
+              value="<?php echo $employees['contact_no']; ?>"
               placeholder="Contact Number"
             />
           </div>
@@ -208,6 +240,7 @@
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="email"
               id="email"
+              value="<?php echo $employees['email']; ?>"
               placeholder="example@example.com">
           </div>
           <div class="mr-2">
@@ -236,6 +269,7 @@
               name="position"
               id="Position"
               type="text"
+              value="<?php echo $employees['position']; ?>"
               placeholder="Position"
             />  
           </div>
@@ -255,6 +289,7 @@
             name="dateofhire"
             id="dateofhire"
             type="date"
+              value="<?php echo $employees['dateofhire']; ?>"
             placeholder="Date of Hire"
           />
           </div>
@@ -267,6 +302,7 @@
             name="startdate"
             id="startdate"
             type="date"
+              value="<?php echo $employees['startdate']; ?>"
             placeholder="Start Date"
           />
           </div>
@@ -279,6 +315,7 @@
               name="enddate"
               id="enddate"
               type="date"
+              value="<?php echo $employees['enddate']; ?>"
               placeholder="enddate"
             />
           </div>
@@ -301,6 +338,7 @@
                           id="monthlysalary"
                           type="text"
                           placeholder="0.00"
+                          value="<?php echo $employees['monthly_salary']; ?>"
                           oninput="calculateTax()"
                           
                         />
@@ -315,6 +353,7 @@
                           name="incometax"
                           id="incometax"
                           type="text"
+                          value="<?php echo $employees['income_tax']; ?>"
                           placeholder="0.00"
                           readonly
                         />
@@ -328,6 +367,7 @@
                           name="withholdingtax"
                           id="withholdingtax"
                           type="number"
+                          value="<?php echo $employees['withholding_tax']; ?>"
                           placeholder="0.00"
                           readonly
                         />
@@ -348,6 +388,7 @@
                               name="sss"
                               id="sss"
                               type="text"
+                              value="<?php echo $employees['sss_fund']; ?>"
                               placeholder="0.00"
                               readonly
                             />
@@ -361,6 +402,7 @@
                               name="pagibig"
                               id="pagibig"
                               type="text"
+                              value="<?php echo $employees['pagibig_fund']; ?>"
                               placeholder="0.00"
                               readonly
                             />
@@ -374,6 +416,7 @@
                               name="philhealth"
                               id="philhealth"
                               type="text"
+                              value="<?php echo $employees['philhealth']; ?>"
                               placeholder="0.00"
                               readonly
                             />
@@ -392,6 +435,7 @@
                                 name="thirteenthmonth"
                                 id="thirteenthmonth"
                                 type="number"
+                                value="<?php echo $employees['thirteenth_month']; ?>"
                                 placeholder="0.00"
                                 readonly
                               />
@@ -405,6 +449,7 @@
                                 name="totalsalary"
                                 id="totalsalary"
                                 type="number"
+                                value="<?php echo $employees['total_salary']; ?>"
                                 placeholder="0.00"
                                 readonly
                               />
@@ -426,6 +471,7 @@
                           name="username"
                           id="username"
                           type="text"
+                          value="<?php echo $employees['username']; ?>"
                           placeholder="Username"
                         />
                     </div>
@@ -439,6 +485,7 @@
                           name="password"
                           id="password"
                           type="password"
+                          value="<?php echo $employees['password']; ?>"
                           placeholder="Password"
                         />
                         <input type="checkbox" id="togglePassword"> Show Password

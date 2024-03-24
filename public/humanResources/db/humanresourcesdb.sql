@@ -21,9 +21,9 @@ CREATE TABLE employees (
 
 CREATE TABLE employment_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
-    dateofhire DATETIME NOT NULL,
-    startdate DATETIME NOT NULL,
-    enddate DATETIME,
+    dateofhire DATE NOT NULL,
+    startdate DATE NOT NULL,
+    enddate DATE,
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id)
@@ -126,8 +126,8 @@ INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirt
 ('https://pbs.twimg.com/profile_images/1556154158860107776/1eTSWQJx_400x400.jpg', 'Ziggy', 'Castro', 'Co', '2001-12-19', 'Female', 'Filipino', 'Pampanga', '09123456789', 'ziggyco@example.com','Single', 'Human Resources', 'Compensation and Benefits Specialist');
 
 INSERT INTO employment_info (dateofhire, startdate, enddate, employees_id) VALUES
-('2021-01-01 08:00:00', '2021-01-01 08:00:00', NULL, 1),
-('2021-01-01 08:00:00', '2021-01-01 08:00:00', NULL, 2);
+('2021-01-01', '2021-01-01', NULL, 1),
+('2021-01-01', '2021-01-01', NULL, 2);
 
 INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
 (40000.00, 28633.00, 1),
