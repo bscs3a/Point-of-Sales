@@ -296,7 +296,7 @@
                                                         }
                                                         
                                                     } else { 
-                                                        alert('The requested quantity exceeds available stocks.'); 
+                                                        showAlertBox(); 
                                                     }
                                                     // Update the cart quantity display when the page loads
                                                     updateCartQuantity();
@@ -326,7 +326,7 @@
                                                         }
                                                         
                                                     } else { 
-                                                        alert('The requested quantity exceeds available stocks.'); 
+                                                        showAlertBox(); 
                                                     }
                                                     // Update the cart quantity display when the page loads
                                                     updateCartQuantity();
