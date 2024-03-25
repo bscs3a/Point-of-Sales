@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
 
     <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+        import Swal from 'sweetalert2'
+
+        const Swal = require('sweetalert2')
+    </script>
+
+
 
     <style>
         .sidebar-open {
@@ -77,48 +84,59 @@
         </div>
         <!-- End: Full Screen Icon -->
 
-        <div class="flex justify-between items-center w-full pt-10 pl-10">
+        <div class="flex justify-between items-center w-full pt-10">
 
-            <form class="max-w-lg ml-20 mb-3 w-2/5 pl-10">
-
-                <!-- Dropdown for selecting categories -->
-                <div class="flex">
-                    <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only">Your Email</label>
-                    <!-- Button to toggle the dropdown -->
-                    <button id="dropdown-button" data-dropdown-toggle="dropdown" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100" type="button">
-                        All categories <!-- Dropdown indicator icon -->
-                        <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-
-                    <!-- Dropdown menu for categories -->
-                    <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
-                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
-                            <?php foreach ($categories as $category) : ?>
-                                <li>
-                                    <!-- Button for each category -->
-                                    <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100"><?= $category ?></button>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+            <!-- Search Form -->
+            <div class="flex justify-between items-center w-full pl-0">
+                <form class="max-w-lg ml-20 mb-3 w-2/5">
+                    <!-- Dropdown for Categories -->
+                    <div class="flex">
+                        <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only">Your Email</label>
+                        <button id="dropdown-button" data-dropdown-toggle="dropdown" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100" type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                            </svg></button>
+                        <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
+                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
+                                <!-- Dropdown Options -->
+                                <?php foreach ($categories as $category) : ?>
+                                    <li>
+                                        <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100"><?= $category ?></button>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <!-- Search Input -->
+                        <div class="relative w-full">
+                            <input type="search" id="search-dropdown" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Hardware, Tools, Supplies..." required /> <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-green-800 rounded-e-lg border border-green-800 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
                     </div>
+                </form>
 
-                    <!-- Search input field -->
-                    <div class="relative w-full">
-                        <input type="search" id="search-dropdown" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Hardware, Tools, Supplies..." required />
+                <!-- JavaScript for Dropdown -->
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const dropdownButton = document.getElementById('dropdown-button');
+                        const dropdown = document.getElementById('dropdown');
 
-                        <!-- Search button -->
-                        <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>
-                            <!-- Search button label -->
-                            <span class="sr-only">Search</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
+                        dropdownButton.addEventListener('click', function() {
+                            dropdown.classList.toggle('hidden');
+                        });
+
+                        document.addEventListener('click', function(event) {
+                            const isDropdownButton = event.target.matches('#dropdown-button');
+                            const isDropdown = event.target.closest('#dropdown');
+                            if (!isDropdownButton && !isDropdown) {
+                                dropdown.classList.add('hidden');
+                            }
+                        });
+                    });
+                </script>
+            </div>
 
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
@@ -145,7 +163,7 @@
                 });
             </script>
 
-            <div class="right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200">
+            <div class="right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200 hidden">
                 <div class="flex items-center">
                     <!-- Button to toggle the cart view -->
                     <button type="button" @click="if (sidebarOpen) { sidebarOpen = false; cartOpen = !cartOpen; } else { cartOpen = !cartOpen; }" x-show="!cartOpen" class="items-center flex bg-gray-200 py-2 w-full justify-between sidebar-toggle2 hover:bg-gray-300 ease-in-out transition">
@@ -184,49 +202,9 @@
                     <i class="ri-add-circle-fill text-xl"></i> Add Order
                 </button> -->
                 <h2 class="text-sm font-semibold text-gray-800 py-2">Total Items in Cart: <span id="cart-quantity" class="text-sm font-bold ">0</span></h2>
-                <button data-open-modal class="py-1 px-3 rounded bg-gray-100 border-2 border-gray-300 hover:bg-red-400 hover:border-red-600 active:scale-75 transition-all transform ease-in-out">
+                <button class="py-1 px-3 rounded bg-gray-100 border-2 border-gray-300 hover:bg-red-400 hover:border-red-600 active:scale-75 transition-all transform ease-in-out">
                     <i class="ri-delete-bin-7-fill text-xl"></i>
                 </button>
-
-
-                <!-- MODAL SECTION -->
-                <dialog data-modal class="rounded-lg shadow-xl">
-                    <div class="relative p-4 w-full max-w-md max-h-full">
-                        <div class="relative bg-white">
-                            <div class="p-4 md:p-5 text-center">
-                                <svg class="mx-auto mb-4 text-red-500 w-12 h-12 dark:text-white-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                                <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-gray-800">Are you sure you want to delete this cart order?</h3>
-                                <button data-close-modal type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" @click="clearCart()">
-                                    Yes, I'm sure
-                                </button>
-                                <button data-close-modal2 type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </dialog>
-
-
-                <!-- MODAL SCRIPT -->
-                <script>
-                    const openButtons = document.querySelector('[data-open-modal]');
-                    const closeButtons = document.querySelector('[data-close-modal]');
-                    const closeButton2 = document.querySelector('[data-close-modal2]');
-                    const modal = document.querySelector('[data-modal]');
-
-                    openButtons.addEventListener('click', () => {
-                        modal.showModal();
-                    });
-
-                    closeButtons.addEventListener('click', () => {
-                        modal.close();
-                    });
-
-                    closeButton2.addEventListener('click', () => {
-                        modal.close();
-                    });
-                </script>
 
             </div>
 
@@ -245,8 +223,6 @@
                 // Parse the JSON string to a JavaScript object
                 var taxRates = JSON.parse('<?php echo $taxRatesJson; ?>');
 
-                // Use the taxRates in your Alpine.js code
-                // ...
             </script>
 
             <div class="flex justify-between px-3 py-2 overflow-y-auto " style="max-height: 26rem;">
@@ -312,7 +288,18 @@
                                 event.preventDefault();
 
                                 // Show a notification if the cart is empty
-                                alert('Your cart is empty!');
+                                Swal.fire({
+                                    title: "Uh oh!",
+                                    text: "Please put items in your cart before proceeding to checkout.",
+                                    imageUrl: "https://cdn-icons-png.flaticon.com/512/4555/4555971.png",
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "Custom image",
+                                    width: 400,
+                                    confirmButtonColor: "#FF0000",
+                                });
+
+
                             } else {
                                 // Proceed to checkout
                                 window.location.pathname = checkoutRoute;
@@ -341,7 +328,7 @@
             }
         </script>
 
-        <div class="flex flex-col items-center min-h-screen w-full sidebar-toggle3" :class="{ 'w-full': !cartOpen, 'w-9/12': cartOpen }">
+        <div class="flex flex-col items-center min-h-screen w-full" :class="{ 'w-full': !cartOpen, 'w-9/12': cartOpen }">
             <?php
             // Assuming $products is an array of arrays where each inner array contains the product details including category
             $categories = array_unique(array_column($products, 'Category')); // Extracting unique categories from products
@@ -354,30 +341,136 @@
                 <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
                     <?php foreach ($products as $product) : ?>
                         <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
-                            <button type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" @click="addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true;">
+                            <!-- Product Item Button -->
+                            <button id="product-item-button" data-open-modal type="button" flareFire class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" data-product='<?= json_encode($product) ?>' @click="
+                                selectedProduct = { id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, deliveryRequired: '<?= $product['DeliveryRequired'] ?>' };
+                            ">
+
                                 <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
                                     <!-- SVG icon -->
                                 </div>
+
                                 <!-- Horizontal line -->
                                 <hr class="w-full border-gray-300 my-2">
-                                <div class="font-bold text-lg text-gray-700 text-center"><?= $product['ProductName'] ?></div>
+                                <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
+                                    <span x-text="productName"></span>
+                                </div>
                                 <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
                                 <?php
                                 // Compute the price with tax
                                 $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
                                 ?>
                                 <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
-                                <div class="text-gray-500 text-sm">Stocks: <?= $product['Quantity'] ?></div>
+                                <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
                             </button>
 
+                            <!-- Modal Section -->
+                            <dialog data-modal class="rounded-lg shadow-xl  w-1/4 max-h-full">
+
+                                <!-- Modal Header -->
+                                <div class="w-full bg-green-800 h-10 flex justify-end items-center">
+                                    <button data-close-modal> <i class="ri-close-fill text-2xl font-bold text-white p-2"></i></button>
+                                </div>
+
+                                <!-- Modal Content -->
+                                <div class="relative p-4">
+                                    <div class="relative bg-white">
+                                        <div class="flex justify-center">
+                                            <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4"></div>
+                                        </div>
+                                        <div class="text-justify">
+                                            <div id="modal-product-category" class="text-justify font-semibold text-gray-800"></div>
+                                        </div>
+                                        <div class="flex justify-between pt-4">
+                                            <h3 id="modal-product-name" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
+                                            <h3 id="modal-product-price" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
+                                        </div>
+
+                                        <div class="text-justify ">
+                                            <div id="modal-product-description" class="text-justify"></div>
+                                        </div>
+
+                                        <div class="flex justify-between pt-6">
+                                            <h3 id="modal-product-stocks" class="pt-3 text-xl text-gray-500 font-medium"></h3>
+                                            <button class="p-3 border border-green-900 bg-green-800 text-white rounded-lg font-medium" @click="
+                                                if (selectedProduct['stocks'] > 0) { 
+                                                    addToCart(selectedProduct); 
+                                                    const Toast = Swal.mixin({
+                                                        toast: true,
+                                                        position: 'top-end',
+                                                        showConfirmButton: false,
+                                                        timer: 1000,
+                                                        timerProgressBar: true,
+                                                        didOpen: (toast) => {
+                                                            toast.onmouseenter = Swal.stopTimer;
+                                                            toast.onmouseleave = Swal.resumeTimer;
+                                                        }
+                                                    });
+
+                                                    Toast.fire({
+                                                        icon: 'success',
+                                                        title: 'Item Added To Cart!'
+                                                    });
+                                                } else { 
+                                                    alert('This product is out of stock.'); 
+                                                }
+                                            ">
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </dialog>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
             <?php endforeach; ?>
         </div>
+
+
+        <!-- Modal Script -->
+        <script>
+            const openButtons = document.querySelectorAll('[data-open-modal]');
+            const closeButtons = document.querySelector('[data-close-modal]');
+            const modal = document.querySelector('[data-modal]');
+            const modalProductName = document.getElementById('modal-product-name');
+            const modalProductPrice = document.getElementById('modal-product-price');
+            const modalProductDescription = document.getElementById('modal-product-description');
+            const modalProductCategory = document.getElementById('modal-product-category');
+            const modalProductStocks = document.getElementById('modal-product-stocks');
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const product = JSON.parse(button.dataset.product);
+                    modalProductName.textContent = product.ProductName;
+                    modalProductPrice.textContent = 'Php' + product.Price;
+                    modalProductCategory.textContent = product.Category;
+                    modalProductDescription.textContent = product.Description;
+                    modalProductStocks.textContent = 'Stocks: ' + product.Stocks + ' ' + product.UnitOfMeasurement;
+                    modal.showModal();
+                });
+            });
+
+            closeButtons.addEventListener('click', () => {
+                modal.close();
+            });
+        </script>
     </main>
     <script src="./../src/route.js"></script>
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addToCartButton = document.querySelector('#modal-add-to-cart-button');
+        const productItemButton = document.querySelector('#product-item-button');
+
+        addToCartButton.addEventListener('click', function() {
+            // Trigger click event of product item button
+            productItemButton.click();
+        });
+    });
+</script>
+
 
 <script>
     // Initialize Alpine.js data
@@ -386,6 +479,7 @@
             sidebarOpen: true,
             cartOpen: false,
             isFullScreen: false,
+            selectedProduct: null,
 
             // Load the cart items from localStorage when the page loads
             init() {
@@ -402,13 +496,24 @@
             addToCart(product) {
                 let item = this.cart.find(i => i.id === product.id);
                 if (item) {
-                    item.quantity++;
+                    if (item.quantity + 1 > product.stocks) {
+                        alert('The quantity you want to add is greater than the available stocks.');
+                    } else {
+                        item.quantity++;
+                    }
+
+
                 } else {
-                    this.cart.push({
-                        ...product,
-                        quantity: 1
-                    });
+                    if (product.stocks < 1) {
+                        alert('The quantity you want to add is greater than the available stocks.');
+                    } else {
+                        this.cart.push({
+                            ...product,
+                            quantity: 1
+                        });
+                    }
                 }
+
 
                 // Save the cart items to localStorage
                 localStorage.setItem('cart', JSON.stringify(this.cart));

@@ -26,8 +26,7 @@
                     alt="">
                 </div>
                 <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900"><?php echo $employee['first_name'] . ' ' . $employee['middle_name'] . ' ' . $employee['last_name']; ?>
-                  </div>
+                  <div class="text-sm font-medium leading-5 text-gray-900"><?php echo $employee['first_name'] . ' ' . substr($employee['middle_name'], 0, 1) . '. ' . $employee['last_name']; ?></div>
                   <div class="text-sm leading-5 text-gray-500"><?php echo $employee['email']; ?></div>
                 </div>
               </div>
@@ -40,7 +39,7 @@
               <div class="text-sm leading-5 text-gray-500"><?php echo $employee['department']; ?></div>
             </td>
             <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a route="/hr/employees/profile" class="text-indigo-600 hover:text-indigo-900">View</a>
+              <a route="/hr/employees/id=<?php echo htmlspecialchars($employee['id']); ?>" class="text-indigo-600 hover:text-indigo-900">View</a>
             </td>
           </tr>
           <?php endforeach; ?>

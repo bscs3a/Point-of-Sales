@@ -3,12 +3,14 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT * FROM attendance;";
+$query = "SELECT attendance.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM attendance";
+$query .= " LEFT JOIN employees ON attendance.employees_id = employees.id";
+
 $params = [];
 
 if (!empty($search)) {
-    $query .= " WHERE first_name = :search OR last_name = :search OR position = :search OR department = :search OR id = :search OR type = :search;";
-    $params[':search'] = $search;
+  $query .= " WHERE employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR attendance.id = :search OR attendance.employees_id = :search;";
+  $params[':search'] = $search;
 }
 
 $stmt = $conn->prepare($query);
@@ -73,16 +75,16 @@ $stmt = null;
 
   <!-- UNCOMMENT THIS AFTER FINISHING THE BACKEND FOR DTR -->
   <?php 
-    // if (empty($attendance)) {
-    //     require_once 'inc/noResult.php';
-    // } 
-    // else {
-    //     require_once 'inc/dtr.table.php';
-    // } 
+    if (empty($attendance)) {
+        require_once 'inc/noResult.php';
+    } 
+    else {
+        require_once 'inc/dtr.table.php';
+    } 
   ?>
 
   <!-- Sample: DELETE THIS WHEN BACKEND IS DONE -->
-  <div class="ml-6 flex flex-col mt-8 mr-6">
+  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
   <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
     <table class="min-w-full">
       <thead>
@@ -132,7 +134,7 @@ $stmt = null;
         </tbody>
       </table>
     </div>
-  </div>
+  </div> -->
 <!-- END Daily Time Record -->
 
 </main>

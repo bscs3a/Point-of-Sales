@@ -11,9 +11,6 @@ $hr = [
     '/hr/employees' => $basePath . "employees.php",
     '/hr/employees/search' => $basePath . "employees.php",
     '/hr/employees/add' => $basePath . "employees.add.php",
-    '/hr/employees/update' => $basePath . "employees.update.php",
-    '/hr/employees/profile' => $basePath . "employees.profile.php",
-
 
     // departments
     '/hr/employees/departments' => $basePath . "departments.php", // 'departments.php
@@ -30,11 +27,16 @@ $hr = [
     '/hr/leave-requests' => $basePath . "leave-requests.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
 
-    //tests
-    '/hr/test' => $basePath . "test-add.php",
-    '/hr/test/id={id}' => function($id) use ($basePath) {
+    //view profile
+    '/hr/employees/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
-        include $basePath . "test-add.php";
+        include $basePath . "employees.profile.php";
+    },
+
+    //update profile
+    '/hr/employees/update={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "employees.update.php";
     },
 ];
 
@@ -414,29 +416,29 @@ Router::post('/hr/applicants', function () {
     include './public/humanResources/views/hr.applicants.php';
 });
 
-// example [test]
-Router::post('/add', function () {
+// search leave_requests
+Router::post('/hr/leave-requests', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-
-    $stmt = $conn->prepare("INSERT INTO test_table (first_name, last_name) VALUES (:firstName, :lastName)");
-    $stmt->bindParam(':firstName', $firstName, PDO::PARAM_STR);
-    $stmt->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+    $search = $_POST['search'];
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
 
-    if (empty($firstName) || empty($lastName)) {
-        header("Location: $rootFolder/hr/test");
+    if (empty($search)) {
+        header("Location: $rootFolder/hr/leave-requests");
         return;
     }
 
+    $query = "SELECT leave_requests.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM leave_requests LEFT JOIN employees ON leave_requests.employees_id = employees.id WHERE employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.employees_id = :search;";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":search", $search);
+
     // Execute the statement
     $stmt->execute();
+    $leaveRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    header("Location: $rootFolder/hr/test");
+    include './public/humanResources/views/hr.leave-requests.php';
 });
 
 // EXAMPLE DELETE

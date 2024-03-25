@@ -1,7 +1,3 @@
-<?php
-  // require_once './public/humanResources/func/add-employee.php';
-?>
-
 <!DOCTYPE html>
 <html>
 <head>

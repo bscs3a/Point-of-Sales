@@ -7,13 +7,13 @@
   $params = [];
 
   if (!empty($search)) {
-      $query .= " WHERE first_name = :search OR last_name = :search OR position = :search OR department = :search OR id = :search;";
+      $query .= " WHERE first_name = :search OR last_name = :search OR applyingForPosition = :search OR applyingForDepartment = :search OR id = :search;";
       $params[':search'] = $search;
   }
 
   $stmt = $conn->prepare($query);
   $stmt->execute($params);
-  $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $applicants = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   $pdo = null;
   $stmt = null;
@@ -72,11 +72,11 @@
   </div> 
   
   <?php 
-    if (empty($employees)) {
+    if (empty($applicants)) {
         require_once 'inc/noResult.php';
     } 
     else {
-        require_once 'inc/employees.table.php';
+        require_once 'inc/applicants.table.php';
     } 
   ?>
   <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
