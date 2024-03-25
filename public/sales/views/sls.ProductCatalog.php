@@ -348,56 +348,70 @@
             $categories = array_unique(array_column($products, 'Category')); // Extracting unique categories from products
             ?>
             <?php foreach ($categories as $category) : ?>
-                <!-- Display category name -->
-                <div class="text-xl font-bold divide-y ml-3 mt-5"><?= $category ?></div>
-                <!-- Horizontal line -->
-                <hr class="w-full border-gray-300 my-2">
-                <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
-                    <?php foreach ($products as $product) : ?>
-                        <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
-                            <!-- Product Item Button -->
-                            <button id="product-item-button" data-open-modal type="button" flareFire class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category']) ?>' @click="
+                <div class="category-container"> <!-- Add this line -->
+                    <!-- Display category name -->
+                    <div class="text-xl font-bold divide-y ml-3 mt-5 category-name"><?= $category ?></div>
+                    <!-- Horizontal line -->
+                    <hr class="w-full border-gray-300 my-2 category-line">
+                    <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
+                        <?php foreach ($products as $product) : ?>
+                            <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
+                                <!-- Product Item Button -->
+                                <button id="product-item-button" data-open-modal type="button" flareFire class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category']) ?>' @click="
                                                             selectedProduct = { id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, deliveryRequired: '<?= $product['DeliveryRequired'] ?>' };
                                                         ">
 
-                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                    <!-- SVG icon -->
-                                </div>
+                                    <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
+                                        <!-- SVG icon -->
+                                    </div>
 
-                                <!-- Horizontal line -->
-                                <hr class="w-full border-gray-300 my-2">
-                                <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
-                                    <span x-text="productName"></span>
-                                </div>
-                                <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
-                                <?php
-                                // Compute the price with tax
-                                $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
-                                ?>
-                                <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
-                                <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
-                            </button>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                                    <!-- Horizontal line -->
+                                    <hr class="w-full border-gray-300 my-2">
+                                    <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
+                                        <span x-text="productName"></span>
+                                    </div>
+                                    <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
+                                    <?php
+                                    // Compute the price with tax
+                                    $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
+                                    ?>
+                                    <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
+                                    <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
+                                </button>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
-        
+
         <script>
             document.getElementById('searchInput').addEventListener('input', function() {
-                console.log('Input event triggered'); // Add this line
+                console.log('Input event triggered');
 
                 var searchValue = this.value.toLowerCase();
-                var items = document.querySelectorAll('#product-item-button');
+                var containers = document.querySelectorAll('.category-container');
 
-                items.forEach(function(item) {
-                    var productName = item.getAttribute('data-product-name').toLowerCase();
-                    var productCategory = item.getAttribute('data-product-category').toLowerCase();
+                containers.forEach(function(container) {
+                    var categoryName = container.querySelector('.category-name').textContent.toLowerCase();
+                    var items = container.querySelectorAll('#product-item-button');
 
-                    if (productName.includes(searchValue) || productCategory.includes(searchValue)) {
-                        item.style.display = '';
+                    var isCategoryMatch = categoryName.includes(searchValue);
+                    var isItemMatch = Array.from(items).some(function(item) {
+                        var productName = item.getAttribute('data-product-name').toLowerCase();
+                        var productCategory = item.getAttribute('data-product-category').toLowerCase();
+                        return productName.includes(searchValue) || productCategory.includes(searchValue);
+                    });
+
+                    if (isCategoryMatch || isItemMatch) {
+                        container.style.display = '';
+                        items.forEach(function(item) {
+                            var productName = item.getAttribute('data-product-name').toLowerCase();
+                            var productCategory = item.getAttribute('data-product-category').toLowerCase();
+                            item.style.display = (productName.includes(searchValue) || productCategory.includes(searchValue)) ? '' : 'none';
+                        });
                     } else {
-                        item.style.display = 'none';
+                        container.style.display = 'none';
                     }
                 });
             });
