@@ -138,6 +138,11 @@ Router::post('/hr/employees/add', function () {
         return;
     }
 
+    // if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
+    //     header("Location: $rootFolder/hr/employees/add");
+    //     return;
+    // }
+
     $stmt->execute([
         ':firstName' => $firstName,
         ':middleName' => $middleName,
