@@ -139,8 +139,11 @@
                     <!-- Search Form -->
                     <div class="relative mb-3">
                         <input type="text" id="searchInput" placeholder="Search..." title="Search by product name..." class="h-10 px-3 py-2 pl-5 pr-10 border rounded-r-lg rounded-l-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
+                        <svg id="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <svg id="clear-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6 hidden">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </div>
                 </div>
@@ -173,6 +176,35 @@
                                 document.getElementById('searchInput').dispatchEvent(new Event('input'));
                             });
                         });
+                    });
+                </script>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const searchInput = document.getElementById('searchInput');
+                        const searchIcon = document.getElementById('search-icon');
+                        const clearIcon = document.getElementById('clear-icon');
+
+                        // Show the clear icon when the search input has value
+                        searchInput.addEventListener('input', function() {
+                            if (this.value) {
+                                searchIcon.classList.add('hidden');
+                                clearIcon.classList.remove('hidden');
+                            } else {
+                                searchIcon.classList.remove('hidden');
+                                clearIcon.classList.add('hidden');
+                            }
+                        });
+
+                        // Clear the search input when the clear icon is clicked
+                        clearIcon.addEventListener('click', function() {
+                            searchInput.value = '';
+                            this.classList.add('hidden');
+                            searchIcon.classList.remove('hidden');
+                            searchInput.dispatchEvent(new Event('input'));
+                        });
+
+                        // Rest of your code...
                     });
                 </script>
             </div>
