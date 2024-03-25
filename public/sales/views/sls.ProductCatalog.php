@@ -16,10 +16,9 @@
         import Swal from 'sweetalert2'
 
         const Swal = require('sweetalert2')
-        
     </script>
 
-    
+
 
 
 
@@ -37,34 +36,31 @@
         }
 
 
-     .modalPop{
-        animation: fadeInUp 0.3s ease-in-out;
-                    }
+        .modalPop {
+            animation: fadeInUp 0.3s ease-in-out;
+        }
 
-                    @keyframes fadeInUp {
-                        0% {
-                            opacity: 0;
-                            transform: translateY(20px);
-                        }
-                        100% {
-                            opacity: 1;
-                            transform: translateY(0);
-                        }
-                    }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-                    @keyframes fadeInDown{
-                        100%{
-                            opacity: 1;
-                            transform: translateY(0);
-                        }
-                        
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-                    }
+        @keyframes fadeInDown {
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+
+        }
     </style>
-
-
-
-               
 
     <?php
     require_once 'function/getProducts.php';
@@ -120,34 +116,35 @@
 
             <!-- Search Form -->
             <div class="flex justify-between items-center w-full pl-0">
-                <form class="max-w-lg ml-20 mb-3 w-2/5">
+                <!-- Dropdown for Categories -->
+                <div class="flex ml-24">
                     <!-- Dropdown for Categories -->
-                    <div class="flex">
-                        <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only">Your Email</label>
-                        <button id="dropdown-button" data-dropdown-toggle="dropdown" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100" type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                            </svg></button>
-                        <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
-                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
-                                <!-- Dropdown Options -->
-                                <?php foreach ($categories as $category) : ?>
-                                    <li>
-                                        <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100"><?= $category ?></button>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                        <!-- Search Input -->
-                        <div class="relative w-full">
-                            <input type="search" id="search-dropdown" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Hardware, Tools, Supplies..." required /> <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-green-800 rounded-e-lg border border-green-800 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                </svg>
-                                <span class="sr-only">Search</span>
-                            </button>
-                        </div>
+                    <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only"></label>
+                    <button id="dropdown-button" data-dropdown-toggle="dropdown" class="h-10 flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100" type="button">
+                        All categories 
+                        <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
+                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
+                            <!-- Dropdown Options -->
+                            <?php foreach ($categories as $category) : ?>
+                                <li>
+                                    <button type="button" class="category-button inline-flex w-full px-4 py-2 hover:bg-gray-100"><?= $category ?></button>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     </div>
-                </form>
+                    <!-- Search Form -->
+                    <div class="relative mb-3">
+                        <input type="text" id="searchInput" placeholder="Search..." title="Search by product name..." class="h-10 px-3 py-2 pl-5 pr-10 border rounded-r-lg rounded-l-none">
+                        <input type="text" id="categoryInput" placeholder="Search..." title="Search by product name..." class=" h-10 px-3 py-2 pl-5 pr-10 border rounded-r-lg rounded-l-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
 
                 <!-- JavaScript for Dropdown -->
                 <script>
@@ -170,31 +167,6 @@
                 </script>
             </div>
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    // Get references to the dropdown button and the dropdown menu
-                    const dropdownButton = document.getElementById('dropdown-button');
-                    const dropdown = document.getElementById('dropdown');
-
-                    // Toggle the visibility of the dropdown menu when the dropdown button is clicked
-                    dropdownButton.addEventListener('click', function() {
-                        dropdown.classList.toggle('hidden');
-                    });
-
-                    // Close the dropdown menu when a click occurs outside of the dropdown button or the dropdown menu
-                    document.addEventListener('click', function(event) {
-                        // Check if the clicked element is the dropdown button or inside the dropdown menu
-                        const isDropdownButton = event.target.matches('#dropdown-button');
-                        const isDropdown = event.target.closest('#dropdown');
-
-                        // If the click is neither on the dropdown button nor inside the dropdown menu, hide the dropdown menu
-                        if (!isDropdownButton && !isDropdown) {
-                            dropdown.classList.add('hidden');
-                        }
-                    });
-                });
-            </script>
-
             <div class="right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200 hidden">
                 <div class="flex items-center">
                     <!-- Button to toggle the cart view -->
@@ -211,7 +183,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
 
 
@@ -237,13 +208,6 @@
                 <button class="py-1 px-3 rounded bg-gray-100 border-2 border-gray-300 hover:bg-red-400 hover:border-red-600 active:scale-75 transition-all transform ease-in-out">
                     <i class="ri-delete-bin-7-fill text-xl"></i>
                 </button>
-
-
-
-
-
-
-
             </div>
 
             <!-- Cart items -->
@@ -382,9 +346,9 @@
                     <?php foreach ($products as $product) : ?>
                         <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
                             <!-- Product Item Button -->
-                            <button id="product-item-button" data-open-modal type="button" flareFire class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" data-product='<?= json_encode($product) ?>' @click="
-                                selectedProduct = { id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, deliveryRequired: '<?= $product['DeliveryRequired'] ?>' };
-                            ">
+                            <button id="product-item-button" data-open-modal type="button" flareFire class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category']) ?>' @click="
+                                                            selectedProduct = { id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, deliveryRequired: '<?= $product['DeliveryRequired'] ?>' };
+                                                        ">
 
                                 <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
                                     <!-- SVG icon -->
@@ -403,77 +367,124 @@
                                 <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
                                 <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
                             </button>
-
-                            <!-- Modal Section -->
-                            <dialog data-modal class="modalPop rounded-lg shadow-xl max-h-full elementToFade">
-
-                                <!-- Modal Header -->
-                                <div class="w-full bg-green-800 h-10 flex flex-row-2 gap-60 text-center justify-end">
-                                    <span class="text-white text-xl font-semibold p-2">Product Details</span>
-                                    <button data-close-modal> <i class="ri-close-fill text-2xl font-bold text-white p-2"></i></button>
-                                </div>
-
-
-                                <!-- Modal Content -->
-                                <div class="relative">
-                                    <div class=" bg-white flex-row flex gap-10 p-4 pt-6 pb-8">
-                                        <div class="">
-                                            <div class="size-64 rounded-full shadow-lg bg-yellow-200"></div>
-                                        </div>
-                                        
-                                     <div>
-                                        <div class="">
-                                            <div id="modal-product-category" class=" text-gray-400"></div>
-                                        </div>
-                                        <div class="flex justify-between items-center">
-                                            <h3 id="modal-product-name" class="mb-5 text-2xl font-bold text-gray-800 dark:text-gray-800 pr-10"></h3>
-                                            <h3 id="modal-product-price" class="mb-5 text-2xl font-bold text-gray-800 dark:text-gray-800 bg-gray-200 rounded-lg p-1 px-10 shadow-md border border-gray-300"></h3>
-                                        </div>
-
-                                        <div class="divide-y">
-                                            <div class="text-gray-400 pb-2">Product Description</div>
-                                            <div id="modal-product-description" class="text-lg pt-2"></div>
-                                        </div>
-
-                                        <div class="flex justify-between pt-6 mt-8">
-                                            <h3 id="modal-product-stocks" class="pt-3 text-xl text-gray-400"></h3>
-                                            <button class="p-3 border w-44 border-green-900 bg-green-800 text-white rounded-lg font-medium hover:shadow-lg hover:bg-green-950 hover:font-bold transition-all" @click="
-                                                if (selectedProduct['stocks'] > 0) { 
-                                                    addToCart(selectedProduct); 
-                                                    const Toast = Swal.mixin({
-                                                        toast: true,
-                                                        position: 'top-end',
-                                                        showConfirmButton: false,
-                                                        timer: 1000,
-                                                        timerProgressBar: true,
-                                                        didOpen: (toast) => {
-                                                            toast.onmouseenter = Swal.stopTimer;
-                                                            toast.onmouseleave = Swal.resumeTimer;
-                                                        }
-                                                    });
-
-                                                    Toast.fire({
-                                                        icon: 'success',
-                                                        title: 'Item Added To Cart!'
-                                                    });
-                                                } else { 
-                                                    alert('This product is out of stock.'); 
-                                                }
-                                            ">
-                                                Add to Cart
-                                            </button>
-                                             </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                  
-                            </dialog>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <script>
+            document.getElementById('searchInput').addEventListener('input', function() {
+                // Add event listener to category buttons
+                document.querySelectorAll('.category-button').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        // Update search input value with category name
+                        document.getElementById('categoryInput').value = button.textContent;
+
+                        // Trigger input event to filter products
+                        document.getElementById('categoryInput').dispatchEvent(new Event('input'));
+                    });
+                });
+
+                // Existing search functionality...
+                document.getElementById('categoryInput').addEventListener('input', function() {
+                    var searchValue = this.value.toLowerCase();
+                    var items = document.querySelectorAll('#product-item-button');
+
+                    items.forEach(function(item) {
+                        var productName = item.getAttribute('data-product-category').toLowerCase();
+
+                        if (productName.includes(searchValue)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+
+                // Existing search functionality...
+                document.getElementById('searchInput').addEventListener('input', function() {
+                    var searchValue = this.value.toLowerCase();
+                    var items = document.querySelectorAll('#product-item-button');
+
+                    items.forEach(function(item) {
+                        var productName = item.getAttribute('data-product-name').toLowerCase();
+
+                        if (productName.includes(searchValue)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <!-- Modal Section -->
+        <dialog data-modal class="modalPop rounded-lg shadow-xl max-h-full elementToFade">
+
+            <!-- Modal Header -->
+            <div class="w-full bg-green-800 h-10 flex flex-row-2 gap-60 text-center justify-end">
+                <span class="text-white text-xl font-semibold p-2">Product Details</span>
+                <button data-close-modal> <i class="ri-close-fill text-2xl font-bold text-white p-2"></i></button>
+            </div>
+
+
+            <!-- Modal Content -->
+            <div class="relative">
+                <div class=" bg-white flex-row flex gap-10 p-4 pt-6 pb-8">
+                    <div class="">
+                        <div class="size-64 rounded-full shadow-lg bg-yellow-200"></div>
+                    </div>
+
+                    <div>
+                        <div class="">
+                            <div id="modal-product-category" class=" text-gray-400"></div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <h3 id="modal-product-name" class="mb-5 text-2xl font-bold text-gray-800 dark:text-gray-800 pr-10"></h3>
+                            <h3 id="modal-product-price" class="mb-5 text-2xl font-bold text-gray-800 dark:text-gray-800 bg-gray-200 rounded-lg p-1 px-10 shadow-md border border-gray-300"></h3>
+                        </div>
+
+                        <div class="divide-y">
+                            <div class="text-gray-400 pb-2">Product Description</div>
+                            <div id="modal-product-description" class="text-lg pt-2"></div>
+                        </div>
+
+                        <div class="flex justify-between pt-6 mt-8">
+                            <h3 id="modal-product-stocks" class="pt-3 text-xl text-gray-400"></h3>
+                            <button class="p-3 border w-44 border-green-900 bg-green-800 text-white rounded-lg font-medium hover:shadow-lg hover:bg-green-950 hover:font-bold transition-all" @click="
+                                    if (selectedProduct['stocks'] > 0) { 
+                                        addToCart(selectedProduct); 
+                                        const Toast = Swal.mixin({
+                                            toast: true,
+                                            position: 'top-end',
+                                            showConfirmButton: false,
+                                            timer: 1000,
+                                            timerProgressBar: true,
+                                            didOpen: (toast) => {
+                                                toast.onmouseenter = Swal.stopTimer;
+                                                toast.onmouseleave = Swal.resumeTimer;
+                                            }
+                                        });
+
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: 'Item Added To Cart!'
+                                        });
+                                    } else { 
+                                        alert('This product is out of stock.'); 
+                                    }
+                                ">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </dialog>
 
 
         <!-- Modal Script -->
@@ -490,14 +501,14 @@
             openButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const product = JSON.parse(button.dataset.product);
-                    selectedProduct = { 
-                        id: product.ProductID, 
-                        name: product.ProductName, 
-                        price: Number(product.Price), 
-                        stocks: product.Stocks, 
-                        priceWithTax: Number(product.Price) * (1 + Number(product.TaxRate)), 
-                        TaxRate: Number(product.TaxRate), 
-                        deliveryRequired: product.DeliveryRequired 
+                    selectedProduct = {
+                        id: product.ProductID,
+                        name: product.ProductName,
+                        price: Number(product.Price),
+                        stocks: product.Stocks,
+                        priceWithTax: Number(product.Price) * (1 + Number(product.TaxRate)),
+                        TaxRate: Number(product.TaxRate),
+                        deliveryRequired: product.DeliveryRequired
                     };
                     console.log('selectedProduct: ', selectedProduct);
                     modalProductName.textContent = product.ProductName;
@@ -510,14 +521,14 @@
             });
 
             closeButtons.addEventListener('click', () => {
-                modal.animate([{ opacity: 1 }, { opacity: 0 }], 250).onfinish = () => {
+                modal.animate([{
+                    opacity: 1
+                }, {
+                    opacity: 0
+                }], 250).onfinish = () => {
                     modal.close();
                 };
             });
-
-            
-   
-
         </script>
     </main>
     <script src="./../src/route.js"></script>
