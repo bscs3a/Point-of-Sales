@@ -36,13 +36,13 @@ getTotalOfGroup("Asset", 2003, 12);
 ```
 
 4. getGroupCode($groupType);
-- synonymous to the getLedgerCode()
+- synonymous to the getLedgerCode(), but considers the grouptype
 
 5. getTotalOfAccountType($accountType, $year = null, $month = null) 
 - synonymous to the getAccountBalance(), but this one consider the account type
 
 6. getAccountCode($accountType)
-- synonymous to the getLedgerCode()
+- synonymous to the getLedgerCode(), but considers the accounttype
 
 7. insertLedgerXact($debitLedger, $creditLedger, $amount, $details = null, $year = null, $month = null)
 - this function allows you to insert a transaction in the ledger transaction table.
