@@ -154,6 +154,7 @@ Router::post('/hr/employees/add', function () {
     ]);
 
     $employeeId = $conn->lastInsertId();
+    $salaryId = $conn->lastInsertId();
 
     // EMPLOYMENT INFORMATION
     $dateofhire = $_POST['dateofhire'];
@@ -176,7 +177,7 @@ Router::post('/hr/employees/add', function () {
     ]);
 
     // SALARY AND TAX INFORMATION
-    // salary
+    // salary FK : employees_id
     $monthlysalary = $_POST['monthlysalary'];
     $totalsalary = $_POST['totalsalary'];
     
@@ -200,23 +201,23 @@ Router::post('/hr/employees/add', function () {
         ':totalsalary' => $totalSalary,
     ]);
 
-    // tax
+    // tax : FK salary_id
     $incometax = $_POST['incometax'];
     $withholdingtax = $_POST['withholdingtax'];
 
     // Calculate tax amount based on monthly salary
     $taxAmount = calculateWithholdingTax($monthlysalary);
 
-    $query = "INSERT INTO tax_info (employees_id, income_tax, withholding_tax) VALUES (:employeeId, :incometax, :withholdingtax);";
+    $query = "INSERT INTO tax_info (salary_id, income_tax, withholding_tax) VALUES (:salaryId, :incometax, :withholdingtax);";
     $stmt = $conn->prepare($query);
 
     $stmt->execute([
-        ':employeeId' => $employeeId,
+        ':salaryId' => $salaryId,
         ':incometax' => $incometax,
         ':withholdingtax' => $taxAmount,
     ]);
     
-    // benefits
+    // benefits : FK salary_id
     $sss = $_POST['sss'];
     $pagibig = $_POST['pagibig'];
     $philhealth = $_POST['philhealth'];
@@ -240,11 +241,11 @@ Router::post('/hr/employees/add', function () {
     // Ensure that the 13th-month pay is not less than the minimum value
     $thirteenthmonth = max($minimumThirteenthMonthPay, $monthlysalary);
 
-    $query = "INSERT INTO benefit_info (employees_id, sss_fund, pagibig_fund, philhealth, thirteenth_month) VALUES (:employeeId, :sss, :pagibig, :philhealth, :thirteenthmonth);";
+    $query = "INSERT INTO benefit_info (salary_id, sss_fund, pagibig_fund, philhealth, thirteenth_month) VALUES (:salaryId, :sss, :pagibig, :philhealth, :thirteenthmonth);";
     $stmt = $conn->prepare($query);
 
     $stmt->execute([
-        ':employeeId' => $employeeId,
+        ':salaryId' => $salaryId,
         ':sss' => $sssContribution,
         ':pagibig' => $pagibigContribution,
         ':philhealth' => $philhealthContribution,
