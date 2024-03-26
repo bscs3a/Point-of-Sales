@@ -60,7 +60,7 @@
                 <div class="flex justify-between items-center">
                     <h1 class="mb-3 text-xl font-bold text-black">Transaction History</h1>
                     <div class="relative mb-3">
-                        <select id="searchType" class="px-3 py-2 border rounded-lg mr-2">
+                    <select id="searchType" class="px-3 py-2 border rounded-lg mr-8">
                             <option value="customerName">Customer Name</option>
                             <option value="saleId">Sale ID</option>
                             <option value="salePreference">Sale Preference</option>
@@ -73,6 +73,7 @@
                     </div>
                 </div>
                 <div class="flex flex-row gap-10">
+                    
                     <table id="salesTable" class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
                         <thead class="bg-gray-200">
                             <tr>

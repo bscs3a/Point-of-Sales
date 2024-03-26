@@ -42,13 +42,45 @@
         </a>
     </li> -->
 
-         <li class="mb-1 hover:bg-slate-400 rounded-xl">
-             <a route='/sls/Transaction-History' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
-                 <i class="ri-shake-hands-fill mr-3 text-lg"></i>
-                 <span class="text-sm font-medium">Transaction History</span>
-                 <i class="ri-arrow-down-s-line ml-auto"></i>
-             </a>
-         </li>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.toggle-reports').addEventListener('click', function () {
+                document.getElementById('reports').classList.toggle('hidden');
+            });
+
+            document.querySelector('.toggle-ledger').addEventListener('click', function () {
+                document.getElementById('reports').classList.add('hidden');
+            });
+
+            document.querySelector('.toggle-request').addEventListener('click', function () {
+                document.getElementById('reports').classList.add('hidden');
+            });
+        });
+    </script>
+
+         <li class="mb-1 rounded-xl">
+            <button id="reports-button"
+                class="toggle-reports flex items-center py-2 px-4 w-full text-white hover:text-black  hover:bg-slate-400 rounded-xl">
+                <i class="ri-file-edit-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Transactions</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </button>
+            <ul id="reports" class="ml-8 hidden">
+                <li>
+                    <a route='/sls/Transaction-History' class="flex flex-row gap-2 items-center py-2 px-4 text-white hover:text-black hover:bg-slate-400 rounded-full transition-colors">
+                          <i class="ri-history-fill"></i>
+                        <span class="text-sm font-medium">History</span>
+                        
+                    </a>
+                </li>
+                <li>
+                    <a route="/sls/Revenue" class="flex flex-row gap-2 items-center py-2 px-4 text-white  hover:text-black hover:bg-slate-400 rounded-full transition-colors">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    <span class="text-sm font-medium">Revenue</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
          <li class="mb-1 hover:bg-slate-400 rounded-xl">
              <a route='/sls/Audit-Trail' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
@@ -58,13 +90,7 @@
              </a>
          </li>
 
-         <li class="mb-1 hover:bg-slate-400 rounded-xl">
-             <a route='/sls/Revenue' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
-                 <i class="ri-funds-line mr-3 text-lg"></i>
-                 <span class="text-sm font-medium">Revenue</span>
-                 <i class="ri-arrow-down-s-line ml-auto"></i>
-             </a>
-         </li>
+
  </div>
 
  <div class="fixed top-0 left-0 w-full h-full z-40 md:hidden sidebar-overlay"></div>
