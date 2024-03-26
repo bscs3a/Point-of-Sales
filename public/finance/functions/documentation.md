@@ -44,10 +44,13 @@ getTotalOfGroup("Asset", 2003, 12);
 6. getAccountCode($accountType)
 - synonymous to the getLedgerCode()
 
-7. insertLedgerXact($debitLedger, $creditLedger, $amount, $details = null)
+7. insertLedgerXact($debitLedger, $creditLedger, $amount, $details = null, $year = null, $month = null)
 - this function allows you to insert a transaction in the ledger transaction table.
 $debitLedger = LedgerNo_dr
 $creditLedger = LedgerNo
 $amount = amount
 $details = details
-datetime is already auto filled
+datetime can be autofilled.
+
+the final parameters of this function, $year and $month, are there to get the last second possible for a given month/year.
+it is only used for reportGeneration advance functions right now, so thread carefully
