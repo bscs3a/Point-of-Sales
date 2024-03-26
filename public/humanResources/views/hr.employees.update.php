@@ -12,10 +12,10 @@
         $query = "SELECT employees.*, employment_info.*, salary_info.*, tax_info.*, benefit_info.*, account_info.* FROM employees
         LEFT JOIN employment_info ON employment_info.employees_id = employees.id
         LEFT JOIN salary_info ON salary_info.employees_id = employees.id
-        LEFT JOIN tax_info ON tax_info.employees_id = employees.id
-        LEFT JOIN benefit_info ON benefit_info.employees_id = employees.id
+        LEFT JOIN tax_info ON tax_info.salary_id = salary_info.id
+        LEFT JOIN benefit_info ON benefit_info.salary_id = salary_info.id
         LEFT JOIN account_info ON account_info.employees_id = employees.id
-        WHERE employees.id = :id;";
+        WHERE employees.id = :id AND salary_info.id = :id;";
 
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
