@@ -1,6 +1,3 @@
-## indicating all tables
-
-i have 
 
 
 ## Basic backend logic for report generation.
