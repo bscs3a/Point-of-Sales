@@ -11,7 +11,7 @@ if ($conn === null) {
         
 <?php
         // query for delivery orders where is not delivered status
-$query = "SELECT * FROM deliveryorders WHERE DeliveryStatus != 'Delivered'";
+$query = "SELECT * FROM deliveryorders WHERE DeliveryStatus != 'Delivered' AND DeliveryStatus != 'Failed to Deliver'";
 
 $result = $conn->query($query);
 ?>

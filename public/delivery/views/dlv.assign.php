@@ -31,11 +31,11 @@ if ($truck === false) {
 ?>
 
 <?php
-        // Display orders from DeliveryOrders table and intersect with Products and Sales tables
+// Display orders from DeliveryOrders table and intersect with Products and Sales tables
 $stmt = $conn->prepare("SELECT DeliveryOrders.*, Products.ProductName, Sales.SaleDate FROM DeliveryOrders 
     INNER JOIN Products ON DeliveryOrders.ProductID = Products.ProductID
     INNER JOIN Sales ON DeliveryOrders.SaleID = Sales.SaleID
-    WHERE DeliveryOrders.DeliveryStatus = 'Pending'");
+    WHERE DeliveryOrders.DeliveryStatus IN ('Pending', 'Failed to Deliver')");
 $stmt->execute();
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

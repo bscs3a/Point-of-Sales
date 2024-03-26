@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS DeliveryOrders (
     DeliveryAddress TEXT,
     DeliveryDate DATE,
     ReceivedDate DATE,  
-    DeliveryStatus ENUM('Pending', 'In Transit', 'Delivered') DEFAULT 'Pending',
+    DeliveryStatus ENUM('Pending', 'In Transit', 'Delivered', 'Not Delivered') DEFAULT 'Pending',
     TruckID INT,
     FOREIGN KEY (SaleID) REFERENCES Sales(SaleID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),

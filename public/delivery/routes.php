@@ -47,15 +47,21 @@ Router::post('/statusupdateview', function () {
     $stmt->execute();
     $truckId = $stmt->fetchColumn();
 
-    // Update all rows with the fetched TruckID
-    $stmt = $conn->prepare("UPDATE deliveryorders SET DeliveryStatus = :status, ReceivedDate = :receivedDate WHERE TruckID = :truckId");
+    // Update only the specific row with the DeliveryOrderID
+    $stmt = $conn->prepare("UPDATE deliveryorders SET DeliveryStatus = :status, ReceivedDate = :receivedDate WHERE DeliveryOrderID = :orderId");
     $stmt->bindParam(':status', $status);
     $stmt->bindParam(':receivedDate', $receivedDate);
-    $stmt->bindParam(':truckId', $truckId);
+    $stmt->bindParam(':orderId', $orderId);
     $stmt->execute();
 
-    // If the status is 'Delivered', set the TruckStatus to 'Available'
-    if ($status == 'Delivered') {
+    // Check if all orders with the same TruckID are either delivered or Failed to Deliver
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM deliveryorders WHERE TruckID = :truckId AND DeliveryStatus NOT IN ('Delivered', 'Failed to Deliver')");
+    $stmt->bindParam(':truckId', $truckId);
+    $stmt->execute();
+    $pendingCount = $stmt->fetchColumn();
+
+    // If there are no pending orders, set the TruckStatus to 'Available'
+    if ($pendingCount == 0) {
         $stmt = $conn->prepare("UPDATE trucks SET TruckStatus = 'Available' WHERE TruckID = :truckId");
         $stmt->bindParam(':truckId', $truckId);
         $stmt->execute();

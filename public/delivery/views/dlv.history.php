@@ -10,7 +10,7 @@ if ($conn === null) {
 ?>
 
 <?php
-$query = "SELECT * FROM deliveryorders WHERE DeliveryStatus = 'Delivered'";
+$query = "SELECT * FROM deliveryorders WHERE DeliveryStatus IN ('Delivered', 'Failed to Deliver')";
 
 $result = $conn->query($query);
 ?>
