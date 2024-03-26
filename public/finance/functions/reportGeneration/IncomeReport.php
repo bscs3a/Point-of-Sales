@@ -18,6 +18,9 @@ function calculateNetSalesOrLoss($year, $month) {
     return getTotalOfGroup(INCOME, $year, $month) - getTotalOfGroup(EXPENSE, $year, $month);
 }
 
+// close the accounts
+
+// read the retained earnings
 
 function generateIncomeReport($year, $month) {
     $db = Database::getInstance();
