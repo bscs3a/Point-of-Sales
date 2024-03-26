@@ -60,6 +60,12 @@
                 <div class="flex justify-between items-center">
                     <h1 class="mb-3 text-xl font-bold text-black">Transaction History</h1>
                     <div class="relative mb-3">
+                        <select id="searchType" class="px-3 py-2 border rounded-lg mr-2">
+                            <option value="customerName">Customer Name</option>
+                            <option value="saleId">Sale ID</option>
+                            <option value="salePreference">Sale Preference</option>
+                            <option value="paymentMode">Payment Mode</option>
+                        </select>
                         <input type="text" id="searchInput" placeholder="Search..." title="Search by ID, Name, Sale Preferences, Payment Mode..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -142,22 +148,33 @@
             // Get the search input value
             var searchValue = this.value.toLowerCase();
 
+            // Get the selected search type
+            var searchType = document.getElementById('searchType').value;
+
             // Get all table rows
             var rows = document.querySelectorAll('#salesTable tbody tr');
 
             // Loop through the rows
             rows.forEach(function(row) {
-                // Get the Customer Name, Sale ID, Sale Preference and Payment Mode cells
-                var customerNameCell = row.querySelector('td:nth-child(1)');
-                var saleIdCell = row.querySelector('td:nth-child(2)');
-                var salePreferenceCell = row.querySelector('td:nth-child(4)');
-                var paymentModeCell = row.querySelector('td:nth-child(5)');
+                // Get the cell based on the search type
+                var cell;
+                switch (searchType) {
+                    case 'customerName':
+                        cell = row.querySelector('td:nth-child(1)');
+                        break;
+                    case 'saleId':
+                        cell = row.querySelector('td:nth-child(2)');
+                        break;
+                    case 'salePreference':
+                        cell = row.querySelector('td:nth-child(4)');
+                        break;
+                    case 'paymentMode':
+                        cell = row.querySelector('td:nth-child(5)');
+                        break;
+                }
 
-                // If any of the cells includes the search value, show the row, otherwise hide it
-                if (customerNameCell.textContent.toLowerCase().includes(searchValue) || 
-                    saleIdCell.textContent.toLowerCase().includes(searchValue) ||
-                    salePreferenceCell.textContent.toLowerCase().includes(searchValue) ||
-                    paymentModeCell.textContent.toLowerCase().includes(searchValue)) {
+                // If the cell includes the search value, show the row, otherwise hide it
+                if (cell.textContent.toLowerCase().includes(searchValue)) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';

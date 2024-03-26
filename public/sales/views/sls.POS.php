@@ -84,34 +84,37 @@
 
             <!-- Search Form -->
             <div class="flex justify-between items-center w-full pl-0">
-                <form class="max-w-lg ml-20 mb-3 w-2/5">
+                <!-- Dropdown for Categories -->
+                <div class="flex ml-24">
                     <!-- Dropdown for Categories -->
-                    <div class="flex">
-                        <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only">Your Email</label>
-                        <button id="dropdown-button" data-dropdown-toggle="dropdown" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100" type="button">All categories <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                            </svg></button>
-                        <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
-                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
-                                <!-- Dropdown Options -->
-                                <?php foreach ($categories as $category) : ?>
-                                    <li>
-                                        <button type="button" class="inline-flex w-full px-4 py-2 hover:bg-gray-100"><?= $category ?></button>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                        <!-- Search Input -->
-                        <div class="relative w-full">
-                            <input type="search" id="search-dropdown" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Hardware, Tools, Supplies..." required /> <button type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-green-800 rounded-e-lg border border-green-800 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                </svg>
-                                <span class="sr-only">Search</span>
-                            </button>
-                        </div>
+                    <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only"></label>
+                    <button id="dropdown-button" data-dropdown-toggle="dropdown" class="h-10 flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100" type="button">
+                        All categories
+                        <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
+                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
+                            <!-- Dropdown Options -->
+                            <?php foreach ($categories as $category) : ?>
+                                <li>
+                                    <button type="button" class="category-button inline-flex w-full px-4 py-2 text-left hover:bg-gray-100"><?= $category ?></button>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     </div>
-                </form>
+                    <!-- Search Form -->
+                    <div class="relative mb-3">
+                        <input type="text" id="searchInput" placeholder="Search..." title="Search by product name..." class="h-10 px-3 py-2 pl-5 pr-10 border rounded-r-lg rounded-l-none">
+                        <svg id="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <svg id="clear-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6 hidden">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                </div>
 
                 <!-- JavaScript for Dropdown -->
                 <script>
@@ -130,34 +133,49 @@
                                 dropdown.classList.add('hidden');
                             }
                         });
+
+                        // Add event listener to category buttons
+                        document.querySelectorAll('.category-button').forEach(function(button) {
+                            button.addEventListener('click', function() {
+                                // Update search input value with category name
+                                document.getElementById('searchInput').value = button.textContent;
+
+                                // Trigger input event to filter products
+                                document.getElementById('searchInput').dispatchEvent(new Event('input'));
+                            });
+                        });
+                    });
+                </script>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const searchInput = document.getElementById('searchInput');
+                        const searchIcon = document.getElementById('search-icon');
+                        const clearIcon = document.getElementById('clear-icon');
+
+                        // Show the clear icon when the search input has value
+                        searchInput.addEventListener('input', function() {
+                            if (this.value) {
+                                searchIcon.classList.add('hidden');
+                                clearIcon.classList.remove('hidden');
+                            } else {
+                                searchIcon.classList.remove('hidden');
+                                clearIcon.classList.add('hidden');
+                            }
+                        });
+
+                        // Clear the search input when the clear icon is clicked
+                        clearIcon.addEventListener('click', function() {
+                            searchInput.value = '';
+                            this.classList.add('hidden');
+                            searchIcon.classList.remove('hidden');
+                            searchInput.dispatchEvent(new Event('input'));
+                        });
+
+                        // Rest of your code...
                     });
                 </script>
             </div>
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    // Get references to the dropdown button and the dropdown menu
-                    const dropdownButton = document.getElementById('dropdown-button');
-                    const dropdown = document.getElementById('dropdown');
-
-                    // Toggle the visibility of the dropdown menu when the dropdown button is clicked
-                    dropdownButton.addEventListener('click', function() {
-                        dropdown.classList.toggle('hidden');
-                    });
-
-                    // Close the dropdown menu when a click occurs outside of the dropdown button or the dropdown menu
-                    document.addEventListener('click', function(event) {
-                        // Check if the clicked element is the dropdown button or inside the dropdown menu
-                        const isDropdownButton = event.target.matches('#dropdown-button');
-                        const isDropdown = event.target.closest('#dropdown');
-
-                        // If the click is neither on the dropdown button nor inside the dropdown menu, hide the dropdown menu
-                        if (!isDropdownButton && !isDropdown) {
-                            dropdown.classList.add('hidden');
-                        }
-                    });
-                });
-            </script>
 
             <div class="right-0 fixed flex items-center border-2 border-gray-300 rounded-l-md bg-gray-200 z-50">
                 <div class="flex items-center">
@@ -269,11 +287,7 @@
                         <!-- Cart item rows -->
                         <template x-for="(item, index) in cart" :key="index">
                             <tr class="bg-gray-100">
-                                <td class="text-left px-3 py-2 rounded-l-lg max-w-36 cursor-pointer hover:bg-gray-300 transition-colors ease-in-out" 
-                                    x-data="{ editing: false, newQuantity: item.quantity }"
-                                    x-effect="newQuantity = item.quantity"
-                                    @click="editing = true"
-                                    @click.away="if (editing) {
+                                <td class="text-left px-3 py-2 rounded-l-lg max-w-36 cursor-pointer hover:bg-gray-300 transition-colors ease-in-out" x-data="{ editing: false, newQuantity: item.quantity }" x-effect="newQuantity = item.quantity" @click="editing = true" @click.away="if (editing) {
                                                      console.log('Old quantity:', item.quantity);
                                                      console.log('New quantity:', newQuantity);
 
@@ -301,9 +315,7 @@
                                                     // Update the cart quantity display when the page loads
                                                     updateCartQuantity();
                                                 }
-                                                editing = false;"
-                                    @blur="editing = false; item.quantity = newQuantity"
-                                    @keydown.enter="if (editing) {
+                                                editing = false;" @blur="editing = false; item.quantity = newQuantity" @keydown.enter="if (editing) {
                                                      console.log('Old quantity:', item.quantity);
                                                      console.log('New quantity:', newQuantity);
 
@@ -332,11 +344,10 @@
                                                     updateCartQuantity();
                                                 }
 
-                                                editing = false;"
-                                    x-bind:class="{ 'bg-gray-300': editing, 'transition-all' : editing }">
+                                                editing = false;" x-bind:class="{ 'bg-gray-300': editing, 'transition-all' : editing }">
 
 
-                                    
+
                                     <span x-show="!editing" x-text="item.quantity + ' x ' + item.name"></span>
                                     <input x-show="editing" type="number" x-model="newQuantity" min="1" step="1" x-autofocus class="w-full rounded-md">
                                 </td>
@@ -487,16 +498,17 @@
             $categories = array_unique(array_column($products, 'Category')); // Extracting unique categories from products
             ?>
             <?php foreach ($categories as $category) : ?>
-                <!-- Display category name -->
-                <div class="text-xl font-bold divide-y ml-3 mt-5"><?= $category ?></div>
-                <!-- Horizontal line -->
-                <hr class="w-full border-gray-300 my-2">
+                <div class="category-container"> <!-- Add this line -->
+                    <!-- Display category name -->
+                    <div class="text-xl font-bold divide-y ml-3 mt-5 category-name"><?= $category ?></div>
+                    <!-- Horizontal line -->
+                    <hr class="w-full border-gray-300 my-2 category-line">
 
-                <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
-                    <?php foreach ($products as $product) : ?>
-                        <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
-                            
-                            <button type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" @click="
+                    <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
+                        <?php foreach ($products as $product) : ?>
+                            <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
+
+                                <button id="product-item-button" type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category']) ?>' @click="
                                     if (<?= $product['Stocks'] ?> > 0) { 
                                       addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true; 
                                 
@@ -505,29 +517,62 @@
                                     }">
 
 
-                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                    <!-- SVG icon -->
-                                </div>
+                                    <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
+                                        <!-- SVG icon -->
+                                    </div>
 
 
-                                <!-- Horizontal line -->
-                                <hr class="w-full border-gray-300 my-2">
-                                <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
-                                    <span x-text="productName"></span>
-                                </div>
-                                <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
-                                <?php
-                                // Compute the price with tax
-                                $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
-                                ?>
-                                <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
-                                <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
-                            </button>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                                    <!-- Horizontal line -->
+                                    <hr class="w-full border-gray-300 my-2">
+                                    <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
+                                        <span x-text="productName"></span>
+                                    </div>
+                                    <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
+                                    <?php
+                                    // Compute the price with tax
+                                    $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
+                                    ?>
+                                    <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?= number_format($price_with_tax, 2) ?></div>
+                                    <div class="text-gray-500 text-sm">Stocks: <?= $product['Stocks'] ?> <?= $product['UnitOfMeasurement'] ?></div>
+                                </button>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <script>
+            document.getElementById('searchInput').addEventListener('input', function() {
+                console.log('Input event triggered');
+
+                var searchValue = this.value.toLowerCase();
+                var containers = document.querySelectorAll('.category-container');
+
+                containers.forEach(function(container) {
+                    var categoryName = container.querySelector('.category-name').textContent.toLowerCase();
+                    var items = container.querySelectorAll('#product-item-button');
+
+                    var isCategoryMatch = categoryName.includes(searchValue);
+                    var isItemMatch = Array.from(items).some(function(item) {
+                        var productName = item.getAttribute('data-product-name').toLowerCase();
+                        var productCategory = item.getAttribute('data-product-category').toLowerCase();
+                        return productName.includes(searchValue) || productCategory.includes(searchValue);
+                    });
+
+                    if (isCategoryMatch || isItemMatch) {
+                        container.style.display = '';
+                        items.forEach(function(item) {
+                            var productName = item.getAttribute('data-product-name').toLowerCase();
+                            var productCategory = item.getAttribute('data-product-category').toLowerCase();
+                            item.style.display = (productName.includes(searchValue) || productCategory.includes(searchValue)) ? '' : 'none';
+                        });
+                    } else {
+                        container.style.display = 'none';
+                    }
+                });
+            });
+        </script>
     </main>
     <script src="./../src/route.js"></script>
 

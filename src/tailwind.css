@@ -744,6 +744,10 @@ video {
   top: 1.5rem;
 }
 
+.right-8{
+  right: 2rem;
+}
+
 .isolate{
   isolation: isolate;
 }
@@ -970,6 +974,10 @@ video {
 
 .ml-20{
   margin-left: 5rem;
+}
+
+.ml-24{
+  margin-left: 6rem;
 }
 
 .ml-3{
@@ -2568,6 +2576,11 @@ video {
 .rounded-l-md{
   border-top-left-radius: 0.375rem;
   border-bottom-left-radius: 0.375rem;
+}
+
+.rounded-l-none{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .rounded-r{
