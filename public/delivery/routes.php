@@ -87,6 +87,6 @@ Router::post('/truckassign', function () {
 
     // Redirect to the dashboard
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/dlv/history");
+    header("Location: $rootFolder/dlv/dashboard");
     exit;
 });

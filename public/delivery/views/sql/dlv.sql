@@ -117,3 +117,9 @@ INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Light-Duty', 'VRR125');
 INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Heavy-Duty', 'DJD233');
 INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Heavy-Duty', 'PGD994');
 INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Heavy-Duty', 'UHD535');
+
+
+UPDATE deliveryorders
+SET DeliveryStatus = 'Pending',
+    ReceivedDate = NULL,
+    TruckID = NULL;
