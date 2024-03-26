@@ -44,30 +44,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelector('.toggle-reports').addEventListener('click', function () {
-                document.getElementById('reports').classList.toggle('hidden');
+            document.querySelector('.toggle-transactions').addEventListener('click', function () {
+                document.getElementById('transactions').classList.toggle('hidden');
             });
 
             document.querySelector('.toggle-ledger').addEventListener('click', function () {
-                document.getElementById('reports').classList.add('hidden');
+                document.getElementById('transactions').classList.add('hidden');
             });
 
             document.querySelector('.toggle-request').addEventListener('click', function () {
-                document.getElementById('reports').classList.add('hidden');
+                document.getElementById('transactions').classList.add('hidden');
             });
         });
+
     </script>
 
          <li class="mb-1 rounded-xl">
-            <button id="reports-button"
-                class="toggle-reports flex items-center py-2 px-4 w-full text-white hover:text-black  hover:bg-slate-400 rounded-xl">
+            <button id="transactions-button"
+                class="toggle-transactions flex items-center py-2 px-4 w-full text-white hover:text-black focus:bg-slate-800  hover:bg-slate-400 rounded-xl">
                 <i class="ri-file-edit-fill mr-3 text-lg"></i>
                 <span class="text-sm font-medium">Transactions</span>
                 <i class="ri-arrow-down-s-line ml-auto"></i>
             </button>
-            <ul id="reports" class="ml-8 hidden">
+            <ul id="transactions" class="ml-8 my-2 hidden">
                 <li>
-                    <a route='/sls/Transaction-History' class="flex flex-row gap-2 items-center py-2 px-4 text-white hover:text-black hover:bg-slate-400 rounded-full transition-colors">
+                    <a route='/sls/Transaction-History' class="flex flex-row gap-2 items-center py-2 px-4 text-white hover:text-black hover:bg-slate-400 rounded-full transition-colors active:bg-slate-400">
                           <i class="ri-history-fill"></i>
                         <span class="text-sm font-medium">History</span>
                         
