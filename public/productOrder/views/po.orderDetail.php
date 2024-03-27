@@ -50,7 +50,7 @@
           {
             try {
               // Query to count the number of unique suppliers
-              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS DeliveredCount FROM order_details WHERE Order_Status = 'Complete'";
+              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS DeliveredCount FROM order_details WHERE Order_Status = 'Completed'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
@@ -111,7 +111,7 @@
           </div>
           
         </div>
-        <a class="text-3xl ml-5">Order Details</a>
+        <a class="text-3xl ml-5">Order/s To Receive</a>
         <!-- table -->
         <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md m-5">
           <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">

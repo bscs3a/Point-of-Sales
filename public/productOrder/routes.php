@@ -317,7 +317,7 @@ function updateOrderStatusToCompleted()
             $conn->beginTransaction();
 
             // Update the order status in the order_details table
-            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Complete' WHERE Supplier_ID = :supplierID");
+            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Completed' WHERE Supplier_ID = :supplierID");
             $stmt->bindParam(':supplierID', $supplierID);
             $stmt->execute();
 
@@ -330,7 +330,7 @@ function updateOrderStatusToCompleted()
             $requestID = $orderDetails['request_Id'];
 
             // Insert updated data into transaction_history table
-            $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Complete')");
+            $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Completed')");
             $insertStmt->bindParam(':orderID', $orderID);
             $insertStmt->bindParam(':requestID', $requestID);
             $insertStmt->bindParam(':supplierID', $supplierID);
@@ -372,7 +372,7 @@ function updateOrderStatusToCancel()
             $conn->beginTransaction();
 
             // Update the order status in the order_details table
-            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Cancel' WHERE Supplier_ID = :supplierID");
+            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Canceled' WHERE Supplier_ID = :supplierID");
             $stmt->bindParam(':supplierID', $supplierID);
             $stmt->execute();
 
@@ -385,7 +385,7 @@ function updateOrderStatusToCancel()
             $requestID = $orderDetails['request_Id'];
 
             // Insert updated data into transaction_history table
-            $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Cancel')");
+            $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Canceled')");
             $insertStmt->bindParam(':orderID', $orderID);
             $insertStmt->bindParam(':requestID', $requestID);
             $insertStmt->bindParam(':supplierID', $supplierID);
