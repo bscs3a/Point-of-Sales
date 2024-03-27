@@ -80,19 +80,19 @@
           require_once 'dbconn.php';
 
           // Function to count the number of unique suppliers
-          function countSuppliers($conn)
+          function countOrders($conn)
           {
             try {
-              // Query to count the number of unique suppliers
-              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS SupplierCount FROM order_details WHERE Order_Status = 'to receive'";
+              // Query to count the number of ordered items
+              $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'to receive'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
               // Fetch the count
               $row = $statement->fetch(PDO::FETCH_ASSOC);
-              $supplierCount = $row['SupplierCount'];
+              $orderCount = $row['OrderCount'];
 
-              return $supplierCount;
+              return $orderCount;
             } catch (PDOException $e) {
               echo "Connection failed: " . $e->getMessage();
             }
@@ -101,11 +101,11 @@
           // Call the countSuppliers function to get the count
           $db = Database::getInstance();
           $conn = $db->connect();
-          $supplierCount = countSuppliers($conn);
+          $orderCount = countOrders($conn);
           ?>
           <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
             <a class="text-3xl">
-              <?php echo $supplierCount; ?> Order/s
+              <?php echo $orderCount; ?> Order/s
             </a>
             <a class="text-lg">To Receive</a>
           </div>
@@ -118,7 +118,7 @@
             <thead class="bg-gray-200">
               <tr class="border-b border-y-gray-300">
                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                  Supplier ID
+                  Order ID
                 </th>
                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">
                   Supplier Name
@@ -136,69 +136,68 @@
               </tr>
             </thead>
             <?php
-function displayRequestData()
-{
-    try {
-        require_once 'dbconn.php';
-        $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
-
-        // Query to retrieve distinct supplier IDs along with their latest date and time
-        $query = "SELECT od.Supplier_ID, s.Supplier_Name, MAX(od.Date_Ordered) AS LatestDate, MAX(od.Time_Ordered) AS LatestTime
-                            FROM order_details od
-                            JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
-                            WHERE od.Order_Status = 'to receive'
-                            GROUP BY od.Supplier_ID";
-        $statement = $conn->prepare($query);
-        $statement->execute();
-
-        // Fetch all rows as associative array
-        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        // Loop through each row and display data in HTML table format
-        foreach ($rows as $row) {
-            echo '<tbody class="divide-y divide-gray-100 border-b border-gray-300">';
-            echo '<tr class="hover:bg-gray-50">';
-            echo '<th class="px-6 py-4 font-normal text-gray-900">';
-            echo '<div class="font-medium text-gray-700 text-sm">' . $row['Supplier_ID'] . '</div>';
-            echo '</th>';
-            echo '<td class="px-6 py-4">';
-            echo '<div class="font-medium text-gray-700 text-sm">' . $row['Supplier_Name'] . '</div>'; // Display supplier name
-            echo '</td>';
-            echo '<td class="px-6 py-4">';
-            echo '<div class="font-medium text-gray-700 text-sm">' . $row['LatestDate'] . '</div>';
-            echo '</td>';
-            echo '<td class="px-6 py-4">';
-            echo '<div class="font-medium text-gray-700 text-sm">' . $row['LatestTime'] . '</div>';
-            echo '</td>';
-            echo '<td class="px-6 py-4">';
-            // Form for Completed status
-            echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data">';
-            echo '<input type="hidden" name="Supplier_ID" value="' . $row['Supplier_ID'] . '">';
-            echo '<input type="hidden" name="status" value="Completed">';
-            echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Complete</button>';
-            echo '</form>';
-            
-            // Form for Cancel status
-            echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data">';
-            echo '<input type="hidden" name="Supplier_ID" value="' . $row['Supplier_ID'] . '">';
-            echo '<input type="hidden" name="status" value="Cancel">';
-            echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Cancel</button>';
-            echo '</form>';
-            echo '</td>';
-            echo '<td class="px-6 py-4">';
-            echo '<div class="font-medium text-gray-700 text-sm">View</div>';
-            echo '</td>';
-            echo '</tr>';
-            echo '</tbody>';
-        }
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
-}
-
-// Call the function to display request data
-displayRequestData();
-?>
+ function displayPendingOrders()
+ {
+     try {
+         require_once 'dbconn.php'; // Include your database connection file
+         $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
+ 
+         // Query to retrieve order IDs with status "pending"
+         $query = "SELECT od.Order_ID, od.Supplier_ID, s.Supplier_Name, od.Date_Ordered, od.Time_Ordered
+                             FROM order_details od
+                             JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
+                             WHERE od.Order_Status = 'to receive'
+                             GROUP BY od.Order_ID"; // Group by Order_ID to show each unique order
+ 
+         $statement = $conn->prepare($query);
+         $statement->execute();
+ 
+         // Fetch all rows as associative array
+         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+ 
+         // Loop through each row and display data in HTML table format
+         foreach ($rows as $row) {
+             echo '<tbody class="divide-y divide-gray-100 border-b border-gray-300">';
+             echo '<tr class="hover:bg-gray-50">';
+             echo '<th class="px-6 py-4 font-normal text-gray-900">';
+             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Order_ID'] . '</div>';
+             echo '</th>';
+             echo '<td class="px-6 py-4">';
+             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Supplier_Name'] . '</div>'; // Display supplier name
+             echo '</td>';
+             echo '<td class="px-6 py-4">';
+             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Date_Ordered'] . '</div>';
+             echo '</td>';
+             echo '<td class="px-6 py-4">';
+             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Time_Ordered'] . '</div>';
+             echo '</td>';
+             echo '<td class="px-6 py-4">';
+             // Form for Completed status
+             echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data">';
+             echo '<input type="hidden" name="Order_ID" value="' . $row['Order_ID'] . '">';
+             echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Complete</button>';
+             echo '</form>';
+             
+             // Form for Cancel status
+             echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data">';
+             echo '<input type="hidden" name="Order_ID" value="' . $row['Order_ID'] . '">';
+             echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Cancel</button>';
+             echo '</form>';
+             echo '</td>';
+             echo '<td class="px-6 py-4">';
+             echo '<div class="font-medium text-gray-700 text-sm">View</div>';
+             echo '</td>';
+             echo '</tr>';
+             echo '</tbody>';
+         }
+     } catch (PDOException $e) {
+         echo "Connection failed: " . $e->getMessage();
+     }
+ }
+ 
+ // Call the function to display pending orders
+ displayPendingOrders();
+ ?>
           </table>
         </div>
       </div>

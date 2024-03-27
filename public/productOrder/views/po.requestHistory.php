@@ -244,11 +244,11 @@ getTotalItemsAndAmount();
         </div>
 
         <!-- View All Button -->
-        <div class="flex justify-end border-none">
+        <!-- <div class="flex justify-end border-none">
           <button class="mr-5 py-3 px-4 border-2 border-black text-sm rounded-md bg-[#FFC955]">
             view all
           </button>
-        </div>
+        </div> -->
         
       </div>
     </div>

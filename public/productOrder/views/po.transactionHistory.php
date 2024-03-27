@@ -97,19 +97,19 @@
           require_once 'dbconn.php';
 
           // Function to count the number of unique suppliers
-          function countSuppliers($conn)
+          function countOrders($conn)
           {
             try {
-              // Query to count the number of unique suppliers
-              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS SupplierCount FROM order_details WHERE Order_Status = 'to receive'";
+              // Query to count the number of ordered items
+              $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'to receive'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
               // Fetch the count
               $row = $statement->fetch(PDO::FETCH_ASSOC);
-              $supplierCount = $row['SupplierCount'];
+              $orderCount = $row['OrderCount'];
 
-              return $supplierCount;
+              return $orderCount;
             } catch (PDOException $e) {
               echo "Connection failed: " . $e->getMessage();
             }
@@ -118,28 +118,62 @@
           // Call the countSuppliers function to get the count
           $db = Database::getInstance();
           $conn = $db->connect();
-          $supplierCount = countSuppliers($conn);
+          $orderCount = countOrders($conn);
           ?>
           <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
             <a class="text-3xl">
-              <?php echo $supplierCount; ?> Order/s
+              <?php echo $orderCount; ?> Order/s
             </a>
             <a class="text-lg">To Receive</a>
           </div>
-          
+          <?php
+          // Include your database connection file
+          require_once 'dbconn.php';
+
+          // Function to count the number of cancelled orders
+          function countCancelled($conn)
+          {
+            try {
+              // Query to count the number of unique suppliers
+              $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'Canceled'";
+              $statement = $conn->prepare($query);
+              $statement->execute();
+
+              // Fetch the count
+              $row = $statement->fetch(PDO::FETCH_ASSOC);
+              $orderCount = $row['OrderCount'];
+
+              return $orderCount;
+            } catch (PDOException $e) {
+              echo "Connection failed: " . $e->getMessage();
+            }
+          }
+
+          // Call the countSuppliers function to get the count
+          $db = Database::getInstance();
+          $conn = $db->connect();
+          $orderCount = countCancelled($conn);
+          ?>
+          <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
+            <a class="text-3xl">
+              <?php echo $orderCount; ?> Order/s
+            </a>
+            <a class="text-lg">Canceled</a>
+          </div>
+
         </div>
           <a class="text-3xl ml-5">Ordered Details</a>
 
           <!-- table -->
           <div
-            class="overflow-hidden rounded-lg border border-gray-300 shadow-md m-5">
+            class="overflow-auto rounded-lg border border-gray-300 shadow-md m-5">
 
             <table
               class="w-full border-collapse bg-white text-left text-sm text-gray-500">
               <thead class="bg-gray-200">
                 <tr class="border-b border-y-gray-300">
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                    Supplier ID
+                    Transaction ID
                   </th>
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900">
                     Supplier Name

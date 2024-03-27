@@ -310,26 +310,26 @@ function updateOrderStatusToCompleted()
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        if (isset($_POST['Supplier_ID'])) {
-            $supplierID = $_POST['Supplier_ID'];
+        if (isset($_POST['Order_ID'])) {
+            $orderID = $_POST['Order_ID'];
 
             // Begin a transaction
             $conn->beginTransaction();
 
             // Update the order status in the order_details table
-            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Completed' WHERE Supplier_ID = :supplierID");
-            $stmt->bindParam(':supplierID', $supplierID);
+            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Completed' WHERE Order_ID = :orderID");
+            $stmt->bindParam(':orderID', $orderID);
             $stmt->execute();
 
-            // Get order_id and request_Id
-            $orderDetailsStmt = $conn->prepare("SELECT order_id, request_Id FROM order_details WHERE Supplier_ID = :supplierID");
-            $orderDetailsStmt->bindParam(':supplierID', $supplierID);
+            // Fetch order details
+            $orderDetailsStmt = $conn->prepare("SELECT request_Id, Supplier_ID FROM order_details WHERE Order_ID = :orderID");
+            $orderDetailsStmt->bindParam(':orderID', $orderID);
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
-            $orderID = $orderDetails['order_id'];
             $requestID = $orderDetails['request_Id'];
+            $supplierID = $orderDetails['Supplier_ID'];
 
-            // Insert updated data into transaction_history table
+            // Insert data into transaction_history table
             $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Completed')");
             $insertStmt->bindParam(':orderID', $orderID);
             $insertStmt->bindParam(':requestID', $requestID);
@@ -339,7 +339,7 @@ function updateOrderStatusToCompleted()
             // Commit the transaction
             $conn->commit();
 
-            echo "Order status updated to 'Completed' for Supplier ID: $supplierID";
+            echo "Order status updated to 'Completed' for Order ID: $orderID";
 
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/orderDetail");
@@ -365,26 +365,26 @@ function updateOrderStatusToCancel()
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        if (isset($_POST['Supplier_ID'])) {
-            $supplierID = $_POST['Supplier_ID'];
+        if (isset($_POST['Order_ID'])) {
+            $orderID = $_POST['Order_ID'];
 
             // Begin a transaction
             $conn->beginTransaction();
 
             // Update the order status in the order_details table
-            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Canceled' WHERE Supplier_ID = :supplierID");
-            $stmt->bindParam(':supplierID', $supplierID);
+            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Canceled' WHERE Order_ID = :orderID");
+            $stmt->bindParam(':orderID', $orderID);
             $stmt->execute();
 
-            // Get order_id and request_Id
-            $orderDetailsStmt = $conn->prepare("SELECT order_id, request_Id FROM order_details WHERE Supplier_ID = :supplierID");
-            $orderDetailsStmt->bindParam(':supplierID', $supplierID);
+            // Fetch order details
+            $orderDetailsStmt = $conn->prepare("SELECT request_Id, Supplier_ID FROM order_details WHERE Order_ID = :orderID");
+            $orderDetailsStmt->bindParam(':orderID', $orderID);
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
-            $orderID = $orderDetails['order_id'];
             $requestID = $orderDetails['request_Id'];
+            $supplierID = $orderDetails['Supplier_ID'];
 
-            // Insert updated data into transaction_history table
+            // Insert data into transaction_history table
             $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Canceled')");
             $insertStmt->bindParam(':orderID', $orderID);
             $insertStmt->bindParam(':requestID', $requestID);
@@ -394,11 +394,11 @@ function updateOrderStatusToCancel()
             // Commit the transaction
             $conn->commit();
 
-            echo "Order status updated to 'Completed' for Supplier ID: $supplierID";
+            echo "Order status updated to 'Completed' for Order ID: $orderID";
 
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/orderDetail");
-            exit(); // Stop script execution after redirection
+            exit(); // Stop script execution
         }
     } catch (PDOException $e) {
         // Rollback the transaction in case of error
