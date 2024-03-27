@@ -441,10 +441,27 @@
                             var productName = item.getAttribute('data-product-name').toLowerCase();
                             var productCategory = item.getAttribute('data-product-category').toLowerCase();
                             item.style.display = (productName.includes(searchValue) || productCategory.includes(searchValue)) ? '' : 'none';
+                            item.style.border = '3px solid #21532c';
+                            item.style.transition = 'border 0.1s ease-in-out'; // Add transition property
+
+                            setTimeout(function() {
+                                item.style.border = '1px solid #d2d5db';
+                                item.style.transition = 'border 0.1s ease-in-out'; // Add transition property
+                            }, 2000);
                         });
+                        
                     } else {
                         container.style.display = 'none';
                     }
+
+                    if (searchValue === '') {
+                        container.style.display = '';
+                        items.forEach(function(item) {
+                            item.style.display = '';
+                            item.style.border = '1px solid #d2d5db';
+                        });
+                    }
+
                 });
             });
         </script>

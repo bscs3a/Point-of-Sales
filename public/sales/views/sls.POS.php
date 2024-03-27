@@ -498,11 +498,11 @@
             $categories = array_unique(array_column($products, 'Category')); // Extracting unique categories from products
             ?>
             <?php foreach ($categories as $category) : ?>
-                <div class="category-container"> <!-- Add this line -->
+                <div class="category-container flex flex-col justify-start"> <!-- Add this line -->
                     <!-- Display category name -->
                     <div class="text-xl font-bold divide-y ml-3 mt-5 category-name"><?= $category ?></div>
                     <!-- Horizontal line -->
-                    <hr class="w-full border-gray-300 my-2 category-line">
+                    <hr class="w-full border-gray-300 my-2 mb-8 category-line">
 
                     <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
                         <?php foreach ($products as $product) : ?>
@@ -566,10 +566,27 @@
                             var productName = item.getAttribute('data-product-name').toLowerCase();
                             var productCategory = item.getAttribute('data-product-category').toLowerCase();
                             item.style.display = (productName.includes(searchValue) || productCategory.includes(searchValue)) ? '' : 'none';
+                            item.style.border = '3px solid #21532c';
+                            item.style.transition = 'border 0.1s ease-in-out'; // Add transition property
+
+                            setTimeout(function() {
+                                item.style.border = '1px solid #d2d5db';
+                                item.style.transition = 'border 0.1s ease-in-out'; // Add transition property
+                            }, 2000);
                         });
+                        
                     } else {
                         container.style.display = 'none';
                     }
+
+                    if (searchValue === '') {
+                        container.style.display = '';
+                        items.forEach(function(item) {
+                            item.style.display = '';
+                            item.style.border = '1px solid #d2d5db';
+                        });
+                    }
+
                 });
             });
         </script>
