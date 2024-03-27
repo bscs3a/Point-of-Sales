@@ -280,14 +280,24 @@
             // Get the original labels and data
             var originalLabels = <?php echo json_encode($labels); ?>;
             var originalData = <?php echo json_encode($data); ?>;
+            var originalTotalSalesData = <?php echo json_encode($totalSalesData); ?>;
 
             // Filter the labels and data based on the selected year
-            var labels = originalLabels.filter(label => label.startsWith(selectedYear));
-            var data = originalData.slice(0, labels.length);
+            var labels = [];
+            var data = [];
+            var totalSalesData = [];
+            for (var i = 0; i < originalLabels.length; i++) {
+                if (originalLabels[i].startsWith(selectedYear)) {
+                    labels.push(originalLabels[i]);
+                    data.push(originalData[i]);
+                    totalSalesData.push(originalTotalSalesData[i]);
+                }
+            }
 
             // Update the chart labels and data
             myChart.data.labels = labels;
             myChart.data.datasets[0].data = data;
+            myChart.data.datasets[1].data = totalSalesData;
             myChart.update();
         });
     </script>
