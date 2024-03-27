@@ -144,7 +144,7 @@ function displayRequestData()
             echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data">';
             echo '<input type="hidden" name="Supplier_ID" value="' . $row['Supplier_ID'] . '">';
             echo '<input type="hidden" name="status" value="Completed">';
-            echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Completed</button>';
+            echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Complete</button>';
             echo '</form>';
             
             // Form for Cancel status
