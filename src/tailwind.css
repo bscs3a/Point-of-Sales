@@ -4283,9 +4283,7 @@ video {
   display: none;
 }
 
-.\!\[a-zA-Z\:_\]{
-  a-z-a--z:  !important;
-}
+
 
 @media (min-width: 640px){
   .sm\:container{
