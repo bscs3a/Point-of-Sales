@@ -111,9 +111,10 @@ function displayRequestData()
 {
     try {
         require_once 'dbconn.php';
+        $conn = Database::getInstance()->connect(); 
 
         // Query to retrieve request data
-        $query = "SELECT * FROM requests WHERE request_Status = 'accepted'";
+        $query = "SELECT * FROM requests WHERE request_Status = 'accepted'"; //query to show in the requestHistory the data that was accepted
         $statement = $conn->prepare($query);
         $statement->execute();
         $requests = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -124,23 +125,47 @@ function displayRequestData()
             echo '<tr class="hover:bg-gray-100">';
             echo '<th class="flex gap-3 px-6 py-7 font-normal text-gray-900">';
             echo '<div class="flex flex-col font-medium text-gray-700 text-sm">';
-            echo '<div class="font-medium text-gray-700 text-sm">Product Name</div>'; //fetch the Product Name to the products table
+
+            // Fetch and display Product Name from the 'products' table
+            $productQuery = "SELECT ProductName FROM products WHERE ProductID = :productID";
+            $productStatement = $conn->prepare($productQuery);
+            $productStatement->bindParam(':productID', $request['Product_ID']);
+            $productStatement->execute();
+            $product = $productStatement->fetch(PDO::FETCH_ASSOC);
+            echo '<div class="font-medium text-gray-700 text-sm">' . $product['ProductName'] . '</div>';
+
             echo '</div>';
             echo '</th>';
             echo '<td class="px-6 py-7">';
             echo '<div class="font-medium text-gray-700 text-sm">' . $request['Request_ID'] . '</div>';
             echo '</td>';
             echo '<td class="px-6 py-7">';
-            echo '<div class="font-medium text-gray-700 text-sm">Date</div>'; //fetch the price to the order_details table
+            
+            // Fetch and display Date from the 'order_details' table using 'Order_ID' from requests table
+            $dateQuery = "SELECT Date_Ordered FROM order_details WHERE Order_ID = :orderID";
+            $dateStatement = $conn->prepare($dateQuery);
+            $dateStatement->bindParam(':orderID', $request['Request_ID']); // Assuming 'Request_ID' in the requests table corresponds to 'Order_ID' in the order_details table
+            $dateStatement->execute();
+            $date = $dateStatement->fetch(PDO::FETCH_ASSOC);
+            echo '<div class="font-medium text-gray-700 text-sm">' . $date['Date_Ordered'] . '</div>';
+            
             echo '</td>';
             echo '<td class="px-6 py-7">';
-            echo '<div class="font-medium text-gray-700 text-sm">Price</div>'; //fetch the price to the products table
+            
+            // Fetch and display Price from the 'products' table
+            $priceQuery = "SELECT Price FROM products WHERE ProductID = :productID";
+            $priceStatement = $conn->prepare($priceQuery);
+            $priceStatement->bindParam(':productID', $request['Product_ID']);
+            $priceStatement->execute();
+            $price = $priceStatement->fetch(PDO::FETCH_ASSOC);
+            echo '<div class="font-medium text-gray-700 text-sm">' . $price['Price'] . '</div>';
+            
             echo '</td>';
             echo '<td class="px-6 py-7">';
-            echo '<div class="font-medium text-gray-700 text-center">' . $request['Product_Quantity'] . '</div>'; //fetch the price to the products table
+            echo '<div class="font-medium text-gray-700 text-center">' . $request['Product_Quantity'] . '</div>';
             echo '</td>';
             echo '<td class="px-6 py-7">';
-            echo '<div class="font-medium text-gray-700 text-center">' . $request['Product_Total_Price'] . '</div>'; //fetch the price to the products table
+            echo '<div class="font-medium text-gray-700 text-center">' . $request['Product_Total_Price'] . '</div>';
             echo '</td>';
             echo '</tr>';
             echo '</tbody>';
@@ -153,6 +178,7 @@ function displayRequestData()
 // Call the function to display request data
 displayRequestData();
 ?>
+
 
 <tfoot class="bg-gray-200">
     <tr class="border-b border-y-gray-300">
@@ -169,7 +195,7 @@ displayRequestData();
         <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
             <div class="flex flex-col font-medium text-gray-700 gap-3">
             <?php
-// Function to get the total count of items and the total amount
+// Function to get the total count of items and the total amount of the accepted request
 function getTotalItemsAndAmount()
 {
     try {
@@ -182,13 +208,13 @@ function getTotalItemsAndAmount()
         }
 
         // Query to get the total count of items
-        $itemCountQuery = "SELECT COUNT(*) AS totalItems FROM requests"; // Replace 'your_table_name' with your actual table name
+        $itemCountQuery = "SELECT COUNT(*) AS totalItems FROM requests WHERE request_Status = 'accepted'"; 
         $itemCountStatement = $conn->prepare($itemCountQuery);
         $itemCountStatement->execute();
         $itemCountResult = $itemCountStatement->fetch(PDO::FETCH_ASSOC);
 
         // Query to get the total amount
-        $totalAmountQuery = "SELECT SUM(Product_Total_Price) AS totalAmount FROM requests"; // Replace 'amount_column_name' and 'your_table_name' with your actual column name and table name
+        $totalAmountQuery = "SELECT SUM(Product_Total_Price) AS totalAmount FROM requests"; 
         $totalAmountStatement = $conn->prepare($totalAmountQuery);
         $totalAmountStatement->execute();
         $totalAmountResult = $totalAmountStatement->fetch(PDO::FETCH_ASSOC);
