@@ -148,6 +148,37 @@
                     </div>
                 </div>
 
+                <?php
+                // Get the current month
+                $currentMonth = date('Y-m');
+
+                // Query for the number of transactions for the current month
+                $sqlTransactionRate = "
+                    SELECT COUNT(*) AS TransactionRate 
+                    FROM Sales 
+                    WHERE DATE_FORMAT(SaleDate, '%Y-%m') = ?
+                ";
+                $stmtTransactionRate = $pdo->prepare($sqlTransactionRate);
+                $stmtTransactionRate->execute([$currentMonth]);
+                $transactionRate = $stmtTransactionRate->fetchColumn() ?: 0;
+
+                // Query for the average number of transactions
+                $sqlAverageTransactionRate = "
+                    SELECT AVG(TransactionCount) AS AverageTransactionRate 
+                    FROM (
+                        SELECT COUNT(*) AS TransactionCount
+                        FROM Sales 
+                        GROUP BY DATE_FORMAT(SaleDate, '%Y-%m')
+                    ) AS MonthlyTransactions
+                ";
+                $stmtAverageTransactionRate = $pdo->prepare($sqlAverageTransactionRate);
+                $stmtAverageTransactionRate->execute();
+                $averageTransactionRate = $stmtAverageTransactionRate->fetchColumn() ?: 0;
+
+                // Calculate the percentage difference from the average
+                $percentageDifference = $averageTransactionRate != 0 ? (($transactionRate - $averageTransactionRate) / $averageTransactionRate) * 100 : 0;
+                ?>
+
                 <!-- Transaction Rate Card -->
                 <div class="bg-white rounded-md border p-6 shadow-md shadow-black/5">
                     <!-- Card header -->
@@ -158,9 +189,9 @@
                                 <i class="ri-shake-hands-fill" style="font-size: 1.2em;"></i> Transaction Rate
                             </div>
                             <!-- Card data -->
-                            <div class="text-4xl font-semibold ml-5 mt-4" style="color: #262261;">53</div>
+                            <div class="text-4xl font-semibold ml-5 mt-4" style="color: #262261;"><?php echo $transactionRate; ?></div>
                             <!-- Additional data -->
-                            <div class="text-sm font-semibold ml-5 mt-2" style="color: #5DD783;">+10% more than average</div>
+                            <div class="text-sm font-semibold ml-5 mt-2" style="color: #5DD783;"><?php echo number_format($percentageDifference, 2); ?>% more than average</div>
                         </div>
                         <!-- Card options -->
                         <div>
@@ -293,7 +324,7 @@
             var event = new Event('change');
             document.getElementById('yearSelect').dispatchEvent(event);
         };
-        
+
         document.getElementById('yearSelect').addEventListener('change', function() {
             // Get the selected year
             var selectedYear = this.value;

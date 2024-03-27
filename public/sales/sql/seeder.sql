@@ -19,53 +19,7 @@ VALUES
     ('Drywall (4x8 feet)', 'Drywall sheets for interior wall finishing', 'Building Materials', 'Yes', 12.00, 200, 0.12, 'sheet', 22.6796),  -- Converted 50 lbs to kg
     ('Concrete Mix (50 lb)', 'Pre-mixed concrete for small-scale construction projects', 'Building Materials', 'Yes', 8.00, 150, 0.12, 'lb', 22.6796);  -- Converted 50 lbs to kg
 
-    -- Insert mock data into the Sales table for 2023 
-    INSERT INTO Sales (SaleDate, SalePreference, ShippingFee, PaymentMode, TotalAmount, EmployeeID, CustomerID)
-    SELECT
-        DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP('2023-01-01') + RAND() * (UNIX_TIMESTAMP('2023-12-31') - UNIX_TIMESTAMP('2023-01-01'))), '%Y-%m-%d %H:%i:%s') AS SaleDate,
-        IF(RAND() < 0.5, 'Delivery', 'Pick-up') AS SalePreference,
-        ROUND(RAND() * (20 - 5) + 5, 2) AS ShippingFee,
-        'Cash' AS PaymentMode,
-        ROUND(RAND() * (500 - 50) + 50, 2) AS TotalAmount,
-        FLOOR(RAND() * 10) + 1 AS EmployeeID,  -- Assuming 10 employees
-        FLOOR(RAND() * 20) + 1 AS CustomerID  -- Assuming 20 customers
-    FROM
-        information_schema.tables;
-
-    -- Insert mock data into the TargetSales table
-    INSERT INTO TargetSales (MonthYear, TargetAmount, EmployeeID)
-    SELECT
-        CONCAT('2023-', LPAD(month, 2, '0'), '-01') AS MonthYear,
-        ROUND(RAND() * (10000 - 5000) + 5000, 2) AS TargetAmount,
-        FLOOR(RAND() * 10) + 1 AS EmployeeID  -- Assuming 10 employees
-    FROM
-        (SELECT 1 AS month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) months;
-
-    -- Insert mock data into the Sales table for 2022
-    INSERT INTO Sales (SaleDate, SalePreference, ShippingFee, PaymentMode, TotalAmount, EmployeeID, CustomerID)
-    SELECT
-        DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP('2022-01-01') + RAND() * (UNIX_TIMESTAMP('2022-12-31') - UNIX_TIMESTAMP('2022-01-01'))), '%Y-%m-%d %H:%i:%s') AS SaleDate,
-        IF(RAND() < 0.5, 'Delivery', 'Pick-up') AS SalePreference,
-        ROUND(RAND() * (20 - 5) + 5, 2) AS ShippingFee,
-        'Cash' AS PaymentMode,
-        ROUND(RAND() * (500 - 50) + 50, 2) AS TotalAmount,
-        FLOOR(RAND() * 10) + 1 AS EmployeeID,  -- Assuming 10 employees
-        FLOOR(RAND() * 20) + 1 AS CustomerID  -- Assuming 20 customers
-    FROM
-        information_schema.tables;
-
-    -- Insert mock data into the TargetSales table for 2022
-    INSERT INTO TargetSales (MonthYear, TargetAmount, EmployeeID)
-    SELECT
-        CONCAT('2022-', LPAD(month, 2, '0'), '-01') AS MonthYear,
-        ROUND(RAND() * (10000 - 5000) + 5000, 2) AS TargetAmount,
-        FLOOR(RAND() * 10) + 1 AS EmployeeID  -- Assuming 10 employees
-    FROM
-        (SELECT 1 AS month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) months;
-
-
-
-            -- Insert mock data into the Sales table for 2023
+    -- Insert mock data into the Sales table for 2023
     INSERT INTO Sales (SaleDate, SalePreference, ShippingFee, PaymentMode, TotalAmount, EmployeeID, CustomerID)
     SELECT
         DATE_FORMAT(FROM_UNIXTIME(UNIX_TIMESTAMP('2023-01-01') + RAND() * (UNIX_TIMESTAMP('2023-12-31') - UNIX_TIMESTAMP('2023-01-01'))), '%Y-%m-%d %H:%i:%s') AS SaleDate,
