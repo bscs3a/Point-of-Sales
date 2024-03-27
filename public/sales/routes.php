@@ -14,6 +14,7 @@ $sls = [
     '/sls/POS/Receipt' => $basePath . "Receipt.php",
     '/sls/Audit-Trail' => $basePath . "AuditTrail.php",
     '/sls/Revenue' => $basePath . "Revenue.php",
+    '/sls/Returns' => $basePath . "returns.php",
     '/sls/Sales-Management' => $basePath . "SalesManagement.php",
     // ... other routes ...
 

@@ -75,6 +75,13 @@
                     </a>
                 </li>
                 <li>
+                    <a route='/sls/Returns' class="flex flex-row gap-2 items-center py-2 px-4 text-white hover:text-black hover:bg-slate-400 rounded-full transition-colors active:bg-slate-400">
+                          <i class="ri-history-fill"></i>
+                        <span class="text-sm font-medium">Returns</span>
+                        
+                    </a>
+                </li>
+                <li>
                     <a route="/sls/Revenue" class="flex flex-row gap-2 items-center py-2 px-4 text-white  hover:text-black hover:bg-slate-400 rounded-full transition-colors">
                     <i class="ri-money-dollar-circle-line"></i>
                     <span class="text-sm font-medium">Revenue</span>
