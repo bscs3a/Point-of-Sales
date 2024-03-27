@@ -1493,6 +1493,10 @@ video {
   max-width: 28rem;
 }
 
+.max-w-\[400px\]{
+  max-width: 400px;
+}
+
 .flex-1{
   flex: 1 1 0%;
 }
@@ -2130,6 +2134,10 @@ video {
 
 .gap-60{
   gap: 15rem;
+}
+
+.gap-\[120px\]{
+  gap: 120px;
 }
 
 .space-x-0 > :not([hidden]) ~ :not([hidden]){
@@ -4491,6 +4499,11 @@ video {
 .hover\:text-white:hover{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.hover\:text-blue-500:hover{
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover{

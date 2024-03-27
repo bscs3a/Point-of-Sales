@@ -102,6 +102,31 @@
         <div class="min-h-screen p-6">
             <!-- Dashboard Analytics -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <?php
+                // Get the current month
+                $currentMonth = date('Y-m');
+
+                // Query for target sales for the current month
+                $sqlTargetSales = "
+                    SELECT TargetAmount 
+                    FROM TargetSales 
+                    WHERE DATE_FORMAT(MonthYear, '%Y-%m') = ?
+                ";
+                $stmtTargetSales = $pdo->prepare($sqlTargetSales);
+                $stmtTargetSales->execute([$currentMonth]);
+                $targetSales = $stmtTargetSales->fetchColumn();
+
+                // Query for actual sales for the current month
+                $sqlActualSales = "
+                    SELECT SUM(TotalAmount) AS ActualSales 
+                    FROM Sales 
+                    WHERE DATE_FORMAT(SaleDate, '%Y-%m') = ?
+                ";
+                $stmtActualSales = $pdo->prepare($sqlActualSales);
+                $stmtActualSales->execute([$currentMonth]);
+                $actualSales = $stmtActualSales->fetchColumn();
+                ?>
+
                 <!-- Target Sales Card -->
                 <div class="md:col-span-2 bg-white rounded-md border border-gray-200 p-6 shadow-md shadow-black/5">
                     <!-- Card header -->
@@ -109,10 +134,10 @@
                         <!-- Card title -->
                         <div>
                             <div class="text-lg font-semibold text-gray-800" style="color: #262261;">
-                                <i class="ri-funds-box-fill ri-fw" style="font-size: 1.2em;"></i> Target Sales for This Month
+                                <i class="ri-funds-box-fill ri-fw" style="font-size: 1.2em;"></i> Target Sales for <?php echo date('F Y', strtotime($currentMonth)); ?>
                             </div>
                             <!-- Card data -->
-                            <div class="text-4xl font-semibold ml-5 mt-4" style="color: #262261;">Php 52,580 <span style="color: gray;">/ Php 32,000</span></div>
+                            <div class="text-4xl font-semibold ml-5 mt-4" style="color: #262261;">Php <?php echo number_format($actualSales, 2); ?> <span style="color: gray;">/ Php <?php echo number_format($targetSales, 2); ?></span></div>
                             <!-- Additional data -->
                             <div class="text-sm font-semibold ml-5 mt-2" style="color: #5DD783;">+10% more than average</div>
                         </div>
@@ -164,10 +189,6 @@
                                     <option value="<?php echo $year['Year']; ?>"><?php echo $year['Year']; ?></option>
                                 <?php endforeach; ?>
                             </select>
-                        </div>
-                        <!-- Card options -->
-                        <div>
-                            <button type="button" class="dropdown-toggle text-gray-800 hover:text-gray-600"><i class="ri-more-fill"></i></button>
                         </div>
                     </div>
 
