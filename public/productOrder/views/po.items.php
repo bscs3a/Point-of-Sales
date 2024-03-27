@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,7 +83,7 @@
                   Product Name
                 </th>
                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                  Company
+                  Supplier
                 </th>
                 <th scope="col" class="px-6 py-4 font-medium text-gray-900">
                   Category
