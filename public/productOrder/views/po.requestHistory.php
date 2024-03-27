@@ -106,70 +106,113 @@
               </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-100 border-b border-gray-300">
-              <tr class="hover:bg-gray-100">
-                <th class="flex gap-3 px-6 py-7 font-normal text-gray-900">
-                  <div class="flex flex-col font-medium text-gray-700 text-sm">
-                    <a>Stanley 84-073 Flat</a>
-                    <a>Nose Pliers 6"</a>
-                  </div>
-                </th>
-                <td class="px-6 py-7">
-                  <div class="font-medium text-gray-700 text-sm">17703</div>
-                </td>
-                <td class="px-6 py-7">
-                  <div class="font-medium text-gray-700 text-sm">...</div>
-                </td>
-                <td class="px-6 py-7">
-                  <div class="font-medium text-gray-700 text-sm">
-                    Php 1000
-                  </div>
-                </td>
-                <td class="px-6 py-7">
-                  <div class="flex justify-center font-medium text-gray-700 text-sm">
-                    <nav>
-                      <ul class="flex items-center -space-x-px h-8 text-sm">
-                        <li>
-                          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-violet-950 hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">-</a>
-                        </li>
-                        <li>
-                          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-violet-950 hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                        </li>
-                        <li>
-                          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-violet-950 hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">+</a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </td>
-                <td class="px-6 py-7">
-                  <div class="font-medium text-center text-gray-700 text-sm">
-                    Php 2000
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+            <?php
+function displayRequestData()
+{
+    try {
+        require_once 'dbconn.php';
 
-            <tfoot class="bg-gray-200">
-              <tr class="border-b border-y-gray-300">
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                </th>
-                <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
-                  <div class="flex flex-col font-medium text-gray-700 gap-3">
-                    <a>Items Subtotal: 2</a>
-                    <a>Total Amount: Php 2000</a>
-                  </div>
-                </th>
-              </tr>
-            </tfoot>
+        // Query to retrieve request data
+        $query = "SELECT * FROM requests WHERE request_Status = 'accepted'";
+        $statement = $conn->prepare($query);
+        $statement->execute();
+        $requests = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // Loop through each request and display data in HTML table format
+        foreach ($requests as $request) {
+            echo '<tbody class="divide-y divide-gray-100 border-b border-gray-300">';
+            echo '<tr class="hover:bg-gray-100">';
+            echo '<th class="flex gap-3 px-6 py-7 font-normal text-gray-900">';
+            echo '<div class="flex flex-col font-medium text-gray-700 text-sm">';
+            echo '<div class="font-medium text-gray-700 text-sm">Product Name</div>'; //fetch the Product Name to the products table
+            echo '</div>';
+            echo '</th>';
+            echo '<td class="px-6 py-7">';
+            echo '<div class="font-medium text-gray-700 text-sm">' . $request['Request_ID'] . '</div>';
+            echo '</td>';
+            echo '<td class="px-6 py-7">';
+            echo '<div class="font-medium text-gray-700 text-sm">Date</div>'; //fetch the price to the order_details table
+            echo '</td>';
+            echo '<td class="px-6 py-7">';
+            echo '<div class="font-medium text-gray-700 text-sm">Price</div>'; //fetch the price to the products table
+            echo '</td>';
+            echo '<td class="px-6 py-7">';
+            echo '<div class="font-medium text-gray-700 text-center">' . $request['Product_Quantity'] . '</div>'; //fetch the price to the products table
+            echo '</td>';
+            echo '<td class="px-6 py-7">';
+            echo '<div class="font-medium text-gray-700 text-center">' . $request['Product_Total_Price'] . '</div>'; //fetch the price to the products table
+            echo '</td>';
+            echo '</tr>';
+            echo '</tbody>';
+        }
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
+}
+
+// Call the function to display request data
+displayRequestData();
+?>
+
+<tfoot class="bg-gray-200">
+    <tr class="border-b border-y-gray-300">
+        <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+        </th>
+        <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+        </th>
+        <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+        </th>
+        <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+        </th>
+        <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+        </th>
+        <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
+            <div class="flex flex-col font-medium text-gray-700 gap-3">
+            <?php
+// Function to get the total count of items and the total amount
+function getTotalItemsAndAmount()
+{
+    try {
+      $db = Database::getInstance();
+      $conn = $db->connect();
+
+        // Check if $conn is defined and not null
+        if (!isset($conn) || $conn === null) {
+            throw new Exception("Database connection is not established.");
+        }
+
+        // Query to get the total count of items
+        $itemCountQuery = "SELECT COUNT(*) AS totalItems FROM requests"; // Replace 'your_table_name' with your actual table name
+        $itemCountStatement = $conn->prepare($itemCountQuery);
+        $itemCountStatement->execute();
+        $itemCountResult = $itemCountStatement->fetch(PDO::FETCH_ASSOC);
+
+        // Query to get the total amount
+        $totalAmountQuery = "SELECT SUM(Product_Total_Price) AS totalAmount FROM requests"; // Replace 'amount_column_name' and 'your_table_name' with your actual column name and table name
+        $totalAmountStatement = $conn->prepare($totalAmountQuery);
+        $totalAmountStatement->execute();
+        $totalAmountResult = $totalAmountStatement->fetch(PDO::FETCH_ASSOC);
+
+        // Display the total count of items
+        echo '<a>Items Subtotal: ' . $itemCountResult['totalItems'] . '</a>';
+
+        // Display the total amount
+        echo '<a>Total Amount: Php ' . $totalAmountResult['totalAmount'] . '</a>';
+
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+// Call the function to display total items and amount
+getTotalItemsAndAmount();
+?>
+            </div>
+        </th>
+    </tr>
+</tfoot>
 
           </table>
         </div>
@@ -184,5 +227,6 @@
       </div>
     </div>
   </body>
-  <script  src="./../src/route.js"></script>
+  <script src="./../src/route.js"></script>
+  <script src="./../src/form.js"></script>
 </html>

@@ -41,9 +41,39 @@
       <!-- Main Content -->
       <div class="h-screen">
         <div class="flex flex-row gap-16 drop-shadow-md ml-5 my-8">
+        <?php
+          // Include your database connection file
+          require_once 'dbconn.php';
+
+          // Function to count the number of unique suppliers
+          function countDelivered($conn)
+          {
+            try {
+              // Query to count the number of unique suppliers
+              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS DeliveredCount FROM order_details WHERE Order_Status = 'Complete'";
+              $statement = $conn->prepare($query);
+              $statement->execute();
+
+              // Fetch the count
+              $row = $statement->fetch(PDO::FETCH_ASSOC);
+              $deliveredCount = $row['DeliveredCount'];
+
+              return $deliveredCount;
+            } catch (PDOException $e) {
+              echo "Connection failed: " . $e->getMessage();
+            }
+          }
+
+          // Call the countSuppliers function to get the count
+          $db = Database::getInstance();
+          $conn = $db->connect();
+          $deliveredCount = countDelivered($conn);
+          ?>
           <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
-            <a class="text-3xl">5350</a>
-            <a class="text-lg">Total Delivery</a>
+            <a class="text-3xl">
+              <?php echo $deliveredCount; ?> Order/s
+            </a>
+            <a class="text-lg">Total Delivered</a>
           </div>
           <?php
           // Include your database connection file
@@ -54,7 +84,7 @@
           {
             try {
               // Query to count the number of unique suppliers
-              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS SupplierCount FROM order_details";
+              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS SupplierCount FROM order_details WHERE Order_Status = 'to receive'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
@@ -75,12 +105,12 @@
           ?>
           <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
             <a class="text-3xl">
-              <?php echo $supplierCount; ?> Orders
+              <?php echo $supplierCount; ?> Order/s
             </a>
             <a class="text-lg">To Receive</a>
           </div>
+          
         </div>
-
         <a class="text-3xl ml-5">Order Details</a>
         <!-- table -->
         <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md m-5">
@@ -116,6 +146,7 @@ function displayRequestData()
         $query = "SELECT od.Supplier_ID, s.Supplier_Name, MAX(od.Date_Ordered) AS LatestDate, MAX(od.Time_Ordered) AS LatestTime
                             FROM order_details od
                             JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
+                            WHERE od.Order_Status = 'to receive'
                             GROUP BY od.Supplier_ID";
         $statement = $conn->prepare($query);
         $statement->execute();
