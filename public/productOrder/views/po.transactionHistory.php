@@ -67,7 +67,7 @@
           {
             try {
               // Query to count the number of unique suppliers
-              $query = "SELECT COUNT(DISTINCT Supplier_ID) AS DeliveredCount FROM order_details WHERE Order_Status = 'Completed'";
+              $query = "SELECT COUNT(DISTINCT Transaction_ID) AS DeliveredCount FROM transaction_history WHERE Order_Status = 'Completed'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
