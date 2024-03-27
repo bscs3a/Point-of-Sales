@@ -516,11 +516,9 @@
                                         showAlertBox(); 
                                     }">
 
-
                                     <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                        <!-- SVG icon -->
+                                        <img src="../uploads/drill.png" alt="Your Image">
                                     </div>
-
 
                                     <!-- Horizontal line -->
                                     <hr class="w-full border-gray-300 my-2">

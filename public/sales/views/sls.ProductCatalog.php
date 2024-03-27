@@ -394,7 +394,7 @@
                                                         ">
 
                                     <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                        <!-- SVG icon -->
+                                        <img src="../uploads/drill.png" alt="Your Image">
                                     </div>
 
                                     <!-- Horizontal line -->
@@ -449,7 +449,7 @@
                                 item.style.transition = 'border 0.1s ease-in-out'; // Add transition property
                             }, 2000);
                         });
-                        
+
                     } else {
                         container.style.display = 'none';
                     }

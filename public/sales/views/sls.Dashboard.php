@@ -298,7 +298,7 @@
                         <?php foreach ($saleDetails as $saleDetail) : ?>
                             <tr class="border border-gray-200 bg-white">
                                 <td class="px-4 py-2 flex items-start">
-                                    <img src="https://via.placeholder.com/150" alt="Product Image" class="w-20 h-20 object-cover mr-4">
+                                    <img src="../uploads/drill.png" alt="Product Image" class="w-20 h-20 object-cover mr-4">
                                     <div>
                                         <div><?= $saleDetail["ProductName"] ?></div>
                                         <div>Quantity: <?= $saleDetail["Quantity"] ?></div>
