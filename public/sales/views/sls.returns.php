@@ -85,7 +85,7 @@
                         </thead>
                         <tbody>
                             <!-- Fetch data from the result set -->
-                                <tr class='border border-gray-200 bg-white' data-sale-id='<?php echo $saleId; ?>'>
+                                <tr class='border border-gray-200 bg-white'>
                                     <td class='px-4 py-2'>Shovel</td>
                                     <td class='px-4 py-2'>1</td>
                                     <td class='px-4 py-2 text-red-500'>Php300</td>
