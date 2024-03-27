@@ -150,7 +150,7 @@
                     } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Pending') {
                         changeColor.classList.remove('bg-green-500');
                         changeColor.classList.add('bg-yellow-500');
-                    } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Cancelled'){
+                    } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Cancelled') {
                         changeColor.classList.remove('bg-yellow-500');
                         changeColor.classList.add('bg-red-500');
                     }
@@ -226,6 +226,13 @@
 
                             <div class="flex justify-between">
                                 <h3 id="modal-product-total" class="pt-3 text-xl text-gray-500 font-medium"></h3>
+                            </div>
+
+                            <!-- Return Order Button -->
+                            <div class="flex justify-center pt-6">
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                    Return Order
+                                </button>
                             </div>
                         </div>
                     </div>
