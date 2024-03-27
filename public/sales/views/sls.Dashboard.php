@@ -14,50 +14,6 @@
 
     <!-- Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <?php
-    require_once './src/dbconn.php';
-
-    // Get PDO instance
-    $database = Database::getInstance();
-    $pdo = $database->connect();
-
-    // Query for years
-    $sqlYears = "SELECT DISTINCT YEAR(MonthYear) AS Year FROM TargetSales ORDER BY Year DESC";
-    $stmtYears = $pdo->query($sqlYears);
-    $years = $stmtYears->fetchAll(PDO::FETCH_ASSOC);
-
-    // Query for target sales
-    $sqlTargetSales = "SELECT MonthYear, TargetAmount FROM TargetSales ORDER BY MonthYear";
-    $stmtTargetSales = $pdo->query($sqlTargetSales);
-    $targetSales = $stmtTargetSales->fetchAll(PDO::FETCH_ASSOC);
-
-    // Prepare the labels and data for the chart
-    $labels = [];
-    $data = [];
-    foreach ($targetSales as $targetSale) {
-        $labels[] = date('Y-F', strtotime($targetSale['MonthYear']));  // Format the date as 'Year-MonthName'
-        $data[] = $targetSale['TargetAmount'];
-    }
-
-    // Query for total sales
-    $sqlTotalSales = "
-        SELECT DATE_FORMAT(SaleDate, '%Y-%m-01') AS MonthYear, SUM(TotalAmount) AS TotalSales 
-        FROM Sales 
-        GROUP BY MonthYear 
-        ORDER BY MonthYear
-    ";
-    $stmtTotalSales = $pdo->query($sqlTotalSales);
-    $totalSales = $stmtTotalSales->fetchAll(PDO::FETCH_ASSOC);
-
-    // Prepare the data for the chart
-    $totalSalesData = [];
-    foreach ($totalSales as $totalSale) {
-        $totalSalesData[] = $totalSale['TotalSales'];
-    }
-    ?>
-
-
 </head>
 
 <body>
@@ -156,14 +112,6 @@
                             <div class="text-lg font-semibold text-gray-800" style="color: #262261;">
                                 <i class="ri-funds-box-fill ri-fw" style="font-size: 1.2em;"></i> Sales
                             </div>
-                        </div>
-                        <!-- Year Select -->
-                        <div>
-                            <select id="yearSelect" class="border rounded-md px-2 py-1">
-                                <?php foreach ($years as $year) : ?>
-                                    <option value="<?php echo $year['Year']; ?>"><?php echo $year['Year']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
                         </div>
                         <!-- Card options -->
                         <div>
@@ -267,6 +215,7 @@
     </main>
 
     <script>
+<<<<<<< HEAD
         // Trigger the change event for the year select element on page load
         window.onload = function() {
             var event = new Event('change');
@@ -303,6 +252,8 @@
     </script>
 
     <script>
+=======
+>>>>>>> parent of 8dc2ccf (Merge branch 'AIan2' into Rey3)
         document.getElementById('productSearchInput').addEventListener('keyup', function() {
             // Get the search input value
             var searchValue = this.value.toLowerCase();
@@ -346,18 +297,18 @@
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: <?php echo json_encode($labels); ?>, // Pass the labels
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                 datasets: [{
-                    label: 'Target',
-                    data: <?php echo json_encode($data); ?>, // Pass the target sales data
-                    backgroundColor: 'transparent',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2
-                }, {
-                    label: 'Total Sales',
-                    data: <?php echo json_encode($totalSalesData); ?>, // Pass the total sales data
+                    label: 'Sales',
+                    data: [60, 30, 25, 90, 60, 100, 150, 200, 500, 300, 350, 400],
                     backgroundColor: 'transparent',
                     borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2
+                }, {
+                    label: 'Target',
+                    data: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 400],
+                    backgroundColor: 'transparent',
+                    borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 2
                 }]
             },

@@ -15,7 +15,6 @@ $sls = [
     '/sls/Audit-Trail' => $basePath . "AuditTrail.php",
     '/sls/Revenue' => $basePath . "Revenue.php",
     '/sls/Returns' => $basePath . "returns.php",
-    '/sls/Sales-Management' => $basePath . "SalesManagement.php",
     // ... other routes ...
 
     '/sls/Transaction-Details/sale={saleId}' => function ($saleId) use ($basePath) {
@@ -186,24 +185,6 @@ Router::post('/addSales', function () {
     header("Location: $rootFolder/sls/POS/Receipt");
 });
 // END: Add Sales
-
-Router::post('/AddTarget', function () {
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
-    $monthYear = $_POST['month_year'] . '-01';  // Append '-01' to make it a valid date
-    $targetSales = $_POST['target_sales'];
-
-    $stmt = $conn->prepare("INSERT INTO TargetSales (MonthYear, TargetAmount) VALUES (:monthYear, :targetSales)");
-    $stmt->bindParam(':monthYear', $monthYear);
-    $stmt->bindParam(':targetSales', $targetSales);
-
-    // Execute the statement
-    $stmt->execute();
-
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/sls/Sales-Management");
-});
 
 Router::post('/remove', function () {
     $db = Database::getInstance();

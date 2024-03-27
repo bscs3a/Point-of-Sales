@@ -89,15 +89,6 @@ CREATE TABLE IF NOT EXISTS DeliveryOrders (
     FOREIGN KEY (TruckID) REFERENCES Trucks(TruckID)
 );
 
--- TargetSales Table
-CREATE TABLE IF NOT EXISTS TargetSales (
-    TargetID INT AUTO_INCREMENT PRIMARY KEY,
-    MonthYear DATE,
-    TargetAmount DECIMAL(10, 2),
-    EmployeeID INT,
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
-);
-
 INSERT INTO Products (ProductName, Description, Category, DeliveryRequired, Price, Stocks, TaxRate, UnitOfMeasurement, ProductWeight) 
 VALUES 
     ('Hammer (Large)', 'Heavy-duty hammer for construction work', 'Tools', 'No', 299.00, 50, 0.12, 'pcs', 1.5),

@@ -71,7 +71,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border border-gray-200 bg-white" onclick="location.href='/master/sls/Transaction-Details'" style="cursor: pointer;">
+                        <tr class="border border-gray-200 bg-white" onclick="location.href='/Master/sls/Transaction-Details'" style="cursor: pointer;">
                             <td class="px-4 py-2">John Doe</td>
                             <td class="px-4 py-2">123456</td>
                             <td class="px-4 py-2">123 Main St, Anytown, USA</td>
