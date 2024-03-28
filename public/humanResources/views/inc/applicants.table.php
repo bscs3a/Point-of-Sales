@@ -28,7 +28,15 @@
                     alt="">
                 </div>
                 <div class="ml-4">
-                <div class="text-sm font-medium leading-5 text-gray-900"><?php echo $applicant['first_name'] . ' ' . substr($applicant['middle_name'], 0, 1) . '. ' . $applicant['last_name']; ?></div>
+                <div class="text-sm font-medium leading-5 text-gray-900">
+                    <?php 
+                        echo $applicant['first_name'] . ' ';
+                        if (!empty($applicant['middle_name'])) {
+                            echo substr($applicant['middle_name'], 0, 1) . '. ';
+                        }
+                        echo $applicant['last_name']; 
+                    ?>
+                </div>
                   <div class="text-sm leading-5 text-gray-500"><?php echo $applicant['email']; ?></div>
                 </div>
               </div>

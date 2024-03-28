@@ -29,7 +29,14 @@
                 </div>
                 <div class="ml-4">
                   <!-- THESE ARE FROM EMPLOYEES TABLE -->
-                  <div class="text-sm font-medium leading-5 text-gray-900"><?php echo $dtr['first_name'] . ' ' . substr($dtr['middle_name'], 0, 1) . '. ' . $dtr['last_name']; ?>
+                  <div class="text-sm font-medium leading-5 text-gray-900">
+                    <?php 
+                        echo $dtr['first_name'] . ' ';
+                        if (!empty($dtr['middle_name'])) {
+                            echo substr($dtr['middle_name'], 0, 1) . '. ';
+                        }
+                        echo $dtr['last_name']; 
+                    ?>
                   </div>
                   <div class="text-sm leading-5 text-gray-500"><?php echo $dtr['email']; ?></div>
                 </div>
