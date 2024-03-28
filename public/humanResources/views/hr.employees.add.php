@@ -123,6 +123,7 @@
               id="lastName"
               type="text"
               placeholder="Last Name"
+              required
             />
         </div>
       </div>
@@ -140,6 +141,7 @@
               name="dateofbirth"
               id="dateofbirth"
               type="date"
+              required
             />
         </div>
         <div class="mr-2">
@@ -165,6 +167,7 @@
               id="nationality"
               type="text"
               placeholder="Nationality"
+              required
             />
         </div>
       </div>
@@ -198,6 +201,7 @@
             id="address"
             type="text"
             placeholder="Address"
+              required
           />
           </div>
           <div>
@@ -240,7 +244,7 @@
                         <option value="">Select Department</option>
                         <option value="Product Order">Product Order</option>
                         <option value="Inventory">Inventory</option>
-                        <option value="Inventory">Delivery</option>
+                        <option value="Delivery">Delivery</option>
                         <option value="Human Resources">Human Resources</option>
                         <option value="Point of Sales">Point of Sales</option>
                         <option value="Finance">Finance/Accounting</option>
@@ -256,6 +260,7 @@
               id="Position"
               type="text"
               placeholder="Position"
+              required
             />  
           </div>
         </div>
@@ -275,6 +280,7 @@
             id="dateofhire"
             type="date"
             placeholder="Date of Hire"
+              required
           />
           </div>
           <div class="mr-2">
@@ -287,6 +293,7 @@
             id="startdate"
             type="date"
             placeholder="Start Date"
+              required
           />
           </div>
           <div>
@@ -320,6 +327,7 @@
                           id="monthlysalary"
                           type="text"
                           placeholder="0.00"
+                          required
                           oninput="calculateTax()"
                           
                         />
@@ -446,6 +454,7 @@
                           id="username"
                           type="text"
                           placeholder="Username"
+                          required
                         />
                     </div>
                     <!-- TAX INFO -->
@@ -459,6 +468,7 @@
                           id="password"
                           type="password"
                           placeholder="Password"
+                          required
                         />
                         <input type="checkbox" id="togglePassword"> Show Password
                     </div>
