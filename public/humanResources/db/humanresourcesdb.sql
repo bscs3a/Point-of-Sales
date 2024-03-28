@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS humanresourcesdb;
-USE humanresourcesdb;
+CREATE DATABASE IF NOT EXISTS bscs3a;
+USE bscs3a;
 
 CREATE TABLE employees (
     id INT(10) NOT NULL AUTO_INCREMENT,
@@ -42,9 +42,9 @@ CREATE TABLE tax_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
     income_tax DECIMAL(10,2) NOT NULL,
     withholding_tax DECIMAL(10,2) NOT NULL,
-    employees_id INT(10) NOT NULL,
+    salary_id INT(10) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (employees_id) REFERENCES employees (id)
+    FOREIGN KEY (salary_id) REFERENCES salary_info (id)
 );
 
 CREATE TABLE benefit_info (
@@ -53,9 +53,9 @@ CREATE TABLE benefit_info (
     sss_fund DECIMAL(10,2) NOT NULL,
     pagibig_fund DECIMAL(10,2) NOT NULL,
     thirteenth_month DECIMAL(10,2) NOT NULL,
-    employees_id INT(10) NOT NULL,
+    salary_id INT(10) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (employees_id) REFERENCES employees (id)
+    FOREIGN KEY (salary_id) REFERENCES salary_info (id)
 );
 
 CREATE TABLE attendance (
@@ -133,11 +133,11 @@ INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
 (40000.00, 28633.00, 1),
 (40000.00, 28633.00, 2);
 
-INSERT INTO tax_info (income_tax, withholding_tax, employees_id) VALUES
+INSERT INTO tax_info (income_tax, withholding_tax, salary_id) VALUES
 (4166.67, 3208.33, 1),
 (4166.67, 3208.33, 2);
 
-INSERT INTO benefit_info (philhealth, sss_fund, pagibig_fund, thirteenth_month, employees_id) VALUES
+INSERT INTO benefit_info (philhealth, sss_fund, pagibig_fund, thirteenth_month, salary_id) VALUES
 (2000.00, 1792.00, 200.00, 40000.00, 1),
 (2000.00, 1792.00, 200.00, 40000.00, 2);
 
