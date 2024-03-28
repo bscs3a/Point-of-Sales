@@ -59,7 +59,7 @@
                 <a x-data="{ tooltip: 'Accept' }" route="/hr/employees/add">   
                   <i class="ri-check-line"></i>     
                 </a>
-                <a x-data="{ tooltip: 'Reject' }" href="#">
+                <a id="rejectButton" x-data="{ tooltip: 'Reject' }" href="#">
                   <i class="ri-close-line"></i>     
                 </a>
               </div>

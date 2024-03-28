@@ -79,6 +79,16 @@
         require_once 'inc/applicants.table.php';
     } 
   ?>
+
+  <!-- Reject modal -->
+  <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-white p-5 rounded-lg text-center">
+          <h2 class="mb-4">Reject this applicant?</h2>
+          <button id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
+          <button id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
+      </div>
+  </div>
+
   <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
   <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
     <table class="min-w-full">
@@ -156,5 +166,19 @@
 <script  src="./../src/route.js"></script>
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
+<script>
+  document.getElementById('rejectButton').addEventListener('click', function() {
+    document.getElementById('rejectModal').classList.remove('hidden');
+  });
+
+  document.getElementById('cancelReject').addEventListener('click', function() {
+      document.getElementById('rejectModal').classList.add('hidden');
+  });
+
+  document.getElementById('confirmReject').addEventListener('click', function() {
+      // Handle the deletion here
+      console.log('Deleting...');
+  });
+</script>
 </body>
 </html> 

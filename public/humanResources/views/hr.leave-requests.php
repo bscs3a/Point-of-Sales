@@ -83,6 +83,15 @@ $stmt = null;
     } 
   ?>
 
+  <!-- Reject modal -->
+  <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-white p-5 rounded-lg text-center">
+          <h2 class="mb-4">Reject leave request?</h2>
+          <button id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
+          <button id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
+      </div>
+  </div>
+
   <!-- <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
     <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
       <thead class="bg-gray-50">
@@ -198,5 +207,19 @@ $stmt = null;
 <script  src="./../src/route.js"></script>
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
+<script>
+  document.getElementById('rejectButton').addEventListener('click', function() {
+    document.getElementById('rejectModal').classList.remove('hidden');
+  });
+
+  document.getElementById('cancelReject').addEventListener('click', function() {
+      document.getElementById('rejectModal').classList.add('hidden');
+  });
+
+  document.getElementById('confirmReject').addEventListener('click', function() {
+      // Handle the deletion here
+      console.log('Deleting...');
+  });
+</script>
 </body>
 </html> 
