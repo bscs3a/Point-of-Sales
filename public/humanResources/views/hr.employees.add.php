@@ -61,8 +61,7 @@
     </div>
 
   <!-- Employee Information -->
-  
-                            <form action= "/hr/employees/add" method="POST">
+<form action= "/hr/employees/add" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">
@@ -123,7 +122,6 @@
               id="lastName"
               type="text"
               placeholder="Last Name"
-              required
             />
         </div>
       </div>
@@ -141,7 +139,6 @@
               name="dateofbirth"
               id="dateofbirth"
               type="date"
-              required
             />
         </div>
         <div class="mr-2">
@@ -167,7 +164,6 @@
               id="nationality"
               type="text"
               placeholder="Nationality"
-              required
             />
         </div>
       </div>
@@ -201,7 +197,6 @@
             id="address"
             type="text"
             placeholder="Address"
-              required
           />
           </div>
           <div>
@@ -260,7 +255,6 @@
               id="Position"
               type="text"
               placeholder="Position"
-              required
             />  
           </div>
         </div>
@@ -280,7 +274,6 @@
             id="dateofhire"
             type="date"
             placeholder="Date of Hire"
-              required
           />
           </div>
           <div class="mr-2">
@@ -293,7 +286,6 @@
             id="startdate"
             type="date"
             placeholder="Start Date"
-              required
           />
           </div>
           <div>
@@ -327,7 +319,6 @@
                           id="monthlysalary"
                           type="text"
                           placeholder="0.00"
-                          required
                           oninput="calculateTax()"
                           
                         />
@@ -454,7 +445,6 @@
                           id="username"
                           type="text"
                           placeholder="Username"
-                          required
                         />
                     </div>
                     <!-- TAX INFO -->
@@ -468,7 +458,6 @@
                           id="password"
                           type="password"
                           placeholder="Password"
-                          required
                         />
                         <input type="checkbox" id="togglePassword"> Show Password
                     </div>
