@@ -201,45 +201,32 @@ function displayRequestData()
               <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
                 <div class="flex flex-col font-medium text-gray-700 gap-3">
                 <?php
-// Function to get the total count of items and the total amount of the accepted request
-function getTotalItemsAndAmount()
+function getTotalItemsAndAmount($requests)
 {
     try {
-      $db = Database::getInstance();
-      $conn = $db->connect();
+        // Initialize total items count and total amount variables
+        $totalItems = 0;
+        $totalAmount = 0;
 
-        // Check if $conn is defined and not null
-        if (!isset($conn) || $conn === null) {
-            throw new Exception("Database connection is not established.");
+        // Loop through each request and calculate total items and amount
+        foreach ($requests as $request) {
+            $totalItems++;
+            $totalAmount += $request['Product_Total_Price'];
         }
 
-        // Query to get the total count of items
-        $itemCountQuery = "SELECT COUNT(*) AS totalItems FROM requests WHERE request_Status = 'accepted'"; 
-        $itemCountStatement = $conn->prepare($itemCountQuery);
-        $itemCountStatement->execute();
-        $itemCountResult = $itemCountStatement->fetch(PDO::FETCH_ASSOC);
-
-        // Query to get the total amount
-        $totalAmountQuery = "SELECT SUM(Product_Total_Price) AS totalAmount FROM requests"; 
-        $totalAmountStatement = $conn->prepare($totalAmountQuery);
-        $totalAmountStatement->execute();
-        $totalAmountResult = $totalAmountStatement->fetch(PDO::FETCH_ASSOC);
-
         // Display the total count of items
-        echo '<a>Items Subtotal: ' . $itemCountResult['totalItems'] . '</a>';
+        echo '<a>Items Subtotal: ' . $totalItems . '</a>';
 
         // Display the total amount
-        echo '<a>Total Amount: Php ' . $totalAmountResult['totalAmount'] . '</a>';
+        echo '<a>Total Amount: Php ' . $totalAmount . '</a>';
 
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
-// Call the function to display total items and amount
-getTotalItemsAndAmount();
+// Call the function with the filtered requests array
+getTotalItemsAndAmount($requests);
 ?>
                 </div>
               </th>
