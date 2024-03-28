@@ -7,19 +7,19 @@ $hr = [
     // Dashboard
     '/hr/dashboard' => $basePath . "dashboard.php",
 
-    // employee profile
+    // employees
     '/hr/employees' => $basePath . "employees.php",
     '/hr/employees/search' => $basePath . "employees.php",
     '/hr/employees/add' => $basePath . "employees.add.php",
 
     // departments
-    '/hr/employees/departments' => $basePath . "departments.php", // 'departments.php
-    '/hr/employees/departments/product-order' => $basePath . "departments.PO.php", // 'departments.PO.php
-    '/hr/employees/departments/inventory' => $basePath . "departments.inv.php", // 'departments.inv.php
-    '/hr/employees/departments/sales' => $basePath . "departments.POS.php", // 'departments.POS.php
-    '/hr/employees/departments/finance' => $basePath . "departments.fin.php", // 'departments.fin.php
-    '/hr/employees/departments/delivery' => $basePath . "departments.dlv.php", // 'departments.dlv.php
-    '/hr/employees/departments/human-resources' => $basePath . "departments.HR.php", // 'departments.HR.php
+    '/hr/employees/departments' => $basePath . "departments.php", // hr.departments.php
+    '/hr/employees/departments/product-order' => $basePath . "departments.PO.php", // hr.departments.PO.php
+    '/hr/employees/departments/inventory' => $basePath . "departments.inv.php", // hr.departments.inv.php
+    '/hr/employees/departments/sales' => $basePath . "departments.POS.php", // hr.departments.POS.php
+    '/hr/employees/departments/finance' => $basePath . "departments.fin.php", // hr.departments.fin.php
+    '/hr/employees/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
+    '/hr/employees/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
 
     '/hr/schedule' => $basePath . "schedule.php",
     '/hr/applicants' => $basePath . "applicants.php",
@@ -37,6 +37,12 @@ $hr = [
     '/hr/employees/update={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
         include $basePath . "employees.update.php";
+    },
+
+    //PAGINATION
+    '/hr/employees/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "employees.php";
     },
 ];
 
@@ -154,7 +160,6 @@ Router::post('/hr/employees/add', function () {
     ]);
 
     $employeeId = $conn->lastInsertId();
-    $salaryId = $conn->lastInsertId();
 
     // EMPLOYMENT INFORMATION
     $dateofhire = $_POST['dateofhire'];
@@ -205,6 +210,8 @@ Router::post('/hr/employees/add', function () {
     $incometax = $_POST['incometax'];
     $withholdingtax = $_POST['withholdingtax'];
 
+    $salaryId = $conn->lastInsertId();
+    
     // Calculate tax amount based on monthly salary
     $taxAmount = calculateWithholdingTax($monthlysalary);
 
@@ -273,6 +280,144 @@ Router::post('/hr/employees/add', function () {
     ]);
 
     header("Location: $rootFolder/hr/employees");
+});
+
+// UPDATE employees information || STILL WIP IDK WHY IT REDIRECTS ME TO INDEX PAGE AGAIN ;; figuring this out
+Router::post('/hr/employees/update={id}', function ($id) {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    // BASIC EMPLOYEE INFORMATION
+    $id = $_SESSION['id'];
+    $firstName = $_POST['firstName'];
+    $middleName = $_POST['middleName'];
+    $lastName = $_POST['lastName'];
+    $dateofbirth = $_POST['dateofbirth'];
+    $gender = $_POST['gender'];
+    $nationality = $_POST['nationality'];
+    $civilstatus = $_POST['civilstatus'];
+    $address = $_POST['address'];
+    $contactnumber = $_POST['contactnumber'];
+    $email = $_POST['email'];
+    $department = $_POST['department'];
+    $position = $_POST['position'];
+
+    $query = "UPDATE employees SET first_name = :firstName, middle_name = :middleName, last_name = :lastName, dateofbirth = :dateofbirth, gender = :gender, nationality = :nationality, civil_status = :civilstatus, address = :address, contact_no = :contactnumber, email = :email, department = :department, position = :position WHERE id = :id";
+    $stmt = $conn->prepare($query);
+
+    if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
+        header("Location: $rootFolder/hr/employees/update=$id");
+        return;
+    }
+
+    $stmt->execute([
+        ':firstName' => $firstName,
+        ':middleName' => $middleName,
+        ':lastName' => $lastName,
+        ':dateofbirth' => $dateofbirth,
+        ':gender' => $gender,
+        ':nationality' => $nationality,
+        ':civilstatus' => $civilstatus,
+        ':address' => $address,
+        ':contactnumber' => $contactnumber,
+        ':email' => $email,
+        ':department' => $department,
+        ':position' => $position,
+        ':id' => $id,
+    ]);
+
+    // EMPLOYMENT INFORMATION
+    $dateofhire = $_POST['dateofhire'];
+    $startdate = $_POST['startdate'];
+    $enddate = $_POST['enddate'];
+
+    $query = "UPDATE employment_info SET dateofhire = :dateofhire, startdate = :startdate, enddate = :enddate WHERE employees_id = :id";
+    $stmt = $conn->prepare($query);
+
+    if (empty($dateofhire) || empty($startdate)) {
+        header("Location: $rootFolder/hr/employees/update=$id");
+        return;
+    }
+
+    $stmt->execute([
+        ':dateofhire' => $dateofhire,
+        ':startdate' => $startdate,
+        ':enddate' => $enddate,
+        ':id' => $id,
+    ]);
+
+    // SALARY AND TAX INFORMATION
+    // salary FK : employees_id
+    $monthlysalary = $_POST['monthlysalary'];
+    $totalsalary = $_POST['totalsalary'];
+
+    $query = "UPDATE salary_info SET monthly_salary = :monthlysalary, total_salary = :totalsalary WHERE employees_id = :id";
+    $stmt = $conn->prepare($query);
+
+    if (empty($monthlysalary)) {
+        header("Location: $rootFolder/hr/employees/update=$id");
+        return;
+    }
+
+    $stmt->execute([
+        ':id' => $id,
+        ':monthlysalary' => $monthlysalary,
+        ':totalsalary' => $totalsalary,
+    ]);
+
+    // tax : FK salary_id
+    $incometax = $_POST['incometax'];
+    $withholdingtax = $_POST['withholdingtax'];
+
+    $query = "UPDATE tax_info SET income_tax = :incometax, withholding_tax = :withholdingtax WHERE salary_id = :id";
+    $stmt = $conn->prepare($query);
+
+    $stmt->execute([
+        ':id' => $id,
+        ':incometax' => $incometax,
+        ':withholdingtax' => $withholdingtax,
+    ]);
+    
+    // benefits : FK salary_id
+    $sss = $_POST['sss'];
+    $pagibig = $_POST['pagibig'];
+    $philhealth = $_POST['philhealth'];
+    $thirteenthmonth = $_POST['thirteenthmonth'];
+
+    $query = "UPDATE benefit_info SET sss_fund = :sss, pagibig_fund = :pagibig, philhealth = :philhealth, thirteenth_month = :thirteenthmonth WHERE salary_id = :id";
+    $stmt = $conn->prepare($query);
+
+    $stmt->execute([
+        ':id' => $id,
+        ':sss' => $sss,
+        ':pagibig' => $pagibig,
+        ':philhealth' => $philhealth,
+        ':thirteenthmonth' => $thirteenthmonth,
+    ]);
+
+    // ACCOUNT INFORMATION
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $role = $_POST['department'];
+
+    $query = "UPDATE account_info SET username = :username, password = :password, role = :role WHERE employees_id = :id";
+    $stmt = $conn->prepare($query);
+
+    if (empty($username) || empty($password) || empty($role)) {
+        header("Location: $rootFolder/hr/employees/update=$id");
+        return;
+    }
+
+    $stmt->execute([
+        ':id' => $id,
+        ':username' => $username,
+        ':password' => $password,
+        ':role' => $role,
+    ]);
+
+    header("Location: $rootFolder/hr/employees/id=$id");
 });
 
 // search employees
@@ -443,7 +588,7 @@ Router::post('/hr/leave-requests', function () {
 });
 
 // EXAMPLE DELETE
-Router::post('/delete', function () {
+Router::post('/hr/employees/id={id}', function ($id) {
     $db = Database::getInstance();
     $conn = $db->connect();
 
@@ -456,5 +601,5 @@ Router::post('/delete', function () {
     $stmt->execute();
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/hr/test");
+    header("Location: $rootFolder/hr/employees");
 });

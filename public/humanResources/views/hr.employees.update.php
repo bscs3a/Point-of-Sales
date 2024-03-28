@@ -90,8 +90,8 @@
     </div>
 
   <!-- Employee Information -->
-  
-                            <form action= "/hr/employees/add" method="POST">
+  <!-- fix the goddamn form action -->
+<form action= "/hr/employees/update=<?php echo htmlspecialchars($employees['id']); ?>" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">
@@ -161,8 +161,8 @@
             name="gender"
             id="gender">
             <option value="">Select Gender</option>
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
+            <option value="Female" <?php echo $employees['gender'] == 'Female' ? 'selected' : ''; ?>>Female</option>
+            <option value="Male" <?php echo $employees['gender'] == 'Male' ? 'selected' : ''; ?>>Male</option>
           </select>
         </div>
         <div>
@@ -193,10 +193,10 @@
               id="civilstatus"
               name="civilstatus">
               <option value="">Select Status</option>
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Widowed">Widowed</option>
-              <option value="Divorced">Divorced</option>
+              <option value="Single"<?php echo $employees['civil_status'] == 'Single' ? 'selected' : ''; ?>>Single</option>
+              <option value="Married"<?php echo $employees['civil_status'] == 'Married' ? 'selected' : ''; ?>>Married</option>
+              <option value="Widowed"<?php echo $employees['civil_status'] == 'Widowed' ? 'selected' : ''; ?>>Widowed</option>
+              <option value="Divorced"<?php echo $employees['civil_status'] == 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
           </select>
           </div>
           <div class="mr-2">
@@ -249,16 +249,17 @@
             </label>
             <select
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        name="department" id="Department" placeholder="Department">
-                        
-                        <option value="">Select Department</option>
-                        <option value="Product Order">Product Order</option>
-                        <option value="Inventory">Inventory</option>
-                        <option value="Inventory">Delivery</option>
-                        <option value="Human Resources">Human Resources</option>
-                        <option value="Point of Sales">Point of Sales</option>
-                        <option value="Finance">Finance/Accounting</option>
-                      </select>
+              name="department" id="Department" placeholder="Department">
+              
+              <option value="">Select Department</option>
+              <option value="Product Order"<?php echo $employees['department'] == 'Product Order' ? 'selected' : ''; ?>>Product Order</option>
+              <option value="Inventory"<?php echo $employees['department'] == 'Inventory' ? 'selected' : ''; ?>>Inventory</option>
+              <option value="Delivery"<?php echo $employees['department'] == 'Delivery' ? 'selected' : ''; ?>>Delivery</option>
+              <option value="Human Resources"<?php echo $employees['department'] == 'Human Resources' ? 'selected' : ''; ?>>Human Resources</option>
+              <option value="Point of Sales"<?php echo $employees['department'] == 'Point of Sales' ? 'selected' : ''; ?>>Point of Sales</option>
+              <option value="Finance"<?php echo $employees['department'] == 'Finance' ? 'selected' : ''; ?>>Finance</option>
+              
+            </select>
           </div>
           <div>
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="Position">

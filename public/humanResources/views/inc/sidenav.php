@@ -80,10 +80,7 @@
 
 <div class="fixed top-0 left-0 w-full h-full z-40 md:hidden sidebar-overlay"></div>
 <!-- end: Sidebar -->
-<!-- <script src="./../js/script.js"></script> -->
-<!-- <script type="module" src="../public/humanResources/js/script.js"></script> -->
 
-<!-- start:dropdown -->
 <script>
 document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function(item){
     item.addEventListener('click', function(e){
