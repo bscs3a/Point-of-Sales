@@ -67,18 +67,40 @@
     <div class="mb-4">
       <div class="flex">
         <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
-              First Name
-            </label>
-            <input
-              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="firstName"
-              id="firstName"
-              type="text"
-              placeholder="First Name"
-              required
-            />
+          <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
+            First Name
+          </label>
+          <input
+            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+            name="firstName"
+            id="firstName"
+            type="text"
+            placeholder="First Name"
+          />
         </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input');
+
+            form.addEventListener('submit', (event) => {
+              console.log('Form submitted'); // Add this line to check if the code is being triggered
+
+              let hasEmptyField = false;
+
+              inputs.forEach((input) => {
+                if (input.value.trim() === '') {
+                  hasEmptyField = true;
+                }
+              });
+
+              if (hasEmptyField) {
+                event.preventDefault();
+                alert('Please fill in all the required fields.');
+              }
+            });
+          });
+        </script>
         <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
               Middle Name
