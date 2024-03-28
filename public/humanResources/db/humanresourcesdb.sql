@@ -92,6 +92,7 @@ CREATE TABLE applicants (
     nationality VARCHAR(30) NOT NULL,
     civil_status ENUM('Single','Married','Divorced','Widowed') NOT NULL,
     applyingForDepartment ENUM('Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery') NOT NULL,
+    address VARCHAR(255) NOT NULL,
     contact_no VARCHAR(20) DEFAULT 'N/A',
     email VARCHAR(30) DEFAULT 'Email not available',
     applyingForPosition VARCHAR(30) NOT NULL,
@@ -148,5 +149,5 @@ INSERT INTO account_info (username, password, role, employees_id) VALUES
 INSERT INTO leave_requests (type, details, start_date, end_date, status, employees_id) VALUES
 ('Sick Leave', 'Enjoy this moon necklace. I got it for you. You remind me of the moon, because it\'s always there and it\'s beautiful.', '2022-08-28 08:00:00', '2022-08-28 08:00:00', 'Pending', 1);
 
-INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, applyingForDepartment, contact_no, email, applyingForPosition) VALUES
-('https://pbs.twimg.com/profile_images/1762475736345067521/C-4MMKJQ_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', '09123456789', 'foxwriter@example.com', 'HR Coordinator');
+INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, applyingForDepartment, address, contact_no, email, applyingForPosition) VALUES
+('https://pbs.twimg.com/profile_images/1699999316746862592/JZcAQK5B_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', 'Country Roads Take Me Home', '09123456789', 'foxwriter@example.com', 'HR Coordinator');

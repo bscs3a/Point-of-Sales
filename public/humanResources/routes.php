@@ -21,8 +21,14 @@ $hr = [
     '/hr/employees/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
     '/hr/employees/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
 
-    '/hr/schedule' => $basePath . "schedule.php",
+    // applicants
     '/hr/applicants' => $basePath . "applicants.php",
+    '/hr/applicants/accept={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "applicants.accept.php";
+    },
+
+    '/hr/schedule' => $basePath . "schedule.php",
     '/hr/payroll' => $basePath . "payroll.php",
     '/hr/leave-requests' => $basePath . "leave-requests.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
@@ -216,7 +222,7 @@ Router::post('/hr/employees/add', function () {
     $withholdingtax = $_POST['withholdingtax'];
 
     $salaryId = $conn->lastInsertId();
-    
+
     // Calculate tax amount based on monthly salary
     $taxAmount = calculateWithholdingTax($monthlysalary);
 
@@ -287,8 +293,8 @@ Router::post('/hr/employees/add', function () {
     header("Location: $rootFolder/hr/employees");
 });
 
-// UPDATE employees information || STILL WIP IDK WHY IT REDIRECTS ME TO INDEX PAGE AGAIN ;; figuring this out
-Router::post('/hr/employees/update={id}', function ($id) {
+// UPDATE employees information
+Router::post('/hr/employees/update', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
@@ -296,6 +302,7 @@ Router::post('/hr/employees/update={id}', function ($id) {
 
     // BASIC EMPLOYEE INFORMATION
     $id = $_SESSION['id'];
+
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $lastName = $_POST['lastName'];

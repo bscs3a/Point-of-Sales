@@ -9,19 +9,13 @@
         $conn = $db->connect();
 
         // Prepare the SQL statement
-        $query = "SELECT employees.*, employment_info.*, salary_info.*, tax_info.*, benefit_info.*, account_info.* FROM employees
-        LEFT JOIN employment_info ON employment_info.employees_id = employees.id
-        LEFT JOIN salary_info ON salary_info.employees_id = employees.id
-        LEFT JOIN tax_info ON tax_info.salary_id = salary_info.id
-        LEFT JOIN benefit_info ON benefit_info.salary_id = salary_info.id
-        LEFT JOIN account_info ON account_info.employees_id = employees.id
-        WHERE employees.id = :id AND salary_info.id = :id;";
+        $query = "SELECT * FROM applicants WHERE id = :id;";
 
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $employees = $stmt->fetch(PDO::FETCH_ASSOC);
+        $applicant = $stmt->fetch(PDO::FETCH_ASSOC);
     } else {
         header('Location: /hr/dashboard');
     }
@@ -34,7 +28,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
   <link href="./../../src/tailwind.css" rel="stylesheet">
-  <title>Update Employee</title>
+  <title>New Employee</title>
 </head>
 <body class="text-gray-800 font-sans">
 
@@ -58,7 +52,7 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a route="/hr/employees" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Employees</a>
   <li class="text-[#151313] mr-2 font-medium">/</li>
-  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Update</a>
+  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Add New</a>
    </ul>
    <ul class="ml-auto flex items-center">
   <li class="mr-1">
@@ -73,14 +67,14 @@
 
   
   <div class="flex items-center flex-wrap">
-    <h3 class="ml-6 mt-8 text-xl font-bold">Update Employee Information</h3>
+    <h3 class="ml-6 mt-8 text-xl font-bold">Employee Information</h3>
   </div>
   
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
   <div class="flex">
     <div class="mr-4">
-      <img src="<?php echo $employees['image_url']; ?>" alt="Profile Picture" class="w-48 h-48 object-cover">
+      <img src="<?php echo htmlspecialchars($applicant['image_url']); ?>" alt="Profile Picture" class="w-48 h-48 object-cover">
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
@@ -90,24 +84,46 @@
     </div>
 
   <!-- Employee Information -->
-  <!-- fix the goddamn form action -->
-<form action= "/hr/employees/update" method="POST">
+<form action= "/hr/employees/add" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">
         <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
-              First Name
-            </label>
-            <input
-              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="firstName"
-              id="firstName"
-              type="text"
-              value="<?php echo $employees['first_name']; ?>"
-              placeholder="First Name"
-            />
+          <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
+            First Name
+          </label>
+          <input
+            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+            name="firstName"
+            id="firstName"
+            type="text"
+            placeholder="First Name"
+            value="<?php echo htmlspecialchars($applicant['first_name']); ?>"
+          />
         </div>
+        <!-- <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input');
+
+            form.addEventListener('submit', (event) => {
+              console.log('Form submitted'); // Add this line to check if the code is being triggered
+
+              let hasEmptyField = false;
+
+              inputs.forEach((input) => {
+                if (input.value.trim() === '') {
+                  hasEmptyField = true;
+                }
+              });
+
+              if (hasEmptyField) {
+                event.preventDefault();
+                alert('Please fill in all the required fields.');
+              }
+            });
+          });
+        </script> -->
         <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
               Middle Name
@@ -117,8 +133,8 @@
               name="middleName"
               id="middleName"
               type="text"
-              value="<?php echo $employees['middle_name']; ?>"
               placeholder="Middle Name"
+              value="<?php echo htmlspecialchars($applicant['middle_name']); ?>"
             />
         </div>
         <div>
@@ -130,8 +146,8 @@
               name="lastName"
               id="lastName"
               type="text"
-              value="<?php echo $employees['last_name']; ?>"
               placeholder="Last Name"
+                value="<?php echo htmlspecialchars($applicant['last_name']); ?>"
             />
         </div>
       </div>
@@ -148,8 +164,8 @@
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="dateofbirth"
               id="dateofbirth"
-              value="<?php echo $employees['dateofbirth']; ?>"
               type="date"
+              value="<?php echo htmlspecialchars($applicant['dateofbirth']); ?>"
             />
         </div>
         <div class="mr-2">
@@ -161,8 +177,8 @@
             name="gender"
             id="gender">
             <option value="">Select Gender</option>
-            <option value="Female" <?php echo $employees['gender'] == 'Female' ? 'selected' : ''; ?>>Female</option>
-            <option value="Male" <?php echo $employees['gender'] == 'Male' ? 'selected' : ''; ?>>Male</option>
+            <option value="Female" <?php echo $applicant['gender'] == 'Female' ? 'selected' : ''; ?>>Female</option>
+            <option value="Male" <?php echo $applicant['gender'] == 'Male' ? 'selected' : ''; ?>>Male</option>
           </select>
         </div>
         <div>
@@ -174,8 +190,8 @@
               name="nationality"
               id="nationality"
               type="text"
-              value="<?php echo $employees['nationality']; ?>"
               placeholder="Nationality"
+              value="<?php echo htmlspecialchars($applicant['nationality']); ?>"
             />
         </div>
       </div>
@@ -193,10 +209,10 @@
               id="civilstatus"
               name="civilstatus">
               <option value="">Select Status</option>
-              <option value="Single"<?php echo $employees['civil_status'] == 'Single' ? 'selected' : ''; ?>>Single</option>
-              <option value="Married"<?php echo $employees['civil_status'] == 'Married' ? 'selected' : ''; ?>>Married</option>
-              <option value="Widowed"<?php echo $employees['civil_status'] == 'Widowed' ? 'selected' : ''; ?>>Widowed</option>
-              <option value="Divorced"<?php echo $employees['civil_status'] == 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
+              <option value="Single"<?php echo $applicant['civil_status'] == 'Single' ? 'selected' : ''; ?>>Single</option>
+              <option value="Married"<?php echo $applicant['civil_status'] == 'Married' ? 'selected' : ''; ?>>Married</option>
+              <option value="Widowed"<?php echo $applicant['civil_status'] == 'Widowed' ? 'selected' : ''; ?>>Widowed</option>
+              <option value="Divorced"<?php echo $applicant['civil_status'] == 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
           </select>
           </div>
           <div class="mr-2">
@@ -208,8 +224,8 @@
             name="address"
             id="address"
             type="text"
-              value="<?php echo $employees['address']; ?>"
             placeholder="Address"
+            value="<?php echo htmlspecialchars($applicant['address']); ?>"
           />
           </div>
           <div>
@@ -221,8 +237,8 @@
               name="contactnumber"
               id="contactnumber"
               type="tel"
-              value="<?php echo $employees['contact_no']; ?>"
               placeholder="Contact Number"
+              value="<?php echo htmlspecialchars($applicant['contact_no']); ?>"
             />
           </div>
         </div>
@@ -240,8 +256,8 @@
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="email"
               id="email"
-              value="<?php echo $employees['email']; ?>"
-              placeholder="example@example.com">
+              placeholder="example@example.com"
+              value="<?php echo htmlspecialchars($applicant['email']); ?>">
           </div>
           <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="department">
@@ -249,17 +265,17 @@
             </label>
             <select
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="department" id="Department" placeholder="Department">
-              
-              <option value="">Select Department</option>
-              <option value="Product Order"<?php echo $employees['department'] == 'Product Order' ? 'selected' : ''; ?>>Product Order</option>
-              <option value="Inventory"<?php echo $employees['department'] == 'Inventory' ? 'selected' : ''; ?>>Inventory</option>
-              <option value="Delivery"<?php echo $employees['department'] == 'Delivery' ? 'selected' : ''; ?>>Delivery</option>
-              <option value="Human Resources"<?php echo $employees['department'] == 'Human Resources' ? 'selected' : ''; ?>>Human Resources</option>
-              <option value="Point of Sales"<?php echo $employees['department'] == 'Point of Sales' ? 'selected' : ''; ?>>Point of Sales</option>
-              <option value="Finance"<?php echo $employees['department'] == 'Finance' ? 'selected' : ''; ?>>Finance</option>
-              
-            </select>
+                name="department" id="Department" placeholder="Department">
+                        
+                <option value="">Select Department</option>
+                <option value="Product Order"<?php echo $applicant['applyingForDepartment'] == 'Product Order' ? 'selected' : ''; ?>>Product Order</option>
+                <option value="Inventory"<?php echo $applicant['applyingForDepartment'] == 'Inventory' ? 'selected' : ''; ?>>Inventory</option>
+                <option value="Delivery"<?php echo $applicant['applyingForDepartment'] == 'Delivery' ? 'selected' : ''; ?>>Delivery</option>
+                <option value="Human Resources"<?php echo $applicant['applyingForDepartment'] == 'Human Resources' ? 'selected' : ''; ?>>Human Resources</option>
+                <option value="Point of Sales"<?php echo $applicant['applyingForDepartment'] == 'Point of Sales' ? 'selected' : ''; ?>>Point of Sales</option>
+                <option value="Finance"<?php echo $applicant['applyingForDepartment'] == 'Finance' ? 'selected' : ''; ?>>Finance</option>
+
+                </select>
           </div>
           <div>
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="Position">
@@ -270,8 +286,8 @@
               name="position"
               id="Position"
               type="text"
-              value="<?php echo $employees['position']; ?>"
               placeholder="Position"
+              value="<?php echo htmlspecialchars($applicant['applyingForPosition']); ?>"
             />  
           </div>
         </div>
@@ -290,7 +306,6 @@
             name="dateofhire"
             id="dateofhire"
             type="date"
-              value="<?php echo $employees['dateofhire']; ?>"
             placeholder="Date of Hire"
           />
           </div>
@@ -303,7 +318,6 @@
             name="startdate"
             id="startdate"
             type="date"
-              value="<?php echo $employees['startdate']; ?>"
             placeholder="Start Date"
           />
           </div>
@@ -316,7 +330,6 @@
               name="enddate"
               id="enddate"
               type="date"
-              value="<?php echo $employees['enddate']; ?>"
               placeholder="enddate"
             />
           </div>
@@ -339,7 +352,6 @@
                           id="monthlysalary"
                           type="text"
                           placeholder="0.00"
-                          value="<?php echo $employees['monthly_salary']; ?>"
                           oninput="calculateTax()"
                           
                         />
@@ -354,7 +366,6 @@
                           name="incometax"
                           id="incometax"
                           type="text"
-                          value="<?php echo $employees['income_tax']; ?>"
                           placeholder="0.00"
                           readonly
                         />
@@ -368,7 +379,6 @@
                           name="withholdingtax"
                           id="withholdingtax"
                           type="number"
-                          value="<?php echo $employees['withholding_tax']; ?>"
                           placeholder="0.00"
                           readonly
                         />
@@ -389,7 +399,6 @@
                               name="sss"
                               id="sss"
                               type="text"
-                              value="<?php echo $employees['sss_fund']; ?>"
                               placeholder="0.00"
                               readonly
                             />
@@ -403,7 +412,6 @@
                               name="pagibig"
                               id="pagibig"
                               type="text"
-                              value="<?php echo $employees['pagibig_fund']; ?>"
                               placeholder="0.00"
                               readonly
                             />
@@ -417,7 +425,6 @@
                               name="philhealth"
                               id="philhealth"
                               type="text"
-                              value="<?php echo $employees['philhealth']; ?>"
                               placeholder="0.00"
                               readonly
                             />
@@ -436,7 +443,6 @@
                                 name="thirteenthmonth"
                                 id="thirteenthmonth"
                                 type="number"
-                                value="<?php echo $employees['thirteenth_month']; ?>"
                                 placeholder="0.00"
                                 readonly
                               />
@@ -450,7 +456,6 @@
                                 name="totalsalary"
                                 id="totalsalary"
                                 type="number"
-                                value="<?php echo $employees['total_salary']; ?>"
                                 placeholder="0.00"
                                 readonly
                               />
@@ -472,7 +477,6 @@
                           name="username"
                           id="username"
                           type="text"
-                          value="<?php echo $employees['username']; ?>"
                           placeholder="Username"
                         />
                     </div>
@@ -486,7 +490,6 @@
                           name="password"
                           id="password"
                           type="password"
-                          value="<?php echo $employees['password']; ?>"
                           placeholder="Password"
                         />
                         <input type="checkbox" id="togglePassword"> Show Password
@@ -497,7 +500,7 @@
                       <div>
                       </div>
                       <div class="flex flex-row mt-8 justify-center">
-                        <button type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Update</button>
+                        <button type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Save</button>
                         <button route="/hr/employees" type="button" class="focus:outline-none text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Cancel</button>
                       </div>
                       </form>
