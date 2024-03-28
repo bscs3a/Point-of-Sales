@@ -201,33 +201,78 @@ function displayRequestData()
               <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
                 <div class="flex flex-col font-medium text-gray-700 gap-3">
                 <?php
-function getTotalItemsAndAmount($requests)
+// Function to get the total count of items and the total amount of the accepted request
+function getTotalItemsAndAmount($searchDate = null)
 {
     try {
-        // Initialize total items count and total amount variables
-        $totalItems = 0;
-        $totalAmount = 0;
+        $db = Database::getInstance();
+        $conn = $db->connect();
 
-        // Loop through each request and calculate total items and amount
-        foreach ($requests as $request) {
-            $totalItems++;
-            $totalAmount += $request['Product_Total_Price'];
+        // Check if $conn is defined and not null
+        if (!isset($conn) || $conn === null) {
+            throw new Exception("Database connection is not established.");
         }
 
+        // Construct the query to get the total count of items
+        $itemCountQuery = "SELECT COALESCE(SUM(r.Product_Quantity), 0) AS totalItems 
+                           FROM requests r
+                           INNER JOIN order_details od ON r.Request_ID = od.Order_ID
+                           WHERE r.request_Status = 'accepted'";
+        
+        // If a search date is provided, modify the query to filter by that date
+        if ($searchDate) {
+            $itemCountQuery .= " AND DATE(od.Date_Ordered) = :searchDate";
+        }
+        
+        $itemCountStatement = $conn->prepare($itemCountQuery);
+        
+        // If a search date is provided, bind the parameter to the query
+        if ($searchDate) {
+            $itemCountStatement->bindParam(':searchDate', $searchDate);
+        }
+        
+        $itemCountStatement->execute();
+        $itemCountResult = $itemCountStatement->fetch(PDO::FETCH_ASSOC);
+
+        // Query to get the total amount
+        $totalAmountQuery = "SELECT COALESCE(SUM(r.Product_Total_Price), 0) AS totalAmount 
+                             FROM requests r
+                             INNER JOIN order_details od ON r.Request_ID = od.Order_ID";
+        
+        // If a search date is provided, modify the query to filter by that date
+        if ($searchDate) {
+            $totalAmountQuery .= " WHERE DATE(od.Date_Ordered) = :searchDate";
+        }
+        
+        $totalAmountStatement = $conn->prepare($totalAmountQuery);
+        
+        // If a search date is provided, bind the parameter to the query
+        if ($searchDate) {
+            $totalAmountStatement->bindParam(':searchDate', $searchDate);
+        }
+        
+        $totalAmountStatement->execute();
+        $totalAmountResult = $totalAmountStatement->fetch(PDO::FETCH_ASSOC);
+
         // Display the total count of items
-        echo '<a>Items Subtotal: ' . $totalItems . '</a>';
+        echo '<a>Items Subtotal: ' . $itemCountResult['totalItems'] . '</a>';
 
         // Display the total amount
-        echo '<a>Total Amount: Php ' . $totalAmount . '</a>';
+        echo '<a>Total Amount: Php ' . $totalAmountResult['totalAmount'] . '</a>';
 
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
-// Call the function with the filtered requests array
-getTotalItemsAndAmount($requests);
+// Example usage:
+// If you want to display totals for today's date, pass the date as 'YYYY-MM-DD' format
+// $searchDate = date('Y-m-d');
+getTotalItemsAndAmount(); // Call the function without providing a search date
 ?>
+
                 </div>
               </th>
             </tr>
