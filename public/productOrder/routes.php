@@ -234,6 +234,41 @@ function getProductDetails($productID, $conn)
 }
 
 
+// Function to update request status to 'Ok' this code is for the finance team
+function updateRequestStatusToOk()
+{
+    try {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        // Begin a transaction
+        $conn->beginTransaction();
+
+        // Update the request status in the requests table
+        $query = "UPDATE requests SET request_Status = 'Ready to order' WHERE request_Status = 'pending'";
+        $statement = $conn->prepare($query);
+        $statement->execute();
+
+        // Commit the transaction
+        $conn->commit();
+
+        echo "All pending requests have been updated to 'Ok' status.";
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/po/requestOrder");
+
+    } catch (PDOException $e) {
+        // Rollback the transaction in case of error
+        $conn->rollBack();
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+// Route to handle the update request status action
+Router::post('/accept/requestOrder', function () {
+    // Call the function to update request status
+    updateRequestStatusToOk();
+});
+
 
 //function to change the "pending" status of requested orders to "accepted" and it will insert on the
 //orders_details table while also having a data in the requests tables to use it as a request history
@@ -279,7 +314,7 @@ function updateRequestStatusToAccepted()
         $conn->commit();
 
         // Update the request status to 'accepted' after inserting into order_details
-        $updateStmt = $conn->prepare("UPDATE requests SET request_Status = 'accepted' WHERE request_Status = 'pending'");
+        $updateStmt = $conn->prepare("UPDATE requests SET request_Status = 'accepted' WHERE request_Status = 'Ready to order'");
         $updateStmt->execute();
 
         echo "Request status updated to 'accepted' for all pending requests.";
