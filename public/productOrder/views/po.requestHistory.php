@@ -63,7 +63,40 @@
         </div>
       </div>
 
-      
+      <?php
+// Initialize a variable to hold the default month
+$defaultMonth = date('F Y');
+
+// Check if form is submitted and search date is set
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
+    // Process the search date
+    $searchDate = $_POST['searchDate'];
+    
+    // Extract the month and year from the search date
+    $searchedMonth = date('F Y', strtotime($searchDate));
+    
+    // If the search date is valid, update the default month
+    if ($searchedMonth) {
+        $defaultMonth = $searchedMonth;
+    }
+}
+?>
+
+<nav class="mx-5">
+    <ul class="flex items-center justify-between -space-x-px h-8 text-sm">
+    <li>
+              <a href="#" class="flex items-center justify-center px-3 h-8 font-bold text-lg text-gray-500 dark:text-gray-400"></a>
+            </li>
+        <li>
+            <a href="#" class="flex items-center justify-center px-3 h-8 font-bold text-3xl text-gray-500 dark:text-gray-400">
+                <?php echo $defaultMonth; ?>
+            </a>
+        </li>
+        <li>
+              <a href="#" class="flex items-center justify-center px-3 h-8 font-bold text-lg text-gray-500 dark:text-gray-400"></a>
+            </li>
+    </ul>
+</nav>
       <!-- Existing table -->
       <div class="overflow-overflow rounded-lg border border-gray-300 shadow-md m-5">
         <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
