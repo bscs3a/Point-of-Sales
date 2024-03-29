@@ -78,28 +78,29 @@
           />
         </div>
         <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            const form = document.querySelector('form');
-            const inputs = form.querySelectorAll('input');
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input');
 
-            form.addEventListener('submit', (event) => {
-              console.log('Form submitted'); // Add this line to check if the code is being triggered
+    form.addEventListener('submit', (event) => {
+      console.log('Form submitted'); // Add this line to check if the code is being triggered
 
-              let hasEmptyField = false;
+      let hasEmptyField = false;
 
-              inputs.forEach((input) => {
-                if (input.value.trim() === '') {
-                  hasEmptyField = true;
-                }
-              });
+      inputs.forEach((input) => {
+        if (input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate' && input.value.trim() === '') {
+          hasEmptyField = true;
+        }
+      });
 
-              if (hasEmptyField) {
-                event.preventDefault();
-                alert('Please fill in all the required fields.');
-              }
-            });
-          });
-        </script>
+      if (hasEmptyField) {
+        event.preventDefault();
+        alert('Please fill in all the required fields.');
+      }
+    });
+  });
+</script>
+
         <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
               Middle Name
