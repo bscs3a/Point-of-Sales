@@ -65,10 +65,10 @@
   
 <div class="flex flex-wrap">
     <h3 class="ml-6 mt-8 text-xl font-bold">All Applicants</h3>
-    <form action="/hr/applicants" method="POST" class="mt-6 ml-auto mr-4 flex">
+    <!-- <form action="/hr/applicants" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
-    </form>
+    </form> -->
 </div> 
   
 <?php 
@@ -96,24 +96,20 @@
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 <script>
-  document.getElementById('rejectButton').addEventListener('click', function() {
-    document.getElementById('rejectModal').classList.remove('hidden');
+  document.querySelectorAll('.rejectButton').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var id = this.getAttribute('data-id');
+        document.getElementById('idToDelete').value = id;
+        document.getElementById('rejectModal').classList.remove('hidden');
+    });
   });
 
   document.getElementById('cancelReject').addEventListener('click', function() {
       document.getElementById('rejectModal').classList.add('hidden');
   });
 
-  document.querySelectorAll('.rejectButton').forEach(function(button) {
-      button.addEventListener('click', function() {
-          var id = this.getAttribute('data-id');
-          document.getElementById('idToDelete').value = id;
-      });
-  });
-
   document.getElementById('confirmReject').addEventListener('click', function() {
-      // Handle the deletion here
-      console.log('Deleting...');
+    document.getElementById('rejectModal').submit();
   });
 </script>
 </body>

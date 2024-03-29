@@ -59,7 +59,7 @@
                 <a x-data="{ tooltip: 'Accept' }" route="/hr/applicants/accept=<?php echo $applicant['id']; ?>">   
                   <i class="ri-check-line"></i>     
                 </a>
-                <a id="rejectButton" data-id="<?php echo $applicant['id']; ?>" x-data="{ tooltip: 'Reject' }" href="#">
+                <a class="rejectButton" data-id="<?php echo $applicant['id']; ?>" x-data="{ tooltip: 'Reject' }" href="#">
                   <i class="ri-close-line"></i>     
                 </a>
               </div>

@@ -764,10 +764,11 @@ Router::post('/hr/applicants/reject', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    $id = $_POST['id'];
+    $idToDelete = $_POST['id'];
 
-    $stmt = $conn->prepare("DELETE FROM applicants WHERE id = :id");
-    $stmt->bindParam(':id', $id);
+    $query = "DELETE FROM applicants WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':id' => $idToDelete]);
 
     // Execute the statement
     $stmt->execute();
