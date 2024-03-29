@@ -447,3 +447,88 @@ Router::post('/cancel/orderDetail', function () {
     // Call the function to update order status
     updateOrderStatusToCancel();
 });
+
+
+//function to just fetch the data in the requestHistory
+function fetchAllRequestsData()
+{
+    try {
+        // Connect to the database
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        // Prepare SQL query to fetch all requests data
+        $sql = "SELECT r.*, od.*, p.ProductName,p.Price 
+                FROM requests r
+                INNER JOIN order_details od ON r.Request_ID = od.Order_ID
+                INNER JOIN products p ON od.Product_ID = p.ProductID
+                WHERE r.Request_Status = 'accepted'
+                ORDER BY r.Request_ID ASC"; // Order by Request_ID from lowest to highest
+
+        // Prepare the SQL statement
+        $stmt = $conn->prepare($sql);
+
+        // Execute the statement
+        $stmt->execute();
+
+        // Fetch all rows as an associative array
+        $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $requests;
+        
+    } catch (PDOException $e) {
+        // Handle database errors
+        echo "Error: " . $e->getMessage();
+        return []; // Set requests to an empty array in case of error
+    }
+}
+
+
+// Function to search requests by date
+function searchByDate()
+{
+    try {
+        // Connect to the database
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        if (isset($_POST['searchDate'])) {
+            $searchDate = $_POST['searchDate'];
+
+            // Prepare SQL query to fetch requests data based on the search date
+            $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
+                    FROM requests r
+                    INNER JOIN order_details od ON r.Request_ID = od.Order_ID
+                    INNER JOIN products p ON od.Product_ID = p.ProductID
+                    WHERE DATE(od.Date_Ordered) = :searchDate AND r.Request_Status = 'accepted'
+                    ORDER BY r.Request_ID ASC"; // Order by Request_ID from lowest to highest
+
+            // Prepare the SQL statement
+            $stmt = $conn->prepare($sql);
+
+            // Bind parameters
+            $stmt->bindParam(':searchDate', $searchDate);
+
+            // Execute the statement
+            $stmt->execute();
+
+            // Fetch all rows as an associative array
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Return the fetched data
+            return $result;
+        }
+    } catch (PDOException $e) {
+        // Handle database errors
+        echo "Error: " . $e->getMessage();
+        return []; // Return an empty array in case of error
+    }
+}
+// Route to handle the search request
+Router::post('/search/requestHistory', function () {
+    // Call the function to search requests by date
+    $searchedRequests = searchByDate();
+
+    // Include the requestHistory.php file to display the search results
+    include 'views/po.requestHistory.php';
+});
