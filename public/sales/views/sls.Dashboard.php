@@ -308,7 +308,7 @@
                                 <td class="px-4 py-2"><?= $saleDetail["SaleID"] ?></td>
                                 <td class="px-4 py-2"><?= date("F j, Y, g:i a", strtotime($saleDetail["SaleDate"])) ?></td>
                                 <td class="px-4 py-2"><?= $saleDetail["FirstName"] . " " . $saleDetail["LastName"] ?></td>
-                                <td class="px-4 py-2">View</td>
+                                <td class='px-4 py-2'><a route='/sls/Transaction-Details/sale=<?php echo $saleDetail["SaleID"] ?>' class='text-blue-500 hover:underline view-link'>View</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
