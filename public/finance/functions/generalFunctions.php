@@ -1,6 +1,7 @@
 <?php
 require_once '../../../src/dbconn.php';
 //get the value of 1 t-account - can return negative or positive
+// debit is positive, credit is negative
 function getAccountBalance($ledger, $considerDate = false, $year = null, $month = null) {
     $db = Database::getInstance();
     $conn = $db->connect();
