@@ -480,7 +480,9 @@
             <div class="relative">
                 <div class=" bg-white flex-row flex gap-10 p-4 pt-6 pb-8">
                     <div class="">
-                        <div class="size-64 rounded-full shadow-lg bg-yellow-200"></div>
+                        <div class="size-64 rounded-full shadow-lg bg-yellow-200">
+                            <img src="../uploads/drill.png" alt="Your Image">
+                        </div>
                     </div>
 
                     <div>

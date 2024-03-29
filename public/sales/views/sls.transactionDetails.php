@@ -181,9 +181,9 @@
                 <div class="flex justify-center">
                     <div class="grid grid-cols-3 gap-4 mx-auto">
                         <?php foreach ($items as $item) : ?>
-                            <div class="w-52 h-70 p-6 flex flex-col items-center border rounded-lg border-solid border-gray-300 shadow-lg text-center" data-open-modal data-product='<?= json_encode($item) ?>'>
+                            <div class="w-52 h-70 p-6 flex flex-col items-center border rounded-lg border-solid border-gray-300 shadow-lg text-center cursor-pointer" data-open-modal data-product='<?= json_encode($item) ?>'>
                                 <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                    <!-- SVG icon -->
+                                    <img src="../../uploads/drill.png" alt="Your Image">
                                 </div>
                                 <div class="font-bold text-lg text-gray-700"><?php echo $item['ProductName']; ?></div>
                                 <div class="font-normal text-sm text-gray-500"><?php echo $item['Category']; ?></div>
@@ -206,7 +206,9 @@
                     <div class="relative p-4">
                         <div class="relative bg-white">
                             <div class="flex justify-center">
-                                <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4"></div>
+                                <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4">
+                                    <img id="modal-product-image" src="" alt="Product Image">
+                                </div>
                             </div>
                             <div class="text-justify">
                                 <div id="modal-product-category" class="text-justify font-semibold text-gray-800"></div>
@@ -243,6 +245,7 @@
                     const closeButtons = document.querySelector('[data-close-modal]');
                     const modal = document.querySelector('[data-modal]');
                     const modalProductName = document.getElementById('modal-product-name');
+                    const modalProductImage = document.getElementById('modal-product-image');
                     const modalProductPrice = document.getElementById('modal-product-price');
                     const modalProductDescription = document.getElementById('modal-product-description');
                     const modalProductCategory = document.getElementById('modal-product-category');
@@ -261,6 +264,8 @@
                                 TaxRate: Number(product.TaxRate),
                                 deliveryRequired: product.DeliveryRequired
                             };
+                            // modalProductImage.src = `../../uploads/${product.Image}`;
+                            modalProductImage.src = `../../uploads/drill.png`;
                             modalProductName.textContent = selectedProduct.name;
                             modalProductPrice.textContent = '₱' + (selectedProduct.price * (1 + selectedProduct.TaxRate)).toFixed(2);
                             modalProductCategory.textContent = product.Category;
