@@ -61,7 +61,7 @@
 
          <li class="mb-1 rounded-xl">
             <button id="transactions-button"
-                class="toggle-transactions flex items-center py-2 px-4 w-full text-white hover:text-black focus:bg-slate-800  hover:bg-slate-400 rounded-xl">
+                class="toggle-transactions flex items-center py-2 px-4 w-full text-white hover:text-black focus:text-black focus:bg-slate-400  hover:bg-slate-400 rounded-xl">
                 <i class="ri-file-edit-fill mr-3 text-lg"></i>
                 <span class="text-sm font-medium">Transactions</span>
                 <i class="ri-arrow-down-s-line ml-auto"></i>
