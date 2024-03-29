@@ -11,6 +11,7 @@ $basePath = "$path/fin.";
 $fin = [
     //dashboard
     '/fin/dashboard' => $basePath . "dashboard.php",
+    '/fin/logs' => $basePath . "auditLog.php",
 
     //reports
     '/fin/reportIncome' => $basePath . "reportIncome.php",
