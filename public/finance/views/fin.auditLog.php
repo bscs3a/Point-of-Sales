@@ -46,7 +46,7 @@
                         <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer"
                             id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                                <?= $_SESSION['fullname']; ?>
+                                <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -125,9 +125,10 @@
                             $db = Database::getInstance();
                             $pdo = $db->connect();
 
-                            $sql = "SELECT * FROM tbl_fin_audit";
+                            $sql = "SELECT * FROM tbl_fin_audit WHERE employee_name = :employee_name";
 
                             $stmt = $pdo->prepare($sql);
+                            $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
                             $stmt->execute();
                             // $stmt->fetchColumn();
                             if ($stmt->rowCount() > 0) {
