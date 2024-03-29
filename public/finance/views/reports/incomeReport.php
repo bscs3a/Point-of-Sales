@@ -1,6 +1,5 @@
 <?php 
-    require_once '../../functions/reportGeneration/IncomeReport.php';
-
+    // require_once '../../functions/reportGeneration/IncomeReport.php';
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
@@ -26,16 +25,28 @@
 </head>
 <style>
     ul {
-        list-style-type: none;
+        list-style-type: none;  
+    }
+    header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
     }
 </style>
 
 <body>
-    Company B
-    Income Statement
-    For month ended <?php echo "$monthName $year"?>
+    <header>
+        <div>
+            <span>Income Statement</span>
+            <span>
+                <?php echo "$monthName $year"?>    
+            </span>
+        </div>
+        <img src="..\..\img\logo_reports.png" alt="">
+    </header>
     <?php
-        echo generateIncomeReport($year, $month);
+        // echo generateIncomeReport($year, $month);
     ?>
 </body>
 </html>

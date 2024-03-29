@@ -1,5 +1,4 @@
 <?php
-
 require_once '../generalFunctions.php';
 // used for getting the accountbalance
 // problems:
@@ -16,7 +15,7 @@ function calculateNetSalesOrLoss($year, $month) {
     define("EXPENSE", "EP");
 
     // income - expense = netsales or loss
-    return getGroupInRetainedAccount(INCOME, $year, $month) - getGroupInRetainedAccount(EXPENSE, $year, $month);
+    return abs(getGroupInRetainedAccount(INCOME, $year, $month)) - abs(getGroupInRetainedAccount(EXPENSE, $year, $month));
 }
 
 //close an account - responsible for inserting the retained earnings/loss
@@ -91,7 +90,7 @@ function getAccountBalanceInRetainedAccount($ledger, $year, $month){
     $creditAmount = $stmt->fetch(PDO::FETCH_ASSOC)['TotalCredit'];
 
     $total = $debitAmount - $creditAmount;
-    return abs($total);
+    return $total;
 }
 
 // get the total of a group in retained earnings
@@ -145,7 +144,7 @@ function getGroupInRetainedAccount($groupType, $year = null, $month = null) {
         $netAmount -= $row['amount'];
     }
 
-    return abs($netAmount);
+    return $netAmount;
 }
 
 function generateIncomeReport($year, $month) {
@@ -174,7 +173,7 @@ function generateIncomeReport($year, $month) {
                 $html .= "<li>\n{$account['Description']}\n<ul>\n";
                 foreach ($ledger_data as $ledger) {
                     if ($ledger['AccountType'] == $account['AccountType']) {
-                        $balance = getAccountBalanceInRetainedAccount($ledger['ledgerno'], $year, $month);
+                        $balance = abs(getAccountBalanceInRetainedAccount($ledger['ledgerno'], $year, $month));
                         // dont show ledger if balance is 0
                         if($balance == 0){
                             continue;
@@ -185,7 +184,7 @@ function generateIncomeReport($year, $month) {
                 $html .= "</ul>\n</li>\n";
             }
         }
-        $total = getGroupInRetainedAccount($group['grouptype'], $year, $month);
+        $total = abs(getGroupInRetainedAccount($group['grouptype'], $year, $month));
         $resultText = $group['grouptype'] == "IC" ? "Gross Profit" : "Total Expense";
         $html .= "</ul>\n<span>{$resultText}</span>&emsp;<span>{$total}</span>\n</li>\n";
     }
