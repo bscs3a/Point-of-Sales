@@ -458,10 +458,10 @@ function fetchAllRequestsData()
         $conn = $db->connect();
 
         // Prepare SQL query to fetch all requests data
-        $sql = "SELECT r.*, od.*, p.ProductName,p.Price 
-                FROM requests r
-                INNER JOIN order_details od ON r.Request_ID = od.Order_ID
-                INNER JOIN products p ON od.Product_ID = p.ProductID
+      $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
+                    FROM requests r
+                    INNER JOIN order_details od ON r.Request_ID = od.Order_ID
+                    INNER JOIN products p ON od.Product_ID = p.ProductID
                 WHERE r.Request_Status = 'accepted'
                 ORDER BY r.Request_ID ASC"; // Order by Request_ID from lowest to highest
 
