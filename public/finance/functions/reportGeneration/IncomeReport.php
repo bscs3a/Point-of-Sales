@@ -7,6 +7,7 @@ require_once '../generalFunctions.php';
 
 
 //calculate net sales
+//returns negative if d kumita; positive if kumita
 function calculateNetSalesOrLoss($year, $month) {
     if ($year === null || $month === null) {
         throw new Exception("Year and month must not be null.");
@@ -178,6 +179,7 @@ function generateIncomeReport($year, $month) {
                         if($balance == 0){
                             continue;
                         }
+                        $balance = abs($balance);
                         $html .= "<li>\n<span>{$ledger['name']}</span>&emsp;<span>{$balance}</span>\n</li>\n";
                     }
                 }
@@ -190,6 +192,7 @@ function generateIncomeReport($year, $month) {
     }
     $netSalesOrLoss = calculateNetSalesOrLoss($year, $month);
     $textSalesOrLoss = $netSalesOrLoss > 0 ? "Net Sales" : "Net Loss";
+    $netSalesOrLoss = abs($netSalesOrLoss);
     $html .= "
     <li>
         <span>{$textSalesOrLoss}</span>&emsp;<span>{$netSalesOrLoss}</span>

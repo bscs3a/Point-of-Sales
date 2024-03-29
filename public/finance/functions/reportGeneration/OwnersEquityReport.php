@@ -23,31 +23,39 @@ function calculateShare($accountNumber){
 }
 
 function divideTheGainLoss($accountNumber, $year, $month){
-    return calculateNetSalesOrLoss($year, $month) * calculateShare($accountNumber);
+    return abs(calculateNetSalesOrLoss($year, $month)) * calculateShare($accountNumber);
 }
 
 function insertShare($accountNumber, $year, $month){
-    $db = Database::getInstance();
-    $conn = $db->connect();
-    $insertBalance = divideTheGainLoss($accountNumber, $year, $month);
-    if ($insertBalance > 0) {
-        $sql = "INSERT INTO LedgerTransaction (LedgerNo, amount, LedgerNo_Dr, details) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$accountNumber, $insertBalance]);
+    $retained = getLedgerCode("Retained Earnings/Loss");
+    $accountNumber = getLedgerCode($accountNumber);
+
+    if ($accountNumber === false) {
+        throw new Exception("Account not found in Ledger table.");
     }
-}
+    // default is earnings
+    $debitLedger = $accountNumber;
+    $creditLedger = $retained;
+    
+    if(calculateNetSalesOrLoss($year,$month) < 0){
+        $debitLedger = $retained;
+        $creditLedger = $accountNumber;
+    }
 
-function closeTemporaryAccounts($year, $month){
+    $amount = abs(divideTheGainLoss($accountNumber, $year, $month));
+    //if share is 0 return
+    if ($amount == 0) {
+        return;
+    }
 
-}
-
-function checkRetainedEarningsLoss(){
-
+    insertLedgerXact($debitLedger, $creditLedger, $amount, "Dividing Earnings or Loss", $year, $month);
 }
 
 
 function generateOEReport(){
     $db = Database::getInstance();
     $conn = $db->connect();
+
+    
 }
 ?>
