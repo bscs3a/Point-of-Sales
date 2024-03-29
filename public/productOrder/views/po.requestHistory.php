@@ -1,12 +1,12 @@
 <?php
-    // Initialize $requests variable to an empty array
-    $requests = [];
+// Initialize $requests variable to an empty array
+$requests = [];
 
-    // Check if form is submitted and display search results
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
-        // Call the function to search requests by date and assign the result to $requests
-        $requests = searchByDate();
-    }
+// Check if form is submitted and display search results
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
+  // Call the function to search requests by date and assign the result to $requests
+  $requests = searchByDate();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,39 +64,42 @@
       </div>
 
       <?php
-// Initialize a variable to hold the default month
-$defaultMonth = date('F Y');
+      // Initialize a variable to hold the default month
+      $defaultMonth = date('F Y');
 
-// Check if form is submitted and search date is set
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
-    // Process the search date
-    $searchDate = $_POST['searchDate'];
-    
-    // Extract the month and year from the search date
-    $searchedMonth = date('F Y', strtotime($searchDate));
-    
-    // If the search date is valid, update the default month
-    if ($searchedMonth) {
-        $defaultMonth = $searchedMonth;
-    }
-}
-?>
+      // Check if form is submitted and search date is set
+      if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
+        // Process the search date
+        $searchDate = $_POST['searchDate'];
 
-<nav class="mx-5">
-    <ul class="flex items-center justify-between -space-x-px h-8 text-sm">
-    <li>
-              <a href="#" class="flex items-center justify-center px-3 h-8 font-bold text-lg text-gray-500 dark:text-gray-400"></a>
-            </li>
-        <li>
-            <a href="#" class="flex items-center justify-center px-3 h-8 font-bold text-3xl text-gray-500 dark:text-gray-400">
-                <?php echo $defaultMonth; ?>
+        // Extract the month and year from the search date
+        $searchedMonth = date('F Y', strtotime($searchDate));
+
+        // If the search date is valid, update the default month
+        if ($searchedMonth) {
+          $defaultMonth = $searchedMonth;
+        }
+      }
+      ?>
+
+      <nav class="mx-5">
+        <ul class="flex items-center justify-between -space-x-px h-8 text-sm">
+          <li>
+            <a href="#"
+              class="flex items-center justify-center px-3 h-8 font-bold text-lg text-gray-500 dark:text-gray-400"></a>
+          </li>
+          <li>
+            <a href="#"
+              class="flex items-center justify-center px-3 h-8 font-bold text-3xl text-gray-500 dark:text-gray-400">
+              <?php echo $defaultMonth; ?>
             </a>
-        </li>
-        <li>
-              <a href="#" class="flex items-center justify-center px-3 h-8 font-bold text-lg text-gray-500 dark:text-gray-400"></a>
-            </li>
-    </ul>
-</nav>
+          </li>
+          <li>
+            <a href="#"
+              class="flex items-center justify-center px-3 h-8 font-bold text-lg text-gray-500 dark:text-gray-400"></a>
+          </li>
+        </ul>
+      </nav>
       <!-- Existing table -->
       <div class="overflow-overflow rounded-lg border border-gray-300 shadow-md m-5">
         <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
@@ -156,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
                   </td>
                   <td class="px-6 py-7">
                     <div class="font-medium text-gray-700 text-sm">
-                    <?php echo $request['Product_Quantity']; ?>
+                      <?php echo $request['Product_Quantity']; ?>
                     </div>
                   </td>
                   <td class="px-6 py-7">
@@ -197,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
                   </td>
                   <td class="px-6 py-7">
                     <div class="font-medium text-center text-gray-700 text-sm">
-                    <?php echo $request['Product_Quantity']; ?>
+                      <?php echo $request['Product_Quantity']; ?>
 
                     </div>
                   </td>
@@ -213,42 +216,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
             ?>
           </tbody>
           <?php
-    // Initialize variables to hold total quantity and total price
-    $totalQuantity = 0;
-    $totalPrice = 0;
+          // Initialize variables to hold total quantity and total price
+          $totalQuantity = 0;
+          $totalPrice = 0;
 
-    // Loop through the fetched data and generate table rows dynamically
-    foreach ($requests as $request) {
-        // Increment total quantity
-        $totalQuantity += $request['Product_Quantity'];
-        
-        // Calculate total price for each item and increment total price
-        $totalPrice += $request['Price'] * $request['Product_Quantity'];
-        ?>
-        <tr class="hover:bg-gray-100">
-            <!-- Your existing table row content here -->
-        </tr>
-    <?php
-    }
-?>
-<!-- Your existing HTML code -->
+          // Loop through the fetched data and generate table rows dynamically
+          foreach ($requests as $request) {
+            // Increment total quantity
+            $totalQuantity += $request['Product_Quantity'];
 
-<!-- Display total quantity and total price in table footer -->
-<tfoot class="bg-gray-200">
-    <tr class="border-b border-y-gray-300">
-        <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-        <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-        <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-        <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-        <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-        <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
-            <div class="flex flex-col font-medium text-gray-700 gap-3">
-                <a>Items Subtotal: <?php echo $totalQuantity; ?></a>
-                <a>Total Amount: <?php echo $totalPrice; ?></a>
-            </div>
-        </th>
-    </tr>
-</tfoot>
+            // Calculate total price for each item and increment total price
+            $totalPrice += $request['Price'] * $request['Product_Quantity'];
+            ?>
+            <tr class="hover:bg-gray-100">
+              <!-- Your existing table row content here -->
+            </tr>
+            <?php
+          }
+          ?>
+          <!-- Your existing HTML code -->
+
+          <!-- Display total quantity and total price in table footer -->
+          <tfoot class="bg-gray-200">
+            <tr class="border-b border-y-gray-300">
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+              <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
+                <div class="flex flex-col font-medium text-gray-700 gap-3">
+                  <a>Items Subtotal:
+                    <?php echo $totalQuantity; ?>
+                  </a>
+                  <a>Total Amount:
+                    <?php echo $totalPrice; ?>
+                  </a>
+                </div>
+              </th>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
