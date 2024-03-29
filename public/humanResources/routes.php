@@ -129,6 +129,7 @@ Router::post('/hr/employees/add', function () {
     $rootFolder = dirname($_SERVER['PHP_SELF']);
 
     // BASIC EMPLOYEE INFORMATION
+    $image_url = $_POST['image_url'];
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $lastName = $_POST['lastName'];
@@ -142,7 +143,7 @@ Router::post('/hr/employees/add', function () {
     $department = $_POST['department'];
     $position = $_POST['position'];
 
-    $query = "INSERT INTO employees (first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, address, contact_no, email, department, position) VALUES (:firstName, :middleName, :lastName, :dateofbirth, :gender, :nationality, :civilstatus, :address, :contactnumber, :email, :department, :position);";
+    $query = "INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, address, contact_no, email, department, position) VALUES (:image_url, :firstName, :middleName, :lastName, :dateofbirth, :gender, :nationality, :civilstatus, :address, :contactnumber, :email, :department, :position);";
     $stmt = $conn->prepare($query);
 
     if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
@@ -156,6 +157,7 @@ Router::post('/hr/employees/add', function () {
     // }
 
     $stmt->execute([
+        'image_url' => $image_url,
         ':firstName' => $firstName,
         ':middleName' => $middleName,
         ':lastName' => $lastName,
@@ -303,6 +305,7 @@ Router::post('/hr/employees/update', function () {
     // BASIC EMPLOYEE INFORMATION
     $id = $_SESSION['id'];
 
+    $image_url = $_POST['image_url'];
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $lastName = $_POST['lastName'];
@@ -316,7 +319,7 @@ Router::post('/hr/employees/update', function () {
     $department = $_POST['department'];
     $position = $_POST['position'];
 
-    $query = "UPDATE employees SET first_name = :firstName, middle_name = :middleName, last_name = :lastName, dateofbirth = :dateofbirth, gender = :gender, nationality = :nationality, civil_status = :civilstatus, address = :address, contact_no = :contactnumber, email = :email, department = :department, position = :position WHERE id = :id";
+    $query = "UPDATE employees SET image_url = :image_url, first_name = :firstName, middle_name = :middleName, last_name = :lastName, dateofbirth = :dateofbirth, gender = :gender, nationality = :nationality, civil_status = :civilstatus, address = :address, contact_no = :contactnumber, email = :email, department = :department, position = :position WHERE id = :id";
     $stmt = $conn->prepare($query);
 
     if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
@@ -325,6 +328,7 @@ Router::post('/hr/employees/update', function () {
     }
 
     $stmt->execute([
+        'image_url' => $image_url,
         ':firstName' => $firstName,
         ':middleName' => $middleName,
         ':lastName' => $lastName,
@@ -574,6 +578,204 @@ Router::post('/hr/applicants', function () {
     include './public/humanResources/views/hr.applicants.php';
 });
 
+// accept applicants (will redirect to add employees and delete the row from applicants)
+Router::post('/hr/applicants/accept', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    // BASIC EMPLOYEE INFORMATION
+    $image_url = $_POST['image_url'];
+    $firstName = $_POST['firstName'];
+    $middleName = $_POST['middleName'];
+    $lastName = $_POST['lastName'];
+    $dateofbirth = $_POST['dateofbirth'];
+    $gender = $_POST['gender'];
+    $nationality = $_POST['nationality'];
+    $civilstatus = $_POST['civilstatus'];
+    $address = $_POST['address'];
+    $contactnumber = $_POST['contactnumber'];
+    $email = $_POST['email'];
+    $department = $_POST['department'];
+    $position = $_POST['position'];
+
+    $query = "INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, address, contact_no, email, department, position) VALUES (:image_url, :firstName, :middleName, :lastName, :dateofbirth, :gender, :nationality, :civilstatus, :address, :contactnumber, :email, :department, :position);";
+    $stmt = $conn->prepare($query);
+
+    if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
+        header("Location: $rootFolder/hr/employees/add");
+        return;
+    }
+
+    // if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
+    //     header("Location: $rootFolder/hr/employees/add");
+    //     return;
+    // }
+
+    $stmt->execute([
+        'image_url' => $image_url,
+        ':firstName' => $firstName,
+        ':middleName' => $middleName,
+        ':lastName' => $lastName,
+        ':dateofbirth' => $dateofbirth,
+        ':gender' => $gender,
+        ':nationality' => $nationality,
+        ':civilstatus' => $civilstatus,
+        ':address' => $address,
+        ':contactnumber' => $contactnumber,
+        ':email' => $email,
+        ':department' => $department,
+        ':position' => $position,
+    ]);
+
+    $employeeId = $conn->lastInsertId();
+
+    // EMPLOYMENT INFORMATION
+    $dateofhire = $_POST['dateofhire'];
+    $startdate = $_POST['startdate'];
+    $enddate = $_POST['enddate'];
+
+    $query = "INSERT INTO employment_info (employees_id, dateofhire, startdate, enddate) VALUES (:employeeId, :dateofhire, :startdate, :enddate);";
+    $stmt = $conn->prepare($query);
+
+    if (empty($dateofhire) || empty($startdate)) {
+        header("Location: $rootFolder/hr/employees/add");
+        return;
+    }
+
+    $stmt->execute([
+        ':employeeId' => $employeeId,
+        ':dateofhire' => $dateofhire,
+        ':startdate' => $startdate,
+        ':enddate' => $enddate,
+    ]);
+
+    // SALARY AND TAX INFORMATION
+    // salary FK : employees_id
+    $monthlysalary = $_POST['monthlysalary'];
+    $totalsalary = $_POST['totalsalary'];
+    
+    // Calculate total deductions
+    $totalDeductions = calculatePagibig($monthlysalary) + calculateSSS($monthlysalary) + calculatePhilhealth($monthlysalary) + calculateIncomeTax($monthlysalary) + calculateWithholdingTax($monthlysalary);
+
+    // Calculate total salary
+    $totalSalary = $monthlysalary - $totalDeductions;
+
+    $query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary) VALUES (:employeeId, :monthlysalary, :totalsalary);";
+    $stmt = $conn->prepare($query);
+
+    if (empty($monthlysalary)) {
+        header("Location: $rootFolder/hr/employees/add");
+        return;
+    }
+
+    $stmt->execute([
+        ':employeeId' => $employeeId,
+        ':monthlysalary' => $monthlysalary,
+        ':totalsalary' => $totalSalary,
+    ]);
+
+    // tax : FK salary_id
+    $incometax = $_POST['incometax'];
+    $withholdingtax = $_POST['withholdingtax'];
+
+    $salaryId = $conn->lastInsertId();
+
+    // Calculate tax amount based on monthly salary
+    $taxAmount = calculateWithholdingTax($monthlysalary);
+
+    $query = "INSERT INTO tax_info (salary_id, income_tax, withholding_tax) VALUES (:salaryId, :incometax, :withholdingtax);";
+    $stmt = $conn->prepare($query);
+
+    $stmt->execute([
+        ':salaryId' => $salaryId,
+        ':incometax' => $incometax,
+        ':withholdingtax' => $taxAmount,
+    ]);
+    
+    // benefits : FK salary_id
+    $sss = $_POST['sss'];
+    $pagibig = $_POST['pagibig'];
+    $philhealth = $_POST['philhealth'];
+    $thirteenthmonth = $_POST['thirteenthmonth'];
+
+    // Calculate SSS contribution
+    $sssContribution = calculateSSS($monthlysalary);
+
+    // Calculate Philhealth contribution based on monthly salary
+    $philhealthContribution = calculatePhilhealth($monthlysalary);
+
+    // Calculate Pag-IBIG fund contribution based on monthly salary
+    $pagibigContribution = calculatePagibig($monthlysalary);
+
+    // Calculate total basic salary earned by the employee within the calendar year
+    $totalBasicSalary = $monthlysalary * 12;
+
+    // Calculate the minimum value for the 13th-month pay
+    $minimumThirteenthMonthPay = $totalBasicSalary / 12;
+
+    // Ensure that the 13th-month pay is not less than the minimum value
+    $thirteenthmonth = max($minimumThirteenthMonthPay, $monthlysalary);
+
+    $query = "INSERT INTO benefit_info (salary_id, sss_fund, pagibig_fund, philhealth, thirteenth_month) VALUES (:salaryId, :sss, :pagibig, :philhealth, :thirteenthmonth);";
+    $stmt = $conn->prepare($query);
+
+    $stmt->execute([
+        ':salaryId' => $salaryId,
+        ':sss' => $sssContribution,
+        ':pagibig' => $pagibigContribution,
+        ':philhealth' => $philhealthContribution,
+        ':thirteenthmonth' => $thirteenthmonth,
+    ]);
+
+    // ACCOUNT INFORMATION
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $role = $_POST['department'];
+
+    $query = "INSERT INTO account_info (employees_id, username, password, role) VALUES (:employeeId, :username, :password, :role);";
+    $stmt = $conn->prepare($query);
+
+    if (empty($username) || empty($password) || empty($role)) {
+        header("Location: $rootFolder/hr/employees/add");
+        return;
+    }
+
+    $stmt->execute([
+        ':employeeId' => $employeeId,
+        ':username' => $username,
+        ':password' => $password,
+        ':role' => $role,
+    ]);
+    
+    // Delete a row from APPLICANTS table
+    $id = $_SESSION['id'];
+    $query = "DELETE FROM applicants WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':id' => $id]);
+
+    header("Location: $rootFolder/hr/employees");
+
+});
+
+// reject applicants (will delete a row from applicants) | STILL NOW WORKING THO?? it says NOT FOUND
+Router::post('/hr/applicants/reject', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $id = $_POST['id'];
+
+    $stmt = $conn->prepare("DELETE FROM applicants WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+
+    // Execute the statement
+    $stmt->execute();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/hr/applicants");
+});
+
 // search leave_requests
 Router::post('/hr/leave-requests', function () {
     $db = Database::getInstance();
@@ -600,7 +802,7 @@ Router::post('/hr/leave-requests', function () {
 });
 
 // EXAMPLE DELETE
-Router::post('/hr/employees/id={id}', function ($id) {
+Router::post('/delete', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 

@@ -74,7 +74,7 @@
 <div class="py-2 px-6 mt-4">
   <div class="flex">
     <div class="mr-4">
-      <img src="<?php echo htmlspecialchars($applicant['image_url']); ?>" alt="Profile Picture" class="w-48 h-48 object-cover">
+      <img src="<?php echo htmlspecialchars($applicant['image_url']); ?>" alt="Profile Picture" class="w-48 h-48 object-cover" name="image_url" id="image_url">
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
@@ -84,7 +84,7 @@
     </div>
 
   <!-- Employee Information -->
-<form action= "/hr/employees/add" method="POST">
+<form action= "/hr/applicants/accept" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">

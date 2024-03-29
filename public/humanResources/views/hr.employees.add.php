@@ -51,7 +51,7 @@
 <div class="py-2 px-6 mt-4">
   <div class="flex">
     <div class="mr-4">
-      <img src="#" alt="Profile Picture" class="w-48 h-48 object-cover">
+      <img src="#" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
@@ -512,6 +512,44 @@
                         <button route="/hr/employees" type="button" class="focus:outline-none text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Cancel</button>
                       </div>
                       </form>
+                      
+        <!--Required Fields modal -->
+          <div id="requiredFieldsModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+              <div class="bg-white p-5 rounded-lg text-center">
+                  <h2 class="mb-4">Please fill in all required fields.</h2>
+                  <button id="confirmFill" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">OK</button>
+              </div>
+          </div>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              const form = document.querySelector('form');
+              const inputs = form.querySelectorAll('input');
+              const requiredFieldsModal = document.querySelector('#requiredFieldsModal');
+              const confirmFill = document.querySelector('#confirmFill');
+
+              form.addEventListener('submit', (event) => {
+                console.log('Form submitted'); // Add this line to check if the code is being triggered
+
+                let hasEmptyField = false;
+
+                inputs.forEach((input) => {
+                  if (input.value.trim() === '' && input.name !== 'email' && input.name !== 'contactNumber' && input.name !== 'endOfEmployment') {
+                    hasEmptyField = true;
+                  }
+                });
+
+                if (hasEmptyField) {
+                  event.preventDefault();
+                  requiredFieldsModal.classList.remove('hidden');
+                }
+              });
+
+              confirmFill.addEventListener('click', () => {
+                requiredFieldsModal.classList.add('hidden');
+              });
+            });
+          </script>
     </div>
   </div>
 </div> 
