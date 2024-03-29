@@ -75,7 +75,7 @@ function generateOEReport($year, $month){
 
     $html = "<tbody>";
     foreach ($ledger_data as $ledger) {
-        if($ledger["AccountType"] != "Capital Accounts"){
+        if($ledger["AccountType"] != $condition){
             continue;
         }
         insertShare($ledger["ledgerno"], $year, $month);
@@ -89,21 +89,27 @@ function generateOEReport($year, $month){
             $pastMonth = 12;
         }
         $html .= "<td>".getAccountBalance($ledger["AccountNumber"], $pastYear, $pastMonth)."</td>"; //account balance last month
-
-
-        // $html .= "<td>".divideTheGainLoss($ledger['ledgerno'], $year, $month)."</td>"; // additional investment
-        $html .= "<td>".divideTheGainLoss($ledger['ledgerno'], $year, $month)."</td>"; // net income/loss
-        // $html .= "<td>".getWithdrawals($ledger["AccountNumber"], $year, $month)."</td>"; //withdrawals
-        $html .= "<td>".getAccountBalance($ledger["AccountNumber"])."</td>";
+        $html .= "<td>".getInvestment($ledger['ledgerno'], $year, $month)."</td>"; // additional investment
+        $html .= "<td>".divideTheGainLoss($ledger['ledgerno'], $year, $month)."</td>"; // net income/loss divided
+        $html .= "<td>".getWithdrawals($ledger["AccountNumber"], $year, $month)."</td>"; //withdrawals
+        $html .= "<td>".getAccountBalance($ledger["AccountNumber"])."</td>"; // get the current total
         $html .= "</tr>";
     }
-
-
     $html .= "</tbody>";
+    $html .= "<tfoot>";
+    $html .= "<tr>";
+    $html .= "<td>Total Equity</td>"; //place holder for name
+    $html .= "<td>".getTotalOfAccountType($condition,$pastYear,$pastMonth)."</td>"; //total investment last month
+    $html .= "<td>".getWholeInvestment($year,$month)."</td>"; // total additional investment this month
+    $html .= "<td>".calculateNetSalesOrLoss($year, $month)."</td>";// total net income/loss this month
+    $html .= "<td>".getWholeWithdrawals($year,$month)."</td>"; // total withdrawals this month
+    $html .= "<td>".getTotalOfAccountType($condition,$year,$month)."</td>"; // ending investment this month
+    $html .= "</tr>";
+    $html .= "</tfoot>";
 
-
+    return $html;
 }
-
+// get the investment of the account holder total - excluding retained earnings
 function getInvestment($accountNumber, $year = null, $month=null){
     $accountNumber = getLedgerCode($accountNumber);
     $retained = getLedgerCode("Retained Earnings/Loss");
@@ -112,6 +118,122 @@ function getInvestment($accountNumber, $year = null, $month=null){
         throw new Exception("Account not found in Ledger table.");
     }
     
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    // get everything that credited the investment account no; excluding retained earnings
+    $sql = "SELECT * FROM LedgerTransaction WHERE LedgerNo = :accountNumber AND LedgerNo_Dr != :retained";
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $sql .= " AND YEAR(datetime) = :year AND MONTH(datetime) = :month";
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountNumber', $accountNumber);
+    $stmt->bindParam(':retained', $retained);
+    if ($year !== null && $month !== null) {
+        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $balance = 0;
+    foreach ($result as $row) {
+        $balance += $row['amount'];
+    }
+    return $balance;
+}
+
+// get the withdrawals of the account holder total - excluding retained earnings
+function getWithdrawals($accountNumber, $year = null, $month=null){
+    $accountNumber = getLedgerCode($accountNumber);
+    $retained = getLedgerCode("Retained Earnings/Loss");
+
+    if ($accountNumber === false) {
+        throw new Exception("Account not found in Ledger table.");
+    }
     
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    // get everything that debited the investment account no; excluding retained earnings
+    $sql = "SELECT * FROM LedgerTransaction WHERE LedgerNo_dr = :accountNumber AND LedgerNo != :retained";
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $sql .= " AND YEAR(datetime) = :year AND MONTH(datetime) = :month";
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountNumber', $accountNumber);
+    $stmt->bindParam(':retained', $retained);
+    if ($year !== null && $month !== null) {
+        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $balance = 0;
+    foreach ($result as $row) {
+        $balance += $row['amount'];
+    }
+    return $balance;
+}
+
+function getWholeInvestment($year,$month){
+    $retained = getLedgerCode("Retained Earnings/Loss");
+    $accountTypeCode = getAccountCode("Capital Accounts");
+
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    // get everything that credited the investment account no; excluding retained earnings
+    $sql = "SELECT * FROM LedgerTransaction lt
+    JOIN Ledger l ON lt.LedgerNo = l.LedgerNo
+    WHERE l.accounttype = :accountTypeCode 
+    AND lt.LedgerNo_Dr != :retained";
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $sql .= " AND YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month";
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountTypeCode', $accountTypeCode);
+    $stmt->bindParam(':retained', $retained);
+    if ($year !== null && $month !== null) {
+        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $balance = 0;
+    foreach ($result as $row) {
+        $balance += $row['amount'];
+    }
+    return $balance;
+}
+
+function getWholeWithdrawals($year, $month){
+    $retained = getLedgerCode("Retained Earnings/Loss");
+    $accountTypeCode = getAccountCode("Capital Accounts");
+
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    // get everything that credited the investment account no; excluding retained earnings
+    $sql = "SELECT * FROM LedgerTransaction lt
+    JOIN Ledger l ON lt.LedgerNo_Dr = l.LedgerNo
+    WHERE l.accounttype = :accountTypeCode 
+    AND lt.LedgerNo != :retained";
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $sql .= " AND YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month";
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountTypeCode', $accountTypeCode);
+    $stmt->bindParam(':retained', $retained);
+    if ($year !== null && $month !== null) {
+        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $balance = 0;
+    foreach ($result as $row) {
+        $balance += $row['amount'];
+    }
+    return $balance;
 }
 ?>

@@ -36,16 +36,6 @@
             </tr>
         </thead>
         <?php echo generateOEReport($year, $month);?>
-        <tfoot>
-            <tr>
-                <th>Total Equity</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tfoot>
     </table>
 </body>
 </html>
