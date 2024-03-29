@@ -1,5 +1,4 @@
 <?php
-
 $path = './public/humanResources/views';
 $basePath = "$path/hr.";
 
@@ -51,8 +50,7 @@ $hr = [
         include $basePath . "employees.php";
     },
 ];
-
-// add employees
+// TAX CALCULATION
 // Function to calculate tax amount based on monthly salary | INCOME TAX
 function calculateIncomeTax($monthlysalary) {
     if ($monthlysalary <= 20833.33) {
@@ -122,6 +120,7 @@ function calculatePagibig($monthlysalary) {
     return 200.00;
 }
 
+// add employees
 Router::post('/hr/employees/add', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -434,6 +433,24 @@ Router::post('/hr/employees/update', function () {
     ]);
 
     header("Location: $rootFolder/hr/employees/id=$id");
+});
+
+// DELETE employees
+Router::post('/hr/employees/delete', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $idToDelete = $_POST['id'];
+
+    $query = "DELETE FROM employees, employment_info, account_info, salary_info, tax_info, benefit_info WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':id' => $idToDelete]);
+
+    // Execute the statement
+    $stmt->execute();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/hr/applicants");
 });
 
 // search employees
