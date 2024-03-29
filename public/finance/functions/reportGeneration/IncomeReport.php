@@ -1,5 +1,6 @@
 <?php
-require_once '../generalFunctions.php';
+require_once '../generalFunction.php';
+
 // used for getting the accountbalance
 // problems:
 // must consider date

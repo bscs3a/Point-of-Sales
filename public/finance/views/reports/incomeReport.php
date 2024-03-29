@@ -1,5 +1,5 @@
 <?php 
-    // require_once '../../functions/reportGeneration/IncomeReport.php';
+    // require_once '../../functions/reportGeneration/IncomeReport.php'; -- might change into ajax
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
