@@ -77,6 +77,70 @@
             placeholder="First Name"
           />
         </div>
+
+    <!--Required Fields modal -->
+    <div id="requiredFieldsModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-5 rounded-lg text-center">
+        <h2 class="mb-4">Please fill in all required fields.</h2>
+        <button id="confirmFill" type="button" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">OK</button>
+    </div>
+    </div>
+
+      <script>
+          document.addEventListener('DOMContentLoaded', () => {
+              const form = document.querySelector('form');
+              const inputs = form.querySelectorAll('input');
+              const requiredFieldsModal = document.querySelector('#requiredFieldsModal');
+              const confirmFill = document.querySelector('#confirmFill');
+
+              form.addEventListener('submit', (event) => {
+                  console.log('Form submitted'); // Add this line to check if the code is being triggered
+
+                  let hasEmptyField = false;
+
+                  inputs.forEach((input) => {
+                      if (input.value.trim() === '' && input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate') {
+                          hasEmptyField = true;
+                      }
+                  });
+
+                  if (hasEmptyField) {
+                      event.preventDefault();
+                      requiredFieldsModal.classList.remove('hidden');
+                  }
+              });
+
+              confirmFill.addEventListener('click', () => {
+                  requiredFieldsModal.classList.add('hidden');
+              });
+          });
+      </script>
+
+  <!-- Alert notifier -->
+        <!-- <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input');
+
+    form.addEventListener('submit', (event) => {
+      console.log('Form submitted'); // Add this line to check if the code is being triggered
+
+      let hasEmptyField = false;
+
+      inputs.forEach((input) => {
+        if (input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate' && input.value.trim() === '') {
+          hasEmptyField = true;
+        }
+      });
+
+      if (hasEmptyField) {
+        event.preventDefault();
+        alert('Please fill in all the required fields.');
+      }
+    });
+  });
+</script> -->
+
         <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
               Middle Name
