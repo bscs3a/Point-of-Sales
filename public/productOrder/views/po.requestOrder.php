@@ -40,7 +40,7 @@
       </div>
 
       <!-- table -->
-      <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md m-5">
+      <div class="overflow-auto rounded-lg border border-gray-300 shadow-md m-5">
         <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
           <thead class="bg-gray-200">
             <tr class="border-b border-y-gray-300">
@@ -51,6 +51,7 @@
               <th scope="col" class="px-6 py-4 font-medium text-gray-900">Price</th>
               <th scope="col" class="px-6 py-4 font-medium text-gray-900">Quantity</th>
               <th scope="col" class="px-6 py-4 font-medium text-gray-900">Total</th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900">Status</th>
               <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
             </tr>
           </thead>
@@ -61,7 +62,7 @@
             try {
               require_once 'dbconn.php';
               // Query to retrieve all requests
-              $query = "SELECT * FROM requests WHERE request_Status = 'pending'";
+              $query = "SELECT * FROM requests WHERE request_Status = 'pending' OR request_Status = 'Ready to order'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
@@ -83,6 +84,7 @@
                 echo '<td class="px-6 py-10">' . $productDetails['Price'] . '</td>';
                 echo '<td class="px-6 py-10">' . $row["Product_Quantity"] . '</td>';
                 echo '<td class="px-6 py-10">' . $row["Product_Total_Price"] . '</td>';
+                echo '<td class="px-6 py-10">' . $row["request_Status"] . '</td>';
                 echo '<td class="px-6 py-10">';
                 echo '<form action="/master/delete/requestOrder" method="POST" enctype="multipart/form-data">';
                 echo '<input type="hidden" name="requestID" value="' . $requestID . '">';
@@ -119,6 +121,8 @@
             echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900">Items Subtotal: ' . $totalQuantity . '</th>';
             echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900">Total Amount: Php ' . $totalPrice . '</th>';
             echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
+            echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
+
             echo '</tr>';
             echo '</tfoot>';
           } catch (PDOException $e) {
@@ -129,6 +133,12 @@
       </div>
       <!-- View All Button -->
       <div class="flex justify-end border-none">
+      <form action="/master/accept/requestOrder" method="POST" enctype="multipart/form-data">
+          <button type="submit" class="mr-5 py-3 px-4 border-2 border-black text-sm rounded-md bg-[#FFC955]"
+            name="order_now">
+            Accept Request
+          </button>
+        </form>
 
         <form action="/master/update/requestOrder" method="POST" enctype="multipart/form-data">
           <button type="submit" class="mr-5 py-3 px-4 border-2 border-black text-sm rounded-md bg-[#FFC955]"

@@ -124,11 +124,17 @@
               <div class="flex flex-col justify-center mt-8 px-8">
                 <label for="category">Category</label>
                 <select class="h-8 border-2 bg-gray-300 mb-3 rounded-md" id="category" name="category" required>
-                  <option value="">Select Category</option>
-                  <option value="Bing">Bing</option>
-                  <option value="Bang">Bang</option>
-                  <option value="Boom">Boom</option>
-                </select>
+    <option value="">Select Category</option>
+    <?php
+    // Get all category names
+    $categoryNames = getAllCategories();
+
+    // Generate options dynamically
+    foreach ($categoryNames as $category) {
+        echo "<option value=\"$category\">$category</option>";
+    }
+    ?>
+</select>
 
                 <label for="weight">Weight</label>
                 <input type="text" id="weight" name="weight" class="h-8  border-2 bg-white mb-3 rounded-md" required>
