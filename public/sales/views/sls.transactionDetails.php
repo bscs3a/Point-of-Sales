@@ -57,18 +57,21 @@
 
         <div class="flex flex-col items-start justify-center min-h-screen w-full max-w-4xl mx-auto p-4">
             <div class="w-full bg-white rounded-lg overflow-hidden shadow-lg p-4">
-                <div class="p-2 pl-6 text-green-800 text-xl">
-                    <i class="ri-cash-line text-2xl"></i> <span class="font-regular text-green-800">AMOUNT</span>
-                </div>
-                <div class="p-2 pl-6 text-6xl font-semibold flex flex-row items-center border-b pb-4">
-                    <span>₱<?php echo number_format($sale['TotalAmount'], 2); ?></span>
-                    <!-- <div>
+                <div class="bg-green-900 text-white">
+                    <div class="p-2 pl-6 text-xl">
+                        <i class="ri-cash-line text-2xl"></i> <span class="font-regular">AMOUNT</span>
+                    </div>
+                    <div class="p-2 pl-6 text-6xl font-semibold flex flex-row items-center border-b pb-4 ">
+                        <span>₱<?php echo number_format($sale['TotalAmount'], 2); ?></span>
+                        <!-- <div>
                         <div class="bg-gray-200 flex justify-center p-2 px-4 rounded-full ml-4 shadow-md border-gray-200 border">
                             <div class="bg-green-800 size-6 rounded-full mr-2"></div>
                             <span class="text-xl font-medium">Order Delivered</span>
                         </div>
                     </div> -->
+                    </div>
                 </div>
+
 
 
                 <div class="p-6 rounded flex flex-row text-lg font-medium">
