@@ -151,6 +151,9 @@ function getGroupInRetainedAccount($groupType, $year = null, $month = null) {
 
 function generateIncomeReport($year, $month) {
     closeAllAccounts($year, $month);
+    $income = getGroupCode("Income");
+    $expense = getGroupCode("Expenses");
+
     $db = Database::getInstance();
     $conn = $db->connect();
 
@@ -166,7 +169,7 @@ function generateIncomeReport($year, $month) {
 
     $html = "<ul>\n";
     foreach ($grouptype_data as $group) {
-        if ($group['grouptype'] != "IC" && $group['grouptype'] != "EP") {
+        if ($group['grouptype'] != $income && $group['grouptype'] != $expense) {
             continue;
         }
         $html .= "<li>\n<h1>{$group['description']}</h1>\n<ul>\n";
