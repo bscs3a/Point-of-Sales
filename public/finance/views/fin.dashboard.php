@@ -12,6 +12,26 @@
 <body>
     <!-- Start: Sidebar -->
     <?php include "components/sidebar.php" ?>
+    <?php 
+        // require_once './../functions/auditLog.php';
+        // echo __DIR__ . './../functions/auditLog.php';
+        // addAccountantAuditLog('Log in'); 
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            if (isset($_SESSION['employee_name'])) {
+
+                $db = Database::getInstance();
+                $pdo = $db->connect();
+                
+                $logAction = "Log in";
+        
+                $sql = "INSERT INTO tbl_fin_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
+                $stmt->bindParam(":log_action", $logAction);
+                $stmt->execute();
+            }
+        }
+    ?>
     <!-- End: Sidebar -->
     <!-- Start: Dashboard -->
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main font-sans">
@@ -46,7 +66,7 @@
                         <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer"
                             id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                                <?= $_SESSION['fullname']; ?>
+                                <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
