@@ -5,66 +5,146 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Items</title>
+
   <link href="./../src/tailwind.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </head>
 
 <body>
-  <div class="flex h-screen bg-gray-100">
+  <div class="flex h-screen bg-white">
     <!-- sidebar -->
-    <?php include "components/po.sidebar.php" ?>
-
-    <!-- Navbar -->
-    <div class="flex flex-col flex-1 overflow-y-auto">
-      <!-- Header -->
-      <div class="flex items-center justify-between h-16 bg-zinc-200 border-b border-gray-200">
-        <div class="flex items-center px-4">
-          <button class="text-gray-500 focus:outline-none focus:text-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <h1 class="text-2xl font-semibold px-5">Product Order / Items</h1>
-        </div>
-
-        <div class="flex items-center pr-4 text-xl font-semibold">
-          Sample User
-
-          <span class="p-3">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </span>
-        </div>
+      <div id="sidebar" class="flex h-screen">
+          <?php include "components/po.sidebar.php" ?>
       </div>
 
       <!-- Main Content -->
-      <div class="p-4">
-        <div class="m-5 flex justify-between items-center">
-          <div class="flex flex-row">
-            <select id="filterSelect"
-              class="appearance-none rounded-l-lg border border-gray-400 border-b block pl-8 pr-6 py-2 bg-gray-300 text-sm placeholder-gray-400 text-black focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none">
-              <option value="">Filter</option>
-              <option value="id">ID</option>
-              <option value="name">Name</option>
-              <option value="supplier">Supplier</option>
-              <option value="category">Category</option>
-              <option value="quality">Quality</option>
-              <option value="price">Price</option>
-              <option value="description">Description</option>
-            </select>
-            <input id="searchInput" placeholder="Search"
-              class="appearance-none rounded-l rounded-lg sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-gray-300 text-sm placeholder-white text-black focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
-          </div>
-          <div class="lg:ml-40 ml-10 space-x-8">
-            <button
-              class="bg-violet-950 px-4 py-2 border border-black text-white rounded-md font-semibold tracking-wide cursor-pointer">
-              <a route='/po/addItem'>add item</a>
-            </button>
-          </div>
-        </div>
+        <div class="flex flex-col flex-1 overflow-y-auto">
+          <!-- header -->
+          <div class="flex items-center justify-between h-20 bg-white shadow-md px-4 py-2">
+            <div class="flex items-center gap-4">
+              <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
+                <i class="ri-menu-line"></i>
+              </button>
+              <label class="text-black font-medium">Product List</label>
+              
+            </div>
 
+            <!-- dropdown -->
+            <div x-data="{ dropdownOpen: false }" class="relative my-32">
+              <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+                <div class="flex items-center gap-4">
+                  <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+              </button>
+
+                <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
+
+                <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                  <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
+                </div>
+            </div>
+          </div>
+
+          <script>
+            document.getElementById('toggleSidebar').addEventListener('click', function() {
+                var sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('hidden', !sidebar.classList.contains('hidden'));
+            });
+          </script>
+
+      <!-- Main Content -->
+        <!-- new layout of table -->
+        <div class="px-10 py-4">
+            <div class="justify-between items-start">
+                <!-- Button -->
+                <div class="flex justify-between">
+                    <div class="items-start">
+                        <div class="relative">
+                            <div class="inline-flex items-center overflow-hidden rounded-lg border border-gray-500">
+                                <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
+                                <button
+                                    class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
+                                    <i class="ri-calendar-2-fill"></i>
+                                    Filter
+                                </button>
+                                
+                                <div class="relative">
+                                    <label for="Search" class="sr-only"> Search </label>
+
+                                    <input type="text" id="Search" placeholder="Search by ID..."
+                                        class="w-full rounded-md rounded-l-md p-1 border-gray-200 pe-10 shadow-sm sm:text-sm outline-none pl-4" />
+
+                                    <span class="absolute inset-y-0 end-0 grid w-10 place-content-center">
+                                        <button type="button" class="text-gray-600 hover:text-gray-700">
+                                            <span class="sr-only">Search</span>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex place-content-end mt-2 m-3">
+                      <button route='/po/addItem' class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
+                      <i class="ri-add-circle-line"></i>
+                      <span>Add Product</span> 
+                      </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto rounded-lg border border-gray-400">
+                <table class="min-w-full text-left mx-auto bg-white">
+                    <thead class="bg-gray-200 border-b border-gray-400 text-sm">
+                        <tr>
+                            <th class="px-4 py-2 font-semibold">Product</th>
+                            <th class="px-4 py-2 font-semibold">Product ID</th>
+                            <th class="px-4 py-2 font-semibold">Supplier</th>
+                            <th class="px-4 py-2 font-semibold">Category</th>
+                            <th class="px-4 py-2 font-semibold">Weight</th>
+                            <th class="px-4 py-2 font-semibold">Price</th>
+                            <th class="px-4 py-2 font-semibold">Description</th>
+                            <th class="px-4 py-2 font-semibold"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="px-4 py-4 flex items-center justify-center">
+                            <img src="https://via.placeholder.com/150" alt="Product Image" class="w-20 h-20 object-cover mr-4">
+                                <div>Product Name</div>
+                            </td>
+                            <td class="px-4 py-4">12</td>
+                            <td class="px-4 py-4">marc</td>
+                            <td class="px-4 py-4">
+                              <select class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm placeholder-gray-400 text-black focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none">
+                                <option value="id">handtool</option>
+                                <option value="name">option</option>
+                                <option value="name">option</option>
+                              </select>
+                            </td>
+                            <td class="px-4 py-4">150 kg</td>
+                            <td class="px-4 py-4">Php 150.00</td>
+                            <td class="px-4 py-4">ssgdffh</td>
+                            <td class="px-4 py-4">edit</td>
+                        </tr>    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+     
+
+      <div class="p-4">
         <!-- table -->
         <?php
         try {
@@ -159,6 +239,7 @@
         ?>
         <!-- //end -->
       </div>
+
     </div>
   </div>
 
