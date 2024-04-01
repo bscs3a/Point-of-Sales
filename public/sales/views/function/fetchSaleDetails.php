@@ -21,7 +21,11 @@ $stmtCustomer->execute([$sale['CustomerID']]);
 $customer = $stmtCustomer->fetch(PDO::FETCH_ASSOC);
 
 // Query for sale items
-$sqlItems = "SELECT * FROM SaleDetails INNER JOIN Products ON SaleDetails.ProductID = Products.ProductID WHERE SaleID = ?";
+$sqlItems = "SELECT SaleDetails.*, Products.*, Categories.Category_Name 
+             FROM SaleDetails 
+             INNER JOIN Products ON SaleDetails.ProductID = Products.ProductID 
+             INNER JOIN Categories ON Products.Category_ID = Categories.Category_ID 
+             WHERE SaleID = ?";
 $stmtItems = $pdo->prepare($sqlItems);
 $stmtItems->execute([$saleId]);
 $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);

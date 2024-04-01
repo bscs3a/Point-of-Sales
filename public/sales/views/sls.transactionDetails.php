@@ -186,10 +186,10 @@
                         <?php foreach ($items as $item) : ?>
                             <div class="w-52 h-70 p-6 flex flex-col items-center border rounded-lg border-solid border-gray-300 shadow-lg text-center cursor-pointer" data-open-modal data-product='<?= json_encode($item) ?>'>
                                 <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                    <img src="../../uploads/drill.png" alt="Your Image">
+                                    <img src="../../<?= $item['ProductImage']; ?>" alt="<?php echo $item['ProductName']; ?>">
                                 </div>
                                 <div class="font-bold text-lg text-gray-700"><?php echo $item['ProductName']; ?></div>
-                                <div class="font-normal text-sm text-gray-500"><?php echo $item['Category']; ?></div>
+                                <div class="font-normal text-sm text-gray-500"><?php echo $item['Category_Name']; ?></div>
                                 <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?php echo number_format($item['UnitPrice'] * $item['Quantity'] * (1 + $item['TaxRate']), 2); ?></div>
                                 <div class="text-gray-500 text-sm">Quantity: <?php echo $item['Quantity']; ?></div>
                             </div>
@@ -261,6 +261,7 @@
                             selectedProduct = {
                                 id: product.ProductID,
                                 name: product.ProductName,
+                                image: product.ProductImage,
                                 price: Number(product.Price),
                                 stocks: product.Stocks,
                                 priceWithTax: Number(product.Price) * (1 + Number(product.TaxRate)),
@@ -268,10 +269,10 @@
                                 deliveryRequired: product.DeliveryRequired
                             };
                             // modalProductImage.src = `../../uploads/${product.Image}`;
-                            modalProductImage.src = `../../uploads/drill.png`;
+                            modalProductImage.src = `../../` + selectedProduct.image;
                             modalProductName.textContent = selectedProduct.name;
                             modalProductPrice.textContent = '₱' + (selectedProduct.price * (1 + selectedProduct.TaxRate)).toFixed(2);
-                            modalProductCategory.textContent = product.Category;
+                            modalProductCategory.textContent = product.Category_Name;
                             modalProductDescription.textContent = product.Description;
                             modalProductQuantity.textContent = 'Quantity: ' + product.Quantity;
                             modalProductTotal.textContent = 'Total: ₱' + (selectedProduct.price * product.Quantity * (1 + selectedProduct.TaxRate)).toFixed(2);

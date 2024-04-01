@@ -522,14 +522,14 @@
 
                                 <button id="product-item-button" type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category_Name']) ?>' @click="
                                     if (<?= $product['Stocks'] ?> > 0) { 
-                                        addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true; 
+                                        addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>', image: '<?= $product['ProductImage'] ?>' }); cartOpen = true; 
 
                                     } else { 
                                         showAlertBox(); 
                                     }">
 
                                     <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                        <img src="../uploads/drill.png" alt="Your Image">
+                                        <img src="../<?= $product['ProductImage'] ?>" alt="Your Image">
                                     </div>
 
                                     <!-- Horizontal line -->

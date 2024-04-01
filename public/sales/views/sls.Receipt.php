@@ -35,7 +35,7 @@
     $shippingFee = $sale['ShippingFee'];
 
     // Query the database for the sale items
-    $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, Products.ProductName 
+    $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, SaleDetails.TotalAmount, Products.ProductName, Products.TaxRate, Products.ProductImage 
                      FROM SaleDetails 
                      INNER JOIN Products ON SaleDetails.ProductID = Products.ProductID 
                      WHERE SaleDetails.SaleID = $sale_id";
@@ -57,14 +57,6 @@
                 ORDER BY SaleDate DESC LIMIT 1';
     $stmtSale = $pdo->query($sqlSale);
     $sale = $stmtSale->fetch(PDO::FETCH_ASSOC);
-
-    // Query the database for the sale items
-    $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, SaleDetails.TotalAmount, Products.ProductName, Products.TaxRate 
-                     FROM SaleDetails 
-                     INNER JOIN Products ON SaleDetails.ProductID = Products.ProductID 
-                     WHERE SaleDetails.SaleID = $sale_id";
-    $stmtSaleItems = $pdo->query($sqlSaleItems);
-    $sale_items = $stmtSaleItems->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
 </head>
@@ -106,28 +98,28 @@
                     </div>
 
                     <div class="p-8">
-                        
 
-                                <table id="cart-items" class="table-auto w-full text-left">
-                                    <tr class=" text-gray-500 text-xl border-b">
-                                        <th class="pb-2">Product</th>
-                                        <th class="pb-2">Quantity</th>
-                                        <th class="px-6 pb-2">Pcs Price</th>
-                                        <th class="pb-2">Total</th>
-                                    </tr>
-                                    <?php foreach ($sale_items as $item) : ?>
-                                    <tr class="">
-                                        <td class="flex flex-row items-center pb-6 pt-4 ">
-                                        <img class="h-12 w-12 mr-6" :src="" :alt="item.name">
-                                        <?= $item['ProductName'] ?>
-                                        </td>
-                                        <td class="pt-4 pb-6"><?= $item['Quantity'] ?></td>
-                                        <td class="pt-4 pb-6 px-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
-                                        <td class="pt-4 pb-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </table>
-                
+
+                        <table id="cart-items" class="table-auto w-full text-left">
+                            <tr class=" text-gray-500 text-xl border-b">
+                                <th class="pb-2">Product</th>
+                                <th class="pb-2">Quantity</th>
+                                <th class="px-6 pb-2">Pcs Price</th>
+                                <th class="pb-2">Total</th>
+                            </tr>
+                            <?php foreach ($sale_items as $item) : ?>
+                                <tr class="">
+                                    <td class="flex flex-row items-center pb-6 pt-4 ">
+                                        <img class="h-12 w-12 mr-6" src="../../<?= $item['ProductImage'] ?>" alt="<?= $item['ProductName'] ?>">
+                                        <?= $item['ProductImage'] ?>
+                                    </td>
+                                    <td class="pt-4 pb-6"><?= $item['Quantity'] ?></td>
+                                    <td class="pt-4 pb-6 px-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                    <td class="pt-4 pb-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+
 
                         <div class="<?= $sale_preferences == 'Delivery' ? 'grid grid-cols-2' : 'grid grid-cols-1' ?> gap-6 mt-6">
                             <?php if ($sale_preferences != 'Pick-up') : ?>
@@ -203,14 +195,14 @@
 
                 document.body.innerHTML = receipt;
 
-                   window.onbeforeprint = function() {
-                            document.querySelector('.print-button').style.display = 'none';
-                        };
+                window.onbeforeprint = function() {
+                    document.querySelector('.print-button').style.display = 'none';
+                };
 
-                       
-                    window.onafterprint = function() {
-                        document.querySelector('.print-button').style.display = 'block';
-                        };
+
+                window.onafterprint = function() {
+                    document.querySelector('.print-button').style.display = 'block';
+                };
 
                 window.print();
 

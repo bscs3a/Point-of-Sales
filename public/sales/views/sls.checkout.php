@@ -76,7 +76,7 @@
                                 <template x-for="(item, index) in cart" :key="index">
                                     <li class="py-4 flex justify-between items-center">
                                         <div class="flex">
-                                            <img class="h-10 w-10 mr-6" :src="" :alt="item.name">
+                                            <img class="h-10 w-10 mr-6" :src="'../../' + item.image" :alt="item.name">
                                             <span x-text="item.quantity + ' x ' + item.name"></span>
                                         </div>
                                         <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
