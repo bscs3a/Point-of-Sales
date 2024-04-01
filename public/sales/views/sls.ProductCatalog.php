@@ -129,7 +129,7 @@
                     <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
                         <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
                             <!-- Dropdown Options -->
-                            <?php 
+                            <?php
                             $uniqueCategories = array_unique(array_column($products, 'Category_Name')); // Extracting unique categories from products
                             foreach ($uniqueCategories as $categoryName) : ?>
                                 <li>
@@ -405,8 +405,8 @@
                                                             selectedProduct = { id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, deliveryRequired: '<?= $product['DeliveryRequired'] ?>' };
                                                         ">
 
-                                    <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                        <img src="../<?= $product['ProductImage'] ?>" alt="Your Image">
+                                    <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4 flex items-center justify-center">
+                                        <img src="../<?= $product['ProductImage'] ?>" alt="Your Image" class="object-contain">
                                     </div>
 
                                     <!-- Horizontal line -->
@@ -492,8 +492,8 @@
             <div class="relative">
                 <div class=" bg-white flex-row flex gap-10 p-4 pt-6 pb-8">
                     <div class="">
-                        <div class="size-64 rounded-full shadow-lg bg-yellow-200">
-                            <img src="../uploads/drill.png" alt="Your Image">
+                        <div class="size-64 rounded-full shadow-lg bg-yellow-200 flex items-center justify-center">
+                            <img id="modal-product-image" src="" alt="Product Image" class="object-contain">
                         </div>
                     </div>
 
@@ -557,6 +557,7 @@
             const modalProductDescription = document.getElementById('modal-product-description');
             const modalProductCategory = document.getElementById('modal-product-category');
             const modalProductStocks = document.getElementById('modal-product-stocks');
+            const modalProductImage = document.getElementById('modal-product-image');
 
             openButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -564,6 +565,7 @@
                     selectedProduct = {
                         id: product.ProductID,
                         name: product.ProductName,
+                        image: product.ProductImage,
                         price: Number(product.Price),
                         stocks: product.Stocks,
                         priceWithTax: Number(product.Price) * (1 + Number(product.TaxRate)),
@@ -572,6 +574,7 @@
                     };
                     console.log('selectedProduct: ', selectedProduct);
                     modalProductName.textContent = product.ProductName;
+                    modalProductImage.src = '../' + product.ProductImage; // Set the src attribute of the img tag to the ProductImage
                     modalProductPrice.textContent = '₱' + (Number(product.Price) * (1 + Number(product.TaxRate))).toFixed(2);
                     modalProductCategory.textContent = product.Category_Name;
                     modalProductDescription.textContent = product.Description;

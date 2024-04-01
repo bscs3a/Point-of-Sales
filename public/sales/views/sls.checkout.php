@@ -75,11 +75,12 @@
                                 <!-- Cart item rows -->
                                 <template x-for="(item, index) in cart" :key="index">
                                     <li class="py-4 flex justify-between items-center">
-                                        <div class="flex">
-                                            <img class="h-10 w-10 mr-6" :src="'../../' + item.image" :alt="item.name">
-                                            <span x-text="item.quantity + ' x ' + item.name"></span>
-                                        </div>
-                                        <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
+                                        <div class="flex items-center">
+                                            <div class="size-12 rounded-full shadow-lg bg-yellow-200 flex items-center justify-center">
+                                                <img class="object-contain" :src="'../../' + item.image" :alt="item.name">
+                                            </div>
+                                            <span class="ml-2" x-text="item.quantity + ' x ' + item.name"></span>
+                                            <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
                                     </li>
                                 </template>
 

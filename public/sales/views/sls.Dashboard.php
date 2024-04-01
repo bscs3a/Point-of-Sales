@@ -274,7 +274,7 @@
 
                 // Query for sale details
                 $sqlSaleDetails = "
-                    SELECT SaleDetails.*, Sales.SaleDate, Sales.CustomerID, Products.ProductName, Customers.FirstName, Customers.LastName 
+                    SELECT SaleDetails.*, Sales.SaleDate, Sales.CustomerID, Products.ProductName, Products.ProductImage, Customers.FirstName, Customers.LastName 
                     FROM SaleDetails 
                     JOIN Sales ON SaleDetails.SaleID = Sales.SaleID 
                     JOIN Products ON SaleDetails.ProductID = Products.ProductID 
@@ -298,7 +298,10 @@
                         <?php foreach ($saleDetails as $saleDetail) : ?>
                             <tr class="border border-gray-200 bg-white">
                                 <td class="px-4 py-2 flex items-start">
-                                    <img src="../uploads/drill.png" alt="Product Image" class="w-20 h-20 object-cover mr-4">
+                                    <div class="size-16 rounded-full shadow-md bg-yellow-200 flex items-center justify-center mr-2">
+                                        <img src="../<?= $saleDetail['ProductImage'] ?>" alt="Product Image" class="object-contain">
+                                    </div>
+
                                     <div>
                                         <div><?= $saleDetail["ProductName"] ?></div>
                                         <div>Quantity: <?= $saleDetail["Quantity"] ?></div>

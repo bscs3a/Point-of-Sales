@@ -55,7 +55,7 @@
 
         <!-- End: Header -->
 
-        <div class="flex flex-col items-start justify-center min-h-screen w-full max-w-4xl mx-auto p-4">
+        <div id="receipt" class="flex flex-col items-start justify-center min-h-screen w-full max-w-4xl mx-auto p-4">
             <div class="w-full bg-white rounded-lg overflow-hidden shadow-lg p-4">
                 <div class="bg-green-900 text-white">
                     <div class="p-2 pl-6 text-xl">
@@ -185,8 +185,8 @@
                     <div class="grid grid-cols-3 gap-4 mx-auto">
                         <?php foreach ($items as $item) : ?>
                             <div class="w-52 h-70 p-6 flex flex-col items-center border rounded-lg border-solid border-gray-300 shadow-lg text-center cursor-pointer" data-open-modal data-product='<?= json_encode($item) ?>'>
-                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                    <img src="../../<?= $item['ProductImage']; ?>" alt="<?php echo $item['ProductName']; ?>">
+                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4 flex items-center justify-center">
+                                    <img src="../../<?= $item['ProductImage']; ?>" alt="<?php echo $item['ProductName']; ?>" class="object-contain">
                                 </div>
                                 <div class="font-bold text-lg text-gray-700"><?php echo $item['ProductName']; ?></div>
                                 <div class="font-normal text-sm text-gray-500"><?php echo $item['Category_Name']; ?></div>
@@ -209,8 +209,8 @@
                     <div class="relative p-4">
                         <div class="relative bg-white">
                             <div class="flex justify-center">
-                                <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4">
-                                    <img id="modal-product-image" src="" alt="Product Image">
+                                <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4 flex items-center justify-center">
+                                    <img id="modal-product-image" src="" alt="Product Image" class="object-contain">
                                 </div>
                             </div>
                             <div class="text-justify">
@@ -316,6 +316,37 @@
     </main>
     <script src="./../../src/form.js"></script>
     <script src="./../../src/route.js"></script>
+
+    <script>
+        function attachPrintButtonEventListener() {
+            document.querySelector('.print-button').addEventListener('click', printReceipt);
+        }
+
+        function printReceipt() {
+            var receipt = document.getElementById('receipt').innerHTML;
+            var originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = receipt;
+
+            window.onbeforeprint = function() {
+                document.querySelector('.print-button').style.display = 'none';
+            };
+
+            window.onafterprint = function() {
+                document.querySelector('.print-button').style.display = 'block';
+            };
+
+            window.print();
+
+            document.body.innerHTML = originalContent;
+
+            // Reattach the event listener after the original content is restored
+            attachPrintButtonEventListener();
+        }
+
+        // Attach the event listener when the page loads
+        attachPrintButtonEventListener();
+    </script>
 </body>
 
 </html>

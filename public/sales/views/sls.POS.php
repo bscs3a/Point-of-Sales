@@ -528,8 +528,8 @@
                                         showAlertBox(); 
                                     }">
 
-                                    <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                        <img src="../<?= $product['ProductImage'] ?>" alt="Your Image">
+                                    <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4 flex items-center justify-center">
+                                        <img src="../<?= $product['ProductImage'] ?>" alt="Your Image" class="object-contain">
                                     </div>
 
                                     <!-- Horizontal line -->

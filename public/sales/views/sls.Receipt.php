@@ -110,8 +110,10 @@
                             <?php foreach ($sale_items as $item) : ?>
                                 <tr class="">
                                     <td class="flex flex-row items-center pb-6 pt-4 ">
-                                        <img class="h-12 w-12 mr-6" src="../../<?= $item['ProductImage'] ?>" alt="<?= $item['ProductName'] ?>">
-                                        <?= $item['ProductImage'] ?>
+                                        <div class="size-12 rounded-full shadow-lg bg-yellow-200 flex items-center justify-center mr-2">
+                                            <img class="object-contain" src="../../<?= $item['ProductImage'] ?>" alt="<?= $item['ProductName'] ?>">
+                                        </div>
+                                        <?= $item['ProductName'] ?>
                                     </td>
                                     <td class="pt-4 pb-6"><?= $item['Quantity'] ?></td>
                                     <td class="pt-4 pb-6 px-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
@@ -189,6 +191,10 @@
         </script>
 
         <script>
+            function attachPrintButtonEventListener() {
+                document.querySelector('.print-button').addEventListener('click', printReceipt);
+            }
+
             function printReceipt() {
                 var receipt = document.getElementById('receipt').innerHTML;
                 var originalContent = document.body.innerHTML;
@@ -199,7 +205,6 @@
                     document.querySelector('.print-button').style.display = 'none';
                 };
 
-
                 window.onafterprint = function() {
                     document.querySelector('.print-button').style.display = 'block';
                 };
@@ -207,9 +212,13 @@
                 window.print();
 
                 document.body.innerHTML = originalContent;
+
+                // Reattach the event listener after the original content is restored
+                attachPrintButtonEventListener();
             }
 
-            document.querySelector('.print-button').addEventListener('click', printReceipt);
+            // Attach the event listener when the page loads
+            attachPrintButtonEventListener();
         </script>
 
         <script src="./../../src/route.js"></script>
