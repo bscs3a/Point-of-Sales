@@ -1,17 +1,28 @@
--- Products Table
-CREATE TABLE Products (
-    ProductID INT PRIMARY KEY AUTO_INCREMENT,
-    ProductName VARCHAR(100),
-    Description VARCHAR(255),
-    Category VARCHAR(50),
-    DeliveryRequired VARCHAR(3),
-    Price DECIMAL(10, 2),
-    Stocks INT,
-    UnitOfMeasurement VARCHAR(20),
-    TaxRate DECIMAL(5, 2),
-    ProductWeight DECIMAL(10, 2)
+-- Categories Table
+CREATE TABLE Categories (
+    Category_ID INT(11) NOT NULL AUTO_INCREMENT,
+    Category_Name VARCHAR(50) NOT NULL,
+    PRIMARY KEY (Category_ID)
 );
 
+-- Products Table
+CREATE TABLE Products (
+    ProductID INT(11) NOT NULL AUTO_INCREMENT,
+    Supplier_ID INT(11) NOT NULL,
+    Category_ID INT(11) NOT NULL,
+    ProductImage VARCHAR(250) NOT NULL,
+    ProductName VARCHAR(100) DEFAULT NULL,
+    Supplier VARCHAR(50) NOT NULL,
+    Description VARCHAR(255) DEFAULT NULL,
+    DeliveryRequired VARCHAR(3) DEFAULT NULL,
+    Price DECIMAL(10,2) DEFAULT NULL,
+    Stocks INT(11) DEFAULT NULL,
+    UnitOfMeasurement VARCHAR(20) DEFAULT NULL,
+    TaxRate DECIMAL(5,2) DEFAULT NULL,
+    ProductWeight DECIMAL(10,2) DEFAULT NULL,
+    FOREIGN KEY (Category_ID) REFERENCES Categories(Category_ID),
+    PRIMARY KEY (ProductID)
+);
 
 -- Customers Table
 CREATE TABLE IF NOT EXISTS Customers (
@@ -98,23 +109,34 @@ CREATE TABLE IF NOT EXISTS TargetSales (
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
 
-INSERT INTO Products (ProductName, Description, Category, DeliveryRequired, Price, Stocks, TaxRate, UnitOfMeasurement, ProductWeight) 
-VALUES 
-    ('Hammer (Large)', 'Heavy-duty hammer for construction work', 'Tools', 'No', 299.00, 50, 0.12, 'pcs', 1.5),
-    ('Screwdriver Set (Standard)', 'Set of 6 screwdrivers with various sizes', 'Tools', 'No', 199.00, 30, 0.12, 'set', 0.8),
-    ('Cement (50kg)', 'Portland cement for construction purposes', 'Building Materials', 'Yes', 220.00, 100, 0.12, 'kg', 50),
-    ('Gravel (1 ton)', 'Crushed stone for construction projects', 'Building Materials', 'Yes', 500.00, 50, 0.12, 'ton', 907.185),  -- Converted 1 ton to kg
-    ('Paint Brush Set', 'Set of 10 paint brushes for art projects', 'Art Supplies', 'No', 99.00, 20, 0.12, 'set', 0.5),
-    ('Safety Helmet', 'Hard hat helmet for construction safety', 'Safety Gear', 'No', 150.00, 40, 0.12, 'pcs', 0.3),
-    ('Drill Machine', 'Cordless drill machine with rechargeable batteries', 'Tools', 'No', 599.00, 15, 0.12, 'pcs', 2),
-    ('Plywood (4x8 feet)', 'Plywood sheets for carpentry and construction', 'Building Materials', 'Yes', 600.00, 30, 0.12, 'sheet', 20),
-    ('Steel Bar (1 meter)', 'Deformed steel bars for reinforcement in concrete construction', 'Building Materials', 'Yes', 50.00, 200, 0.12, 'meter', 2.5),
-    ('Paint Thinner', 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'Paints and Chemicals', 'No', 150.00, 50, 0.12, NULL, 1),
-    ('Concrete Blocks (Standard)', 'Standard concrete blocks for building walls', 'Building Materials', 'Yes', 5.00, 200, 0.12, 'pcs', 2.3),
-    ('Roofing Shingles (Bundle)', 'Bundle of roofing shingles for covering roofs', 'Building Materials', 'Yes', 25.00, 100, 0.12, 'bundle', 13.6078),  -- Converted 30 lbs to kg
-    ('Sand (1 cubic yard)', 'Fine aggregate sand for various construction applications', 'Building Materials', 'Yes', 40.00, 150, 0.12, 'cubic yard', 1088.62),  -- Converted 1 cubic yard to kg
-    ('Brick (Standard)', 'Standard clay bricks for construction', 'Building Materials', 'Yes', 0.50, 500, 0.12, 'pcs', 2.5),
-    ('Wood Studs (8 feet)', 'Standard wood studs for framing walls', 'Building Materials', 'Yes', 3.00, 300, 0.12, '8 feet', 3.62874),  -- Converted 8 lbs to kg
-    ('Galvanized Nails (5 lbs)', 'Galvanized nails for various construction applications', 'Building Materials', 'Yes', 10.00, 100, 0.12, 'lbs', 2.26796),  -- Converted 5 lbs to kg
-    ('Drywall (4x8 feet)', 'Drywall sheets for interior wall finishing', 'Building Materials', 'Yes', 12.00, 200, 0.12, 'sheet', 22.6796),  -- Converted 50 lbs to kg
-    ('Concrete Mix (50 lb)', 'Pre-mixed concrete for small-scale construction projects', 'Building Materials', 'Yes', 8.00, 150, 0.12, 'lb', 22.6796);  -- Converted 50 lbs to kg
+-- Assuming the categories already exist in the Categories table
+-- You should adjust the following INSERT statements according to the Category_ID values in your Categories table
+
+    INSERT INTO Products (Supplier_ID, Category_ID, ProductImage, ProductName, Supplier, Description, DeliveryRequired, Price, Stocks, UnitOfMeasurement, TaxRate, ProductWeight) 
+    VALUES 
+    (1, 1, 'hammer_large.jpg', 'Hammer (Large)', 'Supplier A', 'Heavy-duty hammer for construction work', 'No', 299.00, 50, 'pcs', 0.12, 1.5),
+    (2, 1, 'screwdriver_set_standard.jpg', 'Screwdriver Set (Standard)', 'Supplier B', 'Set of 6 screwdrivers with various sizes', 'No', 199.00, 30, 'set', 0.12, 0.8),
+    (3, 2, 'cement_50kg.jpg', 'Cement (50kg)', 'Supplier C', 'Portland cement for construction purposes', 'Yes', 220.00, 100, 'kg', 0.12, 50),
+    (4, 2, NULL, 'Gravel (1 ton)', NULL, 'Crushed stone for construction projects', 'Yes', 500.00, 50, 'ton', 0.12, 907.185),
+    (5, 3, NULL, 'Paint Brush Set', NULL, 'Set of 10 paint brushes for art projects', 'No', 99.00, 20, 'set', 0.12, 0.5),
+    (6, 4, NULL, 'Safety Helmet', NULL, 'Hard hat helmet for construction safety', 'No', 150.00, 40, 'pcs', 0.12, 0.3),
+    (7, 1, NULL, 'Drill Machine', NULL, 'Cordless drill machine with rechargeable batteries', 'No', 599.00, 15, 'pcs', 0.12, 2),
+    (8, 2, NULL, 'Plywood (4x8 feet)', NULL, 'Plywood sheets for carpentry and construction', 'Yes', 600.00, 30, 'sheet', 0.12, 20),
+    (9, 2, NULL, 'Steel Bar (1 meter)', NULL, 'Deformed steel bars for reinforcement in concrete construction', 'Yes', 50.00, 200, 'meter', 0.12, 2.5),
+    (10, 5, NULL, 'Paint Thinner', NULL, 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'No', 150.00, 50, NULL, 0.12, 1),
+    (11, 2, NULL, 'Concrete Blocks (Standard)', NULL, 'Standard concrete blocks for building walls', 'Yes', 5.00, 200, 'pcs', 0.12, 2.3),
+    (12, 2, NULL, 'Roofing Shingles (Bundle)', NULL, 'Bundle of roofing shingles for covering roofs', 'Yes', 25.00, 100, 'bundle', 0.12, 13.6078),
+    (13, 2, NULL, 'Sand (1 cubic yard)', NULL, 'Fine aggregate sand for various construction applications', 'Yes', 40.00, 150, 'cubic yard', 0.12, 1088.62),
+    (14, 2, NULL, 'Brick (Standard)', NULL, 'Standard clay bricks for construction', 'Yes', 0.50, 500, 'pcs', 0.12, 2.5),
+    (15, 2, NULL, 'Wood Studs (8 feet)', NULL, 'Standard wood studs for framing walls', 'Yes', 3.00, 300, '8 feet', 0.12, 3.62874),
+    (16, 2, NULL, 'Galvanized Nails (5 lbs)', NULL, 'Galvanized nails for various construction applications', 'Yes', 10.00, 100, 'lbs', 0.12, 2.26796),
+    (17, 2, NULL, 'Drywall (4x8 feet)', NULL, 'Drywall sheets for interior wall finishing', 'Yes', 12.00, 200, 'sheet', 0.12, 22.6796),
+    (18, 2, NULL, 'Concrete Mix (50 lb)', NULL, 'Pre-mixed concrete for small-scale construction projects', 'Yes', 8.00, 150, 'lb', 0.12, 22.6796);
+
+    INSERT INTO Categories (Category_Name) 
+    VALUES 
+        ('Tools'),
+        ('Building Materials'),
+        ('Art Supplies'),
+        ('Safety Gear'),
+        ('Paints and Chemicals');

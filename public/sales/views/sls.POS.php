@@ -35,7 +35,7 @@
 
     $data = getProductsAndCategories();
     $products = $data['products'];
-    $categories = $data['categories'];
+    // $categories = $data['categories'];
     ?>
 
 
@@ -97,9 +97,11 @@
                     <div id="dropdown" class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-10">
                         <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown-button">
                             <!-- Dropdown Options -->
-                            <?php foreach ($categories as $category) : ?>
+                            <?php 
+                            $uniqueCategories = array_unique(array_column($products, 'Category_Name')); // Extracting unique categories from products
+                            foreach ($uniqueCategories as $categoryName) : ?>
                                 <li>
-                                    <button type="button" class="category-button inline-flex w-full px-4 py-2 text-left hover:bg-gray-100"><?= $category ?></button>
+                                    <button type="button" class="category-button inline-flex w-full px-4 py-2 text-left hover:bg-gray-100"><?= $categoryName ?></button>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -495,23 +497,33 @@
         <div class="flex flex-col items-center min-h-screen w-full sidebar-toggle3" :class="{ 'w-full': !cartOpen, 'w-9/12': cartOpen }">
             <?php
             // Assuming $products is an array of arrays where each inner array contains the product details including category
-            $categories = array_unique(array_column($products, 'Category')); // Extracting unique categories from products
+            $categories = array_unique(array_column($products, 'Category_ID')); // Extracting unique categories from products
             ?>
             <?php foreach ($categories as $category) : ?>
+                <?php
+                // Get the category name for the current category ID
+                $categoryName = '';
+                foreach ($products as $product) {
+                    if ($product['Category_ID'] === $category) {
+                        $categoryName = $product['Category_Name'];
+                        break;
+                    }
+                }
+                ?>
                 <div class="category-container flex flex-col justify-start"> <!-- Add this line -->
                     <!-- Display category name -->
-                    <div class="text-xl font-bold divide-y ml-3 mt-5 category-name"><?= $category ?></div>
+                    <div class="text-xl font-bold divide-y ml-3 mt-5 category-name"><?= $categoryName ?></div>
                     <!-- Horizontal line -->
                     <hr class="w-full border-gray-300 my-2 mb-8 category-line">
 
                     <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
                         <?php foreach ($products as $product) : ?>
-                            <?php if ($product['Category'] === $category) : ?> <!-- Show products only for the current category -->
+                            <?php if ($product['Category_ID'] === $category) : ?> <!-- Show products only for the current category -->
 
-                                <button id="product-item-button" type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category']) ?>' @click="
+                                <button id="product-item-button" type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category_Name']) ?>' @click="
                                     if (<?= $product['Stocks'] ?> > 0) { 
-                                      addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true; 
-                                
+                                        addToCart({ id: <?= $product['ProductID'] ?>, name: '<?= $product['ProductName'] ?>', price: <?= $product['Price'] ?>, stocks: <?= $product['Stocks'] ?>, priceWithTax: <?= $product['Price'] ?> * (1 + <?= $product['TaxRate'] ?>), TaxRate: <?= $product['TaxRate'] ?>, ProductWeight: '<?= $product['ProductWeight'] ?>', deliveryRequired: '<?= $product['DeliveryRequired'] ?>' }); cartOpen = true; 
+
                                     } else { 
                                         showAlertBox(); 
                                     }">
@@ -525,7 +537,7 @@
                                     <div class="font-bold text-lg text-gray-700 text-center" x-data="{ productName: '<?= $product['ProductName'] ?>' }" :style="productName.length > 20 ? 'font-size: 0.90rem;' : 'font-size: 1rem;'">
                                         <span x-text="productName"></span>
                                     </div>
-                                    <div class="font-normal text-sm text-gray-500"><?= $product['Category'] ?></div>
+                                    <div class="font-normal text-sm text-gray-500"><?= $product['Category_Name'] ?></div>
                                     <?php
                                     // Compute the price with tax
                                     $price_with_tax = $product['Price'] * (1 + $product['TaxRate']);
@@ -572,7 +584,7 @@
                                 item.style.transition = 'border 0.1s ease-in-out'; // Add transition property
                             }, 2000);
                         });
-                        
+
                     } else {
                         container.style.display = 'none';
                     }
