@@ -101,11 +101,11 @@
 
     <!-- Delete modal -->
     <div id="deleteModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white p-5 rounded-lg text-center">
+      <form action="/hr/employees/delete" method="POST" class="bg-white p-5 rounded-lg text-center">
             <h2 class="mb-4">Are you sure you want to delete?</h2>
             <button id="confirmDelete" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
             <button id="cancelDelete" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
-        </div>
+      </form>
     </div>
 
   <!-- Employee Information -->
@@ -522,6 +522,8 @@
   });
 
   document.getElementById('deleteButton').addEventListener('click', function() {
+    var id = this.getAttribute('route').split('=')[1];
+    document.getElementById('idToDelete').value = id;
     document.getElementById('deleteModal').classList.remove('hidden');
   });
 

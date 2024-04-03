@@ -442,15 +442,46 @@ Router::post('/hr/employees/delete', function () {
 
     $idToDelete = $_POST['id'];
 
-    $query = "DELETE FROM employees, employment_info, account_info, salary_info, tax_info, benefit_info WHERE id = :id";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([':id' => $idToDelete]);
+    // Start a transaction
+    $conn->beginTransaction();
 
-    // Execute the statement
-    $stmt->execute();
+    try {
+        // Delete from benefit_info and tax_info
+        $query = "DELETE FROM benefit_info WHERE salary_id IN (SELECT id FROM salary_info WHERE employees_id = :id)";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':id' => $idToDelete]);
+
+        $query = "DELETE FROM tax_info WHERE salary_id IN (SELECT id FROM salary_info WHERE employees_id = :id)";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':id' => $idToDelete]);
+
+        // Delete from salary_info, account_info, and employment_info
+        $query = "DELETE FROM salary_info WHERE employees_id = :id";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':id' => $idToDelete]);
+
+        $query = "DELETE FROM account_info WHERE employees_id = :id";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':id' => $idToDelete]);
+
+        $query = "DELETE FROM employment_info WHERE employees_id = :id";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':id' => $idToDelete]);
+
+        // Delete from employees
+        $query = "DELETE FROM employees WHERE id = :id";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':id' => $idToDelete]);
+
+        // Commit the transaction
+        $conn->commit();
+    } catch (Exception $e) {
+        // An error occurred, rollback the transaction
+        $conn->rollback();
+    }
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/hr/applicants");
+    header("Location: $rootFolder/hr/employees");
 });
 
 // search employees
