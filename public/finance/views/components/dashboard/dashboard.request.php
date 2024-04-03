@@ -201,8 +201,8 @@
 
 
         <div class="text-center mb-5">
-            <button class="border-2 border-[#F8B721] w-full">
-                <p class="text-[#F8B721] py-2 px-2 font-bold text-xl"> <i class="ri-add-line"> </i> New Transaction</p>
+            <button class="border-2 border-[#F8B721] w-full text-[#F8B721] py-2 px-2 font-bold text-xl hover:text-slate-100 hover:bg-[#F8B721] transition-colors">
+                <p> <i class="ri-add-line"> </i> New Transaction</p>
             </button>
         </div>
 
