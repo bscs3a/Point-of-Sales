@@ -177,7 +177,7 @@
         <div class="col-span-2 px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
             <div class="flex justify-between">
 
-                <h2 class="mt-5  font-sans  font-bold text-xl">Cash Flow</h2>
+                <h2 class=" font-sans  font-bold text-xl">Cash Flow</h2>
                 <!-- <a href="#" class="text-sm font-sans font-semibold">
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
                 </a> -->
