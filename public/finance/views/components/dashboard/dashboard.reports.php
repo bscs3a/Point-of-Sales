@@ -2,12 +2,10 @@
     <!-- Start: Header Report -->
     <div class="my-10 flex justify-between">
         <h1 class="font-sans font-bold text-3xl">Report</h1>
-        <div class="font-bold  border-none ">
-            <select name="" id="" class="bg-white border-collapse text-xl">
-                <option value="year" selected>Year</option>
-                <option value="month">Month</option>
-            </select>
-        </div>
+        <button class="font-sans font-bold text-2xl ">
+            <i class="ri-download-2-line"></i>
+            Generate
+        </button>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -15,9 +13,15 @@
 
             <div class="flex justify-between">
                 <h2 class="font-sans font-bold text-xl">Income Statement</h2>
-                <a href="#" class="text-sm font-sans font-semibold">
+                <!-- <a href="#" class="text-sm font-sans font-semibold">
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a>
+                </a> -->
+                <div class="font-bold  border-none ">
+                    <select name="" id="" class="bg-white border-collapse text-xl">
+                        <option value="year" selected>Year</option>
+                        <option value="month">Month</option>
+                    </select>
+                </div>
 
             </div>
             <p class="text-gray-600 my-3 text-lg ">Net Sales 0</p>
@@ -27,9 +31,15 @@
         <div class="px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
             <div class="flex justify-between">
                 <h2 class="font-sans font-bold text-xl">Balance</h2>
-                <a href="#" class="text-sm font-sans font-semibold">
+                <!-- <a href="#" class="text-sm font-sans font-semibold">
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a>
+                </a> -->
+                <div class="font-bold  border-none ">
+                    <select name="" id="" class="bg-white border-collapse text-xl">
+                        <option value="year" selected>Year</option>
+                        <option value="month">Month</option>
+                    </select>
+                </div>
 
             </div>
             <p class="text-gray-600 my-3 text-lg">Total: 0</p>
@@ -147,9 +157,15 @@
         <div class="col-span-1 px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
             <div class="flex justify-between">
                 <h2 class="font-sans font-bold text-xl">Equity</h2>
-                <a href="#" class="text-sm font-sans font-semibold">
+                <!-- <a href="#" class="text-sm font-sans font-semibold">
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a>
+                </a> -->
+                <div class="font-bold  border-none ">
+                    <select name="" id="" class="bg-white border-collapse text-xl">
+                        <option value="year" selected>Year</option>
+                        <option value="month">Month</option>
+                    </select>
+                </div>
 
             </div>
             <p class="text-gray-600 my-3 text-lg">Total: 0</p>
@@ -162,9 +178,15 @@
             <div class="flex justify-between">
 
                 <h2 class="mt-5  font-sans  font-bold text-xl">Cash Flow</h2>
-                <a href="#" class="text-sm font-sans font-semibold">
+                <!-- <a href="#" class="text-sm font-sans font-semibold">
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a>
+                </a> -->
+                <div class="font-bold  border-none ">
+                    <select name="" id="" class="bg-white border-collapse text-xl">
+                        <option value="year" selected>Year</option>
+                        <option value="month">Month</option>
+                    </select>
+                </div>
             </div>
             <div>
 
