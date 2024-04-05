@@ -16,8 +16,14 @@ $po = [
     '/po/viewdetails' => $basePath . "viewdetails.php",
     '/po/transactionHistory' => $basePath . "transactionHistory.php",
     '/po/requestHistory' => $basePath . "requestHistory.php",
-    '/po/test' => $basePath . "test.php",
     '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
+
+//umm idk what to say here
+    '/po/viewdetails/Order={id}' => function($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['id'] = $id;
+        include $basePath . "viewdetails.php";
+},
 
 ];
 Router::post('/po/addItem', function () {
@@ -283,7 +289,7 @@ function updateRequestStatusToAccepted()
         $conn->beginTransaction();
 
         // Retrieve pending requests
-        $pendingRequestsStmt = $conn->prepare("SELECT * FROM requests WHERE request_Status = 'pending'");
+        $pendingRequestsStmt = $conn->prepare("SELECT * FROM requests WHERE request_Status = 'Ready to order'");
         $pendingRequestsStmt->execute();
         $pendingRequests = $pendingRequestsStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -533,3 +539,4 @@ Router::post('/search/requestHistory', function () {
     // Include the requestHistory.php file to display the search results
     include 'views/po.requestHistory.php';
 });
+

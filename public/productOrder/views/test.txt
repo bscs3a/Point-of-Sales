@@ -1,5 +1,0 @@
-<td route='/po/viewdetails' class="px-4 py-4">
-                              <div>
-                                <button route='/po/viewdetails'>view</button>
-                              </div>
-                            </td>

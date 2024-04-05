@@ -129,7 +129,7 @@
                 <table class="min-w-full text-left mx-auto bg-white">
                     <thead class="bg-gray-200 border-b border-gray-400">
                         <tr>
-                            <th class="px-4 py-2 font-semibold">Supplier ID</th>
+                            <th class="px-4 py-2 font-semibold">Order ID</th>
                             <th class="px-4 py-2 font-semibold">Supplier Name</th>
                             <th class="px-4 py-2 font-semibold">Order Date</th>
                             <th class="px-4 py-2 font-semibold">Time</th>
@@ -162,7 +162,7 @@
          foreach ($rows as $row) {
              echo '<tbody>';
              echo '<tr>';
-             echo '<td class="px-4 py-10">' . $row['Supplier_ID'] . '</td>';
+             echo '<td class="px-4 py-10">' . $row['Order_ID'] . '</td>';
              echo '<td class="px-4 py-10">' . $row['Supplier_Name'] . '</td>';
              echo '<td class="px-4 py-10">' . $row['Date_Ordered'] . '</td>';
              echo '<td class="px-4 py-10">' . $row['Time_Ordered'] . '</td>';
@@ -181,8 +181,9 @@
              echo '</form>';
              echo '</td>';
 
+             //for VIEW order
              echo '<td class="px-4 py-4"">';
-             echo '<button route="/po/viewdetails">view</button>';
+             echo '<a href="/master/po/viewdetails/Order=' . $row['Order_ID'] . '">View</a>';
              echo '</td>';
              echo '</tr>';
              echo '</tbody>';
