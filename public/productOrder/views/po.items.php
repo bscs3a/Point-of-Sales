@@ -126,7 +126,7 @@
                   $imagePath = '../' . $row['ProductImage'];
                   echo'<tr>';
                   echo '<tr class="hover:bg-gray-50 data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-quality="5 stars..." data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
-                  echo '<td class="px-4 py-4 flex items-center justify-center">';
+                  echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
                   echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">'; 
                   echo '<div>' . $row['ProductName'] . '</div>';
                   echo '</td>';
