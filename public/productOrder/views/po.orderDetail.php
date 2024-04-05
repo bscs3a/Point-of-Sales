@@ -57,97 +57,7 @@
         <div class="h-screen px-10">
           <div class="flex flex-row gap-10 drop-shadow-md my-8">
               <div class="flex flex-col pl-8 border border-gray-300 bg-white rounded-lg w-64 h-40 justify-center">
-                <a class="text-6xl ">5350</a>
-                <a class="text-lg">Total Delivery</a>
-              </div>
-              <div class="flex flex-col pl-8 border border-gray-300 bg-white rounded-lg w-64 h-40 justify-center">
-                <a class="text-6xl">1214</a>
-                <a class="text-lg">To Receive</a>
-              </div>
-            </div>
-          
-          <!-- NEW Table -->
-            <div class="overflow-x-auto rounded-lg border border-gray-400">
-                <table class="min-w-full text-left mx-auto bg-white">
-                    <thead class="bg-gray-200 border-b border-gray-400">
-                        <tr>
-                            <th class="px-4 py-2 font-semibold">Supplier ID</th>
-                            <th class="px-4 py-2 font-semibold">Supplier Name</th>
-                            <th class="px-4 py-2 font-semibold">Order Date</th>
-                            <th class="px-4 py-2 font-semibold">Time</th>
-                            <th class="px-4 py-2 font-semibold">Status</th>
-                            <th class="px-4 py-2 font-semibold"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td class="px-4 py-10">12</td>
-                            <td class="px-4 py-10">marc</td>
-                            <td class="px-4 py-10">03/12/2024</td>
-                            <td class="px-4 py-10">09:23:43 AM</td>
-                            <td class="px-4 py-10">
-                              <select class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm placeholder-gray-400 text-black focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none">
-                              <option value="id">Pending</option>
-                              <option value="name">Completed</option>
-                              <option value="name">To Receive</option>
-                              </select>
-                            </td>
-                            <td route='/po/viewdetails' class="px-4 py-4">
-                              <div>
-                                <button route='/po/viewdetails'>view</button>
-                              </div>
-                            </td>
-                        </tr>    
-                    </tbody>
-                </table>
-            </div>
-
-          <!-- table -->
-          <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md m-5">
-=======
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Details</title>
-  <link href="./../src/tailwind.css" rel="stylesheet">
-</head>
-
-<body>
-  <div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <?php include "components/po.sidebar.php" ?>
-
-    <!-- Main Content -->
-    <div class="flex flex-col flex-1 overflow-y-auto">
-      <!-- header -->
-      <div class="flex items-center justify-between h-16 bg-zinc-200 border-b border-gray-200">
-        <div class="flex items-center px-4">
-          <button class="text-gray-500 focus:outline-none focus:text-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <h1 class="text-2xl font-semibold px-5">Product Order / Order Details</h1>
-        </div>
-
-        <div class="flex items-center pr-4 text-xl font-semibold">
-          Sample User
-          <span class="p-3">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </span>
-        </div>
-      </div>
-
-      <!-- Main Content -->
-      <div class="h-screen">
-        <div class="flex flex-row gap-16 drop-shadow-md ml-5 my-8">
-        <?php
+              <?php
           // Include your database connection file
           require_once 'dbconn.php';
 
@@ -175,13 +85,13 @@
           $conn = $db->connect();
           $deliveredCount = countDelivered($conn);
           ?>
-          <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
-            <a class="text-3xl">
-              <?php echo $deliveredCount; ?> Order/s
-            </a>
-            <a class="text-lg">Total Delivered</a>
-          </div>
-          <?php
+                <a class="text-6xl "> <?php echo $deliveredCount; ?></a>
+                <a class="text-lg">Total Delivery</a>
+              </div>
+
+              
+              <div class="flex flex-col pl-8 border border-gray-300 bg-white rounded-lg w-64 h-40 justify-center">
+              <?php
           // Include your database connection file
           require_once 'dbconn.php';
 
@@ -209,39 +119,26 @@
           $conn = $db->connect();
           $orderCount = countOrders($conn);
           ?>
-          <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
-            <a class="text-3xl">
-              <?php echo $orderCount; ?> Order/s
-            </a>
-            <a class="text-lg">To Receive</a>
-          </div>
+                <a class="text-6xl"><?php echo $orderCount; ?></a>
+                <a class="text-lg">To Receive</a>
+              </div>
+            </div>
           
-        </div>
-        <a class="text-3xl ml-5">Order/s To Receive</a>
-        <!-- table -->
-        <div class="overflow-hidden rounded-lg border border-gray-300 shadow-md m-5">
-          <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-            <thead class="bg-gray-200">
-              <tr class="border-b border-y-gray-300">
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                  Order ID
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                  Supplier Name
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                  Date Order
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                  Time
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                  Actions
-                </th>
-                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-              </tr>
-            </thead>
-            <?php
+          <!-- NEW Table -->
+            <div class="overflow-x-auto rounded-lg border border-gray-400">
+                <table class="min-w-full text-left mx-auto bg-white">
+                    <thead class="bg-gray-200 border-b border-gray-400">
+                        <tr>
+                            <th class="px-4 py-2 font-semibold">Supplier ID</th>
+                            <th class="px-4 py-2 font-semibold">Supplier Name</th>
+                            <th class="px-4 py-2 font-semibold">Order Date</th>
+                            <th class="px-4 py-2 font-semibold">Time</th>
+                            <th class="px-4 py-2 font-semibold">Status</th>
+                            <th class="px-4 py-2 font-semibold"></th>
+                        </tr>
+                    </thead>
+
+<?php
  function displayPendingOrders()
  {
      try {
@@ -263,21 +160,14 @@
  
          // Loop through each row and display data in HTML table format
          foreach ($rows as $row) {
-             echo '<tbody class="divide-y divide-gray-100 border-b border-gray-300">';
-             echo '<tr class="hover:bg-gray-50">';
-             echo '<th class="px-6 py-4 font-normal text-gray-900">';
-             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Order_ID'] . '</div>';
-             echo '</th>';
-             echo '<td class="px-6 py-4">';
-             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Supplier_Name'] . '</div>'; // Display supplier name
-             echo '</td>';
-             echo '<td class="px-6 py-4">';
-             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Date_Ordered'] . '</div>';
-             echo '</td>';
-             echo '<td class="px-6 py-4">';
-             echo '<div class="font-medium text-gray-700 text-sm">' . $row['Time_Ordered'] . '</div>';
-             echo '</td>';
-             echo '<td class="px-6 py-4">';
+             echo '<tbody>';
+             echo '<tr>';
+             echo '<td class="px-4 py-10">' . $row['Supplier_ID'] . '</td>';
+             echo '<td class="px-4 py-10">' . $row['Supplier_Name'] . '</td>';
+             echo '<td class="px-4 py-10">' . $row['Date_Ordered'] . '</td>';
+             echo '<td class="px-4 py-10">' . $row['Time_Ordered'] . '</td>';
+           
+             echo '<td class="px-4 py-10">';
              // Form for Completed status
              echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data">';
              echo '<input type="hidden" name="Order_ID" value="' . $row['Order_ID'] . '">';
@@ -290,8 +180,9 @@
              echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Cancel</button>';
              echo '</form>';
              echo '</td>';
-             echo '<td class="px-6 py-4">';
-             echo '<div class="font-medium text-gray-700 text-sm">View</div>';
+
+             echo '<td class="px-4 py-4"">';
+             echo '<button route="/po/viewdetails">view</button>';
              echo '</td>';
              echo '</tr>';
              echo '</tbody>';
