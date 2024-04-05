@@ -48,6 +48,31 @@
           <i class="ri-arrow-right-s-line"></i>
         </span>
       </a>
+
+      <!-- testing area -->
+      <a
+        route='/po/test'
+        class="flex justify-between items-center px-4 py-2 text-gray-100 hover:bg-violet-300">
+        <span class="flex items-center">
+          <span class="mx-4 font-normal">Tester</span>
+        </span>
+
+        <span>
+          <svg
+            class="h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+        </span>
+      </a>
     </nav>
   </div>
 </div>

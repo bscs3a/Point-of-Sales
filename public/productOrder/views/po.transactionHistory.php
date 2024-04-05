@@ -51,7 +51,7 @@
                 sidebar.classList.toggle('hidden', !sidebar.classList.contains('hidden'));
             });
           </script>
-
+          
         <!-- Main Content -->
         <div class="h-screen px-10">
           <div class="flex flex-row gap-10 drop-shadow-md my-8">
@@ -97,17 +97,126 @@
                     </tbody>
                 </table>
             </div>
+          
+      <!-- Main Content -->
+      <div class="h-screen">
+        <div class="flex flex-row gap-16 drop-shadow-md ml-5 my-8">
+        <?php
+          // Include your database connection file
+          require_once 'dbconn.php';
 
+          // Function to count the number of unique suppliers
+          function countDelivered($conn)
+          {
+            try {
+              // Query to count the number of unique suppliers
+              $query = "SELECT COUNT(DISTINCT Transaction_ID) AS DeliveredCount FROM transaction_history WHERE Order_Status = 'Completed'";
+              $statement = $conn->prepare($query);
+              $statement->execute();
+
+              // Fetch the count
+              $row = $statement->fetch(PDO::FETCH_ASSOC);
+              $deliveredCount = $row['DeliveredCount'];
+
+              return $deliveredCount;
+            } catch (PDOException $e) {
+              echo "Connection failed: " . $e->getMessage();
+            }
+          }
+
+          // Call the countSuppliers function to get the count
+          $db = Database::getInstance();
+          $conn = $db->connect();
+          $deliveredCount = countDelivered($conn);
+          ?>
+          <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
+            <a class="text-3xl">
+              <?php echo $deliveredCount; ?> Order/s
+            </a>
+            <a class="text-lg">Total Delivered</a>
+          </div>
+          <?php
+          // Include your database connection file
+          require_once 'dbconn.php';
+
+          // Function to count the number of unique suppliers
+          function countOrders($conn)
+          {
+            try {
+              // Query to count the number of ordered items
+              $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'to receive'";
+              $statement = $conn->prepare($query);
+              $statement->execute();
+
+              // Fetch the count
+              $row = $statement->fetch(PDO::FETCH_ASSOC);
+              $orderCount = $row['OrderCount'];
+
+              return $orderCount;
+            } catch (PDOException $e) {
+              echo "Connection failed: " . $e->getMessage();
+            }
+          }
+
+          // Call the countSuppliers function to get the count
+          $db = Database::getInstance();
+          $conn = $db->connect();
+          $orderCount = countOrders($conn);
+          ?>
+          <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
+            <a class="text-3xl">
+              <?php echo $orderCount; ?> Order/s
+            </a>
+            <a class="text-lg">To Receive</a>
+          </div>
+          <?php
+          // Include your database connection file
+          require_once 'dbconn.php';
+
+          // Function to count the number of cancelled orders
+          function countCancelled($conn)
+          {
+            try {
+              // Query to count the number of unique suppliers
+              $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'Canceled'";
+              $statement = $conn->prepare($query);
+              $statement->execute();
+
+              // Fetch the count
+              $row = $statement->fetch(PDO::FETCH_ASSOC);
+              $orderCount = $row['OrderCount'];
+
+              return $orderCount;
+            } catch (PDOException $e) {
+              echo "Connection failed: " . $e->getMessage();
+            }
+          }
+
+          // Call the countSuppliers function to get the count
+          $db = Database::getInstance();
+          $conn = $db->connect();
+          $orderCount = countCancelled($conn);
+          ?>
+          <div class="flex flex-col pl-3 border-2 border-gray-400 rounded-md w-80 h-40 justify-center">
+            <a class="text-3xl">
+              <?php echo $orderCount; ?> Order/s
+            </a>
+            <a class="text-lg">Canceled</a>
+          </div>
+
+        </div>
+          <a class="text-3xl ml-5">Ordered Details</a>
+        
           <!-- table -->
           <div
-            class="overflow-hidden rounded-lg border border-gray-300 shadow-md m-5">
+            class="overflow-auto rounded-lg border border-gray-300 shadow-md m-5">
 
             <table
               class="w-full border-collapse bg-white text-left text-sm text-gray-500">
               <thead class="bg-gray-200">
                 <tr class="border-b border-y-gray-300">
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                    ID
+                    Transaction ID
                   </th>
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900">
                     Supplier Name
@@ -125,6 +234,7 @@
                   </th>
                 </tr>
               </thead>
+
 
               <tbody class="divide-y divide-gray-100 border-b border-gray-300">
                 <tr class="hover:bg-gray-50">
@@ -158,6 +268,55 @@
                   </td>
                 </tr>
               </tbody>
+
+              
+<?php
+function displayTransactionHistory()
+{
+    try {
+      $db = Database::getInstance();
+      $conn = $db->connect();
+        // Query to retrieve data from transaction_history table
+        $query = "SELECT th.Transaction_ID, s.Supplier_Name, th.Date_Delivered, th.Time_Delivered, th.Order_Status
+                  FROM transaction_history th
+                  JOIN suppliers s ON th.Supplier_ID = s.Supplier_ID"; // Assuming Product_ID links to the products table
+        $statement = $conn->prepare($query);
+        $statement->execute();
+        $transactions = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // Loop through each transaction and display data in HTML table format
+        foreach ($transactions as $transaction) {
+            echo '<tbody class="divide-y divide-gray-100 border-b border-gray-300">';
+            echo '<tr class="hover:bg-gray-50">';
+            echo '<th class="px-6 py-4 font-normal text-gray-900">';
+            echo '<div class="font-medium text-gray-700 text-sm">' . $transaction['Transaction_ID'] . '</div>';
+            echo '</th>';
+            echo '<td class="px-6 py-4">';
+            echo '<div class="font-medium text-gray-700 text-sm">' . $transaction['Supplier_Name'] . '</div>';
+            echo '</td>';
+            echo '<td class="px-6 py-4">';
+            echo '<div class="font-medium text-gray-700 text-sm">' . $transaction['Date_Delivered'] . '</div>';
+            echo '</td>';
+            echo '<td class="px-6 py-4">';
+            echo '<div class="font-medium text-gray-700 text-sm">' . $transaction['Time_Delivered'] . '</div>';
+            echo '</td>';
+            echo '<td class="px-6 py-4">';
+            echo '<div class="font-medium text-gray-700 text-sm">' . $transaction['Order_Status'] . '</div>';
+            echo '</td>';
+            echo '<td class="px-6 py-4">';
+            echo '<div class="font-medium text-gray-700 text-sm">View</div>';
+            echo '</td>';
+            echo '</tr>';
+            echo '</tbody>';
+        }
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
+}
+
+// Call the function to display transaction history
+displayTransactionHistory();
+?>
             </table>
           </div>
         </div>
