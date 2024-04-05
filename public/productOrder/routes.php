@@ -8,15 +8,16 @@ $po = [
     '/po/dashboard' => $basePath . "dashboard.php",
     '/po/requestOrder' => $basePath . "requestOrder.php",
     '/po/suppliers' => $basePath . "suppliers.php",
+    '/po/addsupplier' => $basePath . "addsupplier.php",
+    '/po/viewsupplier' => $basePath . "viewsupplier.php",
     '/po/items' => $basePath . "items.php",
     '/po/addItem' => $basePath . "addItem.php",
     '/po/orderDetail' => $basePath . "orderDetail.php",
+    '/po/viewdetails' => $basePath . "viewdetails.php",
     '/po/transactionHistory' => $basePath . "transactionHistory.php",
     '/po/requestHistory' => $basePath . "requestHistory.php",
     '/po/test' => $basePath . "test.php",
     '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
-
-
 
 ];
 Router::post('/po/addItem', function () {
