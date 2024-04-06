@@ -144,7 +144,7 @@
                                         <div class="flex items-center mb-1">
                                             <div class="text-4xl font-semibold text-[#F8B721]">
                                                 <?php
-                                                $amount = 10000;
+                                                $amount = 1000;
                                                 echo '₱' . number_format($amount, 2);
                                                 ?>
                                             </div>
@@ -153,7 +153,7 @@
                                     </div>
                                     <div>
                                         <img src="../public/finance/img/RequestMoney.png" alt="request-money.png"
-                                            class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] max-w-full h-auto py-2 px-1 rounded-full sm:hidden">
+                                            class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] max-w-full h-auto py-2 px-1 rounded-full">
                                     </div>
                                 </div>
                             </div>
