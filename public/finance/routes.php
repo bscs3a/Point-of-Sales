@@ -2,7 +2,7 @@
 
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
-$_SESSION['fullname'] = "Tagle, Aries";
+$_SESSION['employee_name'] = "Tagle, Aries";
 
 $path = './public/finance/views';
 
@@ -11,6 +11,7 @@ $basePath = "$path/fin.";
 $fin = [
     //dashboard
     '/fin/dashboard' => $basePath . "dashboard.php",
+    '/fin/logs' => $basePath . "auditLog.php",
 
     //reports
     '/fin/reportIncome' => $basePath . "reportIncome.php",
