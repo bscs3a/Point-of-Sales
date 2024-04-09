@@ -161,10 +161,12 @@
                             <div class="bg-gray-200 rounded-full p-2 text-center font-bold">Heavy</div>
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryAddress']; ?></span>
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryDate']; ?></span>
-                            <span class="p-2 bg-gray-200 px-4 rounded-full font-bold flex flex-row items-center">
-                                <div changeColor class="size-4 rounded-full mr-2"></div>
-                                <?php echo $deliveryOrder['DeliveryStatus']; ?>
-                            </span>
+                            <div class="flex justify-center items-center">
+                                <span class="p-2 bg-gray-200 px-4 rounded-full font-bold flex flex-row items-center">
+                                    <div changeColor class="size-4 rounded-full mr-2"></div>
+                                    <?php echo $deliveryOrder['DeliveryStatus']; ?>
+                                </span>
+                            </div>
                             <span class="p-2"><?php echo $deliveryOrder['ReceivedDate']; ?></span>
                         </div>
                     </div>
@@ -173,17 +175,19 @@
 
                 <!-- COLOR CHANGER for delivery status-->
                 <script>
-                    const changeColor = document.querySelector('[changeColor]');
-                    if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Delivered') {
-                        changeColor.classList.remove('bg-yellow-500');
-                        changeColor.classList.add('bg-green-500');
-                    } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Pending') {
-                        changeColor.classList.remove('bg-green-500');
-                        changeColor.classList.add('bg-yellow-500');
-                    } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Cancelled') {
-                        changeColor.classList.remove('bg-yellow-500');
-                        changeColor.classList.add('bg-red-500');
-                    }
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                        const changeColor = document.querySelector('[changeColor]');
+                        if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Delivered') {
+                            changeColor.classList.remove('bg-yellow-500');
+                            changeColor.classList.add('bg-green-500');
+                        } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Pending') {
+                            changeColor.classList.remove('bg-green-500');
+                            changeColor.classList.add('bg-yellow-500');
+                        } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'In Transit') {
+                            changeColor.classList.remove('bg-yellow-500');
+                            changeColor.classList.add('bg-orange-300');
+                        }
+                    });
                 </script>
 
                 <?php if ($sale['PaymentMode'] == 'Card') { ?>

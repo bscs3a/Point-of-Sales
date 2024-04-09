@@ -32,7 +32,35 @@ $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
 
 // Query for delivery details
 $sqlDelivery = "SELECT * FROM deliveryorders WHERE SaleID = ?";
-$stmt = $pdo->prepare($sqlDelivery);
-$stmt->execute([$saleId]);
-$deliveryOrder = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmtDelivery = $pdo->prepare($sqlDelivery);
+$stmtDelivery->execute([$saleId]);
+$deliveryOrder = $stmtDelivery->fetch(PDO::FETCH_ASSOC);
+
+// Fetch all delivery statuses for the given SalesID
+$sqlStatuses = "SELECT DeliveryStatus FROM deliveryorders WHERE SaleID = ?";
+$stmtStatuses = $pdo->prepare($sqlStatuses);
+$stmtStatuses->execute([$saleId]);
+$deliveryStatuses = $stmtStatuses->fetchAll(PDO::FETCH_COLUMN);
+
+// Check if all delivery statuses are "Delivered"
+$allDelivered = array_reduce($deliveryStatuses, function($carry, $status) {
+    return $carry && $status === 'Delivered';
+}, true);
+
+// Check if all delivery statuses are "Pending"
+$allPending = array_reduce($deliveryStatuses, function($carry, $status) {
+    return $carry && $status === 'Pending';
+}, true);
+
+// Check if any delivery status is "In Transit"
+$anyInTransit = in_array('In Transit', $deliveryStatuses);
+
+// Set delivery status based on the delivery statuses
+if ($allDelivered) {
+    $deliveryOrder['DeliveryStatus'] = 'Delivered';
+} elseif ($allPending) {
+    $deliveryOrder['DeliveryStatus'] = 'Pending';
+} elseif ($anyInTransit || !$allDelivered) {
+    $deliveryOrder['DeliveryStatus'] = 'In Transit';
+}
 ?>
