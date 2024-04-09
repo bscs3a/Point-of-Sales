@@ -1,13 +1,17 @@
 <?php
 
+$_SESSION['user'] = 'admin';
+$_SESSION['role'] = 'admin';
+$_SESSION['employee_name'] = "Alfaro, Aian Louise";
+
 $path = './public/sales/views';
 $basePath = "$path/sls.";
 
 $sls = [
+    '/sls/Dashboard' => $basePath . "Dashboard.php",
     '/sls/Product-Catalog' => $basePath . "ProductCatalog.php",
     '/sls/Transaction-History' => $basePath . "transactionHistory.php",
     '/sls/Transaction-Details' => $basePath . "transactionDetails.php",
-    '/sls/Dashboard' => $basePath . "Dashboard.php",
     '/sls/POS' => $basePath . "POS.php",
     '/sls/TEST' => $basePath . "TEST.php",
     '/sls/POS/Checkout' => $basePath . "checkout.php",
@@ -22,6 +26,10 @@ $sls = [
         $_GET['sale'] = $saleId;
         include $basePath . "transactionDetails.php";
     },
+
+    // functions
+    // can't recognize by the router logout can proceed
+    '/sls/logout' => "./public/sales/views/function/logout.php",
 ];
 
 // Get the current URL path

@@ -1,3 +1,17 @@
+-- Audit Trail Table
+CREATE TABLE tbl_sls_audit (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_name VARCHAR(255),
+    log_action VARCHAR(255),
+    log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log in');
+INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log out');
+
+SELECT * FROM tbl_sls_audit;
+
 -- Categories Table
 CREATE TABLE Categories (
     Category_ID INT(11) NOT NULL AUTO_INCREMENT,
