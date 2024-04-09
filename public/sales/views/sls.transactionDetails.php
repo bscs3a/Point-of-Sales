@@ -48,7 +48,7 @@
                     <div>
                         <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -244,6 +244,7 @@
                                 <div id="modal-product-category" class="text-justify font-semibold text-gray-800"></div>
                             </div>
                             <div class="flex justify-between pt-4">
+                                <div id="modal-product-id" class="text-lg font-semibold"></div>
                                 <h3 id="modal-product-name" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
                                 <h3 id="modal-product-price" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
                             </div>
@@ -263,21 +264,39 @@
                             <!-- Return Order Button -->
                             <div class="flex justify-center pt-6">
                                 <?php
-                                // Fetch SaleDetailsID and ProductID
                                 $sql = "SELECT sd.SaleDetailID, sd.ProductID 
-                                        FROM SaleDetails sd 
-                                        JOIN Products p ON sd.ProductID = p.ProductID 
-                                        WHERE sd.SaleID = :sale_id";
+                                FROM SaleDetails sd 
+                                JOIN Products p ON sd.ProductID = p.ProductID 
+                                WHERE sd.SaleID = :sale_id";
                                 $stmt = $pdo->prepare($sql);
                                 $stmt->bindParam(":sale_id", $sale['SaleID']);
                                 $stmt->execute();
                                 $saleDetail = $stmt->fetch(PDO::FETCH_ASSOC);
                                 $SaleDetailId = $saleDetail['SaleDetailID'];
-                                $productId = $saleDetail['ProductID'];
+                                $productId = $saleDetail['ProductID']; // Ensure this fetches the correct product ID
                                 ?>
-                                <button route="/sls/ReturnProduct/sale=<?php echo $sale['SaleID']; ?>/saledetails=<?php echo $SaleDetailId; ?>/product=<?php echo $productId; ?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                <button id="returnProductButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                     Return Product
                                 </button>
+
+                                <script>
+                                    // Get the button element
+                                    const button = document.querySelector('#returnProductButton');
+
+                                    // Add click event listener to the button
+                                    button.addEventListener('click', () => {
+                                        // Get the sale ID, sale detail ID, and product ID
+                                        const saleId = <?php echo json_encode($sale['SaleID']); ?>;
+                                        const saleDetailId = <?php echo json_encode($SaleDetailId); ?>;
+                                        const productId = <?php echo json_encode($productId); ?>;
+
+                                        // Construct the route
+                                        const route = `/master/sls/ReturnProduct/sale=${saleId}/saledetails=${saleDetailId}/product=${selectedProduct.id}`;
+
+                                        // Redirect to the route
+                                        window.location.href = route;
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -288,6 +307,7 @@
                     const closeButtons = document.querySelector('[data-close-modal]');
                     const modal = document.querySelector('[data-modal]');
                     const modalProductName = document.getElementById('modal-product-name');
+                    const modalProductId = document.getElementById('modal-product-id');
                     const modalProductImage = document.getElementById('modal-product-image');
                     const modalProductPrice = document.getElementById('modal-product-price');
                     const modalProductDescription = document.getElementById('modal-product-description');
@@ -310,6 +330,7 @@
                             };
                             // modalProductImage.src = `../../uploads/${product.Image}`;
                             modalProductImage.src = `../../` + selectedProduct.image;
+                            modalProductId.textContent = selectedProduct.id;
                             modalProductName.textContent = selectedProduct.name;
                             modalProductPrice.textContent = '₱' + (selectedProduct.price * (1 + selectedProduct.TaxRate)).toFixed(2);
                             modalProductCategory.textContent = product.Category_Name;
