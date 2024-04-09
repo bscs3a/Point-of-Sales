@@ -102,22 +102,45 @@
                 <div class="flex flex-row gap-10">
 
                     <table id="salesTable" class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
+                        <!-- Fetch returned products -->
+                        <?php
+                        $sql = "SELECT rp.ReturnID, rp.SaleID, p.ProductID, p.ProductName, rp.Quantity, rp.Reason, rp.ReturnDate, rp.PaymentReturned 
+                                FROM ReturnProducts rp 
+                                JOIN Products p ON rp.ProductID = p.ProductID";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute();
+                        $returnedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        ?>
+                        
+                        <!-- Rest of your code... -->
+                        
                         <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-4 py-2 font-semibold">Returned Item</th>
-                                <th class="px-4 py-2 font-semibold">Order ID</th>
+                                <th class="px-4 py-2 font-semibold">Quantity</th>
+                                <th class="px-4 py-2 font-semibold">Sale ID</th>
+                                <th class="px-4 py-2 font-semibold">Product ID</th>
                                 <th class="px-4 py-2 font-semibold">Payment Returned</th>
                                 <th class="px-4 py-2 font-semibold">Action</th>
                             </tr>
                         </thead>
+                        
+                        <!-- Rest of your code... -->
+                        
                         <tbody>
-                            <!-- Fetch data from the result set -->
-                            <tr class='border border-gray-200 bg-white'>
-                                <td class='px-4 py-2'>Shovel</td>
-                                <td class='px-4 py-2'>1</td>
-                                <td class='px-4 py-2 text-red-500'>Php300</td>
-                                <td class='px-4 py-2'><button data-open-modal class="hover:font-bold hover:text-blue-500 transition-all">View</button></td>
+                            <?php foreach ($returnedProducts as $product) : ?>
+                                <tr class='border border-gray-200 bg-white'>
+                                    <td class='px-4 py-2'><?php echo $product['ProductName']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $product['Quantity']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $product['SaleID']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $product['ProductID']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $product['PaymentReturned']; ?></td>
+                                    <td class='px-4 py-2'><button data-open-modal class='text-blue-500 hover:underline view-link'>View</button></td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
+                        
+                        <!-- Rest of your code... -->
                     </table>
 
                     <dialog data-modal class="modalPop rounded-lg shadow-xl max-w-[400px] max-h-full elementToFade">
@@ -174,16 +197,26 @@
 
                     <div class="flex flex-col gap-4 justify-start items-start">
 
-                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        <?php
+                        // Database connection
+                        $db = Database::getInstance();
+                        $pdo = $db->connect();
 
+                        // Fetch number of returns
+                        $sql = "SELECT COUNT(*) as count FROM ReturnProducts";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute();
+                        $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+                        ?>
+
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
                             <div class="flex flex-col gap-5">
                                 <div class="text-lg font-semibold text-gray-800">
                                     <i class="ri-shake-hands-fill text-lg mx-2"></i> Number of Returns
                                 </div>
-                                <div class="text-5xl font-semibold ml-5">53</div>
+                                <div class="text-5xl font-semibold ml-5"><?php echo $count; ?></div>
                                 <div class="text-sm font-semibold ml-5 text-red-700">+10% more than average</div>
                             </div>
-
                         </div>
 
                         <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">

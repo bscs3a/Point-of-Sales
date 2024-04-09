@@ -123,6 +123,18 @@ CREATE TABLE IF NOT EXISTS TargetSales (
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
 
+CREATE TABLE ReturnProducts (
+    ReturnID INT AUTO_INCREMENT PRIMARY KEY,
+    SaleID INT,
+    ProductID INT,
+    Quantity INT,
+    Reason VARCHAR(255),
+    PaymentReturned DECIMAL(10, 2),
+    ReturnDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (SaleID) REFERENCES Sales(SaleID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
 -- Assuming the categories already exist in the Categories table
 -- You should adjust the following INSERT statements according to the Category_ID values in your Categories table
 

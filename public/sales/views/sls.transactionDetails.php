@@ -262,8 +262,21 @@
 
                             <!-- Return Order Button -->
                             <div class="flex justify-center pt-6">
-                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                    Return Order
+                                <?php
+                                // Fetch SaleDetailsID and ProductID
+                                $sql = "SELECT sd.SaleDetailID, sd.ProductID 
+                                        FROM SaleDetails sd 
+                                        JOIN Products p ON sd.ProductID = p.ProductID 
+                                        WHERE sd.SaleID = :sale_id";
+                                $stmt = $pdo->prepare($sql);
+                                $stmt->bindParam(":sale_id", $sale['SaleID']);
+                                $stmt->execute();
+                                $saleDetail = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $SaleDetailId = $saleDetail['SaleDetailID'];
+                                $productId = $saleDetail['ProductID'];
+                                ?>
+                                <button route="/sls/ReturnProduct/sale=<?php echo $sale['SaleID']; ?>/saledetails=<?php echo $SaleDetailId; ?>/product=<?php echo $productId; ?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                    Return Product
                                 </button>
                             </div>
                         </div>

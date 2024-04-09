@@ -18,13 +18,21 @@ $sls = [
     '/sls/POS/Receipt' => $basePath . "Receipt.php",
     '/sls/Audit-Trail' => $basePath . "AuditTrail.php",
     '/sls/Revenue' => $basePath . "Revenue.php",
-    '/sls/Returns' => $basePath . "returns.php",
+    '/sls/Returns' => $basePath . "ReturnTable.php",
     '/sls/Sales-Management' => $basePath . "SalesManagement.php",
+    '/sls/ReturnProduct' => $basePath . "ReturnProduct.php",
     // ... other routes ...
 
     '/sls/Transaction-Details/sale={saleId}' => function ($saleId) use ($basePath) {
         $_GET['sale'] = $saleId;
         include $basePath . "transactionDetails.php";
+    },
+
+    '/sls/ReturnProduct/sale={saleId}/saledetails={saledetailsId}/product={productId}' => function ($saleId, $saledetailsId, $productId) use ($basePath) {
+        $_GET['sale'] = $saleId;
+        $_GET['saledetails'] = $saledetailsId;
+        $_GET['product'] = $productId;
+        include $basePath . "ReturnProduct.php";
     },
 
     // functions
@@ -177,8 +185,8 @@ Router::post('/addSales', function () {
     $cart = json_decode($_POST['cartData'], true);
     foreach ($cart as $item) {
         $subtotal = $item['price'] * $item['quantity'];
-        $tax = $subtotal * $item['TaxRate'];
-        $totalAmount = $subtotal + $tax;
+        $tax = $item['price'] * $item['TaxRate'];
+        $totalAmount = ($item['price'] + $tax) * $item['quantity'];
 
         $productWeight = $product->getWeight($item['id']);
         $totalProductWeight = $productWeight * $item['quantity'];  // Calculate total weight of each product purchased
@@ -211,6 +219,30 @@ Router::post('/AddTarget', function () {
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/sls/Sales-Management");
+});
+
+Router::post('/returnProduct', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $saleId = $_POST['sale'];
+    $productId = $_POST['product_id'];
+    $quantity = $_POST['quantity'];
+    $reason = $_POST['reason'];
+    $paymentReturned = $_POST['payment_returned'];
+
+    $stmt = $conn->prepare("INSERT INTO ReturnProducts (SaleID, ProductID, Quantity, Reason, PaymentReturned) VALUES (:saleId, :productId, :quantity, :reason, :paymentReturned)");
+    $stmt->bindParam(':saleId', $saleId);
+    $stmt->bindParam(':productId', $productId);
+    $stmt->bindParam(':quantity', $quantity);
+    $stmt->bindParam(':reason', $reason);
+    $stmt->bindParam(':paymentReturned', $paymentReturned);
+
+    // Execute the statement
+    $stmt->execute();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/sls/Returns");
 });
 
 Router::post('/remove', function () {
