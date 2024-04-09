@@ -43,10 +43,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                    <div>
+                        <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                                <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -60,7 +87,7 @@
                 <div class="flex justify-between items-center">
                     <h1 class="mb-3 text-xl font-bold text-black">Transaction History</h1>
                     <div class="relative mb-3">
-                    <select id="searchType" class="px-3 py-2 border rounded-lg mr-8">
+                        <select id="searchType" class="px-3 py-2 border rounded-lg mr-8">
                             <option value="customerName">Customer Name</option>
                             <option value="saleId">Sale ID</option>
                             <option value="salePreference">Sale Preference</option>
@@ -73,7 +100,7 @@
                     </div>
                 </div>
                 <div class="flex flex-row gap-10">
-                    
+
                     <table id="salesTable" class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
                         <thead class="bg-gray-200">
                             <tr>

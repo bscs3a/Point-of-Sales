@@ -38,10 +38,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                    <div>
+                        <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                                <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -67,7 +94,7 @@
                         require_once './src/dbconn.php';
                         $database = Database::getInstance();
                         $pdo = $database->connect();
-                        
+
                         // Query for the audit trail
                         $sqlAuditTrail = "SELECT * FROM tbl_sls_audit ORDER BY log_date DESC";
                         $stmtAuditTrail = $pdo->query($sqlAuditTrail);
@@ -98,7 +125,7 @@
             document.getElementById('mainContent').classList.toggle('md:ml-64');
         });
     </script>
-    <script  src="./../src/route.js"></script>
+    <script src="./../src/route.js"></script>
 </body>
 
 </html>
