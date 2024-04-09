@@ -21,6 +21,7 @@ $sls = [
     '/sls/Returns' => $basePath . "ReturnTable.php",
     '/sls/Sales-Management' => $basePath . "SalesManagement.php",
     '/sls/ReturnProduct' => $basePath . "ReturnProduct.php",
+    '/sls/ReturnDetails' => $basePath . "ReturnDetails.php",
     // ... other routes ...
 
     '/sls/Transaction-Details/sale={saleId}' => function ($saleId) use ($basePath) {
@@ -35,28 +36,38 @@ $sls = [
         include $basePath . "ReturnProduct.php";
     },
 
+    // '/sls/ReturnDetails/returnID={returnId}' => function ($returnID) use ($basePath) {
+    //     $_GET['returnID'] = $returnID;
+    //     include $basePath . "ReturnDetails.php";
+    // },
+
+    '/sls/ReturnDetails/returnID={returnID}' => function ($returnID) use ($basePath) {
+        $_GET['returnID'] = $returnID;
+        include $basePath . "ReturnDetails.php";
+    },
+
     // functions
     // can't recognize by the router logout can proceed
     '/sls/logout' => "./public/sales/views/function/logout.php",
 ];
 
-// Get the current URL path
-$urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// // Get the current URL path
+// $urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Loop through all routes
-foreach ($sls as $route => $action) {
-    // Check if the start of the URL path matches the route
-    if (strpos($urlPath, $route) === 0) {
-        // Get the sale ID from the URL path
-        $saleId = substr($urlPath, strlen($route));
+// // Loop through all routes
+// foreach ($sls as $route => $action) {
+//     // Check if the start of the URL path matches the route
+//     if (strpos($urlPath, $route) === 0) {
+//         // Get the sale ID from the URL path
+//         $saleId = substr($urlPath, strlen($route));
 
-        // Execute the action for the route
-        $action($saleId);
+//         // Execute the action for the route
+//         $action($saleId);
 
-        // Stop the loop
-        break;
-    }
-}
+//         // Stop the loop
+//         break;
+//     }
+// }
 
 
 // START: Add Sales

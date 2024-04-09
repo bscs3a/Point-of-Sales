@@ -4,12 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction History</title>
+    <title>Returns History</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
     <?php
-    require_once 'function/fetchSalesData.php';
+    // Database connection
+    $db = Database::getInstance();
+    $pdo = $db->connect();
+
+    // Fetch number of returns
+    $sql = "SELECT COUNT(*) as count FROM ReturnProducts";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+    $sql = "SELECT rp.ReturnID, rp.SaleID, p.ProductID, p.ProductName, rp.Quantity, rp.Reason, rp.ReturnDate, rp.PaymentReturned 
+    FROM ReturnProducts rp 
+    JOIN Products p ON rp.ProductID = p.ProductID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $returnedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
 </head>
@@ -33,7 +48,7 @@
             <ul class="flex items-center text-md ml-4">
 
                 <li class="mr-2">
-                    <p class="text-black font-medium">Sales / Returns</p>
+                    <p class="text-black font-medium">Sales / Returns History</p>
                 </li>
 
             </ul>
@@ -85,8 +100,8 @@
         <div class="flex flex-col items-center min-h-screen mb-10 ">
             <div class="w-full max-w-6xl mt-10">
                 <div class="flex justify-between items-center">
-                    <h1 class="mb-3 text-xl font-bold text-black">Returns</h1>
-                    <div class="relative mb-3">
+                    <h1 class="mb-3 text-xl font-bold text-black">Returns History</h1>
+                    <!-- <div class="relative mb-3">
                         <select id="searchType" class="px-3 py-2 border rounded-lg mr-8">
                             <option value="customerName">Customer Name</option>
                             <option value="saleId">Sale ID</option>
@@ -97,23 +112,14 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="flex flex-row gap-10">
 
                     <table id="salesTable" class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
-                        <!-- Fetch returned products -->
-                        <?php
-                        $sql = "SELECT rp.ReturnID, rp.SaleID, p.ProductID, p.ProductName, rp.Quantity, rp.Reason, rp.ReturnDate, rp.PaymentReturned 
-                                FROM ReturnProducts rp 
-                                JOIN Products p ON rp.ProductID = p.ProductID";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute();
-                        $returnedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        ?>
-                        
+
                         <!-- Rest of your code... -->
-                        
+
                         <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-4 py-2 font-semibold">Returned Item</th>
@@ -124,9 +130,9 @@
                                 <th class="px-4 py-2 font-semibold">Action</th>
                             </tr>
                         </thead>
-                        
+
                         <!-- Rest of your code... -->
-                        
+
                         <tbody>
                             <?php foreach ($returnedProducts as $product) : ?>
                                 <tr class='border border-gray-200 bg-white'>
@@ -135,11 +141,13 @@
                                     <td class='px-4 py-2'><?php echo $product['SaleID']; ?></td>
                                     <td class='px-4 py-2'><?php echo $product['ProductID']; ?></td>
                                     <td class='px-4 py-2'><?php echo $product['PaymentReturned']; ?></td>
-                                    <td class='px-4 py-2'><button data-open-modal class='text-blue-500 hover:underline view-link'>View</button></td>
+                                    <td class='px-4 py-2'>
+                                        <button route="/sls/ReturnDetails/returnID=<?php echo $product['ReturnID']; ?>" class='text-blue-500 hover:underline view-link'>View</button>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
-                        
+
                         <!-- Rest of your code... -->
                     </table>
 
@@ -160,24 +168,63 @@
 
                             <div class="mt-2">
                                 <div class="flex flex-row justify-between">
-                                    <div class="text-lg font-semibold">Item Name</div>
+                                    <div class="text-lg font-semibold">
+                                        Product Name
+                                    </div>
                                     <div class="text-lg font-semibold">Php 300</div>
                                 </div>
 
-                                <div class="text-s text-gray-600">Category</div>
+                                <div class="text-s text-gray-600">
+                                    <?php
+                                    // Fetch CategoryID
+                                    $sql = "SELECT Category_ID FROM Products WHERE ProductID = :product_id";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->bindParam(":product_id", $product['ProductID']);
+                                    $stmt->execute();
+                                    $categoryId = $stmt->fetch(PDO::FETCH_ASSOC)['Category_ID'];
+
+                                    // Fetch CategoryName
+                                    $sql = "SELECT Category_Name FROM Categories WHERE Category_ID = :category_id";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->bindParam(":category_id", $categoryId);
+                                    $stmt->execute();
+                                    $categoryName = $stmt->fetch(PDO::FETCH_ASSOC)['Category_Name'];
+                                    echo $categoryName;
+                                    ?>
+                                </div>
                             </div>
 
                             <div>
-                                <div>From Order ID: <span class="font-bold">#</span></div>
-                                <div>Customer Name: <span class="font-bold">Name</span> </div>
+                                <div>From Sale ID: <span class="font-bold" id="saleId"></span></div>
+                                <div>Product ID: <span class="font-bold" id="productId"></span> </div>
+
+
                                 <div class="text-lg">Reason for Return:</div>
-                                <div class="bg-gray-200 rounded-md p-4 shadow-inner">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam sapiente expedita ex sequi, facilis rem?</div>
+                                <div class="bg-gray-200 rounded-md p-4 shadow-inner" id="reasonForReturn"></div>
+
                             </div>
-
-
 
                         </div>
                     </dialog>
+
+                    <script>
+                        // Get all view buttons
+                        const viewButtons = document.querySelectorAll('.view-link');
+
+                        // Add click event listener to each button
+                        viewButtons.forEach(button => {
+                            button.addEventListener('click', () => {
+                                // Get the SaleID and ProductID from the button's data- attributes
+                                const saleId = button.dataset.saleId;
+                                const productId = button.dataset.productId;
+
+                                // Display the SaleID and ProductID
+                                document.querySelector('#saleId').textContent = saleId;
+                                document.querySelector('#productId').textContent = productId;
+
+                            });
+                        });
+                    </script>
 
                     <script>
                         document.querySelectorAll('[data-open-modal]').forEach(function(button) {
@@ -196,19 +243,6 @@
 
 
                     <div class="flex flex-col gap-4 justify-start items-start">
-
-                        <?php
-                        // Database connection
-                        $db = Database::getInstance();
-                        $pdo = $db->connect();
-
-                        // Fetch number of returns
-                        $sql = "SELECT COUNT(*) as count FROM ReturnProducts";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute();
-                        $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-                        ?>
-
                         <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
                             <div class="flex flex-col gap-5">
                                 <div class="text-lg font-semibold text-gray-800">
@@ -219,16 +253,23 @@
                             </div>
                         </div>
 
+                        <?php
+                            // Fetch total of PaymentReturned
+                            $sql = "SELECT SUM(PaymentReturned) as total FROM ReturnProducts";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute();
+                            $totalPaymentReturned = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+                        ?>
+                        
+                        <!-- Display total PaymentReturned -->
                         <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
-
                             <div class="flex flex-col gap-5">
                                 <div>
-                                    <i class="ri-funds-line text-lg mx-2"></i>Money Returned
+                                    <i class="ri-funds-line text-lg mx-2"></i>Payment Returned
                                 </div>
-                                <div class="text-5xl font-semibold ml-5">53</div>
+                                <div class="text-5xl font-semibold ml-5"><?php echo $totalPaymentReturned; ?></div>
                                 <div class="text-sm font-medium ml-5 text-red-700">+10% more than average</div>
                             </div>
-
                         </div>
 
 

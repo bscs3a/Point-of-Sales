@@ -138,26 +138,44 @@ CREATE TABLE ReturnProducts (
 -- Assuming the categories already exist in the Categories table
 -- You should adjust the following INSERT statements according to the Category_ID values in your Categories table
 
-    INSERT INTO Products (Supplier_ID, Category_ID, ProductImage, ProductName, Supplier, Description, DeliveryRequired, Price, Stocks, UnitOfMeasurement, TaxRate, ProductWeight) 
-    VALUES 
-    (1, 1, 'uploads/hammer.png', 'Hammer (Large)', 'Supplier A', 'Heavy-duty hammer for construction work', 'No', 299.00, 50, 'pcs', 0.12, 1.5),
-    (2, 1, 'screwdriver_set_standard.jpg', 'Screwdriver Set (Standard)', 'Supplier B', 'Set of 6 screwdrivers with various sizes', 'No', 199.00, 30, 'set', 0.12, 0.8),
-    (3, 2, 'cement_50kg.jpg', 'Cement (50kg)', 'Supplier C', 'Portland cement for construction purposes', 'Yes', 220.00, 100, 'kg', 0.12, 50),
-    (4, 2, 'default.jpg', 'Gravel (1 ton)', 'Default Supplier', 'Crushed stone for construction projects', 'Yes', 500.00, 50, 'ton', 0.12, 907.185),
-    (5, 3, 'default.jpg', 'Paint Brush Set', 'Default Supplier', 'Set of 10 paint brushes for art projects', 'No', 99.00, 20, 'set', 0.12, 0.5),
-    (6, 4, 'default.jpg', 'Safety Helmet', 'Default Supplier', 'Hard hat helmet for construction safety', 'No', 150.00, 40, 'pcs', 0.12, 0.3),
-    (7, 1, 'uploads/drill.png', 'Drill Machine', 'Default Supplier', 'Cordless drill machine with rechargeable batteries', 'No', 599.00, 15, 'pcs', 0.12, 2),
-    (8, 2, 'default.jpg', 'Plywood (4x8 feet)', 'Default Supplier', 'Plywood sheets for carpentry and construction', 'Yes', 600.00, 30, 'sheet', 0.12, 20),
-    (9, 2, 'default.jpg', 'Steel Bar (1 meter)', 'Default Supplier', 'Deformed steel bars for reinforcement in concrete construction', 'Yes', 50.00, 200, 'meter', 0.12, 2.5),
-    (10, 5, 'default.jpg', 'Paint Thinner', 'Default Supplier', 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'No', 150.00, 50, 'pcs', 0.12, 1),
-    (11, 2, 'default.jpg', 'Concrete Blocks (Standard)', 'Default Supplier', 'Standard concrete blocks for building walls', 'Yes', 5.00, 200, 'pcs', 0.12, 2.3),
-    (12, 2, 'default.jpg', 'Roofing Shingles (Bundle)', 'Default Supplier', 'Bundle of roofing shingles for covering roofs', 'Yes', 25.00, 100, 'bundle', 0.12, 13.6078),
-    (13, 2, 'default.jpg', 'Sand (1 cubic yard)', 'Default Supplier', 'Fine aggregate sand for various construction applications', 'Yes', 40.00, 150, 'cubic yard', 0.12, 1088.62),
-    (14, 2, 'default.jpg', 'Brick (Standard)', 'Default Supplier', 'Standard clay bricks for construction', 'Yes', 0.50, 500, 'pcs', 0.12, 2.5),
-    (15, 2, 'default.jpg', 'Wood Studs (8 feet)', 'Default Supplier', 'Standard wood studs for framing walls', 'Yes', 3.00, 300, '8 feet', 0.12, 3.62874),
-    (16, 2, 'default.jpg', 'Galvanized Nails (5 lbs)', 'Default Supplier', 'Galvanized nails for various construction applications', 'Yes', 10.00, 100, 'lbs', 0.12, 2.26796),
-    (17, 2, 'default.jpg', 'Drywall (4x8 feet)', 'Default Supplier', 'Drywall sheets for interior wall finishing', 'Yes', 12.00, 200, 'sheet', 0.12, 22.6796),
-    (18, 2, 'default.jpg', 'Concrete Mix (50 lb)', 'Default Supplier', 'Pre-mixed concrete for small-scale construction projects', 'Yes', 8.00, 150, 'lb', 0.12, 22.6796);
+INSERT INTO Products (Supplier_ID, Category_ID, ProductImage, ProductName, Supplier, Description, DeliveryRequired, Price, Stocks, UnitOfMeasurement, TaxRate, ProductWeight) 
+VALUES 
+    (1, 1, 'uploads/Hammer_(Large).png', 'Hammer (Large)', 'Supplier A', 'Heavy-duty hammer for construction work', 'No', 329.00, 50, 'pcs', 0.12, 1.5),
+    (2, 1, 'uploads/Screwdriver_Set_(Standard).png', 'Screwdriver Set (Standard)', 'Supplier B', 'Set of 6 screwdrivers with various sizes', 'No', 969.00, 30, 'set', 0.12, 0.8),
+    (3, 2, 'uploads/Cement_(50kg).png', 'Cement (50kg)', 'Supplier C', 'Portland cement for construction purposes', 'Yes', 240.00, 100, 'pcs', 0.12, 50),
+    (4, 2, 'uploads/Gravel_(1_ton).png', 'Gravel (1 ton)', 'Default Supplier', 'Crushed stone for construction projects', 'Yes', 550.00, 50, 'ton', 0.12, 907.185),
+    (5, 3, 'uploads/Paint_Brush_Set.png', 'Paint Brush Set', 'Default Supplier', 'Set of 10 paint brushes for art projects', 'No', 209.00, 20, 'set', 0.12, 0.5),
+    (6, 4, 'uploads/Safety_Helmet.png', 'Safety Helmet', 'Default Supplier', 'Hard hat helmet for construction safety', 'No', 470.00, 40, 'pcs', 0.12, 0.3),
+    (7, 1, 'uploads/Drill_Machine.png', 'Drill Machine', 'Default Supplier', 'Cordless drill machine with rechargeable batteries', 'No', 1100.00, 15, 'pcs', 0.12, 2),
+    (8, 2, 'uploads/Plywood_(4x8_feet).png', 'Plywood (4x8 feet)', 'Default Supplier', 'Plywood sheets for carpentry and construction', 'Yes', 650.00, 30, 'sheet', 0.12, 20),
+    (9, 2, 'uploads/Steel_Bar_(1_meter).png', 'Steel Bar (1 meter)', 'Default Supplier', 'Deformed steel bars for reinforcement in concrete construction', 'Yes', 55.00, 200, 'meter', 0.12, 2.5),
+    (10, 5, 'uploads/Paint_Thinner.png', 'Paint Thinner', 'Default Supplier', 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'No', 170.00, 50, 'pcs', 0.12, 1),
+    (11, 2, 'uploads/Concrete_Blocks_(Standard).png', 'Concrete Blocks (Standard)', 'Default Supplier', 'Standard concrete blocks for building walls', 'Yes', 12.00, 200, 'pcs', 0.12, 2.3),
+    (12, 2, 'uploads/Roofing_Shingles_(Bundle).png', 'Roofing Shingles (Bundle)', 'Default Supplier', 'Bundle of roofing shingles for covering roofs', 'Yes', 1750.00, 100, 'bundle', 0.12, 13.6078),
+    (13, 2, 'uploads/Sand_(1_cubic_yard).jpg', 'Sand (1 cubic yard)', 'Default Supplier', 'Fine aggregate sand for various construction applications', 'Yes', 1500.00, 150, 'cubic yard', 0.12, 1088.62),
+    (14, 2, 'uploads/Brick_(Standard).png', 'Brick (Standard)', 'Default Supplier', 'Standard clay bricks for construction', 'Yes', 12.00, 500, 'pcs', 0.12, 2.5),
+    (15, 2, 'uploads/Wood_Studs_(8_feet).png', 'Wood Studs (8 feet)', 'Default Supplier', 'Standard wood studs for framing walls', 'Yes', 225.00, 300, '8 feet', 0.12, 3.62874),
+    (16, 2, 'uploads/Galvanized_Nails_(5_lbs).png', 'Galvanized Nails (5 lbs)', 'Default Supplier', 'Galvanized nails for various construction applications', 'Yes',50.00, 100, 'lbs', 0.12, 2.26796),
+    (17, 2, 'uploads/Drywall_(4x8_feet).png', 'Drywall (4x8 feet)', 'Default Supplier', 'Drywall sheets for interior wall finishing', 'Yes', 450.00, 200, 'sheet', 0.12, 22.6796),
+    (18, 2, 'uploads/Concrete_Mix_(50_lb).png', 'Concrete Mix (50 lb)', 'Default Supplier', 'Pre-mixed concrete for small-scale construction projects', 'Yes', 365.00, 150, 'lb', 0.12, 22.6796),
+    (19, 1, 'uploads/Adjustable_Wrench_(12_inches).png', 'Adjustable Wrench (12 inches)', 'Supplier D', 'Adjustable wrench for plumbing and mechanical work', 'No', 109.00, 50, 'pcs', 0.12, 1.2),
+    (20, 1, 'uploads/Electric_Screwdriver.png', 'Electric Screwdriver', 'Supplier E', 'Electric screwdriver with multiple torque settings', 'No', 269.00, 30, 'pcs', 0.12, 1.8),
+    (21, 2, 'uploads/PVC_Pipes_(10_feet).png', 'PVC Pipes (10 feet)', 'Supplier F', 'PVC pipes for plumbing and drainage systems', 'Yes', 42.00, 100, '10 feet', 0.12, 6),
+    (22, 2, 'uploads/Insulation_Foam_Board_(4x8_feet).png', 'Insulation Foam Board (4x8 feet)', 'Supplier G', 'Foam boards for insulation purposes in construction', 'Yes', 380.00, 80, 'sheet', 0.12, 12),
+    (23, 3, 'uploads/Watercolor_Paint_Set.png', 'Watercolor Paint Set', 'Supplier H', 'Set of high-quality watercolor paints for artists', 'No', 109.00, 25, 'set', 0.12, 0.6),
+    (24, 4, 'uploads/High-Visibility_Safety_Vest.png', 'High-Visibility Safety Vest', 'Supplier I', 'Fluorescent safety vest for high-visibility in construction areas', 'No', 58.00, 60, 'pcs', 0.12, 0.4),
+    (25, 5, 'uploads/Acrylic_Paint_Set.png', 'Acrylic Paint Set', 'Supplier J', 'Set of vibrant acrylic paints suitable for various surfaces', 'No', 99.00, 40, 'set', 0.12, 0.7),
+    (26, 3, 'uploads/Oil_Paint_Set.png', 'Oil Paint Set', 'Supplier K', 'Set of high-quality oil paints for professional artists', 'No', 129.00, 30, 'set', 0.12, 0.8),
+    (27, 3, 'uploads/Sketching_Pencils_(Set_of_12).png', 'Sketching Pencils (Set of 12)', 'Supplier L', 'Set of graphite sketching pencils for drawing and shading', 'No', 45.00, 50, 'set', 0.12, 0.3),
+    (28, 3, 'uploads/Canvas_Roll_(6_feet).png', 'Canvas Roll (6 feet)', 'Supplier M', 'Roll of primed canvas for painting', 'Yes', 40.00, 20, 'roll', 0.12, 3),
+    (29, 4, 'uploads/Hard_Hat_with_Ear_Protection.png', 'Hard Hat with Ear Protection', 'Supplier N', 'Safety hard hat with built-in ear protection for noisy environments', 'No', 305.00, 40, 'pcs', 0.12, 0.5),
+    (30, 4, 'uploads/Steel-Toed_Boots.png', 'Steel-Toed Boots', 'Supplier O', 'Heavy-duty steel-toed boots for foot protection in construction sites', 'No', 799.00, 25, 'pair', 0.12, 2),
+    (31, 4, 'uploads/Reflective_Safety_Tape_(Roll).png', 'Reflective Safety Tape (Roll)', 'Supplier P', 'Roll of reflective tape for enhancing visibility on safety gear', 'No', 40.00, 60, 'roll', 0.12, 0.2),
+    (32, 5, 'uploads/Wood_Stain_(1_quart).jpg', 'Wood Stain (1 quart)', 'Supplier Q', 'High-quality wood stain for finishing wood surfaces', 'No', 215.00, 40, 'quart', 0.12, 2),
+    (33, 5, 'uploads/Paint_Roller_Set.png', 'Paint Roller Set', 'Supplier R', 'Set of paint rollers for applying paint smoothly on surfaces', 'No', 300.00, 35, 'set', 0.12, 0.8),
+    (34, 5, 'uploads/Adhesive_Primer_(1_gallon).png', 'Adhesive Primer (1 gallon)', 'Supplier S', 'Adhesive primer for preparing surfaces before painting', 'No', 210.00, 20, 'gallon', 0.12, 8);
+
+
 
     INSERT INTO Categories (Category_Name) 
     VALUES 
