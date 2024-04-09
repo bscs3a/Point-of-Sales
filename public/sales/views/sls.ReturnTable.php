@@ -60,10 +60,10 @@
             <ul class="ml-auto flex items-center">
 
                 <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                      <div>
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                                <?= $_SESSION['employee_name']; ?>
+                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>

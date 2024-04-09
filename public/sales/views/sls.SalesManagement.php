@@ -53,6 +53,13 @@
     }
     ?>
 
+    <style>
+    ::-webkit-scrollbar {
+    display: none;
+}
+
+    </style>
+
 </head>
 
 <body>
@@ -87,9 +94,9 @@
 
                 <div class="relative inline-block text-left">
                     <div>
-                        <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                                <?= $_SESSION['employee_name']; ?>
+                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -121,13 +128,14 @@
         </div>
 
         <!-- End: Header -->
-
-        <div class="flex flex-col items-center min-h-screen mb-10">
+       
+        <div class="flex flex-col items-center min-h-screen mb-10 mt-14">
             <!-- Title -->
-            <h1 class="text-2xl font-semibold mb-6 mt-6">Sales Management</h1>
+            
 
             <!-- Sales Chart Card -->
-            <div class="w-full max-w-3xl bg-white rounded-md border border-gray-200 p-6 shadow-md">
+            <div class="flex flex-row w-full items-center px-20 justify-center gap-8">
+            <div class="w-full bg-white rounded-md border border-gray-200 p-6 shadow-md">
                 <!-- Card header -->
                 <div class="flex justify-between items-center mb-6">
                     <!-- Card title -->
@@ -150,10 +158,46 @@
                 </div>
             </div>
 
+             <!-- Target Sales Form -->
+             <section id="target-sales-form" class="w-1/3 h-full">
+                <div class="bg-white shadow-md border rounded px-8 py-10">
+                    <h2 class="mb-4 text-lg font-bold text-gray-700">Set Target Sales for This Month</h2>
+                    <form action="/AddTarget" method="POST">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="month-year">Month and Year:</label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="month" id="month-year" name="month_year" value="<?php echo date('Y-m'); ?>" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="target-sales">Target Sales:</label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="target-sales" name="target_sales" required>
+                        </div>
+                        <div class="flex items-center justify-center pt-4">
+                            <button class="bg-green-800 w-full hover:bg-green-900 hover:font-bold text-white font-semibold transition-all py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Set Target</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            </div>
+
             <!-- Previous Target Sales Table -->
-            <section id="previous-target-sales" class="w-full max-w-3xl mt-8">
-                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
+            <section id="previous-target-sales" class="w-full p-20 justify-center">
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 border">
+
+                
+                    <div class="flex justify-between border-b py-2 mb-4">
                     <h2 class="mb-4 text-lg font-bold text-gray-700">Previous Target Sales</h2>
+                    <div class="relative mb-3">
+                        <input type="text" id="searchInput" placeholder="Search by Year" title="Search by product name..." class="h-10 px-3 py-2 pl-5 pr-10 border rounded-r-lg rounded-l-none">
+                        <svg id="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <svg id="clear-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6 hidden">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+
+                    
+                    </div>
                     <table class="w-full">
                         <thead>
                             <tr>
@@ -173,25 +217,7 @@
                 </div>
             </section>
 
-            <!-- Target Sales Form -->
-            <section id="target-sales-form" class="w-full max-w-3xl mt-8">
-                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-                    <h2 class="mb-4 text-lg font-bold text-gray-700">Set Target Sales for This Month</h2>
-                    <form action="/AddTarget" method="POST">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="month-year">Month and Year:</label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="month" id="month-year" name="month_year" value="<?php echo date('Y-m'); ?>" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="target-sales">Target Sales:</label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="target-sales" name="target_sales" required>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Set Target</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+           
         </div>
 
 

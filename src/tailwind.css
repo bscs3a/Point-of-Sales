@@ -663,8 +663,16 @@ video {
   position: fixed;
 }
 
+.\!absolute{
+  position: absolute !important;
+}
+
 .absolute{
   position: absolute;
+}
+
+.\!relative{
+  position: relative !important;
 }
 
 .relative{
@@ -698,6 +706,10 @@ video {
 
 .end-1{
   inset-inline-end: 0.25rem;
+}
+
+.end-2{
+  inset-inline-end: 0.5rem;
 }
 
 .left-0{
@@ -812,6 +824,10 @@ video {
   clear: none;
 }
 
+.m-1{
+  margin: 0.25rem;
+}
+
 .m-2{
   margin: 0.5rem;
 }
@@ -890,6 +906,21 @@ video {
 .my-8{
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.mx-8{
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.mx-20{
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+
+.mx-1{
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 .-mb-px{
@@ -1072,6 +1103,14 @@ video {
   margin-top: 2.25rem;
 }
 
+.mt-20{
+  margin-top: 5rem;
+}
+
+.mt-14{
+  margin-top: 3.5rem;
+}
+
 .box-border{
   box-sizing: border-box;
 }
@@ -1112,6 +1151,10 @@ video {
 
 .inline-flex{
   display: inline-flex;
+}
+
+.\!table{
+  display: table !important;
 }
 
 .table{
@@ -1156,6 +1199,10 @@ video {
 
 .flow-root{
   display: flow-root;
+}
+
+.\!grid{
+  display: grid !important;
 }
 
 .grid{
@@ -1463,8 +1510,25 @@ video {
   width: 100vw;
 }
 
+.w-min{
+  width: -moz-min-content;
+  width: min-content;
+}
+
+.w-2\/3{
+  width: 66.666667%;
+}
+
 .min-w-full{
   min-width: 100%;
+}
+
+.min-w-3{
+  min-width: 0.75rem;
+}
+
+.min-w-3\.5{
+  min-width: 0.875rem;
 }
 
 .max-w-2xl{
@@ -2150,6 +2214,10 @@ video {
   gap: 120px;
 }
 
+.gap-8{
+  gap: 2rem;
+}
+
 .space-x-0 > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(0px * var(--tw-space-x-reverse));
@@ -2535,6 +2603,10 @@ video {
 
 .rounded-xl{
   border-radius: 0.75rem;
+}
+
+.rounded-sm{
+  border-radius: 0.125rem;
 }
 
 .rounded-b{
@@ -3190,6 +3262,14 @@ video {
   padding: 2.5rem;
 }
 
+.p-14{
+  padding: 3.5rem;
+}
+
+.p-16{
+  padding: 4rem;
+}
+
 .p-2{
   padding: 0.5rem;
 }
@@ -3216,6 +3296,10 @@ video {
 
 .p-8{
   padding: 2rem;
+}
+
+.p-20{
+  padding: 5rem;
 }
 
 .px-1{
@@ -3296,6 +3380,26 @@ video {
 .py-5{
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
+}
+
+.px-20{
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+.py-8{
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.py-12{
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.py-11{
+  padding-top: 2.75rem;
+  padding-bottom: 2.75rem;
 }
 
 .pb-2{
@@ -3412,6 +3516,10 @@ video {
 
 .pt-6{
   padding-top: 1.5rem;
+}
+
+.pb-10{
+  padding-bottom: 2.5rem;
 }
 
 .text-left{
@@ -3580,6 +3688,11 @@ video {
 
 .normal-nums{
   font-variant-numeric: normal;
+}
+
+.\!ordinal{
+  --tw-ordinal: ordinal !important;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction) !important;
 }
 
 .ordinal{
@@ -4256,6 +4369,10 @@ video {
   display: none;
 }
 
+.\!\[a-zA-Z\:_\]{
+  a-z-a--z:  !important;
+}
+
 @media (min-width: 640px){
   .sm\:container{
     width: 100%;
@@ -4455,6 +4572,11 @@ video {
 .hover\:bg-yellow-500:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-green-700:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(21 128 61 / var(--tw-bg-opacity));
 }
 
 .hover\:font-bold:hover{
