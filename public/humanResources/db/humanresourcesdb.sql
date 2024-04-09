@@ -123,7 +123,7 @@ CREATE TABLE session (
 
 -- EXAMPLE DATA
 INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, address, contact_no, email, civil_status, department, position) VALUES
-('https://pbs.twimg.com/profile_images/1761013959287623680/tzx6DEES_400x400.jpg', 'Jarelle Anne', 'Cañada', 'Pamintuan', '2001-08-31', 'Female', 'Filipino', 'Rias-Eveland Boulevard', '09123456789', 'jarelleannepamintuan@gmail.com','Single', 'Human Resources', 'HR Manager'),
+('https://pbs.twimg.com/profile_images/1776936838118404096/cxF34bgy_400x400.jpg', 'Jarelle Anne', 'Cañada', 'Pamintuan', '2001-08-31', 'Female', 'Filipino', 'Rias-Eveland Boulevard', '09123456789', 'jarelleannepamintuan@gmail.com','Single', 'Human Resources', 'HR Manager'),
 ('https://pbs.twimg.com/profile_images/1556154158860107776/1eTSWQJx_400x400.jpg', 'Ziggy', 'Castro', 'Co', '2001-12-19', 'Female', 'Filipino', 'Pampanga', '09123456789', 'ziggyco@example.com','Single', 'Human Resources', 'Compensation and Benefits Specialist');
 
 INSERT INTO employment_info (dateofhire, startdate, enddate, employees_id) VALUES
@@ -150,5 +150,5 @@ INSERT INTO leave_requests (type, details, start_date, end_date, status, employe
 ('Sick Leave', 'Enjoy this moon necklace. I got it for you. You remind me of the moon, because it\'s always there and it\'s beautiful.', '2022-08-28 08:00:00', '2022-08-28 08:00:00', 'Pending', 1);
 
 INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, applyingForDepartment, address, contact_no, email, applyingForPosition) VALUES
-('https://pbs.twimg.com/profile_images/1699999316746862592/JZcAQK5B_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', 'Country Roads Take Me Home', '09123456789', 'foxwriter@example.com', 'HR Coordinator'),
-('https://pbs.twimg.com/profile_images/1773686394264682496/uF0wq-tk_400x400.jpg', 'Suzuran', '', 'Yamino', '2001-08-31', 'Female', 'Filipino', 'Single', 'Finance', 'Sorcerer, I Hardly Even Know Her!', '09123456789', 'sorcerer@example.com', 'Credit Analyst');
+('https://pbs.twimg.com/profile_images/1776936537089089536/Ws5Ihsh7_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', 'Country Roads Take Me Home', '09123456789', 'foxwriter@example.com', 'HR Coordinator'),
+('https://pbs.twimg.com/profile_images/1752672426381762560/lGu3Vx-C_400x400.jpg', 'Suzuran', '', 'Yamino', '2001-08-31', 'Female', 'Filipino', 'Single', 'Finance', 'Sorcerer, I Hardly Even Know Her!', '09123456789', 'sorcerer@example.com', 'Credit Analyst');

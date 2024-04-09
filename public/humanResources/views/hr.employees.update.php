@@ -83,7 +83,10 @@
       <img src="<?php echo $employees['image_url']; ?>" alt="Profile Picture" class="w-48 h-48 object-cover">
       <span>
         <div class="ml-2 mb-20 mt-4"> 
-          <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
+        <form method="POST" action="/hr/employees/update" enctype="multipart/form-data">
+          <input type="file" name="image" accept="image/*">
+          <button type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
+        </form>
           <button type="button" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
         </div>    
       </span>

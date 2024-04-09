@@ -50,13 +50,31 @@
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
   <div class="flex">
+    
+    <!-- IMAGE -->
+    <!-- <div class="mr-4"> -->
+      <!-- <img src="#" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover"> -->
+      <!-- <span> -->
+      <!-- <div class="ml-2 mb-20 mt-4"> -->
+          <!-- The file input for uploading pictures. It's hidden because the custom upload button is used instead. -->
+          <!-- <input type="file" id="fileInput" style="display: none;"> -->
+
+          <!-- The custom upload button. When clicked, it triggers the click event of the file input. -->
+          <!-- <button type="button" onclick="document.getElementById('fileInput').click();" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button> -->
+
+          <!-- The remove button. When clicked, it removes the selected file from the file input. -->
+          <!-- <button type="button" onclick="removeFile();" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
+        </div>    
+      </span>
+    </div> -->
     <div class="mr-4">
       <img src="#" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
+      <input type="file" id="fileInput" name="image" accept="image/*" style="display: none;">
       <span>
-        <div class="ml-2 mb-20 mt-4"> 
-          <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
-          <button type="button" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
-        </div>    
+          <div class="ml-1 mb-20 mt-4"> 
+              <button type="button" id="uploadButton" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5  mb-2 dark:focus:ring-yellow-900">Upload</button>
+              <button type="button" id="removeButton" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
+          </div>    
       </span>
     </div>
 
@@ -533,8 +551,8 @@
 <script  src="./../../src/route.js"></script>
 <script  src="./../../src/form.js"></script>
 
-<!-- Sidebar active/inactive -->
 <script>
+  // Sidebar Toggle
   document.querySelector('.sidebar-toggle').addEventListener('click', function() {
     document.getElementById('sidebar-menu').classList.toggle('hidden');
     document.getElementById('sidebar-menu').classList.toggle('transform');
@@ -543,6 +561,7 @@
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
 
+  // Show/Hide Password
   document.getElementById('togglePassword').addEventListener('change', function () {
     const passwordInput = document.getElementById('password');
     if (this.checked) {
@@ -550,6 +569,23 @@
     } else {
         passwordInput.type = 'password';
     }
+  });
+
+  // Image Upload
+  document.getElementById('uploadButton').addEventListener('click', function() {
+    document.getElementById('fileInput').click();
+  });
+
+  document.getElementById('fileInput').addEventListener('change', function() {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+          document.getElementById('image_url').src = e.target.result;
+      }
+      reader.readAsDataURL(this.files[0]);
+  });
+
+  document.getElementById('removeButton').addEventListener('click', function() {
+      document.getElementById('image_url').src = '#';
   });
 
   // Automatic Tax Calculation for UI

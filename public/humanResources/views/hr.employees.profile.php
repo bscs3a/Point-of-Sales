@@ -94,19 +94,27 @@
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button route="/hr/employees/update=<?php echo htmlspecialchars($employees['id']); ?>" type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Edit</button>
-          <button id="deleteButton" type="button" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Delete</button>
+          <button id="deleteButton" type="button" class="deleteButton focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Delete</button>
         </div>    
       </span>
     </div>
 
-    <!-- Delete modal -->
-    <div id="deleteModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-      <form action="/hr/employees/delete" method="POST" class="bg-white p-5 rounded-lg text-center">
-            <h2 class="mb-4">Are you sure you want to delete?</h2>
-            <button id="confirmDelete" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
-            <button id="cancelDelete" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
-      </form>
-    </div>
+<!-- Delete modal -->
+<div id="deleteModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+  <form action="/delete/employees" method="POST" class="bg-white p-5 rounded-lg text-center">
+      <h2 class="mb-4">Are you sure that you want to delete <?php 
+                        echo $employees['first_name'] . ' ';
+                        if (!empty($employees['middle_name'])) {
+                            echo substr($employees['middle_name'], 0, 1) . '. ';
+                        }
+                        echo $employees['last_name']; 
+                    ?>?</h2>
+      <h3 class="mb-4 text-sm text-red-600">Note: Once deleted, it cannot be undone.</h3>
+      <input type="hidden" name="id" id="idToDelete"> <!-- This will hold the ID of the row to delete -->
+      <input type="submit" value="Yes" id="confirmDelete" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+      <input type="button" value="No" id="cancelDelete" class="px-4 py-2 bg-gray-300 text-black rounded">
+  </form>
+</div>
 
   <!-- Employee Information -->
 
@@ -521,10 +529,12 @@
     }
   });
 
-  document.getElementById('deleteButton').addEventListener('click', function() {
-    var id = this.getAttribute('route').split('=')[1];
-    document.getElementById('idToDelete').value = id;
-    document.getElementById('deleteModal').classList.remove('hidden');
+  document.querySelectorAll('.deleteButton').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var id = this.getAttribute('data-id');
+        document.getElementById('idToDelete').value = id;
+        document.getElementById('deleteModal').classList.remove('hidden');
+    });
   });
 
   document.getElementById('cancelDelete').addEventListener('click', function() {
@@ -532,8 +542,7 @@
   });
 
   document.getElementById('confirmDelete').addEventListener('click', function() {
-      // Handle the deletion here
-      console.log('Deleting...');
+    document.getElementById('deleteModal').submit();
   });
 </script>
 </body>

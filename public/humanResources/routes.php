@@ -32,7 +32,7 @@ $hr = [
     '/hr/leave-requests' => $basePath . "leave-requests.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
 
-    //view profile
+    //view employee profile
     '/hr/employees/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
         include $basePath . "employees.profile.php";
@@ -43,6 +43,12 @@ $hr = [
         $_SESSION['id'] = $id;
         include $basePath . "employees.update.php";
     },
+    
+    //view applicant profile
+    '/hr/applicants/id={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "applicants.view.php";
+    },
 
     //PAGINATION
     '/hr/employees/page={pageNumber}' => function($pageNumber) use ($basePath) {
@@ -50,6 +56,7 @@ $hr = [
         include $basePath . "employees.php";
     },
 ];
+
 // TAX CALCULATION
 // Function to calculate tax amount based on monthly salary | INCOME TAX
 function calculateIncomeTax($monthlysalary) {
@@ -120,7 +127,7 @@ function calculatePagibig($monthlysalary) {
     return 200.00;
 }
 
-// add employees
+// ADD employees
 Router::post('/hr/employees/add', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -436,7 +443,7 @@ Router::post('/hr/employees/update', function () {
 });
 
 // DELETE employees
-Router::post('/hr/employees/delete', function () {
+Router::post('/delete/employees', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
@@ -484,7 +491,7 @@ Router::post('/hr/employees/delete', function () {
     header("Location: $rootFolder/hr/employees");
 });
 
-// search employees
+// SEARCH employees
 Router::post('/hr/employees', function () {
 
     $search = $_POST['search'];
@@ -807,8 +814,8 @@ Router::post('/hr/applicants/accept', function () {
 
 });
 
-// reject applicants (will delete a row from applicants) | STILL NOW WORKING THO?? it says NOT FOUND
-Router::post('/hr/applicants/reject', function () {
+// reject applicants (will delete a row from applicants)
+Router::post('/reject/applicants', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 

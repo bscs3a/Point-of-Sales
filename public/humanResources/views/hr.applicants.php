@@ -82,7 +82,7 @@
 
   <!-- Reject modal -->
 <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-    <form action="/hr/applicants/reject" method="POST" class="bg-white p-5 rounded-lg text-center">
+    <form action="/master/reject/applicants" method="POST" class="bg-white p-5 rounded-lg text-center">
         <h2 class="mb-4">Reject this applicant?</h2>
         <input type="hidden" name="id" id="idToDelete"> <!-- This will hold the ID of the row to delete -->
         <input type="submit" value="Yes" id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">

@@ -75,16 +75,16 @@ $stmt = null;
 
   <!-- UNCOMMENT THIS AFTER FINISHING THE BACKEND FOR DTR -->
   <?php 
-    if (empty($attendance)) {
-        require_once 'inc/noResult.php';
-    } 
-    else {
-        require_once 'inc/dtr.table.php';
-    } 
+    // if (empty($attendance)) {
+    //     require_once 'inc/noResult.php';
+    // } 
+    // else {
+    //     require_once 'inc/dtr.table.php';
+    // } 
   ?>
 
   <!-- Sample: DELETE THIS WHEN BACKEND IS DONE -->
-  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
+  <div class="ml-6 flex flex-col mt-8 mr-6">
   <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
     <table class="min-w-full">
       <thead>
@@ -107,7 +107,7 @@ $stmt = null;
               <div class="flex items-center">
                 <div class="flex-shrink-0 w-10 h-10">
                   <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1669355498234318849/Kg3mWUFZ_400x400.jpg"
+                    src="https://pbs.twimg.com/profile_images/1775969848239009792/z8Ab_XEM_400x400.jpg"
                     alt="">
                 </div>
                 <div class="ml-4">
@@ -134,7 +134,7 @@ $stmt = null;
         </tbody>
       </table>
     </div>
-  </div> -->
+  </div>
 <!-- END Daily Time Record -->
 
 </main>
