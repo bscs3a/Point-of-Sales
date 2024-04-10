@@ -79,11 +79,12 @@
         <!-- End: Header -->
 
         <div id="receipt" class="flex flex-col items-start min-h-screen w-full max-w-3xl mx-auto p-5">
+             <div class="w-full bg-green-800 rounded-t-lg p-8 h-10 flex justify-center items-center text-center">
+                    <span class="text-white w-full text-3xl font-semibold p-2">Details</span>
+                </div>
             <div class="w-full bg-white rounded-lg overflow-hidden shadow-lg p-4 ">
                 <!-- Header -->
-                <div class="w-full bg-green-800 h-10 flex justify-center items-center text-center">
-                    <span class="text-white text-xl font-semibold p-2">Details</span>
-                </div>
+              
 
                 <!-- Body -->
                 <div class="flex flex-col gap-4 p-8">
@@ -140,7 +141,7 @@
                     ?>
 
                     <!-- Display product details -->
-                    <div class="mt-2">
+                    <div class="mt-8">
                         <div class="flex flex-row justify-between">
                             <div class="text-lg font-semibold">
                                 <?php echo $product['ProductName']; ?>
@@ -150,8 +151,8 @@
                             </div>
                         </div>
 
-                        <div class="text-s text-gray-600">
-                            <div class="text-lg font-semibold">
+                        <div class="text-s text-gray-300">
+                            <div class="text-lg font-medium">
                                 <?php echo $product['Category_Name']; ?>
                             </div>
                         </div>
@@ -176,7 +177,7 @@
                         <div>From Sale ID: <span class="font-bold" id="saleId"><?php echo $returnProduct['SaleID']; ?></span></div>
                         <div>Product ID: <span class="font-bold" id="productId"><?php echo $returnProduct['ProductID']; ?></span> </div>
                         <div>Return Date: <span class="font-bold" id="returnDate"><?php echo date("F j, Y, g:i a", strtotime($returnProduct['ReturnDate'])); ?></span> </div>
-                        <div class="text-lg">Reason for Return:</div>
+                        <div class="text-lg mt-4">Reason(s) for Return:</div>
                         <div class="bg-gray-200 rounded-md p-4 shadow-inner" id="reasonForReturn"><?php echo $returnProduct['Reason']; ?></div>
                     </div>
 
