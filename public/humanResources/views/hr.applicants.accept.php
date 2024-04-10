@@ -1,3 +1,26 @@
+<?php
+    // Check if the id is set in the URL
+    // Start a new session or resume the existing one
+    if (isset($_SESSION['id'])) {
+        // Get the id from the session
+        $id = $_SESSION['id'];
+
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        // Prepare the SQL statement
+        $query = "SELECT * FROM applicants WHERE id = :id;";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $applicant = $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        header('Location: /hr/dashboard');
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,45 +73,18 @@
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
   <div class="flex">
-    
-    <!-- IMAGE -->
-    <!-- <div class="mr-4"> -->
-      <!-- <img src="#" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover"> -->
-      <!-- <span> -->
-      <!-- <div class="ml-2 mb-20 mt-4"> -->
-          <!-- The file input for uploading pictures. It's hidden because the custom upload button is used instead. -->
-          <!-- <input type="file" id="fileInput" style="display: none;"> -->
-
-          <!-- The custom upload button. When clicked, it triggers the click event of the file input. -->
-          <!-- <button type="button" onclick="document.getElementById('fileInput').click();" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button> -->
-
-          <!-- The remove button. When clicked, it removes the selected file from the file input. -->
-          <!-- <button type="button" onclick="removeFile();" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
-        </div>    
-      </span>
-    </div> -->
     <div class="mr-4">
-      <img src="#" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
-      <input type="file" id="fileInput" name="image_url" accept="image/*" style="display: none;">
-      <span>
-          <div class="ml-1 mb-20 mt-4"> 
-              <button type="button" id="uploadButton" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5  mb-2">Upload</button>
-              <button type="button" id="removeButton" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Remove</button>
-          </div>    
-      </span>
-    </div>
-    <!-- <div class="mr-4">
-      <img src="#" alt="Profile Picture" class="w-48 h-48 object-cover">
+      <img src="<?php echo htmlspecialchars($applicant['image_url']); ?>" alt="Profile Picture" class="w-48 h-48 object-cover" name="image_url" id="image_url">
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
           <button type="button" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
         </div>    
       </span>
-    </div> -->
+    </div>
 
   <!-- Employee Information -->
-<form action= "/hr/employees/add" method="POST">
+<form action= "/hr/applicants/accept" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">
@@ -102,9 +98,10 @@
             id="firstName"
             type="text"
             placeholder="First Name"
+            value="<?php echo htmlspecialchars($applicant['first_name']); ?>"
           />
         </div>
-
+        
     <!--Required Fields modal -->
     <div id="requiredFieldsModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white p-5 rounded-lg text-center">
@@ -126,7 +123,7 @@
                   let hasEmptyField = false;
 
                   inputs.forEach((input) => {
-                      if (input.value.trim() === '' && input.name !== 'middleName' && input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate' && input.name !== 'image_url') {
+                      if (input.value.trim() === '' && input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate') {
                           hasEmptyField = true;
                       }
                   });
@@ -142,7 +139,6 @@
               });
           });
       </script>
-
         <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
               Middle Name
@@ -153,6 +149,7 @@
               id="middleName"
               type="text"
               placeholder="Middle Name"
+              value="<?php echo htmlspecialchars($applicant['middle_name']); ?>"
             />
         </div>
         <div>
@@ -165,6 +162,7 @@
               id="lastName"
               type="text"
               placeholder="Last Name"
+                value="<?php echo htmlspecialchars($applicant['last_name']); ?>"
             />
         </div>
       </div>
@@ -182,6 +180,7 @@
               name="dateofbirth"
               id="dateofbirth"
               type="date"
+              value="<?php echo htmlspecialchars($applicant['dateofbirth']); ?>"
             />
         </div>
         <div class="mr-2">
@@ -193,8 +192,8 @@
             name="gender"
             id="gender">
             <option value="">Select Gender</option>
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
+            <option value="Female" <?php echo $applicant['gender'] == 'Female' ? 'selected' : ''; ?>>Female</option>
+            <option value="Male" <?php echo $applicant['gender'] == 'Male' ? 'selected' : ''; ?>>Male</option>
           </select>
         </div>
         <div>
@@ -207,6 +206,7 @@
               id="nationality"
               type="text"
               placeholder="Nationality"
+              value="<?php echo htmlspecialchars($applicant['nationality']); ?>"
             />
         </div>
       </div>
@@ -224,10 +224,10 @@
               id="civilstatus"
               name="civilstatus">
               <option value="">Select Status</option>
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Widowed">Widowed</option>
-              <option value="Divorced">Divorced</option>
+              <option value="Single"<?php echo $applicant['civil_status'] == 'Single' ? 'selected' : ''; ?>>Single</option>
+              <option value="Married"<?php echo $applicant['civil_status'] == 'Married' ? 'selected' : ''; ?>>Married</option>
+              <option value="Widowed"<?php echo $applicant['civil_status'] == 'Widowed' ? 'selected' : ''; ?>>Widowed</option>
+              <option value="Divorced"<?php echo $applicant['civil_status'] == 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
           </select>
           </div>
           <div class="mr-2">
@@ -240,6 +240,7 @@
             id="address"
             type="text"
             placeholder="Address"
+            value="<?php echo htmlspecialchars($applicant['address']); ?>"
           />
           </div>
           <div>
@@ -252,6 +253,7 @@
               id="contactnumber"
               type="tel"
               placeholder="Contact Number"
+              value="<?php echo htmlspecialchars($applicant['contact_no']); ?>"
             />
           </div>
         </div>
@@ -269,7 +271,8 @@
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="email"
               id="email"
-              placeholder="example@example.com">
+              placeholder="example@example.com"
+              value="<?php echo htmlspecialchars($applicant['email']); ?>">
           </div>
           <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="department">
@@ -277,16 +280,17 @@
             </label>
             <select
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        name="department" id="Department" placeholder="Department">
+                name="department" id="Department" placeholder="Department">
                         
-                        <option value="">Select Department</option>
-                        <option value="Product Order">Product Order</option>
-                        <option value="Inventory">Inventory</option>
-                        <option value="Delivery">Delivery</option>
-                        <option value="Human Resources">Human Resources</option>
-                        <option value="Point of Sales">Point of Sales</option>
-                        <option value="Finance">Finance/Accounting</option>
-                      </select>
+                <option value="">Select Department</option>
+                <option value="Product Order"<?php echo $applicant['applyingForDepartment'] == 'Product Order' ? 'selected' : ''; ?>>Product Order</option>
+                <option value="Inventory"<?php echo $applicant['applyingForDepartment'] == 'Inventory' ? 'selected' : ''; ?>>Inventory</option>
+                <option value="Delivery"<?php echo $applicant['applyingForDepartment'] == 'Delivery' ? 'selected' : ''; ?>>Delivery</option>
+                <option value="Human Resources"<?php echo $applicant['applyingForDepartment'] == 'Human Resources' ? 'selected' : ''; ?>>Human Resources</option>
+                <option value="Point of Sales"<?php echo $applicant['applyingForDepartment'] == 'Point of Sales' ? 'selected' : ''; ?>>Point of Sales</option>
+                <option value="Finance"<?php echo $applicant['applyingForDepartment'] == 'Finance' ? 'selected' : ''; ?>>Finance</option>
+
+                </select>
           </div>
           <div>
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="Position">
@@ -298,6 +302,7 @@
               id="Position"
               type="text"
               placeholder="Position"
+              value="<?php echo htmlspecialchars($applicant['applyingForPosition']); ?>"
             />  
           </div>
         </div>
@@ -522,8 +527,8 @@
 <script  src="./../../src/route.js"></script>
 <script  src="./../../src/form.js"></script>
 
+<!-- Sidebar active/inactive -->
 <script>
-  // Sidebar Toggle
   document.querySelector('.sidebar-toggle').addEventListener('click', function() {
     document.getElementById('sidebar-menu').classList.toggle('hidden');
     document.getElementById('sidebar-menu').classList.toggle('transform');
@@ -532,7 +537,6 @@
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
 
-  // Show/Hide Password
   document.getElementById('togglePassword').addEventListener('change', function () {
     const passwordInput = document.getElementById('password');
     if (this.checked) {
@@ -540,23 +544,6 @@
     } else {
         passwordInput.type = 'password';
     }
-  });
-
-  // Image Upload
-  document.getElementById('uploadButton').addEventListener('click', function() {
-    document.getElementById('fileInput').click();
-  });
-
-  document.getElementById('fileInput').addEventListener('change', function() {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-          document.getElementById('image_url').src = e.target.result;
-      }
-      reader.readAsDataURL(this.files[0]);
-  });
-
-  document.getElementById('removeButton').addEventListener('click', function() {
-      document.getElementById('image_url').src = '#';
   });
 
   // Automatic Tax Calculation for UI

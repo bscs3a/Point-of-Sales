@@ -1,5 +1,5 @@
 <?php 
-    // require_once '../../functions/reportGeneration/IncomeReport.php'; -- might change into ajax
+    // require_once '../../functions/reportGeneration/TrialBalance.php'; -- might change into ajax
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
@@ -21,32 +21,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income Report</title>
+    <title>Trial Balance</title>
 </head>
-<style>
-    ul {
-        list-style-type: none;  
-    }
-    header{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-    }
-</style>
-
 <body>
     <header>
         <div>
-            <span>Income Statement</span>
+            <span>Balance Sheet</span>
             <span>
                 <?php echo "$monthName $year"?>    
             </span>
         </div>
         <img src="..\..\img\logo_reports.png" alt="">
     </header>
-    <?php
-        // echo generateIncomeReport($year, $month);
-    ?>
+    <section>
+        <?php echo generateTrialBalance($year,$month)?>
+    </section>
 </body>
 </html>

@@ -30,7 +30,7 @@
             <ul class="flex items-center text-md ml-4">
 
                 <li class="mr-2">
-                    <p class="text-black font-medium">Inventory</p>
+                    <p class="text-black font-medium">Expenses</p>
                 </li>
 
             </ul>
@@ -126,18 +126,22 @@
                 <table class="min-w-full divide-y-2 divide-gray-400 bg-white text-sm">
                 <thead class="ltr:text-left rtl:text-right bg-gray-200">
                         <tr>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Product</th>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Product Name</th>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Description</th>
+                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Item</th>
+                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Department</th>
+                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Amount</th>
+                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Reason</th>
+                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Method</th>
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Status</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 text-center">
                         <tr>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">item image</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">item name</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">item description</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">department name</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">requested ammount</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">reason for requesting</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">payment method</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">
                                 <!-- Pending Button -->
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
@@ -195,7 +199,6 @@
                                         document.getElementById('modal').classList.add('hidden');
                                     }
                                 </script>
-
 
         <ol class="flex justify-end mr-8 gap-1 text-xs font-medium">
             <li>
