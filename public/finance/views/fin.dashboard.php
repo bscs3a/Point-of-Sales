@@ -12,25 +12,25 @@
 <body>
     <!-- Start: Sidebar -->
     <?php include "components/sidebar.php" ?>
-    <?php 
-        // require_once './../functions/auditLog.php';
-        // echo __DIR__ . './../functions/auditLog.php';
-        // addAccountantAuditLog('Log in'); 
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            if (isset($_SESSION['employee_name'])) {
+    <?php
+    // require_once './../functions/auditLog.php';
+    // echo __DIR__ . './../functions/auditLog.php';
+    // addAccountantAuditLog('Log in'); 
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        if (isset($_SESSION['employee_name'])) {
 
-                $db = Database::getInstance();
-                $pdo = $db->connect();
-                
-                $logAction = "Log in";
-        
-                $sql = "INSERT INTO tbl_fin_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
-                $stmt->bindParam(":log_action", $logAction);
-                $stmt->execute();
-            }
+            $db = Database::getInstance();
+            $pdo = $db->connect();
+
+            $logAction = "Log in";
+
+            $sql = "INSERT INTO tbl_fin_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
+            $stmt->bindParam(":log_action", $logAction);
+            $stmt->execute();
         }
+    }
     ?>
     <!-- End: Sidebar -->
     <!-- Start: Dashboard -->
@@ -141,16 +141,16 @@
                                 <div class="flex justify-between mb-4">
                                     <div>
                                         <div class="flex items-center mb-1">
-                                            <div class="text-4xl font-semibold text-[#F8B721]">
+                                            <p class="text-4xl sm:text-md md:text-lg font-semibold text-[#F8B721]">
                                                 <?php
                                                 $amount = 2000;
                                                 echo number_format($amount, 2);
                                                 ?>
-                                            </div>
+                                            </p>
                                         </div>
                                         <div class="text-sm font-medium text-gray-400">Total Sales</div>
                                     </div>
-                                    <div>
+                                    <div class="sm:block hidden">
                                         <img src="../public/finance/img/Profit.png" alt="Profit.png"
                                             class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] py-2 px-2 rounded-full">
                                     </div>
