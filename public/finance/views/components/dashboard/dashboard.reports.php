@@ -106,7 +106,7 @@
             </div>
             <p class="text-gray-600 my-3 text-lg">Total: 0</p>
             <!-- Donut Chart for Equity -->
-            <div class="flex justify-center w-3/4">
+            <div class="flex justify-center w-max">
                 <canvas id="equityDonutChart"></canvas>
             </div>
         </div>
@@ -154,10 +154,10 @@
 
                 plugins: {
                     legend: {
-                        position: 'left',
+                        position: 'bottom',
                         labels: {
                             font: {
-                                size: 20,
+                                size: 15,
                                 weight: 'bold'
                             }
 
