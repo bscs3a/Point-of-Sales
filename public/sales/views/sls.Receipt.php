@@ -169,7 +169,10 @@
                         <i class="ri-import-line font-medium text-2xl"></i>
                         Print Receipt</button>
                 </div>
-
+                <button route="/sls/POS" class="print-button mt-4 w-full text-black text-xl py-4 px-4 hover:bg-gray-200 hover:font-bold transition-all ease-in-out">
+                    <i class="ri-arrow-left-line font-medium text-2xl"></i> <!-- Change the icon class here -->
+                    Go Back
+                </button>
             </div>
         </div>
 

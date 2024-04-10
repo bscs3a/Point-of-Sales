@@ -8,6 +8,50 @@
     <link href="./../../../../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
+    <?php
+    // Database connection
+    $db = Database::getInstance();
+    $pdo = $db->connect();
+
+    // Get saleId from URL
+    $saleId = $_GET['sale'];
+    $saledetailId = $_GET['saledetails'];
+    $productId = $_GET['product'];
+
+    // Fetch product name and category
+    $sql = "SELECT p.ProductName, p.Description, c.Category_Name 
+      FROM Products p 
+      JOIN Categories c ON p.Category_ID = c.Category_ID 
+      WHERE p.ProductID = :product_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":product_id", $productId);
+    $stmt->execute();
+    $productDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+    $productName = $productDetails['ProductName'];
+    $productDescription = $productDetails['Description'];
+    $productCategory = $productDetails['Category_Name'];
+
+    // Fetch product details, quantity, unit price, and tax
+    $sql = "SELECT p.ProductID, p.ProductName, sd.Quantity, sd.UnitPrice, sd.Tax 
+                 FROM SaleDetails sd 
+                 JOIN Products p ON sd.ProductID = p.ProductID 
+                 WHERE sd.SaleID = :sale_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":sale_id", $saleId);
+    $stmt->execute();
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
+
+
+    <?php
+    // Fetch quantity
+    $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":saledetails_id", $saledetailsId);
+    $stmt->execute();
+    $quantity = $stmt->fetch(PDO::FETCH_ASSOC)['Quantity'];
+    ?>
+
 </head>
 
 <body>
@@ -78,62 +122,33 @@
         <!-- End: Header -->
         <div class="flex flex-row justify-center">
 
-            <div class="mx-10 my-10 flex flex-col w-1/2 border-r border-gray-200">
-                <h1 class="font-bold text-xl mx-8 text-gray-500 bg-white border-b shadow-md p-4 w-1/3">You're about to Return:</h1>
+            <div class="mx-10 my-10 flex flex-col w-1/2 mr-10">
+                <h1 class="font-bold text-lg mx-8 text-gray-500 bg-white border-b shadow-md p-4">You're about to Return:</h1>
                 <div class="flex flex-row">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="300" height="300" fill="currentColor">
                         <path d="M5 11.1005L7 9.1005L12.5 14.6005L16 11.1005L19 14.1005V5H5V11.1005ZM5 13.9289V19H8.1005L11.0858 16.0147L7 11.9289L5 13.9289ZM10.9289 19H19V16.9289L16 13.9289L10.9289 19ZM4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM15.5 10C14.6716 10 14 9.32843 14 8.5C14 7.67157 14.6716 7 15.5 7C16.3284 7 17 7.67157 17 8.5C17 9.32843 16.3284 10 15.5 10Z"></path>
                     </svg>
 
-                    <div class="flex flex-col justify-center text-xl gap-4">
-                        <div>Product Name: <span class="font-bold">Name</span> </div>
-                        <div>Product Category: <span class="font-bold">Tools</span> </div>
-                        <div>Product Price: <span class="font-bold">123 (each)</span> </div>
-                        <div>Quantity Bought: <span class="font-bold">123</span> </div>
+                    <div class="flex flex-col justify-center text-lg gap-4">
+                        <div>Product Name: <span class="font-bold"><?php echo $productName; ?></span> </div>
+                        <div>Product Category: <span class="font-bold"><?php echo $productCategory; ?></span> </div>
+                        <div>Product Price: <span class="font-bold"><?php echo $products[0]['UnitPrice'] + $products[0]['Tax']; ?></span> </div>
+                        <div>Quantity Bought: <span class="font-bold"><?php echo $products[0]['Quantity']; ?></span> </div>
                     </div>
                 </div>
-                <div class="mx-10 text-xl font-semibold flex flex-col">
+                <div class="mx-10 text-lg font-semibold flex flex-col">
                     Product Description:
                     <div class="font-normal bg-gray-100 rounded-md p-4">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda accusantium et possimus porro mollitia eveniet.
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda accusantium et possimus porro mollitia eveniet.
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda accusantium et possimus porro mollitia eveniet.
+                    <?php echo $productDescription; ?>
                     </div>
                 </div>
-
             </div>
 
-            <div class="flex flex-col justify-center items-center w-full border max-w-md rounded-lg my-10 mr-20 shadow-md">
+            <div class="flex flex-col justify-center items-center w-1/2 border max-w-md rounded-lg my-10 ml-10 shadow-md">
                 <h1 class="text-2xl font-semibold p-4 text-center rounded-t-lg text-white bg-green-800 w-full">Return Product</h1>
                 <form action="/returnProduct" method="post" class="w-full p-4">
 
-                    <?php
-                    // Database connection
-                    $db = Database::getInstance();
-                    $pdo = $db->connect();
 
-                    // Get saleId from URL
-                    $saleId = $_GET['sale'];
-                    $saledetailId = $_GET['saledetails'];
-                    $productId = $_GET['product'];
-
-                    // Fetch product name
-                    $sql = "SELECT ProductName FROM Products WHERE ProductID = :product_id";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->bindParam(":product_id", $productId);
-                    $stmt->execute();
-                    $productName = $stmt->fetch(PDO::FETCH_ASSOC)['ProductName'];
-
-                    // Fetch product details, quantity, unit price, and tax
-                    $sql = "SELECT p.ProductID, p.ProductName, sd.Quantity, sd.UnitPrice, sd.Tax 
-                 FROM SaleDetails sd 
-                 JOIN Products p ON sd.ProductID = p.ProductID 
-                 WHERE sd.SaleID = :sale_id";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->bindParam(":sale_id", $saleId);
-                    $stmt->execute();
-                    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    ?>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
@@ -149,14 +164,7 @@
                         <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value="<?php echo $productName; ?>">
                     </div>
                     <div class="mb-4">
-                        <?php
-                        // Fetch quantity
-                        $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->bindParam(":saledetails_id", $saledetailsId);
-                        $stmt->execute();
-                        $quantity = $stmt->fetch(PDO::FETCH_ASSOC)['Quantity'];
-                        ?>
+
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
                             Quantity
                         </label>
@@ -204,6 +212,7 @@
                     var quantity = document.getElementById('quantity').value;
                     var unitPrice = <?php echo $products[0]['UnitPrice']; ?>;
                     var tax = <?php echo $products[0]['Tax']; ?>;
+                    var priceEach = unitPrice + tax;
                     var paymentReturned = (unitPrice + tax) * quantity;
                     document.getElementById('payment_returned').value = paymentReturned.toFixed(2);
                 }
@@ -213,6 +222,15 @@
     <script src="./../../../../src/form.js"></script>
     <script src="./../../../../src/route.js"></script>
 
+    <script>
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.getElementById('sidebar-menu').classList.toggle('hidden');
+            document.getElementById('sidebar-menu').classList.toggle('transform');
+            document.getElementById('sidebar-menu').classList.toggle('-translate-x-full');
+            document.getElementById('mainContent').classList.toggle('md:w-full');
+            document.getElementById('mainContent').classList.toggle('md:ml-64');
+        });
+    </script>
 </body>
 
 </html>

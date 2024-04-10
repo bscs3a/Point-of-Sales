@@ -248,7 +248,7 @@
                                 <div id="modal-product-category" class="text-justify font-semibold text-gray-800"></div>
                             </div>
                             <div class="flex justify-between pt-4">
-                                <div id="modal-product-id" class="text-lg font-semibold"></div>
+                                <div id="modal-product-id" class="text-lg font-semibold hidden"></div>
                                 <h3 id="modal-product-name" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
                                 <h3 id="modal-product-price" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
                             </div>
