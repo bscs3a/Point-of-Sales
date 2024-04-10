@@ -6,6 +6,7 @@ use Dompdf\Dompdf;
 // Start output buffering
 ob_start();
 
+
 // Include the script
 require_once 'incomeReport.php';
 

@@ -1,49 +1,22 @@
 <?php
-// try {
-//   require_once 'dbconn-test.php';
-
-//   $query = "SELECT * FROM employees WHERE department = 'Inventory';";
-//   $stmt = $conn->prepare($query);
-//   $stmt->execute();
-//   $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-//   if (empty($employees)) {
-//     echo 'No results found.';
-// }
-
-//   $pdo = null;
-//   $stmt = null;
-// }
-// catch (PDOException $e) {
-//     echo 'Database connection failed: ' . $e->getMessage();
-// }
-try {
-  require_once 'dbconn-test.php';
-  // require_once 'dbconnection.php';
+  $db = Database::getInstance();
+  $conn = $db->connect();
 
   $search = $_POST['search'] ?? '';
+  $query = "SELECT * FROM employees WHERE department = 'Inventory'";
+  $params = [];
 
-  if ($search) {
-    $query = "SELECT * FROM employees WHERE first_name = :search OR last_name = :search OR 
-    position = :search OR id = :search AND department = 'Inventory';";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(":search", $search);
-
-  } else {
-    $query = "SELECT * FROM employees WHERE department = 'Inventory';";
-    $stmt = $conn->prepare($query);
+  if (!empty($search)) {
+      $query .= " AND (first_name = :search OR last_name = :search OR position = :search OR id = :search OR department = :search);";
+      $params[':search'] = $search;
   }
 
-  $stmt->execute();
+  $stmt = $conn->prepare($query);
+  $stmt->execute($params);
   $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   $pdo = null;
   $stmt = null;
-}
-catch (PDOException $e) {
-    echo 'Database connection failed: ' . $e->getMessage();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +80,7 @@ catch (PDOException $e) {
                 </a>
                 <a route="/hr/employees/departments/sales"
                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                    Point of Sale
+                    Point of Sales
                 </a>
                 <a route="/hr/employees/departments/finance"
                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
@@ -129,8 +102,8 @@ catch (PDOException $e) {
 <!-- EMPLOYEES -->
 <div class="flex flex-wrap">
     <h3 class="ml-6 mt-8 text-xl font-bold">Employees</h3>
-    <form action="/search" method="get" class="mt-6 ml-auto mr-4 flex">
-      <input type="search" id="search" name="q" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    <form action="/hr/employees/departments/inventory" method="POST" class="mt-6 ml-auto mr-4 flex">
+      <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
 </div> 
@@ -246,6 +219,7 @@ catch (PDOException $e) {
 </main>
 <!-- End Main Bar -->
     <script  src="./../../../src/route.js"></script>
+    <script  src="./../../../src/form.js"></script>
 
 <!-- Sidebar active/inactive -->
 <script>

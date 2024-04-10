@@ -105,6 +105,7 @@
 </main>
 <!-- End Main Bar -->
 <script  src="./../src/route.js"></script>
+<script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 </body>
 </html> 

@@ -1,5 +1,10 @@
 <?php
-//testing
+
+
+$_SESSION['user'] = 'admin';
+$_SESSION['role'] = 'admin';
+$_SESSION['employee_name'] = "Tagle, Aries";
+
 $path = './public/finance/views';
 
 $basePath = "$path/fin.";
@@ -7,6 +12,7 @@ $basePath = "$path/fin.";
 $fin = [
     //dashboard
     '/fin/dashboard' => $basePath . "dashboard.php",
+    '/fin/logs' => $basePath . "auditLog.php",
 
     //reports
     '/fin/reportIncome' => $basePath . "reportIncome.php",
@@ -33,6 +39,10 @@ $fin = [
         $_SESSION['id'] = $id;
         include $basePath . "test2.php";
     },
+
+    // functions
+    // can't recognize by the router logout can proceed
+    '/fin/logout' => "./public/finance/functions/logout.php",
 
 ];
 

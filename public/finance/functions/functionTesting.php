@@ -4,16 +4,7 @@
 // php -r "require 'public\finance\functions\functionTesting.php';"  
 // php -r "require 'public\finance\views\test.php';'
 
-require_once '../../../src/dbconn.php';
+require_once 'generalFunctions.php';
 
-$db = Database::getInstance();
-$conn = $db->connect();
+echo getTotalOfAccountType("Sales");
 
-try {
-    $conn->query('SELECT 1');
-    echo 'Database connection is working.';
-} catch (PDOException $e) {
-    echo 'Database connection failed: ' . $e->getMessage();
-}
-
-echo "hello";

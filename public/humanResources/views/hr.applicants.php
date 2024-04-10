@@ -1,18 +1,22 @@
 <?php
-try {
-  require_once 'dbconn-test.php';
+  $db = Database::getInstance();
+  $conn = $db->connect();
 
-  $query = "SELECT * FROM applicants;";
+  $search = $_POST['search'] ?? '';
+  $query = "SELECT * FROM applicants";
+  $params = [];
+
+  if (!empty($search)) {
+      $query .= " WHERE first_name = :search OR last_name = :search OR position = :search OR department = :search OR id = :search;";
+      $params[':search'] = $search;
+  }
+
   $stmt = $conn->prepare($query);
-  $stmt->execute();
+  $stmt->execute($params);
   $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   $pdo = null;
   $stmt = null;
-}
-catch (PDOException $e) {
-    echo 'Database connection failed: ' . $e->getMessage();
-}
 ?>
 
 <!DOCTYPE html>
@@ -61,12 +65,21 @@ catch (PDOException $e) {
   
 <div class="flex flex-wrap">
     <h3 class="ml-6 mt-8 text-xl font-bold">All Applicants</h3>
-    <form action="/search" method="get" class="mt-6 ml-auto mr-4 flex">
-      <input type="search" id="search" name="q" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    <form action="/hr/applicants" method="POST" class="mt-6 ml-auto mr-4 flex">
+      <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
   </div> 
-  <div class="ml-6 flex flex-col mt-8 mr-6">
+  
+  <?php 
+    if (empty($employees)) {
+        require_once 'inc/employees.noResult.php';
+    } 
+    else {
+        require_once 'inc/employees.table.php';
+    } 
+  ?>
+  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
   <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
     <table class="min-w-full">
       <thead>
@@ -137,10 +150,11 @@ catch (PDOException $e) {
         </tbody>
       </table>
     </div>
-  </div>
+  </div> -->
 </main>
 <!-- End Main Bar -->
 <script  src="./../src/route.js"></script>
+<script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 </body>
 </html> 

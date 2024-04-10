@@ -15,7 +15,7 @@
         <div class="flex flex-wrap -mx-2">
             <div class="w-1/2 px-2">
                 <p>Group1</p>
-                <button route='/po/sample'
+                <button route='/po/dashboard'
                     class="px-6 py-3 mb-2 text-white bg-sidebar rounded hover:bg-blue-700">ProductOrder</button><br>
                 <p>Group3</p>
                 <script>

@@ -9,6 +9,6 @@ require_once './router.php';
 // routes
 require_once './web.php';
 
-header("Location: /Master/");
+header("Location: /master/");
 
 

@@ -1,3 +1,19 @@
+<?php
+  $db = Database::getInstance();
+  $conn = $db->connect();
+
+  $query = "SELECT COUNT(*) as total_employees FROM employees";
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  $total_employees = $result['total_employees'];
+
+  $query = "SELECT * FROM employees ORDER BY id DESC LIMIT 3";
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!doctype html>
 <html>
 
@@ -28,7 +44,7 @@
     <a href="#" class="text-[#151313] hover:text-gray-600 font-medium">Human Resources</a>
   </li>
   <li class="text-[#151313] mr-2 font-medium">/</li>
-  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Analytics</a>
+  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Dashboard</a>
    </ul>
    <ul class="ml-auto flex items-center">
   <li class="mr-1">
@@ -44,7 +60,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">Total Employees</div>
-      <div class="text-2xl text-center font-semibold">0</div>
+      <div class="text-2xl text-center font-semibold"><?php echo $total_employees; ?></div>
     </div>
     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">On Leave</div>
@@ -56,9 +72,18 @@
     </div>
     </div>
   </div>
-  <!-- Employees -->
+  <!-- Newly Hired Employees -->
   <h3 class="ml-6 mt-4 text-xl font-bold">Newly Hired Employees</h3>
-  <div class="ml-6 flex flex-col mt-8 mr-6">
+  
+  <?php 
+    if (empty($employees)) {
+        require_once 'inc/employees.noResult.php';
+    } 
+    else {
+        require_once 'inc/employees.table.php';
+    } 
+  ?>
+  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
   <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
     <table class="min-w-full">
       <thead>
@@ -105,7 +130,7 @@
               <div class="flex items-center">
                 <div class="flex-shrink-0 w-10 h-10">
                   <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1727459524808970240/aDMHxOQC_400x400.jpg"
+                    src="https://pbs.twimg.com/profile_images/1767366909417144320/4jM8rbT7_400x400.jpg"
                     alt="">
                 </div>
                 <div class="ml-4">
@@ -154,7 +179,7 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
   </div>
 </div>
 </div>
@@ -195,6 +220,7 @@
 </main>
 <!-- End Main Bar-->
 <script  src="./../src/route.js"></script>
+<script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 </body>
 
