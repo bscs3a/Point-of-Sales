@@ -1,11 +1,11 @@
 <?php
-require_once "../generalFunctions.php";
+require_once "public\\finance\\functions\generalFunctions.php";
 
 function generateTrialBalance($year, $month) {
     $db = Database::getInstance();
     $conn = $db->connect();
     $asset = getGroupCode("Asset");
-    $LiabilityAndOE = getGroupCode("liabilities and owner\'s equity");
+    $LiabilityAndOE = getGroupCode("liabilities and owner's equity");
 
     // Query data
     $grouptype_data = $conn->query('SELECT * FROM grouptype')->fetchAll();
@@ -14,7 +14,7 @@ function generateTrialBalance($year, $month) {
 
     // Sort grouptype_data(in descending order -- needed)
     usort($grouptype_data, function($a, $b) {
-        return strcmp($b['grouptype'], $a['grouptype']);
+        return strcmp($a['grouptype'], $b['grouptype']);
     });
 
     $html = "<ul>\n";

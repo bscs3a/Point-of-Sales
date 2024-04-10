@@ -1,5 +1,5 @@
 <?php
-require_once "IncomeReport.php";
+require_once "public\\finance\\functions\\reportGeneration\IncomeReport.php";
 //get all account in owner's equity
 //designate the percentage
 //distribute the loss/profit in the owner's equity
@@ -7,7 +7,7 @@ require_once "IncomeReport.php";
 
 
 function calculateShare($accountNumber){
-    define("CAPITAL","Capital Accounts");
+    $CAPITAL = "Capital Accounts";
 
     $accountNumber = getLedgerCode($accountNumber);
 
@@ -17,8 +17,11 @@ function calculateShare($accountNumber){
 
     //get share
     $accountBalance = abs(getAccountBalance($accountNumber));
-    $allBalance = abs(getTotalOfAccountType(CAPITAL));
+    $allBalance = abs(getTotalOfAccountType($CAPITAL));
     //divide it by total share
+    if($allBalance == 0){
+        return 0;
+    }
     return $accountBalance/$allBalance;
 }
 
@@ -67,7 +70,7 @@ function generateOEReport($year, $month){
     $stmt->bindParam(':condition', $condition);
     $stmt->execute();
     $ledger_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    $grouptype_data = [];
     // Sort grouptype_data(in descending order -- needed)
     usort($grouptype_data, function($a, $b) {
         return strcmp($b['grouptype'], $a['grouptype']);
@@ -88,11 +91,11 @@ function generateOEReport($year, $month){
             $pastYear = $year - 1;
             $pastMonth = 12;
         }
-        $html .= "<td>".getAccountBalance($ledger["AccountNumber"], $pastYear, $pastMonth)."</td>"; //account balance last month
+        $html .= "<td>".getAccountBalance($ledger["AccountType"], $pastYear, $pastMonth)."</td>"; //account balance last month
         $html .= "<td>".getInvestment($ledger['ledgerno'], $year, $month)."</td>"; // additional investment
         $html .= "<td>".divideTheGainLoss($ledger['ledgerno'], $year, $month)."</td>"; // net income/loss divided
-        $html .= "<td>".getWithdrawals($ledger["AccountNumber"], $year, $month)."</td>"; //withdrawals
-        $html .= "<td>".getAccountBalance($ledger["AccountNumber"])."</td>"; // get the current total
+        $html .= "<td>".getWithdrawals($ledger["AccountType"], $year, $month)."</td>"; //withdrawals
+        $html .= "<td>".getAccountBalance($ledger["AccountType"])."</td>"; // get the current total
         $html .= "</tr>";
     }
     $html .= "</tbody>";
