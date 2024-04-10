@@ -76,16 +76,34 @@
         </div>
 
         <!-- End: Header -->
+        <div class="flex flex-row justify-center">
 
-        <div class="flex flex-col justify-center items-center ">
-            <!-- Title -->
-           
+            <div class="mx-10 my-10 flex flex-col w-1/2 border-r border-gray-200">
+            <h1 class="font-bold text-xl mx-8 text-gray-500 bg-white border-b shadow-md p-4 w-1/3">You're about to Return:</h1>
+            <div class="flex flex-row">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="300" height="300" fill="currentColor"><path d="M5 11.1005L7 9.1005L12.5 14.6005L16 11.1005L19 14.1005V5H5V11.1005ZM5 13.9289V19H8.1005L11.0858 16.0147L7 11.9289L5 13.9289ZM10.9289 19H19V16.9289L16 13.9289L10.9289 19ZM4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM15.5 10C14.6716 10 14 9.32843 14 8.5C14 7.67157 14.6716 7 15.5 7C16.3284 7 17 7.67157 17 8.5C17 9.32843 16.3284 10 15.5 10Z"></path></svg>
+            
+            <div class="flex flex-col justify-center text-xl gap-4">
+                    <div>Product Name: <span class="font-bold">Name</span> </div>
+                    <div>Product Category: <span class="font-bold">Tools</span> </div>
+                    <div>Product Price: <span class="font-bold">123 (each)</span> </div>
+                    <div>Quantity Bought: <span class="font-bold">123</span> </div>
+            </div>
+            </div>
+            <div class="mx-10 text-xl font-semibold flex flex-col">
+                Product Description:
+                <div class="font-normal bg-gray-100 rounded-md p-4">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda accusantium et possimus porro mollitia eveniet.
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda accusantium et possimus porro mollitia eveniet.
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda accusantium et possimus porro mollitia eveniet.
+                </div>
+            </div>
+        
+            </div>
 
-            <!-- Return Product Form -->
-            <div class="w-full border max-w-md rounded-lg my-10">
+          <div class="flex flex-col justify-center items-center w-full border max-w-md rounded-lg my-10 mr-20 shadow-md">   
             <h1 class="text-2xl font-semibold p-4 text-center rounded-t-lg text-white bg-green-800 w-full">Return Product</h1>
-            <form action="/returnProduct" method="post" class="p-5">
-         
+            <form action="/returnProduct" method="post" class="w-full p-4">
                 <?php
                 // Database connection
                 $db = Database::getInstance();
@@ -164,8 +182,10 @@
                     </button>
                 </div>
             </form>
+            
             </div>
-        </div>
+
+            </div>
 
         <script>
             function calculatePaymentReturned() {
