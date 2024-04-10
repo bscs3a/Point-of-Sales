@@ -43,10 +43,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                    <div>
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -60,14 +87,21 @@
                 <div class="flex justify-between items-center">
                     <h1 class="mb-3 text-xl font-bold text-black">Transaction History</h1>
                     <div class="relative mb-3">
-                        <input type="text" placeholder="Search by ID..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
+                        <select id="searchType" class="px-3 py-2 border rounded-lg mr-8">
+                            <option value="customerName">Customer Name</option>
+                            <option value="saleId">Sale ID</option>
+                            <option value="salePreference">Sale Preference</option>
+                            <option value="paymentMode">Payment Mode</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="Search..." title="Search by ID, Name, Sale Preferences, Payment Mode..." class="px-3 py-2 pl-5 pr-10 border rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
                 </div>
                 <div class="flex flex-row gap-10">
-                    <table class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
+
+                    <table id="salesTable" class="table-auto w-full mx-auto rounded-lg overflow-hidden shadow-lg text-center">
                         <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-4 py-2 font-semibold">Customer Name</th>
@@ -80,8 +114,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
-
                             <!-- Fetch data from the result set -->
                             <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
                                 <?php $saleId = $row['SaleID']; ?>
@@ -122,7 +154,6 @@
                                 <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
                             </div>
 
-
                         </div>
 
                         <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
@@ -134,21 +165,51 @@
                                 <div class="text-5xl font-semibold ml-5">53</div>
                                 <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
                             </div>
-
-
                         </div>
-
-
-
                     </div>
-
-
-
                 </div>
             </div>
         </div>
     </main>
     <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            // Get the search input value
+            var searchValue = this.value.toLowerCase();
+
+            // Get the selected search type
+            var searchType = document.getElementById('searchType').value;
+
+            // Get all table rows
+            var rows = document.querySelectorAll('#salesTable tbody tr');
+
+            // Loop through the rows
+            rows.forEach(function(row) {
+                // Get the cell based on the search type
+                var cell;
+                switch (searchType) {
+                    case 'customerName':
+                        cell = row.querySelector('td:nth-child(1)');
+                        break;
+                    case 'saleId':
+                        cell = row.querySelector('td:nth-child(2)');
+                        break;
+                    case 'salePreference':
+                        cell = row.querySelector('td:nth-child(4)');
+                        break;
+                    case 'paymentMode':
+                        cell = row.querySelector('td:nth-child(5)');
+                        break;
+                }
+
+                // If the cell includes the search value, show the row, otherwise hide it
+                if (cell.textContent.toLowerCase().includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
         document.querySelector('.sidebar-toggle').addEventListener('click', function() {
             document.getElementById('sidebar-menu').classList.toggle('hidden');
             document.getElementById('sidebar-menu').classList.toggle('transform');

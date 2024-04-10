@@ -42,13 +42,53 @@
         </a>
     </li> -->
 
-         <li class="mb-1 hover:bg-slate-400 rounded-xl">
-             <a route='/sls/Transaction-History' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
-                 <i class="ri-shake-hands-fill mr-3 text-lg"></i>
-                 <span class="text-sm font-medium">Transaction History</span>
-                 <i class="ri-arrow-down-s-line ml-auto"></i>
-             </a>
-         </li>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.toggle-transactions').addEventListener('click', function () {
+                document.getElementById('transactions').classList.toggle('hidden');
+            });
+
+            document.querySelector('.toggle-ledger').addEventListener('click', function () {
+                document.getElementById('transactions').classList.add('hidden');
+            });
+
+            document.querySelector('.toggle-request').addEventListener('click', function () {
+                document.getElementById('transactions').classList.add('hidden');
+            });
+        });
+
+    </script>
+
+         <li class="mb-1 rounded-xl">
+            <button id="transactions-button"
+                class="toggle-transactions flex items-center py-2 px-4 w-full text-white hover:text-black focus:text-black focus:bg-slate-400  hover:bg-slate-400 rounded-xl">
+                <i class="ri-file-edit-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Transactions</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </button>
+            <ul id="transactions" class="ml-8 my-2 hidden">
+                <li>
+                    <a route='/sls/Transaction-History' class="flex flex-row gap-2 items-center py-2 px-4 text-white hover:text-black hover:bg-slate-400 rounded-full transition-colors active:bg-slate-400">
+                          <i class="ri-history-fill"></i>
+                        <span class="text-sm font-medium">History</span>
+                        
+                    </a>
+                </li>
+                <li>
+                    <a route='/sls/Returns' class="flex flex-row gap-2 items-center py-2 px-4 text-white hover:text-black hover:bg-slate-400 rounded-full transition-colors active:bg-slate-400">
+                          <i class="ri-history-fill"></i>
+                        <span class="text-sm font-medium">Returns</span>
+                        
+                    </a>
+                </li>
+                <li>
+                    <a route="/sls/Revenue" class="flex flex-row gap-2 items-center py-2 px-4 text-white  hover:text-black hover:bg-slate-400 rounded-full transition-colors">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    <span class="text-sm font-medium">Revenue</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
          <li class="mb-1 hover:bg-slate-400 rounded-xl">
              <a route='/sls/Audit-Trail' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
@@ -58,13 +98,15 @@
              </a>
          </li>
 
-         <li class="mb-1 hover:bg-slate-400 rounded-xl">
-             <a route='/sls/Revenue' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
-                 <i class="ri-funds-line mr-3 text-lg"></i>
-                 <span class="text-sm font-medium">Revenue</span>
-                 <i class="ri-arrow-down-s-line ml-auto"></i>
-             </a>
-         </li>
+        <li class="mb-1 hover:bg-slate-400 rounded-xl">
+            <a route='/sls/Sales-Management' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
+                <i class="ri-bar-chart-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Sales Management</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </a>
+        </li>
+
+
  </div>
 
  <div class="fixed top-0 left-0 w-full h-full z-40 md:hidden sidebar-overlay"></div>

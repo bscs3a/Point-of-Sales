@@ -46,10 +46,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                     <div>
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -75,11 +102,12 @@
                                 <!-- Cart item rows -->
                                 <template x-for="(item, index) in cart" :key="index">
                                     <li class="py-4 flex justify-between items-center">
-                                        <div class="flex">
-                                            <img class="h-10 w-10 mr-6" :src="" :alt="item.name">
-                                            <span x-text="item.quantity + ' x ' + item.name"></span>
-                                        </div>
-                                        <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
+                                        <div class="flex items-center">
+                                            <div class="size-12 rounded-full shadow-lg bg-yellow-200 flex items-center justify-center">
+                                                <img class="object-contain" :src="'../../' + item.image" :alt="item.name">
+                                            </div>
+                                            <span class="ml-2" x-text="item.quantity + ' x ' + item.name"></span>
+                                            <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
                                     </li>
                                 </template>
 

@@ -35,7 +35,7 @@
     $shippingFee = $sale['ShippingFee'];
 
     // Query the database for the sale items
-    $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, Products.ProductName 
+    $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, SaleDetails.TotalAmount, Products.ProductName, Products.TaxRate, Products.ProductImage 
                      FROM SaleDetails 
                      INNER JOIN Products ON SaleDetails.ProductID = Products.ProductID 
                      WHERE SaleDetails.SaleID = $sale_id";
@@ -57,14 +57,6 @@
                 ORDER BY SaleDate DESC LIMIT 1';
     $stmtSale = $pdo->query($sqlSale);
     $sale = $stmtSale->fetch(PDO::FETCH_ASSOC);
-
-    // Query the database for the sale items
-    $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, SaleDetails.TotalAmount, Products.ProductName, Products.TaxRate 
-                     FROM SaleDetails 
-                     INNER JOIN Products ON SaleDetails.ProductID = Products.ProductID 
-                     WHERE SaleDetails.SaleID = $sale_id";
-    $stmtSaleItems = $pdo->query($sqlSaleItems);
-    $sale_items = $stmtSaleItems->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
 </head>
@@ -90,7 +82,7 @@
 
                 <!-- Add receipt details here -->
                 <div id="receipt" class="bg-white rounded-xl shadow-md">
-                    <div class=" bg-green-800 text-white p-10">
+                    <div class="bg-green-800 text-white p-10">
                         <!-- Display the sale details -->
                         <div class="flex justify-between">
                             <h2 class="text-6xl font-medium">Receipt</h2>
@@ -105,13 +97,31 @@
 
                     </div>
 
-                    <div class="p-10">
+                    <div class="p-8">
 
-                        <ul id="cart-items">
+
+                        <table id="cart-items" class="table-auto w-full text-left">
+                            <tr class=" text-gray-500 text-xl border-b">
+                                <th class="pb-2">Product</th>
+                                <th class="pb-2">Quantity</th>
+                                <th class="px-6 pb-2">Pcs Price</th>
+                                <th class="pb-2">Total</th>
+                            </tr>
                             <?php foreach ($sale_items as $item) : ?>
-                                <li><?= $item['Quantity'] ?> x <?= $item['ProductName'] ?>: ₱<?= number_format($item['TotalAmount'], 2) ?></li>
+                                <tr class="">
+                                    <td class="flex flex-row items-center pb-6 pt-4 ">
+                                        <div class="size-12 rounded-full shadow-lg bg-yellow-200 flex items-center justify-center mr-2">
+                                            <img class="object-contain" src="../../<?= $item['ProductImage'] ?>" alt="<?= $item['ProductName'] ?>">
+                                        </div>
+                                        <?= $item['ProductName'] ?>
+                                    </td>
+                                    <td class="pt-4 pb-6"><?= $item['Quantity'] ?></td>
+                                    <td class="pt-4 pb-6 px-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                    <td class="pt-4 pb-6">₱<?= number_format($item['TotalAmount'], 2) ?></td>
+                                </tr>
                             <?php endforeach; ?>
-                        </ul>
+                        </table>
+
 
                         <div class="<?= $sale_preferences == 'Delivery' ? 'grid grid-cols-2' : 'grid grid-cols-1' ?> gap-6 mt-6">
                             <?php if ($sale_preferences != 'Pick-up') : ?>
@@ -133,7 +143,7 @@
                                 $tax = $subtotal * 0.12; // Assuming a tax rate of 12%
                                 ?>
 
-                                <div id="subtotal" class="flex justify-between border-b text-lg pb-4 mb-2 text-gray-400">
+                                <div id="subtotal" class="flex justify-between border-b text-lg pb-2 mb-2 text-gray-400">
                                     <span>Subtotal</span>
                                     <span>₱<?= number_format($subtotal, 2) ?></span>
                                 </div>
@@ -181,18 +191,34 @@
         </script>
 
         <script>
+            function attachPrintButtonEventListener() {
+                document.querySelector('.print-button').addEventListener('click', printReceipt);
+            }
+
             function printReceipt() {
                 var receipt = document.getElementById('receipt').innerHTML;
                 var originalContent = document.body.innerHTML;
 
                 document.body.innerHTML = receipt;
 
+                window.onbeforeprint = function() {
+                    document.querySelector('.print-button').style.display = 'none';
+                };
+
+                window.onafterprint = function() {
+                    document.querySelector('.print-button').style.display = 'block';
+                };
+
                 window.print();
 
                 document.body.innerHTML = originalContent;
+
+                // Reattach the event listener after the original content is restored
+                attachPrintButtonEventListener();
             }
 
-            document.querySelector('.print-button').addEventListener('click', printReceipt);
+            // Attach the event listener when the page loads
+            attachPrintButtonEventListener();
         </script>
 
         <script src="./../../src/route.js"></script>
