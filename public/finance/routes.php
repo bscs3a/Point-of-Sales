@@ -13,12 +13,6 @@ $fin = [
     '/fin/dashboard' => $basePath . "dashboard.php",
     '/fin/logs' => $basePath . "auditLog.php",
 
-    //reports
-    '/fin/reportIncome' => $basePath . "reportIncome.php",
-    '/fin/reportCash' => $basePath . "reportCash.php",
-    '/fin/reportEquity' => $basePath . "reportEquity.php",
-    '/fin/reportBalance' => $basePath . "reportBalance.php",
-
     //ledger
     // '/fin/ledger' => $basePath . "ledger.gen.php",
     '/fin/ledger/page={pageNumber}' => function($pageNumber) use ($basePath) {
