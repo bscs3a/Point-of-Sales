@@ -1,5 +1,5 @@
 <?php
-require_once "IncomeReport.php";
+require_once "public\\finance\\functions\\reportGeneration\IncomeReport.php";
 //get all account in owner's equity
 //designate the percentage
 //distribute the loss/profit in the owner's equity
@@ -7,7 +7,7 @@ require_once "IncomeReport.php";
 
 
 function calculateShare($accountNumber){
-    define("CAPITAL","Capital Accounts");
+    $CAPITAL = "Capital Accounts";
 
     $accountNumber = getLedgerCode($accountNumber);
 
@@ -17,8 +17,11 @@ function calculateShare($accountNumber){
 
     //get share
     $accountBalance = abs(getAccountBalance($accountNumber));
-    $allBalance = abs(getTotalOfAccountType(CAPITAL));
+    $allBalance = abs(getTotalOfAccountType($CAPITAL));
     //divide it by total share
+    if($allBalance == 0){
+        $allBalance = 1;
+    }
     return $accountBalance/$allBalance;
 }
 
@@ -39,12 +42,12 @@ function insertShare($accountNumber, $year, $month){
         throw new Exception("Account not found in Ledger table.");
     }
     // default is earnings
-    $debitLedger = $accountNumber;
-    $creditLedger = $retained;
+    $debitLedger = $retained;
+    $creditLedger = $accountNumber;
     
     if(calculateNetSalesOrLoss($year,$month) < 0){
-        $debitLedger = $retained;
-        $creditLedger = $accountNumber;
+        $debitLedger = $accountNumber;
+        $creditLedger = $retained;
     }
 
     $amount = abs(divideTheGainLoss($accountNumber, $year, $month));
@@ -63,47 +66,49 @@ function generateOEReport($year, $month){
     $conn = $db->connect();
 
     $condition = getAccountCode("Capital Accounts");
-    $stmt = $conn->prepare('SELECT * FROM ledger WHERE ledger.accounttype = :condition');
+    $stmt = $conn->prepare('SELECT * FROM ledger l 
+    INNER JOIN accounttype at ON at.accounttype = l.accounttype 
+    WHERE l.accounttype = :condition ');
     $stmt->bindParam(':condition', $condition);
     $stmt->execute();
+    
     $ledger_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     // Sort grouptype_data(in descending order -- needed)
-    usort($grouptype_data, function($a, $b) {
+    usort($ledger_data, function($a, $b) {
         return strcmp($b['grouptype'], $a['grouptype']);
     });
-
+    
     $html = "<tbody>";
+    $pastYear = $year;
+    $pastMonth = $month - 1;
+    if($month == 1){
+        $pastYear = $year - 1;
+        $pastMonth = 12;
+    }
+    
     foreach ($ledger_data as $ledger) {
-        if($ledger["AccountType"] != $condition){
+        if(getAccountBalanceV2($ledger['ledgerno'], true, $year, $month) == 0){
             continue;
         }
-        insertShare($ledger["ledgerno"], $year, $month);
         $html .= "<tr>";
         $html .= "<td>".$ledger["name"]."</td>"; //name
-
-        $pastYear = $year;
-        $pastMonth = $month - 1;
-        if($month == 1){
-            $pastYear = $year - 1;
-            $pastMonth = 12;
-        }
-        $html .= "<td>".getAccountBalance($ledger["AccountNumber"], $pastYear, $pastMonth)."</td>"; //account balance last month
+        $html .= "<td>".abs(getAccountBalanceV2($ledger["ledgerno"], true, $pastYear, $pastMonth))."</td>"; //account balance last month
+        insertShare($ledger["ledgerno"], $year, $month);
         $html .= "<td>".getInvestment($ledger['ledgerno'], $year, $month)."</td>"; // additional investment
         $html .= "<td>".divideTheGainLoss($ledger['ledgerno'], $year, $month)."</td>"; // net income/loss divided
-        $html .= "<td>".getWithdrawals($ledger["AccountNumber"], $year, $month)."</td>"; //withdrawals
-        $html .= "<td>".getAccountBalance($ledger["AccountNumber"])."</td>"; // get the current total
+        $html .= "<td>".getWithdrawals($ledger["AccountType"], $year, $month)."</td>"; //withdrawals
+        $html .= "<td>".abs(getAccountBalanceV2($ledger["ledgerno"], true, $year, $month))."</td>"; // get the current total
         $html .= "</tr>";
     }
     $html .= "</tbody>";
     $html .= "<tfoot>";
     $html .= "<tr>";
     $html .= "<td>Total Equity</td>"; //place holder for name
-    $html .= "<td>".getTotalOfAccountType($condition,$pastYear,$pastMonth)."</td>"; //total investment last month
+    $html .= "<td>".getTotalOfAccountTypeV2($condition,$pastYear,$pastMonth)."</td>"; //total investment last month
     $html .= "<td>".getWholeInvestment($year,$month)."</td>"; // total additional investment this month
     $html .= "<td>".calculateNetSalesOrLoss($year, $month)."</td>";// total net income/loss this month
     $html .= "<td>".getWholeWithdrawals($year,$month)."</td>"; // total withdrawals this month
-    $html .= "<td>".getTotalOfAccountType($condition,$year,$month)."</td>"; // ending investment this month
+    $html .= "<td>".getTotalOfAccountTypeV2($condition,$year,$month)."</td>"; // ending investment this month
     $html .= "</tr>";
     $html .= "</tfoot>";
 

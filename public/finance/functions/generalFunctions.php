@@ -1,5 +1,5 @@
 <?php
-require_once '../../../src/dbconn.php';
+require_once 'src\dbconn.php';
 //get the value of 1 t-account - can return negative or positive
 // debit is positive, credit is negative
 function getAccountBalance($ledger, $considerDate = false, $year = null, $month = null) {
@@ -31,7 +31,6 @@ function getAccountBalance($ledger, $considerDate = false, $year = null, $month 
             $balance -= $row['amount'];
         }
     }
-
     return $balance;
 }
 
@@ -217,7 +216,7 @@ function insertLedgerXact($debitLedger, $creditLedger, $amount, $details = null,
     if($year !== null && !is_numeric($year)){
         throw new Exception("Year must be a number.");
     }
-    if($month !== null && $month >= 1 && $month <= 12){
+    if($month !== null && $month <= 1 && $month >= 12){
         throw new Exception("Month must be a number.");
     }
     if ($year !== null && $month !== null && ($month < 1 || $month > 12)) {
@@ -259,4 +258,140 @@ function insertLedgerXact($debitLedger, $creditLedger, $amount, $details = null,
 
 }
 
+// GET account balance upto a date
+function getAccountBalanceV2($ledger, $considerDate = false, $year = null, $month = null) {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $ledgerNo = getLedgerCode($ledger);
+
+    if ($ledgerNo === false) {
+        throw new Exception("Account not found in Ledger table.");
+    }
+
+    if ($considerDate && is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31';
+        $sql = "SELECT * FROM LedgerTransaction WHERE (ledgerno = ? OR ledgerNo_Dr = ?) AND datetime <= ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$ledgerNo, $ledgerNo, $date]);
+    } else {
+        $sql = "SELECT * FROM LedgerTransaction WHERE ledgerno = ? OR ledgerNo_Dr = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$ledgerNo, $ledgerNo]);
+    }
+
+    $balance = 0;
+
+    while ($row = $stmt->fetch()) {
+        if ($row['LedgerNo_Dr'] == $ledgerNo) {
+            $balance += $row['amount'];
+        } else if ($row['LedgerNo'] == $ledgerNo) {
+            $balance -= $row['amount'];
+        }
+    }
+    return $balance;
+}
+
+//get account type balance upto a date
+function getTotalOfAccountTypeV2($accountType, $year = null, $month = null) {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    
+    $accountType = getAccountCode($accountType);
+    
+    if ($accountType === false) {
+        throw new Exception("Account not found in accounttype table.");
+    }
+    
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31';
+    } else {
+        $date = date('Y-m-d');
+    }
+    
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.accountType = :accountType AND lt.datetime <= :date";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountType', $accountType);
+    $stmt->bindParam(':date', $date);
+    $stmt->execute();
+    
+    $netAmount = 0;
+    
+    while ($row = $stmt->fetch()) {
+        $netAmount += $row['amount'];
+    }
+    
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo_dr = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.accountType = :accountType AND lt.datetime <= :date";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountType', $accountType);
+    $stmt->bindParam(':date', $date);
+    $stmt->execute();
+    
+    while ($row = $stmt->fetch()) {
+        $netAmount -= $row['amount'];
+    }
+    
+    return abs($netAmount);
+}
+function getTotalOfGroupV2($groupType, $year = null, $month = null) {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $groupType = getGroupCode($groupType);
+
+    if ($groupType === false) {
+        throw new Exception("Account not found in grouptype table.");
+    }
+
+    $date = null;
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31';
+    }
+
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.groupType = :groupType";
+    if ($date !== null) {
+        $sql .= " AND lt.datetime <= :date";
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':groupType', $groupType);
+    if ($date !== null) {
+        $stmt->bindParam(':date', $date);
+    }
+    $stmt->execute();
+
+    $netAmount = 0;
+
+    while ($row = $stmt->fetch()) {
+        $netAmount += $row['amount'];
+    }
+
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo_dr = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.groupType = :groupType";
+    if ($date !== null) {
+        $sql .= " AND lt.datetime <= :date";
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':groupType', $groupType);
+    if ($date !== null) {
+        $stmt->bindParam(':date', $date);
+    }
+    $stmt->execute();
+
+    while ($row = $stmt->fetch()) {
+        $netAmount -= $row['amount'];
+    }
+
+    return abs($netAmount);
+}
 ?>

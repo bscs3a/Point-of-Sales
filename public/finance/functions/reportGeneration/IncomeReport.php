@@ -1,5 +1,5 @@
 <?php
-require_once '../generalFunction.php';
+require_once 'public\finance\functions\generalFunctions.php';
 
 // used for getting the accountbalance
 // problems:
@@ -13,11 +13,11 @@ function calculateNetSalesOrLoss($year, $month) {
     if ($year === null || $month === null) {
         throw new Exception("Year and month must not be null.");
     }
-    define("INCOME", "IC");
-    define("EXPENSE", "EP");
+    $INCOME = "IC";
+    $EXPENSE = "EP";
 
     // income - expense = netsales or loss
-    return abs(getGroupInRetainedAccount(INCOME, $year, $month)) - abs(getGroupInRetainedAccount(EXPENSE, $year, $month));
+    return abs(getGroupInRetainedAccount($INCOME, $year, $month)) - abs(getGroupInRetainedAccount($EXPENSE, $year, $month));
 }
 
 //close an account - responsible for inserting the retained earnings/loss
@@ -70,7 +70,7 @@ function getAccountBalanceInRetainedAccount($ledger, $year, $month){
     $conn = $db->connect();
 
     $sql = "SELECT SUM(amount) as TotalDebit 
-    FROM 'LedgerTransaction' 
+    FROM LedgerTransaction 
     WHERE LedgerNo = :retained AND LedgerNo_Dr = :ledger AND YEAR(DateTime) = :year AND MONTH(DateTime) = :month";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':retained', $retained);
@@ -81,7 +81,7 @@ function getAccountBalanceInRetainedAccount($ledger, $year, $month){
     $debitAmount = $stmt->fetch(PDO::FETCH_ASSOC)['TotalDebit'];
 
     $sql = "SELECT SUM(amount) as TotalCredit 
-    FROM 'LedgerTransaction' 
+    FROM LedgerTransaction
     WHERE LedgerNo_Dr = :retained AND LedgerNo = :ledger AND YEAR(DateTime) = :year AND MONTH(DateTime) = :month";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':retained', $retained);
@@ -99,7 +99,7 @@ function getAccountBalanceInRetainedAccount($ledger, $year, $month){
 function getGroupInRetainedAccount($groupType, $year = null, $month = null) {
     $db = Database::getInstance();
     $conn = $db->connect();
-
+    $retained = getLedgerCode("Retained Earnings/Loss");
     $groupType = getGroupCode($groupType);
 
     if ($groupType === false) {
@@ -115,6 +115,7 @@ function getGroupInRetainedAccount($groupType, $year = null, $month = null) {
     }
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':groupType', $groupType);
+    $stmt->bindParam(':retained', $retained);
     if ($year !== null && $month !== null) {
         $stmt->bindParam(':year', $year, PDO::PARAM_INT);
         $stmt->bindParam(':month', $month, PDO::PARAM_INT);
@@ -136,6 +137,7 @@ function getGroupInRetainedAccount($groupType, $year = null, $month = null) {
     }
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':groupType', $groupType);
+    $stmt->bindParam(':retained', $retained);
     if ($year !== null && $month !== null) {
         $stmt->bindParam(':year', $year, PDO::PARAM_INT);
         $stmt->bindParam(':month', $month, PDO::PARAM_INT);

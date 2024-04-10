@@ -1,5 +1,5 @@
 <?php 
-    // require_once '../../functions/reportGeneration/TrialBalance.php'; -- might change into ajax
+    require_once 'public/finance/functions/reportGeneration/TrialBalance.php';
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
@@ -10,10 +10,12 @@
     $year = $today->format('Y');
     $month = $today->format('n');
     $monthName = $today->format('F');
-    if (isset($_POST['year']) && isset($_POST['month'])){
-        $year = $_POST['year'];
-        $month = $_POST['month'];
+    if (isset($_SESSION['postdata']['year']) && isset($_SESSION['postdata']['month'])){
+        $year = $_SESSION['postdata']['year'];
+        $month =$_SESSION['postdata']['month'];
     }
+    $year = intval($year);
+    $month = intval($month);
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +33,7 @@
                 <?php echo "$monthName $year"?>    
             </span>
         </div>
-        <img src="..\..\img\logo_reports.png" alt="">
+        <!-- <img src="..\..\img\logo_reports.png" alt=""> -->
     </header>
     <section>
         <?php echo generateTrialBalance($year,$month)?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2024 at 04:16 PM
+-- Generation Time: Apr 10, 2024 at 02:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -157,7 +157,8 @@ CREATE TABLE `requestexpense` (
   `payfor` int(11) NOT NULL,
   `proofofinvoice` text NOT NULL,
   `status` enum('pending','confirm','deny') NOT NULL,
-  `details` text NOT NULL
+  `details` text NOT NULL,
+  `department` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

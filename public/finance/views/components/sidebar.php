@@ -45,50 +45,6 @@
             });
         </script>
 
-
-        <li class="mb-1  rounded-xl">
-            <button id="reports-button"
-                class="toggle-reports flex items-center py-2 px-4 w-full text-white hover:text-black  hover:bg-slate-400 rounded-xl">
-                <i class="ri-file-edit-fill mr-3 text-lg"></i>
-                <span class="text-sm font-medium">Reports</span>
-                <i class="ri-arrow-down-s-line ml-auto"></i>
-            </button>
-            <ul id="reports" class="ml-8 hidden">
-                <li>
-                    <a route='/fin/reportIncome' class="flex items-center py-2 px-4 text-white hover:text-black">
-
-                        <span class="text-sm font-medium">Income</span>
-                        <i class="ri-arrow-right-s-line ml-auto"></i>
-                    </a>
-                </li>
-                <li>
-                    <a route="/fin/reportCash" class="flex items-center py-2 px-4 text-white hover:text-black">
-
-                        <span class="text-sm font-medium">Cash Flow</span>
-                        <i class="ri-arrow-right-s-line ml-auto"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a route="/fin/reportEquity" class="flex items-center py-2 px-4 text-white hover:text-black">
-
-                        <span class="text-sm font-medium">Equity</span>
-                        <i class="ri-arrow-right-s-line ml-auto"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a route="/fin/reportBalance" class="flex items-center py-2 px-4 text-white hover:text-black">
-
-                        <span class="text-sm font-medium">Balance Sheet</span>
-                        <i class="ri-arrow-right-s-line ml-auto"></i>
-                    </a>
-                </li>
-
-
-            </ul>
-        </li>
-
         <li class="mb-1">
             <button
                 class="toggle-ledger flex items-center py-2 px-4 w-full text-white hover:bg-slate-400 hover:text-black rounded-xl">

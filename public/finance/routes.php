@@ -13,12 +13,6 @@ $fin = [
     '/fin/dashboard' => $basePath . "dashboard.php",
     '/fin/logs' => $basePath . "auditLog.php",
 
-    //reports
-    '/fin/reportIncome' => $basePath . "reportIncome.php",
-    '/fin/reportCash' => $basePath . "reportCash.php",
-    '/fin/reportEquity' => $basePath . "reportEquity.php",
-    '/fin/reportBalance' => $basePath . "reportBalance.php",
-
     //ledger
     // '/fin/ledger' => $basePath . "ledger.gen.php",
     '/fin/ledger/page={pageNumber}' => function($pageNumber) use ($basePath) {
@@ -43,7 +37,8 @@ $fin = [
     // functions
     // can't recognize by the router logout can proceed
     '/fin/logout' => "./public/finance/functions/logout.php",
-
+    
+    '/fin/report' => $path . "/reports/generateReport.php",
 ];
 
 Router::post('/test', function () {
@@ -94,6 +89,13 @@ Router::post('/test', function () {
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger");
+});
+
+Router::post('/reportGeneration', function (){
+    $_SESSION['postdata'] = $_POST;
+    list($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
+    header('Location: Finance/fin/report');
+    exit;
 });
 
 
