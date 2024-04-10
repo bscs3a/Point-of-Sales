@@ -1,6 +1,6 @@
 <?php
 require_once "../generalFunctions.php";
-require_once "tax.php";
+require_once "../supportingFunctions/tax.php";
 
 
 // parameters is SalesAmount(without tax and without discount)

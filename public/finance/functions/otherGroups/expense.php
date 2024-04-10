@@ -1,5 +1,5 @@
 <?php
-require_once "supportingExpense.php";
+require_once "../supportingFunctions/supportingExpense.php";
 
 //insert something in the the expense table
 function insertIntoExpenseTable($department, $amount, $details, $payfor, $payusing){
