@@ -139,7 +139,7 @@
                         <tr>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">item name</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">department name</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">requested ammount</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">requested amount</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">reason for requesting</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">payment method</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">
