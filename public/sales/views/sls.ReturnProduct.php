@@ -77,12 +77,15 @@
 
         <!-- End: Header -->
 
-        <div class="flex flex-col items-center min-h-screen mb-10">
+        <div class="flex flex-col justify-center items-center ">
             <!-- Title -->
-            <h1 class="text-2xl font-semibold mb-6 mt-6">Return Product</h1>
+           
 
             <!-- Return Product Form -->
-            <form action="/returnProduct" method="post" class="w-full max-w-sm">
+            <div class="w-full border max-w-md rounded-lg my-10">
+            <h1 class="text-2xl font-semibold p-4 text-center rounded-t-lg text-white bg-green-800 w-full">Return Product</h1>
+            <form action="/returnProduct" method="post" class="p-5">
+         
                 <?php
                 // Database connection
                 $db = Database::getInstance();
@@ -155,12 +158,13 @@
                 <!-- Add hidden input field for saleId -->
                 <input type="hidden" name="sale" value="<?php echo $saleId; ?>">
 
-                <div class="flex items-center justify-between">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                <div class="flex items-center justify-end mt-4">
+                    <button class="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                         Submit
                     </button>
                 </div>
             </form>
+            </div>
         </div>
 
         <script>
