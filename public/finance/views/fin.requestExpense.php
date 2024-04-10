@@ -131,7 +131,7 @@
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Amount</th>
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Reason</th>
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Method</th>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Action</th>
+                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Status</th>
                         </tr>
                     </thead>
 
@@ -142,7 +142,14 @@
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">requested ammount</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">reason for requesting</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">payment method</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">accept/reject</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                                <!-- Pending Button -->
+                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
+                                        Pending
+                                </button>
+                                
+                                
+                            </td>
                         </tr>
 
                        
@@ -152,6 +159,46 @@
         </div>
         </div>
 
+            <!-- Modal -->
+            <div id="modal" class="hidden fixed z-10 inset-0 overflow-y-auto mt-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                <h4 class="text-center leading-6 font-medium text-gray-900" id="modal-title">
+                                                    Accept Expense Request?
+                                                </h4>
+                                                <div class="mt-2">
+                                                    <form method="POST" action="your-action-url">
+                                                        <!-- Your form fields go here -->
+                                                        <div class="mt-5 sm:mt-6">
+                                                            <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm" onclick="closeModal()">
+                                                                Accept
+                                                            </button>
+                                                            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal()">
+                                                                Decline
+                                                            </button>
+                                                            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal()">
+                                                                Cancel
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <script>
+                                    function openModal() {
+                                        document.getElementById('modal').classList.remove('hidden');
+                                    }
+                                
+                                    function closeModal() {
+                                        document.getElementById('modal').classList.add('hidden');
+                                    }
+                                </script>
 
         <ol class="flex justify-end mr-8 gap-1 text-xs font-medium">
             <li>
