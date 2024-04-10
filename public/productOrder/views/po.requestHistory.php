@@ -515,7 +515,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
             <?php
           }
           ?>
-          <!-- Your existing HTML code -->
 
           <!-- Display total quantity and total price in table footer -->
           <tfoot class="bg-gray-200">
