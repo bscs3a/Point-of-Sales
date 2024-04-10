@@ -1,5 +1,5 @@
 <?php 
-    // require_once '../../functions/reportGeneration/OwnersEquityReport.php';
+    require_once 'public/finance/functions/reportGeneration/OwnersEquityReport.php';
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 

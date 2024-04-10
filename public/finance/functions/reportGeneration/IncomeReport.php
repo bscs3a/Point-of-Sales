@@ -1,5 +1,5 @@
 <?php
-require_once '../generalFunction.php';
+require_once 'public\finance\functions\generalFunctions.php';
 
 // used for getting the accountbalance
 // problems:
