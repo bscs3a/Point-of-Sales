@@ -10,9 +10,9 @@
     $year = $today->format('Y');
     $month = $today->format('n');
     $monthName = $today->format('F');
-    if (isset($_POST['year']) && isset($_POST['month'])){
-        $year = $_POST['year'];
-        $month = $_POST['month'];
+    if (isset($_SESSION['postdata']['year']) && isset($_SESSION['postdata']['month'])){
+        $year = $_SESSION['postdata']['year'];
+        $month =$_SESSION['postdata']['month'];
     }
 ?>
 
