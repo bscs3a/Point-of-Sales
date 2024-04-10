@@ -98,7 +98,7 @@
             </button>
             <ul id="ledger" class="ml-8 hidden">
                 <li>
-                    <a route='/fin/ledger' class="flex items-center py-2 px-4 text-white hover:text-black">
+                    <a route='/fin/ledger/page=1' class="flex items-center py-2 px-4 text-white hover:text-black">
 
                         <span class="text-sm font-medium">General</span>
                         <i class="ri-arrow-right-s-line ml-auto"></i>
