@@ -60,10 +60,12 @@
                         <div class="relative">
                             <div class="inline-flex items-center overflow-hidden rounded-lg  border border-gray-500">
                                 <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
-                                <button
-                                    class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
-                                    <i class="ri-calendar-2-fill"></i>
-                                </button>
+                                <select class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
+                                    <option value="">Select</option>
+                                    <option value="option1">Option 1</option>
+                                    <option value="option2">Option 2</option>
+                                    <!-- Add more options as needed -->
+                                </select>
 
                                 <button
                                     class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900">
