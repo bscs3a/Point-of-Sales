@@ -114,12 +114,6 @@
                         </thead>
                         <tbody>
                             <tr class="border-b border">
-                                <td class="p-4 font-semibold">Total Sales</td>
-                                <td class="p-4 text-green-400">₱10000</td>
-                                <td class="p-4 text-green-400">%10</td>
-                            </tr>
-
-                            <tr class="border-b border">
                                 <td class="p-4 font-semibold">Amount of Raw Sales</td>
                                 <td class="p-4 text-green-400">₱10000</td>
                                 <td class="p-4 text-green-400">%10</td>
@@ -132,41 +126,11 @@
                             </tr>
 
                             <tr class="border-b border">
-                                <td class="p-4 font-semibold">Amount of Shipping Fee</td>
-                                <td class="p-4 text-green-400">₱10000</td>
+                                <td class="p-4 font-semibold">Amount of Transactions</td>
+                                <td class="p-4 text-green-400">100</td>
                                 <td class="p-4 text-green-400">%10</td>
-                            </tr>
 
-                            <tr class="border-b border">
-                                <td class="p-4 font-semibold">Total Assets Deducted <span class="text-gray-500 font-medium">(Inventory)</span></td>
-                                <td class="p-4 text-red-400">₱10000</td>
-                                <td class="p-4 text-red-400">%10</td>
-                            </tr>
-
-                            <tr class="">
-                                <td class="p-4 font-semibold">Others</td>
-                                <td class="p-4 text-green-500">₱10000</td>
-                                <td class="p-4 text-green-500">%10</td>
-                            </tr>
-
-                            <tr>
-                                <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                                <td class="p-4 text-green-300">₱10000</td>
-                                <td class="p-4 text-green-300">%1</td>
-                            </tr>
-
-                            <tr>
-                                <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                                <td class="p-4 text-green-300">₱10000</td>
-                                <td class="p-4 text-green-300">%1</td>
-                            </tr>
-
-                            <tr class="border-b">
-                                <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                                <td class="p-4 text-green-300">₱10000</td>
-                                <td class="p-4 text-green-300">%1</td>
-                            </tr>
-
+                    
                             <tr class="font-semibold text-2xl">
                                 <td class="p-4 ">Total</td>
                                 <td class="p-4 text-green-600">₱10000</td>
@@ -193,43 +157,13 @@
                                 <td class="p-4 text-red-400">%10</td>
                             </tr>
 
-                            <tr class="border-b border">
-                                <td class="p-4 font-semibold">Cancellations</td>
-                                <td class="p-4 text-red-400">₱10000</td>
-                                <td class="p-4 text-red-400">%10</td>
-                            </tr>
-
-
+                        
 
                             <tr class="border-b border">
-                                <td class="p-4 font-semibold">Expenses</td>
-                                <td class="p-4 text-red-400">₱10000</td>
+                                <td class="p-4 font-semibold">Amount of Returned Items</td>
+                                <td class="p-4 text-red-400">100</td>
                                 <td class="p-4 text-red-400">%10</td>
-                            </tr>
-
-                            <tr class="">
-                                <td class="p-4 font-semibold">Contra Revenue</td>
-                                <td class="p-4 text-red-500">₱10000</td>
-                                <td class="p-4 text-red-500">%10</td>
-                            </tr>
-
-                            <tr>
-                                <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                                <td class="p-4 text-red-300">₱10000</td>
-                                <td class="p-4 text-red-300">%1</td>
-                            </tr>
-
-                            <tr>
-                                <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                                <td class="p-4 text-red-300">₱10000</td>
-                                <td class="p-4 text-red-300">%1</td>
-                            </tr>
-
-                            <tr class="border-b">
-                                <td class="p-4 pl-16 text-gray-600">Miscellaneous</td>
-                                <td class="p-4 text-red-300">₱10000</td>
-                                <td class="p-4 text-red-300">%1</td>
-                            </tr>
+                            </tr>         
 
                             <tr class="font-semibold text-2xl">
                                 <td class="p-4 ">Total</td>
