@@ -1,5 +1,5 @@
 <?php 
-    // require_once '../../functions/reportGeneration/IncomeReport.php'; -- might change into ajax
+    // require_once '../../functions/reportGeneration/OwnersEquityReport.php';
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
@@ -21,32 +21,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income Report</title>
+    <title>Owner/s' Equity Report</title>
 </head>
-<style>
-    ul {
-        list-style-type: none;  
-    }
-    header{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-    }
-</style>
-
 <body>
     <header>
         <div>
-            <span>Income Statement</span>
+            <span>Owner/s' Equity Report</span>
             <span>
                 <?php echo "$monthName $year"?>    
             </span>
         </div>
         <img src="..\..\img\logo_reports.png" alt="">
     </header>
-    <?php
-        // echo generateIncomeReport($year, $month);
-    ?>
+    <table>
+        <thead>
+            <tr>
+                <th>Investor</th>
+                <th>Investment Last Month</th>
+                <th>Additional Investment</th>
+                <th>Net Income/Loss</th>
+                <th>Withdrawals</th>
+                <th>Ending Balance</th>
+            </tr>
+        </thead>
+        <?php echo generateOEReport($year, $month);?>
+    </table>
 </body>
 </html>
