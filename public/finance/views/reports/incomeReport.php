@@ -1,5 +1,5 @@
 <?php 
-    // require_once '../../functions/reportGeneration/IncomeReport.php'; -- might change into ajax
+    require_once 'public\finance\functions\reportGeneration\IncomeReport.php';
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
@@ -82,7 +82,7 @@ if ($today < $lastDayOfMonth) {
         <!-- <img src="..\..\img\logo_reports.png" alt=""> -->
     </header>
     <?php
-        // echo generateIncomeReport($year, $month);
+        echo generateIncomeReport($year, $month);
     ?>
 
 
