@@ -94,7 +94,7 @@
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button route="/hr/employees/update=<?php echo htmlspecialchars($employees['id']); ?>" type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Edit</button>
-          <button id="deleteButton" type="button" class="deleteButton focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Delete</button>
+          <button id="deleteButton" type="button" data-id="<?php echo $employees['id']; ?>" class="deleteButton focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Delete</button>
         </div>    
       </span>
     </div>
@@ -529,21 +529,31 @@
     }
   });
 
-  document.querySelectorAll('.deleteButton').forEach(function(button) {
-    button.addEventListener('click', function() {
-        var id = this.getAttribute('data-id');
-        document.getElementById('idToDelete').value = id;
-        document.getElementById('deleteModal').classList.remove('hidden');
-    });
-  });
+// Get the delete button, delete modal, hidden input field, and "Yes" button
+var deleteButton = document.getElementById('deleteButton');
+var deleteModal = document.getElementById('deleteModal');
+var idToDelete = document.getElementById('idToDelete');
+var confirmDelete = document.getElementById('confirmDelete');
 
-  document.getElementById('cancelDelete').addEventListener('click', function() {
-      document.getElementById('deleteModal').classList.add('hidden');
-  });
+// When the delete button is clicked, show the delete modal and set the id of the employee to be deleted
+deleteButton.addEventListener('click', function() {
+    var id = this.getAttribute('data-id');
+    idToDelete.value = id;
+    deleteModal.classList.remove('hidden');
+});
 
-  document.getElementById('confirmDelete').addEventListener('click', function() {
-    document.getElementById('deleteModal').submit();
-  });
+// When the "Yes" button is clicked, submit the form
+confirmDelete.addEventListener('click', function() {
+    this.form.submit();
+});
+
+// Get the "No" button
+var cancelDelete = document.getElementById('cancelDelete');
+
+// When the "No" button is clicked, hide the delete modal
+cancelDelete.addEventListener('click', function() {
+    deleteModal.classList.add('hidden');
+});
 </script>
 </body>
 </html> 

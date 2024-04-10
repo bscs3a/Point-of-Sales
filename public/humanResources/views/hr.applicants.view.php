@@ -83,7 +83,7 @@
       <span>
         <div class="ml-2 mb-20 mt-4"> 
           <button route="/hr/applicants/accept=<?php echo $applicant['id']; ?>" type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Accept</button>
-          <button id="rejectButton" type="button" class="rejectButton focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Reject</button>
+          <button id="rejectButton" type="button" data-id="<?php echo $applicant['id']; ?>" class="rejectButton  focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Reject</button>
         </div>    
       </span>
     </div>
@@ -303,8 +303,9 @@
 <script  src="./../../src/route.js"></script>
 <script  src="./../../src/form.js"></script>
 
-<!-- Sidebar active/inactive -->
+
 <script>
+// Sidebar active/inactive 
   document.querySelector('.sidebar-toggle').addEventListener('click', function() {
     document.getElementById('sidebar-menu').classList.toggle('hidden');
     document.getElementById('sidebar-menu').classList.toggle('transform');
@@ -313,21 +314,27 @@
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
 
-  document.querySelectorAll('.rejectButton').forEach(function(button) {
-    button.addEventListener('click', function() {
-        var id = this.getAttribute('data-id');
-        document.getElementById('idToDelete').value = id;
-        document.getElementById('rejectModal').classList.remove('hidden');
-    });
-  });
+// Reject Modal
+var rejectButton = document.getElementById('rejectButton');
+var rejectModal = document.getElementById('rejectModal');
+var idToDelete = document.getElementById('idToDelete');
+var confirmReject = document.getElementById('confirmReject');
 
-  document.getElementById('cancelReject').addEventListener('click', function() {
-      document.getElementById('rejectModal').classList.add('hidden');
-  });
+rejectButton.addEventListener('click', function() {
+    var id = this.getAttribute('data-id');
+    idToDelete.value = id;
+    rejectModal.classList.remove('hidden');
+});
 
-  document.getElementById('confirmReject').addEventListener('click', function() {
-    document.getElementById('rejectModal').submit();
-  });
+confirmReject.addEventListener('click', function() {
+    this.form.submit();
+});
+
+var cancelReject = document.getElementById('cancelReject');
+
+cancelReject.addEventListener('click', function() {
+  rejectModal.classList.add('hidden');
+});
 </script>
 </body>
 </html> 

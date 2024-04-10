@@ -442,23 +442,19 @@ Router::post('/hr/employees/update', function () {
     header("Location: $rootFolder/hr/employees/id=$id");
 });
 
-// DELETE employees
+// DELETE employees (1. benefit_info 2. tax_info 3. salary_info 4. employment_info 5. account_info 6. employees)
 Router::post('/delete/employees', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
     $idToDelete = $_POST['id'];
 
-    // Start a transaction
-    $conn->beginTransaction();
-
-    try {
         // Delete from benefit_info and tax_info
-        $query = "DELETE FROM benefit_info WHERE salary_id IN (SELECT id FROM salary_info WHERE employees_id = :id)";
+        $query = "DELETE FROM benefit_info WHERE salary_id = :id";
         $stmt = $conn->prepare($query);
         $stmt->execute([':id' => $idToDelete]);
 
-        $query = "DELETE FROM tax_info WHERE salary_id IN (SELECT id FROM salary_info WHERE employees_id = :id)";
+        $query = "DELETE FROM tax_info WHERE salary_id = :id";
         $stmt = $conn->prepare($query);
         $stmt->execute([':id' => $idToDelete]);
 
@@ -479,13 +475,6 @@ Router::post('/delete/employees', function () {
         $query = "DELETE FROM employees WHERE id = :id";
         $stmt = $conn->prepare($query);
         $stmt->execute([':id' => $idToDelete]);
-
-        // Commit the transaction
-        $conn->commit();
-    } catch (Exception $e) {
-        // An error occurred, rollback the transaction
-        $conn->rollback();
-    }
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/hr/employees");

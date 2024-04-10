@@ -79,16 +79,23 @@
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
   <div class="flex">
-    <div class="mr-4">
-      <img src="<?php echo $employees['image_url']; ?>" alt="Profile Picture" class="w-48 h-48 object-cover">
-      <span>
+    <!-- <div class="mr-4"> -->
+      <!-- <img src="<?php //echo $employees['image_url']; ?>" alt="Profile Picture" class="w-48 h-48 object-cover"> -->
+      <!-- <span>
         <div class="ml-2 mb-20 mt-4"> 
-        <form method="POST" action="/hr/employees/update" enctype="multipart/form-data">
-          <input type="file" name="image" accept="image/*">
-          <button type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
-        </form>
+          <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
           <button type="button" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
         </div>    
+      </span>
+    </div> -->
+    <div class="mr-4">
+      <img src="<?php echo $employees['image_url']; ?>" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
+      <input type="file" id="fileInput" name="image_url" accept="image/*" style="display: none;">
+      <span>
+          <div class="ml-1 mb-20 mt-4"> 
+              <button type="button" id="uploadButton" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5  mb-2">Upload</button>
+              <button type="button" id="removeButton" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Remove</button>
+          </div>    
       </span>
     </div>
 
@@ -529,6 +536,23 @@
     } else {
         passwordInput.type = 'password';
     }
+  });
+
+  // Image Upload
+  document.getElementById('uploadButton').addEventListener('click', function() {
+    document.getElementById('fileInput').click();
+  });
+
+  document.getElementById('fileInput').addEventListener('change', function() {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+          document.getElementById('image_url').src = e.target.result;
+      }
+      reader.readAsDataURL(this.files[0]);
+  });
+
+  document.getElementById('removeButton').addEventListener('click', function() {
+      document.getElementById('image_url').src = '#';
   });
 
   // Automatic Tax Calculation for UI
