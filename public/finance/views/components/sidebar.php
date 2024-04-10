@@ -124,6 +124,13 @@
             </button>
             <ul id="request" class="ml-8 hidden">
                 <li>
+                    <a route='/fin/expense' class="flex items-center py-2 px-4 text-white hover:text-black">
+
+                        <span class="text-sm font-medium">Expenses</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+                <li>
                     <a route='/fin/request' class="flex items-center py-2 px-4 text-white hover:text-black">
 
                         <span class="text-sm font-medium">Inventory</span>
