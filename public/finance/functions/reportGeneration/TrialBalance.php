@@ -6,7 +6,7 @@ function generateTrialBalance($year, $month) {
     $conn = $db->connect();
     $asset = getGroupCode("Asset");
     $LiabilityAndOE = getGroupCode("liabilities and owner's equity");
-
+    $retained = getAccountCode("Retained");
     // Query data
     $grouptype_data = $conn->query('SELECT * FROM grouptype')->fetchAll();
     $accounttype_data = $conn->query('SELECT * FROM accounttype')->fetchAll();
@@ -24,23 +24,26 @@ function generateTrialBalance($year, $month) {
         }
         $html .= "<li>\n<h1>{$group['description']}</h1>\n<ul>\n";
         foreach ($accounttype_data as $account) {
+            if ($account['AccountType'] == $retained) {
+                continue;
+            }
             if ($account['grouptype'] == $group['grouptype']) {
                 $html .= "<li>\n{$account['Description']}\n<ul>\n";
                 foreach ($ledger_data as $ledger) {
                     if ($ledger['AccountType'] == $account['AccountType']) {
-                        $balance = abs(getAccountBalance($ledger['ledgerno'],true, $year, $month));
+                        $balance = getAccountBalanceV2($ledger['ledgerno'],true, $year, $month);
                         // dont show ledger if balance is 0
                         if($balance == 0){
                             continue;
                         }
-                        $balance = abs($balance);
+                        $balance = $balance;
                         $html .= "<li>\n<span>{$ledger['name']}</span>&emsp;<span>{$balance}</span>\n</li>\n";
                     }
                 }
                 $html .= "</ul>\n</li>\n";
             }
         }
-        $total = abs(getTotalOfGroup($group['grouptype'], $year, $month));
+        $total = abs(getTotalOfGroupV2($group['grouptype'], $year, $month));
         $resultText = $group['grouptype'] == $asset ? "Asset" : "Liabilities and Owner's Equity";
         $html .= "</ul>\n<span>{$resultText}</span>&emsp;<span>{$total}</span>\n</li>\n";
     }

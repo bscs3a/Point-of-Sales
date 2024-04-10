@@ -70,7 +70,7 @@ function getAccountBalanceInRetainedAccount($ledger, $year, $month){
     $conn = $db->connect();
 
     $sql = "SELECT SUM(amount) as TotalDebit 
-    FROM 'LedgerTransaction' 
+    FROM LedgerTransaction 
     WHERE LedgerNo = :retained AND LedgerNo_Dr = :ledger AND YEAR(DateTime) = :year AND MONTH(DateTime) = :month";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':retained', $retained);
@@ -81,7 +81,7 @@ function getAccountBalanceInRetainedAccount($ledger, $year, $month){
     $debitAmount = $stmt->fetch(PDO::FETCH_ASSOC)['TotalDebit'];
 
     $sql = "SELECT SUM(amount) as TotalCredit 
-    FROM 'LedgerTransaction' 
+    FROM LedgerTransaction
     WHERE LedgerNo_Dr = :retained AND LedgerNo = :ledger AND YEAR(DateTime) = :year AND MONTH(DateTime) = :month";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':retained', $retained);

@@ -14,6 +14,10 @@
         $year = $_SESSION['postdata']['year'];
         $month =$_SESSION['postdata']['month'];
     }
+
+    $year = intval($year);
+    $month = intval($month);
+    echo $month;
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +50,7 @@
         <!-- <img src="..\..\img\logo_reports.png" alt=""> -->
     </header>
     <?php
-        // echo generateIncomeReport($year, $month);
+        echo generateIncomeReport($year, $month);
     ?>
 </body>
 </html>

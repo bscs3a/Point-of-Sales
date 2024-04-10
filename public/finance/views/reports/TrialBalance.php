@@ -14,6 +14,8 @@
         $year = $_SESSION['postdata']['year'];
         $month =$_SESSION['postdata']['month'];
     }
+    $year = intval($year);
+    $month = intval($month);
 ?>
 
 <!DOCTYPE html>

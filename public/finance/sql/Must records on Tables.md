@@ -76,3 +76,32 @@ Cost of Goods Sold
 
 # Ledger Transaction
 Dump data 
+change the date if needed
+``` 
+-- Set up a variable for the start date of the month
+SET @start_date = '2024-01-01';
+
+-- Set up a variable for the end date of the month
+SET @end_date = '2024-01-31';
+
+-- Delete existing data to avoid duplication (if needed)
+-- DELETE FROM ledgertransaction;
+
+-- Insert 250 random transactions excluding "Retained Earnings/Loss"
+INSERT INTO ledgertransaction (LedgerXactID, LedgerNo, DateTime, LedgerNo_Dr, amount, details)
+SELECT 
+    NULL,
+    l1.ledgerno,
+    TIMESTAMPADD(DAY, FLOOR(RAND() * DATEDIFF(@end_date, @start_date)), @start_date) + INTERVAL FLOOR(RAND() * 24) HOUR + INTERVAL FLOOR(RAND() * 60) MINUTE + INTERVAL FLOOR(RAND() * 60) SECOND,
+    l2.ledgerno,
+    ROUND(RAND() * 10000, 2), -- Random amount between 0 and 10000
+    CONCAT('Transaction for ', l1.name)
+FROM 
+    (SELECT * FROM ledger WHERE ledgerno <> 25 ORDER BY RAND() LIMIT 250) AS l1
+JOIN
+    (SELECT * FROM ledger WHERE ledgerno <> 25 ORDER BY RAND() LIMIT 250) AS l2
+ON l1.ledgerno <> l2.ledgerno
+ORDER BY RAND()
+LIMIT 250;
+
+```
