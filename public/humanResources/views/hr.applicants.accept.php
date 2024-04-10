@@ -72,19 +72,20 @@
   
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
+<form action= "/hr/applicants/accept" method="POST" enctype="multipart/form-data">
   <div class="flex">
     <div class="mr-4">
-      <img src="<?php echo htmlspecialchars($applicant['image_url']); ?>" alt="Profile Picture" class="w-48 h-48 object-cover" name="image_url" id="image_url">
+      <img src="<?php echo $applicant['image_url']; ?>" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
+      <input type="file" id="fileInput" name="image_url" accept="image/*" style="display: none;">
       <span>
-        <div class="ml-2 mb-20 mt-4"> 
-          <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button>
-          <button type="button" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
-        </div>    
+          <div class="ml-1 mb-20 mt-4"> 
+              <button type="button" id="uploadButton" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5  mb-2">Upload</button>
+              <button type="button" id="removeButton" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Remove</button>
+          </div>    
       </span>
     </div>
 
   <!-- Employee Information -->
-<form action= "/hr/applicants/accept" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">
@@ -123,7 +124,7 @@
                   let hasEmptyField = false;
 
                   inputs.forEach((input) => {
-                      if (input.value.trim() === '' && input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate') {
+                      if (input.value.trim() === '' && input.name !== 'middleName' && input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate' && input.name !== 'image_url') {
                           hasEmptyField = true;
                       }
                   });
@@ -139,6 +140,7 @@
               });
           });
       </script>
+
         <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
               Middle Name
@@ -545,6 +547,47 @@
         passwordInput.type = 'password';
     }
   });
+
+  // Image Upload
+document.getElementById('uploadButton').addEventListener('click', function() {
+    document.getElementById('fileInput').click();
+});
+
+document.getElementById('fileInput').addEventListener('change', function() {
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function() {
+        document.getElementById('image_url').src = reader.result;
+    }
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('image_url').src = "";
+    }
+});
+
+document.getElementById('removeButton').addEventListener('click', function() {
+    document.getElementById('image_url').src = 'https://e1.nmcdn.io/iwmf/wp-content/uploads/2018/08/no-image-available-01.jpg/v:1-width:800-height:800-fit:cover/no-image-available-01.jpg?signature=f29d577c';
+    document.getElementById('fileInput').value = ""; // Clear the file input
+});
+
+// Form submission
+document.getElementById('form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var formData = new FormData(this);
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', 'hr/employees/add', true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            alert('File uploaded successfully.');
+        } else {
+            alert('An error occurred while uploading the file.');
+        }
+    };
+    xhr.send(formData);
+});
 
   // Automatic Tax Calculation for UI
   function calculateTax() {
