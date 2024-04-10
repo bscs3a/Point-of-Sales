@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ledger</title>
+    <title>Salary Requests</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
@@ -131,6 +131,7 @@
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Name</th>
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">ID</th>
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Department</th>
+                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Amount</th>
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Status</th>
                         </tr>
                     </thead>
@@ -141,6 +142,7 @@
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">personel name</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">personel ID</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">Department</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">salary amount</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">
                                 <!-- Pending Button -->
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">

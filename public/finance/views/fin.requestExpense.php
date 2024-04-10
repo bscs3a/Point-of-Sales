@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ledger</title>
+    <title>Requests</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
@@ -139,7 +139,7 @@
                         <tr>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">item name</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">department name</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">requested ammount</td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">requested amount</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">reason for requesting</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">payment method</td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">
