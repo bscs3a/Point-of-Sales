@@ -44,7 +44,7 @@
                     <div>
                         <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -79,12 +79,12 @@
         <!-- End: Header -->
 
         <div id="receipt" class="flex flex-col items-start min-h-screen w-full max-w-3xl mx-auto p-5">
-             <div class="w-full bg-green-800 rounded-t-lg p-8 h-10 flex justify-center items-center text-center">
-                    <span class="text-white w-full text-3xl font-semibold p-2">Details</span>
-                </div>
+            <div class="w-full bg-green-800 rounded-t-lg p-8 h-10 flex justify-center items-center text-center">
+                <span class="text-white w-full text-3xl font-semibold p-2">Details</span>
+            </div>
             <div class="w-full bg-white rounded-lg overflow-hidden shadow-lg p-4 ">
                 <!-- Header -->
-              
+
 
                 <!-- Body -->
                 <div class="flex flex-col gap-4 p-8">
@@ -177,9 +177,11 @@
                         <div>From Sale ID: <span class="font-bold" id="saleId"><?php echo $returnProduct['SaleID']; ?></span></div>
                         <div>Product ID: <span class="font-bold" id="productId"><?php echo $returnProduct['ProductID']; ?></span> </div>
                         <div>Return Date: <span class="font-bold" id="returnDate"><?php echo date("F j, Y, g:i a", strtotime($returnProduct['ReturnDate'])); ?></span> </div>
+                        <div>Product Status: <span class="font-bold" id="productStatus"><?php echo $returnProduct['ProductStatus']; ?></span> </div> <!-- Add this line -->
                         <div class="text-lg mt-4">Reason(s) for Return:</div>
                         <div class="bg-gray-200 rounded-md p-4 shadow-inner" id="reasonForReturn"><?php echo $returnProduct['Reason']; ?></div>
                     </div>
+
 
                 </div>
             </div>

@@ -241,13 +241,15 @@ Router::post('/returnProduct', function () {
     $quantity = $_POST['quantity'];
     $reason = $_POST['reason'];
     $paymentReturned = $_POST['payment_returned'];
+    $productStatus = $_POST['product_status']; // Get the product status from the form data
 
-    $stmt = $conn->prepare("INSERT INTO ReturnProducts (SaleID, ProductID, Quantity, Reason, PaymentReturned) VALUES (:saleId, :productId, :quantity, :reason, :paymentReturned)");
+    $stmt = $conn->prepare("INSERT INTO ReturnProducts (SaleID, ProductID, Quantity, Reason, PaymentReturned, ProductStatus) VALUES (:saleId, :productId, :quantity, :reason, :paymentReturned, :productStatus)");
     $stmt->bindParam(':saleId', $saleId);
     $stmt->bindParam(':productId', $productId);
     $stmt->bindParam(':quantity', $quantity);
     $stmt->bindParam(':reason', $reason);
     $stmt->bindParam(':paymentReturned', $paymentReturned);
+    $stmt->bindParam(':productStatus', $productStatus); // Bind the product status parameter
 
     // Execute the statement
     $stmt->execute();

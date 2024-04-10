@@ -130,6 +130,7 @@ CREATE TABLE ReturnProducts (
     Quantity INT,
     Reason VARCHAR(255),
     PaymentReturned DECIMAL(10, 2),
+    ProductStatus VARCHAR(255), -- Add this line
     ReturnDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (SaleID) REFERENCES Sales(SaleID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)

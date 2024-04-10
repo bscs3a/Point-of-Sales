@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Management</title>
+    <title>Return Product</title>
     <link href="./../../../../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
@@ -44,7 +44,7 @@
                     <div>
                         <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -79,91 +79,103 @@
 
         <div class="flex flex-col justify-center items-center ">
             <!-- Title -->
-           
+
 
             <!-- Return Product Form -->
             <div class="w-full border max-w-md rounded-lg my-10">
-            <h1 class="text-2xl font-semibold p-4 text-center rounded-t-lg text-white bg-green-800 w-full">Return Product</h1>
-            <form action="/returnProduct" method="post" class="p-5">
-         
-                <?php
-                // Database connection
-                $db = Database::getInstance();
-                $pdo = $db->connect();
+                <h1 class="text-2xl font-semibold p-4 text-center rounded-t-lg text-white bg-green-800 w-full">Return Product</h1>
+                <form action="/returnProduct" method="post" class="p-5">
 
-                // Get saleId from URL
-                $saleId = $_GET['sale'];
-                $saledetailId = $_GET['saledetails'];
-                $productId = $_GET['product'];
+                    <?php
+                    // Database connection
+                    $db = Database::getInstance();
+                    $pdo = $db->connect();
 
-                // Fetch product name
-                $sql = "SELECT ProductName FROM Products WHERE ProductID = :product_id";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(":product_id", $productId);
-                $stmt->execute();
-                $productName = $stmt->fetch(PDO::FETCH_ASSOC)['ProductName'];
+                    // Get saleId from URL
+                    $saleId = $_GET['sale'];
+                    $saledetailId = $_GET['saledetails'];
+                    $productId = $_GET['product'];
 
-                // Fetch product details, quantity, unit price, and tax
-                $sql = "SELECT p.ProductID, p.ProductName, sd.Quantity, sd.UnitPrice, sd.Tax 
+                    // Fetch product name
+                    $sql = "SELECT ProductName FROM Products WHERE ProductID = :product_id";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(":product_id", $productId);
+                    $stmt->execute();
+                    $productName = $stmt->fetch(PDO::FETCH_ASSOC)['ProductName'];
+
+                    // Fetch product details, quantity, unit price, and tax
+                    $sql = "SELECT p.ProductID, p.ProductName, sd.Quantity, sd.UnitPrice, sd.Tax 
                  FROM SaleDetails sd 
                  JOIN Products p ON sd.ProductID = p.ProductID 
                  WHERE sd.SaleID = :sale_id";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(":sale_id", $saleId);
-                $stmt->execute();
-                $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                ?>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
-                        Product ID
-                    </label>
-                    <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_id" type="text" name="product_id" value="<?php echo $productId; ?>">
-                </div>
-                <div class="mb-4">
-
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="product_name">
-                        Product Name
-                    </label>
-                    <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value="<?php echo $productName; ?>">
-                </div>
-                <div class="mb-4">
-                    <?php
-                    // Fetch quantity
-                    $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id";
                     $stmt = $pdo->prepare($sql);
-                    $stmt->bindParam(":saledetails_id", $saledetailsId);
+                    $stmt->bindParam(":sale_id", $saleId);
                     $stmt->execute();
-                    $quantity = $stmt->fetch(PDO::FETCH_ASSOC)['Quantity'];
+                    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
-                        Quantity
-                    </label>
-                    <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" type="number" name="quantity" min="1" max="<?php echo $quantity; ?>" oninput="calculatePaymentReturned()">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="reason">
-                        Reason
-                    </label>
-                    <textarea required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="reason" name="reason"></textarea>
-                </div>
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="payment_returned">
-                        Payment to be Returned
-                    </label>
-                    <input readonly name="payment_returned" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="payment_returned" type="text">
-                </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
+                            Product ID
+                        </label>
+                        <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_id" type="text" name="product_id" value="<?php echo $productId; ?>">
+                    </div>
+                    <div class="mb-4">
 
-                <!-- Add hidden input field for saleId -->
-                <input type="hidden" name="sale" value="<?php echo $saleId; ?>">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="product_name">
+                            Product Name
+                        </label>
+                        <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value="<?php echo $productName; ?>">
+                    </div>
+                    <div class="mb-4">
+                        <?php
+                        // Fetch quantity
+                        $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->bindParam(":saledetails_id", $saledetailsId);
+                        $stmt->execute();
+                        $quantity = $stmt->fetch(PDO::FETCH_ASSOC)['Quantity'];
+                        ?>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
+                            Quantity
+                        </label>
+                        <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" type="number" name="quantity" min="1" max="<?php echo $quantity; ?>" oninput="calculatePaymentReturned()">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="reason">
+                            Reason
+                        </label>
+                        <textarea required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="reason" name="reason"></textarea>
+                    </div>
 
-                <div class="flex items-center justify-end mt-4">
-                    <button class="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                        Submit
-                    </button>
-                </div>
-            </form>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="product_status">
+                            Product Status
+                        </label>
+                        <select required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_status" name="product_status">
+                            <option value="">Select a status</option>
+                            <option value="Defective">Defective</option>
+                            <option value="Damaged">Damaged</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="payment_returned">
+                            Payment to be Returned
+                        </label>
+                        <input readonly name="payment_returned" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="payment_returned" type="text">
+                    </div>
+
+                    <!-- Add hidden input field for saleId -->
+                    <input type="hidden" name="sale" value="<?php echo $saleId; ?>">
+
+                    <div class="flex items-center justify-end mt-4">
+                        <button class="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Submit
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
