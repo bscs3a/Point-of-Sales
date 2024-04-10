@@ -135,7 +135,6 @@ Router::post('/hr/employees/add', function () {
     $rootFolder = dirname($_SERVER['PHP_SELF']);
 
     // BASIC EMPLOYEE INFORMATION
-    // $image_url = $_POST['image_url'];
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $lastName = $_POST['lastName'];
@@ -321,7 +320,6 @@ Router::post('/hr/employees/update', function () {
     // BASIC EMPLOYEE INFORMATION
     $id = $_SESSION['id'];
 
-    // $image_url = $_POST['image_url'];
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $lastName = $_POST['lastName'];
@@ -335,19 +333,29 @@ Router::post('/hr/employees/update', function () {
     $department = $_POST['department'];
     $position = $_POST['position'];
 
+    $query = "SELECT image_url FROM employees WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':id' => $id]);
+    $image_url = $stmt->fetchColumn();
+
     // Handle the image upload
-    if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] == 0) {
-        $uploadDir = './public/humanResources/img/';
-        $uploadFile = $uploadDir . basename($_FILES['image_url']['name']);
-        if (move_uploaded_file($_FILES['image_url']['tmp_name'], $uploadFile)) {
-            $image_url = preg_replace('/\./', '/master', $uploadFile, 1);
+    if (isset($_FILES['image_url'])) {
+        if ($_FILES['image_url']['error'] == UPLOAD_ERR_NO_FILE) {
+            // No file was uploaded. Keep the old image_url.
+        } else if ($_FILES['image_url']['error'] == 0) {
+            $uploadDir = './public/humanResources/img/';
+            $uploadFile = $uploadDir . basename($_FILES['image_url']['name']);
+            if (move_uploaded_file($_FILES['image_url']['tmp_name'], $uploadFile)) {
+                $image_url = preg_replace('/\./', '/master', $uploadFile, 1);
+            } else {
+                echo "Failed to move uploaded file.";
+                return;
+            }
         } else {
-            echo "Failed to move uploaded file.";
+            // An error occurred. Handle it.
+            echo "An error occurred: " . $_FILES['image_url']['error'];
             return;
         }
-    } else {
-        echo "No file uploaded.";
-        return;
     }
 
     $query = "UPDATE employees SET image_url = :image_url, first_name = :firstName, middle_name = :middleName, last_name = :lastName, dateofbirth = :dateofbirth, gender = :gender, nationality = :nationality, civil_status = :civilstatus, address = :address, contact_no = :contactnumber, email = :email, department = :department, position = :position WHERE id = :id";
@@ -654,8 +662,9 @@ Router::post('/hr/applicants/accept', function () {
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
 
+    $applicantid = $_SESSION['id'];
+
     // BASIC EMPLOYEE INFORMATION
-    $image_url = $_POST['image_url'];
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $lastName = $_POST['lastName'];
@@ -669,20 +678,30 @@ Router::post('/hr/applicants/accept', function () {
     $department = $_POST['department'];
     $position = $_POST['position'];
 
+    $query = "SELECT image_url FROM applicants WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':id' => $applicantid]);
+    $image_url = $stmt->fetchColumn();
+
     // Handle the image upload
-    // if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] == 0) {
-    //     $uploadDir = './public/humanResources/img/';
-    //     $uploadFile = $uploadDir . basename($_FILES['image_url']['name']);
-    //     if (move_uploaded_file($_FILES['image_url']['tmp_name'], $uploadFile)) {
-    //         $image_url = preg_replace('/\./', '/master', $uploadFile, 1);
-    //     } else {
-    //         echo "Failed to move uploaded file.";
-    //         return;
-    //     }
-    // } else {
-    //     echo "No file uploaded.";
-    //     return;
-    // }
+    if (isset($_FILES['image_url'])) {
+        if ($_FILES['image_url']['error'] == UPLOAD_ERR_NO_FILE) {
+            // No file was uploaded. Keep the old image_url.
+        } else if ($_FILES['image_url']['error'] == 0) {
+            $uploadDir = './public/humanResources/img/';
+            $uploadFile = $uploadDir . basename($_FILES['image_url']['name']);
+            if (move_uploaded_file($_FILES['image_url']['tmp_name'], $uploadFile)) {
+                $image_url = preg_replace('/\./', '/master', $uploadFile, 1);
+            } else {
+                echo "Failed to move uploaded file.";
+                return;
+            }
+        } else {
+            // An error occurred. Handle it.
+            echo "An error occurred: " . $_FILES['image_url']['error'];
+            return;
+        }
+    }
 
     $query = "INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, address, contact_no, email, department, position) VALUES (:image_url, :firstName, :middleName, :lastName, :dateofbirth, :gender, :nationality, :civilstatus, :address, :contactnumber, :email, :department, :position);";
     $stmt = $conn->prepare($query);
@@ -691,11 +710,6 @@ Router::post('/hr/applicants/accept', function () {
         header("Location: $rootFolder/hr/employees/add");
         return;
     }
-
-    // if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
-    //     header("Location: $rootFolder/hr/employees/add");
-    //     return;
-    // }
 
     $stmt->execute([
         'image_url' => $image_url,
