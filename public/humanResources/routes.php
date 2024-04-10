@@ -482,6 +482,11 @@ Router::post('/delete/employees', function () {
 
     $idToDelete = $_POST['id'];
 
+        // Delete from leave_requests
+        $query = "DELETE FROM leave_requests WHERE employees_id = :id";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([':id' => $idToDelete]);
+
         // Delete from benefit_info and tax_info
         $query = "DELETE FROM benefit_info WHERE salary_id = :id";
         $stmt = $conn->prepare($query);
