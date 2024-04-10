@@ -89,6 +89,14 @@ Router::post('/test', function () {
     header("Location: $rootFolder/fin/ledger");
 });
 
+Router::post('/reportGeneration', function (){
+    session_start();
+    $_SESSION['postdata'] = $_POST;
+    list($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
+    header('Location: generateReport.php');
+    exit;
+});
+
 
 
 
