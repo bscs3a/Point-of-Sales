@@ -31,7 +31,7 @@
                 <?php echo "$monthName $year"?>    
             </span>
         </div>
-        <img src="..\..\img\logo_reports.png" alt="">
+        <!-- <img src="..\..\img\logo_reports.png" alt=""> -->
     </header>
     <section>
         <?php echo generateTrialBalance($year,$month)?>

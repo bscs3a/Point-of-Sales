@@ -1,9 +1,8 @@
 <?php
-require_once '../../../../vendor/autoload.php';
+require_once './vendor/autoload.php';
 
 use Dompdf\Dompdf;
 
-session_start();
 $fileNeeded = $_SESSION['postdata']['file'];
 if($fileNeeded === null){
     echo "No file selected";

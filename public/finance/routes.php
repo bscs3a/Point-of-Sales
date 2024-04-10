@@ -36,7 +36,8 @@ $fin = [
     // functions
     // can't recognize by the router logout can proceed
     '/fin/logout' => "./public/finance/functions/logout.php",
-
+    
+    '/fin/report' => $path . "/reports/generateReport.php",
 ];
 
 Router::post('/test', function () {
@@ -90,10 +91,9 @@ Router::post('/test', function () {
 });
 
 Router::post('/reportGeneration', function (){
-    session_start();
     $_SESSION['postdata'] = $_POST;
     list($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
-    header('Location: generateReport.php');
+    header('Location: Finance/fin/report');
     exit;
 });
 

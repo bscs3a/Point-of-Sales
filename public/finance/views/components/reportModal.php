@@ -39,6 +39,8 @@
             </button>
         </div>
     </form>
-        
+    <!-- remove this when making this a modal -->
+    <script  src="./../../../../src/route.js"></script>
+    <script  src="./../../../../src/form.js"></script>
 </body>
 </html>
