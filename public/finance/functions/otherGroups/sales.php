@@ -52,7 +52,7 @@ function insertSalesReturn($amount, $paymentMethod){
 
 // for allowance
 //amount is the amount you are refunding
-//paymentMethod can be "Cash on hand" or "Cash in bank"
+//paymentMethod can be "Cash on hand" or "Cash on bank"
 function insertSalesAllowance($amount, $paymentMethod){
     if ($amount <= 0){
         throw new Exception("Amount must be greater than 0");
