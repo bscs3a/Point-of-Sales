@@ -1,5 +1,5 @@
 <!-- start: Sidebar -->
- <div id="sidebar-menu" class="fixed left-0 top-0 w-64 h-full bg-red-900 p-4 z-50 sidebar-menu transition-transform">
+ <div id="sidebar-menu" class="fixed left-0 top-0 w-64 h-full bg-sidebar p-4 z-50 sidebar-menu transition-transform">
   <a route="/" class="flex items-center pb-4 border-b border-b-white ">
     <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover">
     <span  class="cursor-pointer text-4xl font-russo text-white ml-3">BSCS 3A</span>
