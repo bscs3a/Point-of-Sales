@@ -1,8 +1,9 @@
 <?php
 
+
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
-$_SESSION['fullname'] = "Tagle, Aries";
+$_SESSION['employee_name'] = "Tagle, Aries";
 
 $path = './public/finance/views';
 
@@ -11,12 +12,7 @@ $basePath = "$path/fin.";
 $fin = [
     //dashboard
     '/fin/dashboard' => $basePath . "dashboard.php",
-
-    //reports
-    '/fin/reportIncome' => $basePath . "reportIncome.php",
-    '/fin/reportCash' => $basePath . "reportCash.php",
-    '/fin/reportEquity' => $basePath . "reportEquity.php",
-    '/fin/reportBalance' => $basePath . "reportBalance.php",
+    '/fin/logs' => $basePath . "auditLog.php",
 
     //ledger
     // '/fin/ledger' => $basePath . "ledger.gen.php",
@@ -28,6 +24,7 @@ $fin = [
     '/fin/ledger/accounts/payable' => $basePath . "ledger.payable.php",
 
     //request
+    '/fin/expense' => $basePath . "requestExpense.php",
     '/fin/request' => $basePath . "requestInventory.php",
     '/fin/salary' => $basePath . "requestSalary.php",
 
@@ -41,7 +38,8 @@ $fin = [
     // functions
     // can't recognize by the router logout can proceed
     '/fin/logout' => "./public/finance/functions/logout.php",
-
+    
+    '/fin/report' => $path . "/reports/generateReport.php",
 ];
 
 Router::post('/test', function () {
@@ -91,8 +89,16 @@ Router::post('/test', function () {
     }
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger");
+    header("Location: $rootFolder/fin/ledger/page=1");
 });
+
+Router::post('/reportGeneration', function (){
+    $_SESSION['postdata'] = $_POST;
+    list($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
+    header('Location: Finance/fin/report');
+    exit;
+});
+
 
 
 

@@ -62,7 +62,7 @@
                     <div class="hidden sm:block">
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex gap-6" aria-label="Tabs">
-                               
+
                                 <a route='/fin/ledger/accounts/investors'
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Investors
@@ -70,7 +70,7 @@
                                 <a route='/fin/ledger/accounts/payable'
                                     class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
                                     aria-current="page">
-                                    Accounts Payable 
+                                    Accounts Payable
                                 </a>
 
                             </nav>
@@ -110,157 +110,45 @@
                         </div>
                     </div>
 
-                    <div class="inline-flex items-center justify-center gap-3">
-                        <a href="#"
-                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
-                            <span class="sr-only">Next Page</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-
-                        <p class="text-xs text-gray-900">
-                            3
-                            <span class="mx-0.25">/</span>
-                            12
-                        </p>
-
-                        <a href="#"
-                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
-                            <span class="sr-only">Next Page</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
+                    <div class="items-start mb-2">
+                        <button id="openModal"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
+                            <i class="ri-add-box-line"></i>
+                            Add Invesment
+                        </button>
                     </div>
                 </div>
 
                 <!-- Equity -->
                 <div class="flex flex-wrap gap-5">
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Debit</h1>
-                            
+                    <?php
+                    require_once "public/finance/functions/specialTransactions/payable.php";
+                    $result = getAllPayable();
+                    ?>
+
+                    <?php foreach ($result as $results): ?>
+                        <div
+                            class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
+                            <div class="text-center p-5 ">
+                                <br><br><br>
+                                <h1 class="text-5xl">Credit</h1>
+                                <p><?= $results['name'] ?></p>
+                            </div>
+                            <div class="p-10">
+                                <button
+                                    class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
+                                    Pay
+                                </button>
+                            </div>
                         </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Credit</h1>
-                            
-                        </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Debit</h1>
-                            
-                        </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Credit</h1>
-                            
-                        </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Debit</h1>
-                            
-                        </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Credit</h1>
-                            
-                        </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Debit</h1>
-                            
-                        </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                        <div class="text-center p-5 ">
-                            <br><br><br>
-                            <h1 class="text-5xl">Credit</h1>
-                            
-                        </div>
-                        <div class="p-10">
-                            <button
-                                class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                Pay
-                            </button>
-                        </div>
-                    </div>
-                    
-                    
+                    <?php endforeach; ?>
+
+
+
                 </div>
             </div>
     </main>
-    <script  src="./../../../src/route.js"></script>
+    <script src="./../../../src/route.js"></script>
 
 </body>
 
