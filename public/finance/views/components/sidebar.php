@@ -18,32 +18,7 @@
             </a>
         </li>
 
-        <!-- button dropdown -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelector('.toggle-reports').addEventListener('click', function () {
-                    document.getElementById('reports').classList.toggle('hidden');
-                    document.getElementById('ledger').classList.add('hidden');
-                    document.getElementById('request').classList.add('hidden');
-                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
-
-                });
-
-                document.querySelector('.toggle-ledger').addEventListener('click', function () {
-                    document.getElementById('ledger').classList.toggle('hidden');
-                    document.getElementById('reports').classList.add('hidden');
-                    document.getElementById('request').classList.add('hidden');
-                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
-                });
-
-                document.querySelector('.toggle-request').addEventListener('click', function () {
-                    document.getElementById('ledger').classList.add('hidden');
-                    document.getElementById('reports').classList.add('hidden');
-                    document.getElementById('request').classList.toggle('hidden');
-                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
-                });
-            });
-        </script>
+        
 
         <li class="mb-1">
             <button
@@ -104,15 +79,6 @@
             </ul>
         </li>
 
-
-        <li class="mb-1 hover:bg-slate-400 rounded-xl">
-            <a route="/fin/charts" class="flex items-center py-2 px-4 text-white hover:text-black">
-                <i class="ri-line-chart-line mr-3 text-lg"></i>
-                <span class="text-sm font-medium">Charts</span>
-                <i class="ri-arrow-down-s-line ml-auto"></i>
-            </a>
-        </li>
-
         <!-- Audit Log -->
         <li class="mb-1 hover:bg-slate-400 rounded-xl">
             <a route="/fin/logs" class="flex items-center py-2 px-4 text-white hover:text-black">
@@ -126,4 +92,21 @@
 </div>
 
 <div class="fixed top-0 left-0 w-full h-full z-40 md:hidden sidebar-overlay"></div>
+
+<!-- button dropdown -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('.toggle-ledger').addEventListener('click', function () {
+            document.getElementById('ledger').classList.toggle('hidden');
+            document.getElementById('request').classList.add('hidden');
+            // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+        });
+
+        document.querySelector('.toggle-request').addEventListener('click', function () {
+            document.getElementById('ledger').classList.add('hidden');
+            document.getElementById('request').classList.toggle('hidden');
+            // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+        });
+    });
+</script>
 <!-- End: Sidebar -->

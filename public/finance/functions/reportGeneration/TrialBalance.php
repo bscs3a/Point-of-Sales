@@ -31,12 +31,11 @@ function generateTrialBalance($year, $month) {
                 $html .= "<li>\n{$account['Description']}\n<ul>\n";
                 foreach ($ledger_data as $ledger) {
                     if ($ledger['AccountType'] == $account['AccountType']) {
-                        $balance = getAccountBalanceV2($ledger['ledgerno'],true, $year, $month);
+                        $balance = abs(getAccountBalanceV2($ledger['ledgerno'],true, $year, $month));
                         // dont show ledger if balance is 0
                         if($balance == 0){
                             continue;
                         }
-                        $balance = $balance;
                         $html .= "<li>\n<span>{$ledger['name']}</span>&emsp;<span>{$balance}</span>\n</li>\n";
                     }
                 }

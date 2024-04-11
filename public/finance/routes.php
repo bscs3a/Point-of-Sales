@@ -89,7 +89,7 @@ Router::post('/test', function () {
     }
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger");
+    header("Location: $rootFolder/fin/ledger/page=1");
 });
 
 Router::post('/reportGeneration', function (){
