@@ -13,16 +13,16 @@
     $db = Database::getInstance();
     $pdo = $db->connect();
 
-    // Get saleId from URL
+    // Get saleId, saledetailsId, and productId from URL
     $saleId = $_GET['sale'];
-    $saledetailId = $_GET['saledetails'];
+    $saledetailsId = $_GET['saledetails'];
     $productId = $_GET['product'];
 
-    // Fetch product name and category
-    $sql = "SELECT p.ProductName, p.Description, c.Category_Name 
-      FROM Products p 
-      JOIN Categories c ON p.Category_ID = c.Category_ID 
-      WHERE p.ProductID = :product_id";
+    // Fetch product name, description, category, and image
+    $sql = "SELECT p.ProductName, p.Description, c.Category_Name, p.ProductImage 
+        FROM Products p 
+        JOIN Categories c ON p.Category_ID = c.Category_ID 
+        WHERE p.ProductID = :product_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
@@ -30,26 +30,27 @@
     $productName = $productDetails['ProductName'];
     $productDescription = $productDetails['Description'];
     $productCategory = $productDetails['Category_Name'];
+    $productImage = $productDetails['ProductImage'];
 
     // Fetch product details, quantity, unit price, and tax
     $sql = "SELECT p.ProductID, p.ProductName, sd.Quantity, sd.UnitPrice, sd.Tax 
-                 FROM SaleDetails sd 
-                 JOIN Products p ON sd.ProductID = p.ProductID 
-                 WHERE sd.SaleID = :sale_id";
+                                     FROM SaleDetails sd 
+                                     JOIN Products p ON sd.ProductID = p.ProductID 
+                                     WHERE sd.SaleID = :sale_id AND sd.ProductID = :product_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(":sale_id", $saleId);
+    $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    ?>
 
-
-    <?php
     // Fetch quantity
-    $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id";
+    $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id AND ProductID = :product_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(":saledetails_id", $saledetailsId);
+    $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
-    $quantity = $stmt->fetch(PDO::FETCH_ASSOC)['Quantity'];
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $quantity = $result ? $result['Quantity'] : null;
     ?>
 
 </head>
@@ -125,21 +126,19 @@
             <div class="mx-10 my-10 flex flex-col w-1/2 mr-10">
                 <h1 class="font-bold text-lg mx-8 text-gray-500 bg-white border-b shadow-md p-4">You're about to Return:</h1>
                 <div class="flex flex-row">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="300" height="300" fill="currentColor">
-                        <path d="M5 11.1005L7 9.1005L12.5 14.6005L16 11.1005L19 14.1005V5H5V11.1005ZM5 13.9289V19H8.1005L11.0858 16.0147L7 11.9289L5 13.9289ZM10.9289 19H19V16.9289L16 13.9289L10.9289 19ZM4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM15.5 10C14.6716 10 14 9.32843 14 8.5C14 7.67157 14.6716 7 15.5 7C16.3284 7 17 7.67157 17 8.5C17 9.32843 16.3284 10 15.5 10Z"></path>
-                    </svg>
+                    <img src="./../../../../<?php echo $productImage; ?>" alt="<?php echo $productName; ?>" width="300" height="300">
 
                     <div class="flex flex-col justify-center text-lg gap-4">
                         <div>Product Name: <span class="font-bold"><?php echo $productName; ?></span> </div>
                         <div>Product Category: <span class="font-bold"><?php echo $productCategory; ?></span> </div>
-                        <div>Product Price: <span class="font-bold"><?php echo $products[0]['UnitPrice'] + $products[0]['Tax']; ?></span> </div>
+                        <div>Product Price (per item): <span class="font-bold">₱<?php echo number_format($products[0]['UnitPrice'] + $products[0]['Tax'], 2); ?></span> </div>
                         <div>Quantity Bought: <span class="font-bold"><?php echo $products[0]['Quantity']; ?></span> </div>
                     </div>
                 </div>
                 <div class="mx-10 text-lg font-semibold flex flex-col">
                     Product Description:
                     <div class="font-normal bg-gray-100 rounded-md p-4">
-                    <?php echo $productDescription; ?>
+                        <?php echo $productDescription; ?>
                     </div>
                 </div>
             </div>
@@ -147,32 +146,27 @@
             <div class="flex flex-col justify-center items-center w-1/2 border max-w-md rounded-lg my-10 ml-10 shadow-md">
                 <h1 class="text-2xl font-semibold p-4 text-center rounded-t-lg text-white bg-green-800 w-full">Return Product</h1>
                 <form action="/returnProduct" method="post" class="w-full p-4">
-
-
-
-                    <div class="mb-4">
+                    <div class="mb-4 hidden">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
                             Product ID
                         </label>
                         <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_id" type="text" name="product_id" value="<?php echo $productId; ?>">
                     </div>
-                    <div class="mb-4">
-
+                    <div class="mb-4 hidden">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="product_name">
                             Product Name
                         </label>
                         <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value="<?php echo $productName; ?>">
                     </div>
                     <div class="mb-4">
-
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
                             Quantity
                         </label>
-                        <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" type="number" name="quantity" min="1" max="<?php echo $quantity; ?>" oninput="calculatePaymentReturned()">
+                        <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" type="number" name="quantity" min="1" max="<?php echo $products[0]['Quantity']; ?>" oninput="calculatePaymentReturned()">
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="reason">
-                            Reason
+                            Reason(s)
                         </label>
                         <textarea required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="reason" name="reason"></textarea>
                     </div>
