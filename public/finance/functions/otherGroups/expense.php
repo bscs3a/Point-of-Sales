@@ -45,7 +45,7 @@ function deleteRequestInTable($id){
 
     return true;
 }
-
+    
 //display all your request depending on department
 function viewRequestInTable($department){
     if ($department === null){
