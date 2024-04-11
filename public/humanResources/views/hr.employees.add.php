@@ -280,84 +280,6 @@
         </div>
       </div>
 
-      <script>
-        function populatePositions() {
-          const departmentSelect = document.getElementById("department");
-          const positionSelect = document.getElementById("position");
-          const department = departmentSelect.value;
-
-          // Clear previous options
-          positionSelect.innerHTML = "";
-
-          // Populate positions based on department
-          if (department === "Product Order") {
-            const positions = [
-              "Order Processor",
-              "Inventory Coordinator",
-              "Shipping Clerk",
-              "Order Fulfillment Specialist",
-              "Logistics Coordinator"
-            ];
-            populateOptions(positions);
-          } else if (department === "Inventory") {
-            const positions = [
-              "Inventory Manager",
-              "Inventory Analyst",
-              "Stock Control Clerk",
-              "Warehouse Manager",
-              "Inventory Auditor"
-            ];
-            populateOptions(positions);
-          } else if (department === "Delivery") {
-            const positions = [
-              "Delivery Driver",
-              "Route Planner",
-              "Dispatch Coordinator",
-              "Shipping and Receiving Clerk",
-              "Warehouse Supervisor"
-            ];
-            populateOptions(positions);
-          } else if (department === "Human Resources") {
-            const positions = [
-              "HR Manager",
-              "HR Coordinator",
-              "Recruitment Specialist",
-              "Training and Development Officer",
-              "Compensation and Benefits Analyst"
-            ];
-            populateOptions(positions);
-          } else if (department === "Point of Sales") {
-            const positions = [
-              "Sales Associate",
-              "Cashier",
-              "Retail Supervisor",
-              "Customer Service Representative",
-              "Store Manager"
-            ];
-            populateOptions(positions);
-          } else if (department === "Finance") {
-            const positions = [
-              "Accountant",
-              "Financial Analyst",
-              "Accounts Payable Clerk",
-              "Accounts Receivable Clerk",
-              "Finance Manager"
-            ];
-            populateOptions(positions);
-          }
-        }
-
-        function populateOptions(options) {
-          const positionSelect = document.getElementById("position");
-          options.forEach(option => {
-            const optionElement = document.createElement("option");
-            optionElement.value = option;
-            optionElement.text = option;
-            positionSelect.appendChild(optionElement);
-          });
-        }
-      </script>
-
     <!-- Employee Information 5 : EMPLOYMENT INFO-->
     <div class="flex flex-col">
       <div class="mb-4">
@@ -470,18 +392,18 @@
                 <div class="mb-4 mt-4">
                   <div class="flex">
                     <div class="mr-2">
-                        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="monthlysalary">
-                          Monthly Salary
-                        </label>
-                        <input
-                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                          name="monthlysalary"
-                          id="monthlysalary"
-                          type="text"
-                          placeholder="0.00"
-                          oninput="calculateTax()"
-                          
-                        />
+                      <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="monthlysalary">
+                        Monthly Salary
+                      </label>
+                      <input
+                        class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        name="monthlysalary"
+                        id="monthlysalary"
+                        type="text"
+                        placeholder="0.00"
+                        readonly
+                        onchange="calculateTax()"
+                      />
                     </div>
                     <!-- TAX INFO -->
                     <div class="mr-2">
@@ -712,153 +634,230 @@ document.getElementById('Department').addEventListener('change', function() {
           'Payroll Specialist'
         ]
     };
+      
+    // Define the salaries for each position
+    var salaries = {
+      'Order Processor': 18000,
+  'Order Entry Clerk': 15000,
+  'Quality Control Inspector': 20000,
+  'Logistics Coordinator': 30000,
+  'Procurement Specialist': 40000,
+  'Inventory Manager/Controller': 60000,
+  'Inventory Planner': 35000,
+  'Stock Controller': 25000,
+  'Purchasing Manager': 70000,
+  'Warehouse Manager': 55000,
+  'Materials Manager': 55000,
+  'Delivery Driver': 15000,
+  'Courier': 18000,
+  'Warehouse Associate': 18000,
+  'Customer Service Representative': 20000,
+  'Parcel Sorter': 15000,
+  'Recruiter': 30000,
+  'HR Manager/Director': 80000,
+  'Compensation and Benefits Specialist': 45000,
+  'HR Coordinator': 25000,
+  'HR Legal Compliance Specialist': 35000,
+  'Retail Associate/Cashier': 12000,
+  'Inventory Control Specialist': 25000,
+  'Sales Associate': 18000,
+  'Business Analyst': 45000,
+  'E-commerce Coordinator': 35000,
+  'Accountant': 35000,
+  'Bookkeeper': 20000,
+  'Financial Analyst': 45000,
+  'Tax Accountant': 45000,
+  'Cost Accountant': 45000,
+  'Credit Analyst': 35000,
+  'Payroll Specialist': 30000
+    };
 
-    // Get the positions for the selected department
-    var departmentPositions = positions[department];
+  // Add an event listener to the position select field
+  document.getElementById('Position').addEventListener('change', function() {
+  var salaryInput = document.getElementById('monthlysalary');
+  var position = this.value;
 
-    // Add the positions to the position select
-    if (departmentPositions) {
-        departmentPositions.forEach(function(position) {
-            var option = document.createElement('option');
-            option.value = position;
-            option.text = position;
-            positionSelect.add(option);
-        });
-    }
+  // Get the salary for the selected position
+  var salary = salaries[position];
+
+  // Update the salary input field
+  if (salary) {
+    salaryInput.value = salary.toFixed(2);
+  } else {
+    salaryInput.value = '';
+  }
+
+  // Manually trigger the calculateTax function
+  calculateTax();
 });
+      // Get the positions for the selected department
+      var departmentPositions = positions[department];
 
-// DATE OF HIRE AND START OF EMPLOYMENT VALIDATION
-document.getElementById('dateofhire').addEventListener('change', validateDates);
-document.getElementById('startdate').addEventListener('change', validateDates);
-
-function validateDates() {
-    var dateOfHire = new Date(document.getElementById('dateofhire').value);
-    var startDate = new Date(document.getElementById('startdate').value);
-
-    if (startDate < dateOfHire) {
-        alert('Start of employment should be on or after the date of hire.');
-    }
-}
-
-  // Show/Hide Password
-  document.getElementById('togglePassword').addEventListener('change', function () {
-    const passwordInput = document.getElementById('password');
-    if (this.checked) {
-        passwordInput.type = 'text';
-    } else {
-        passwordInput.type = 'password';
-    }
+      // Add the positions to the position select
+      if (departmentPositions) {
+          departmentPositions.forEach(function(position) {
+              var option = document.createElement('option');
+              option.value = position;
+              option.text = position;
+              positionSelect.add(option);
+          });
+      }
   });
 
- // Image Upload
-document.getElementById('uploadButton').addEventListener('click', function() {
-    document.getElementById('fileInput').click();
-});
+  // DATE OF HIRE AND START OF EMPLOYMENT VALIDATION
+  document.getElementById('dateofhire').addEventListener('change', validateDates);
+  document.getElementById('startdate').addEventListener('change', validateDates);
 
-document.getElementById('fileInput').addEventListener('change', function() {
-    var file = this.files[0];
-    var reader = new FileReader();
-    reader.onloadend = function() {
-        document.getElementById('image_url').src = reader.result;
-    }
-    if (file) {
-        reader.readAsDataURL(file);
-    } else {
-        document.getElementById('image_url').src = "";
-    }
-});
+  function validateDates() {
+      var dateOfHire = new Date(document.getElementById('dateofhire').value);
+      var startDate = new Date(document.getElementById('startdate').value);
 
-document.getElementById('removeButton').addEventListener('click', function() {
-    document.getElementById('image_url').src = '/master/public/humanResources/img/noPhotoAvailable.png';
-    document.getElementById('fileInput').value = ""; // Clear the file input
-});
+      if (startDate < dateOfHire) {
+          alert('Start of employment should be on or after the date of hire.');
+      }
+  }
 
-// Form submission
-document.getElementById('form').addEventListener('submit', function(event) {
-    event.preventDefault();
+    // Show/Hide Password
+    document.getElementById('togglePassword').addEventListener('change', function () {
+      const passwordInput = document.getElementById('password');
+      if (this.checked) {
+          passwordInput.type = 'text';
+      } else {
+          passwordInput.type = 'password';
+      }
+    });
 
-    var formData = new FormData(this);
-    var xhr = new XMLHttpRequest();
+  // Image Upload
+  document.getElementById('uploadButton').addEventListener('click', function() {
+      document.getElementById('fileInput').click();
+  });
 
-    xhr.open('POST', 'hr/employees/add', true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            alert('File uploaded successfully.');
-        } else {
-            alert('An error occurred while uploading the file.');
-        }
-    };
-    xhr.send(formData);
-});
+  document.getElementById('fileInput').addEventListener('change', function() {
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function() {
+          document.getElementById('image_url').src = reader.result;
+      }
+      if (file) {
+          reader.readAsDataURL(file);
+      } else {
+          document.getElementById('image_url').src = "";
+      }
+  });
+
+  document.getElementById('removeButton').addEventListener('click', function() {
+      document.getElementById('image_url').src = '/master/public/humanResources/img/noPhotoAvailable.png';
+      document.getElementById('fileInput').value = ""; // Clear the file input
+  });
+
+  // Form submission
+  document.getElementById('form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var formData = new FormData(this);
+      var xhr = new XMLHttpRequest();
+
+      xhr.open('POST', 'hr/employees/add', true);
+      xhr.onload = function() {
+          if (xhr.status === 200) {
+              alert('File uploaded successfully.');
+          } else {
+              alert('An error occurred while uploading the file.');
+          }
+      };
+      xhr.send(formData);
+  });
 
   // Automatic Tax Calculation for UI
-  function calculateTax() {
-      const monthlySalary = document.getElementById('monthlysalary').value;
+function calculateTax() {
+  const monthlySalary = parseFloat(document.getElementById('monthlysalary').value.replace(/[^\d.-]/g, '')); // Retrieve and parse the monthly salary value
+  
+  if (!isNaN(monthlySalary)) { // Check if the parsed value is a valid number
+    // TAX DEDUCTIONS
+    // FIX INCOME TAX. THIS IS JUST A TEST
+    let incomeTax;
+    if (monthlySalary <= 20833.33) {
+      incomeTax = 0;
+    } else if (monthlySalary <= 33333.33) {
+        incomeTax = (monthlySalary - 20833.33) * 0.20;
+    } else if (monthlySalary <= 66666.67) {
+        incomeTax = 2500 + (monthlySalary - 33333.33) * 0.25;
+    } else if (monthlySalary <= 166666.67) {
+        incomeTax = 10833.33 + (monthlySalary - 66666.67) * 0.30;
+    } else if (monthlySalary <= 666666.67) {
+        incomeTax = 40833.33 + (monthlySalary - 166666.67) * 0.32;
+    } else {
+        incomeTax = 200833.33 + (monthlySalary - 666666.67) * 0.35;
+    }
+    document.getElementById('incometax').value = incomeTax.toFixed(2);
 
-      // TAX DEDUCTIONS
-      // FIX INCOME TAX. THIS IS JUST A TEST
-      let incomeTax;
-      if (monthlySalary <= 20833.33) {
-        incomeTax = 0;
-      } else if (monthlySalary <= 33333.33) {
-          incomeTax = (monthlySalary - 20833.33) * 0.20;
-      } else if (monthlySalary <= 66666.67) {
-          incomeTax = 2500 + (monthlySalary - 33333.33) * 0.25;
-      } else if (monthlySalary <= 166666.67) {
-          incomeTax = 10833.33 + (monthlySalary - 66666.67) * 0.30;
-      } else if (monthlySalary <= 666666.67) {
-          incomeTax = 40833.33 + (monthlySalary - 166666.67) * 0.32;
-      } else {
-          incomeTax = 200833.33 + (monthlySalary - 666666.67) * 0.35;
-      }
-      document.getElementById('incometax').value = incomeTax.toFixed(2);
+    let withholdingTax;
+    if (monthlySalary <= 20833.33) {
+      withholdingTax = 0;
+    } else if (monthlySalary <= 33333.33) {
+        withholdingTax = 0 + (monthlySalary - 20833.33) * 0.15;
+    } else if (monthlySalary <= 66666.67) {
+        withholdingTax = 1875 + (monthlySalary - 33333.33) * 0.20;
+    } else if (monthlySalary <= 166666.67) {
+        withholdingTax = 8541.80 + (monthlySalary - 66666.67) * 0.25;
+    } else if (monthlySalary <= 666666.67) {
+        withholdingTax = 33541.80 + (monthlySalary - 166666.67) * 0.30;
+    } else {
+        withholdingTax = 183541.80 + (monthlySalary - 666666.67) * 0.35;
+    }
+    document.getElementById('withholdingtax').value = withholdingTax.toFixed(2);
+    
+    // BENEFIT DEDUCTIONS
+    const pagibig = 200.00;
+    document.getElementById('pagibig').value = pagibig;
 
-      let withholdingTax;
-      if (monthlySalary <= 20833.33) {
-        // 20,833.33 and below
-        withholdingTax = 0;
-      } else if (monthlySalary <= 33333.33) {
-          // 20,833.34 to 33,333.33
-          withholdingTax = 0 + (monthlySalary - 20833.33) * 0.15;
-      } else if (monthlySalary <= 66666.67) {
-          // 33,333.34 to 66,666.67
-          withholdingTax = 1875 + (monthlySalary - 33333.33) * 0.20;
-      } else if (monthlySalary <= 166666.67) {
-          // 66,666.68 to 166,666.67
-          withholdingTax = 8541.80 + (monthlySalary - 66666.67) * 0.25;
-      } else if (monthlySalary <= 666666.67) {
-          // 166,666.68 to 666,666.67
-          withholdingTax = 33541.80 + (monthlySalary - 166666.67) * 0.30;
-      } else {
-          // 666,666.68 and above
-          withholdingTax = 183541.80 + (monthlySalary - 666666.67) * 0.35;
-      }
-      document.getElementById('withholdingtax').value = withholdingTax.toFixed(2);
-      
-      // BENEFIT DEDUCTIONS
-      const pagibig = 200.00;
-      document.getElementById('pagibig').value = pagibig;
+    const sss = (monthlySalary * 0.14) * 0.32;
+    document.getElementById('sss').value = sss.toFixed(2);
+    
+    let philhealth;
+    if (monthlySalary <= 10000.00) {
+        philhealth = 500.00;
+    } else if (monthlySalary <= 99999.99) {
+        philhealth = 500.00 + (monthlySalary - 10000.00) * 0.05;
+    } else {
+        philhealth = 5000.00;
+    }
+    document.getElementById('philhealth').value = philhealth.toFixed(2);
 
-      const sss = (monthlySalary * 0.14) * 0.32;
-      document.getElementById('sss').value = sss.toFixed(2);
-      
-      let philhealth;
-      if (monthlySalary <= 10000.00) {
-          philhealth = 500.00;
-      } else if (monthlySalary <= 99999.99) {
-          philhealth = 500.00 + (monthlySalary - 10000.00) * 0.05;
-      } else {
-          philhealth = 5000.00;
-      }
-      document.getElementById('philhealth').value = philhealth.toFixed(2);
+    const thirteenthmonth = monthlySalary;
+    document.getElementById('thirteenthmonth').value = thirteenthmonth;
 
-      const thirteenthmonth = monthlySalary;
-      document.getElementById('thirteenthmonth').value = thirteenthmonth;
-
-      // TOTAL SALARY
-      const totalsalary = monthlySalary - (incomeTax + withholdingTax + pagibig + sss + philhealth);
-      document.getElementById('totalsalary').value = totalsalary.toFixed(2);
+    // TOTAL SALARY
+    const totalsalary = monthlySalary - (incomeTax + withholdingTax + pagibig + sss + philhealth);
+    document.getElementById('totalsalary').value = totalsalary.toFixed(2);
+  } else {
+    // If the parsed value is NaN (Not a Number), clear the tax input fields
+    document.getElementById('incometax').value = '';
+    document.getElementById('withholdingtax').value = '';
+    document.getElementById('pagibig').value = '';
+    document.getElementById('sss').value = '';
+    document.getElementById('philhealth').value = '';
+    document.getElementById('thirteenthmonth').value = '';
+    document.getElementById('totalsalary').value = '';
   }
+}
+
+
+      // Function to update the monthly salary based on the selected position and calculate tax
+function updateSalary() {
+  var selectedPosition = document.getElementById('Position').value;
+  var monthlySalaryInput = document.getElementById('monthlysalary');
+
+  if (salaries[selectedPosition] !== undefined) {
+    var salary = salaries[selectedPosition];
+    monthlySalaryInput.value = salary.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+    console.log("Monthly salary updated:", salary); // Debugging statement
+    calculateTax(); // Call the calculateTax function after updating the salary
+  } else {
+    monthlySalaryInput.value = ''; // If position not found, clear the input
+  }
+}
+
 </script>
 </body>
 </html> 
