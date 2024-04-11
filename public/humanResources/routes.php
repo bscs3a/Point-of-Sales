@@ -27,9 +27,12 @@ $hr = [
         include $basePath . "applicants.accept.php";
     },
 
+    // leave requests
+    '/hr/leave-requests' => $basePath . "leave-requests.php",
+    '/hr/leave-requests/file-leave' => $basePath . "leave-requests.file.php",
+
     '/hr/schedule' => $basePath . "schedule.php",
     '/hr/payroll' => $basePath . "payroll.php",
-    '/hr/leave-requests' => $basePath . "leave-requests.php",
     '/hr/dtr' => $basePath . "daily-time-record.php",
 
     //view employee profile
@@ -911,6 +914,32 @@ Router::post('/hr/leave-requests', function () {
     $leaveRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     include './public/humanResources/views/hr.leave-requests.php';
+});
+
+// file leave requests [WORK IN PROGRESS]
+Router::post('/hr/leave-requests/file-leave-WIP', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    // BASIC EMPLOYEE INFORMATION
+    $firstName = $_POST['firstName'];
+    $middleName = $_POST['middleName'];
+    $lastName = $_POST['lastName'];
+
+    $query = "INSERT INTO table_here (column_here, column_here);";
+    $stmt = $conn->prepare($query);
+
+    $stmt->execute([
+        ':firstName' => $firstName,
+        ':middleName' => $middleName,
+        ':lastName' => $lastName,
+    ]);
+
+    $employeeId = $conn->lastInsertId();
+
+    header("Location: $rootFolder/hr/leave-requests");
 });
 
 // EXAMPLE DELETE

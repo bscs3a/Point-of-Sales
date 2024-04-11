@@ -65,7 +65,8 @@ $stmt = null;
 
   <!-- Leave Requests -->
   <div class="flex flex-wrap">
-    <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3>
+    <!-- <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3> -->
+    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600">File a Leave</button>
 
     <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -82,6 +83,15 @@ $stmt = null;
         require_once 'inc/leave-requests.table.php';
     } 
   ?>
+  
+  <!-- Accept modal -->
+  <div id="acceptModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-white p-5 rounded-lg text-center">
+          <h2 class="mb-4">Accept leave request?</h2>
+          <button id="confirmAccept" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
+          <button id="cancelAccept" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
+      </div>
+  </div>
 
   <!-- Reject modal -->
   <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
@@ -92,114 +102,7 @@ $stmt = null;
       </div>
   </div>
 
-  <!-- <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-    <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-      <thead class="bg-gray-50">
-        <tr>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Name</th>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Request Date</th>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Reason</th>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Status</th>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-        <tr class="hover:bg-gray-50">
-          <td class="flex gap-3 px-6 py-4 font-normal text-gray-900 items-center">
-            <div class="relative h-10 w-10">
-              <img
-                class="h-full w-full rounded-full object-cover object-center"
-                src="https://pbs.twimg.com/media/GJMnNhcXoAEM1Es?format=png"
-                alt=""
-              />
-              <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <div class="text-sm">
-              <div class="font-medium text-gray-700">Employee Name</div>
-              <div class="text-gray-400">Employee Position</div>
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600">
-              MM/DD/YYYY
-            </span>
-          </td>
-          <td class="px-6 py-4"> 
-            <div class="font-medium text-gray-700">Sick Leave</div>
-            <div>
-              Ever since one fated day, my world's been fading to gray. Despite the unclouded sky, staining the Earth with its dye. Afraid of taking the leap or to forevermore sleep. With cowardice as my guard, I'll keep enduring these scars.
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-              Pending
-            </span>
-          </td>   
-          <td class="px-6 py-4">
-            <div class="flex justify-end gap-4">
-              <a x-data="{ tooltip: 'Delete' }" href="#">   
-                <i class="ri-check-line"></i>     
-              </a>
-              <a x-data="{ tooltip: 'Edit' }" href="#">
-                <i class="ri-close-line"></i>     
-              </a>
-            </div>
-          </td>
-        </tr>
 
-        <tr class="hover:bg-gray-50">
-          <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
-            <div class="relative h-10 w-10">
-              <img
-                class="h-full w-full rounded-full object-cover object-center"
-                src="https://pbs.twimg.com/media/GJMmbo7XsAAqA9R?format=png"
-                alt=""
-              />
-              <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <div class="text-sm">
-              <div class="font-medium text-gray-700">Employee Name</div>
-              <div class="text-gray-400">Employee Position</div>
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <span
-              class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600"
-            >       
-              MM/DD/YYYY
-            </span>
-          </td>
-          <td class="px-6 py-4">
-            <div class="font-medium text-gray-700">Vacation Leave</div>
-            <div>
-              A spiral without an end to solitude I'm condemned. Barely able to recall how full of joy I once was. My life now follows this trend of every day that I spend staring into a screen and simply daring to dream.
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-              Pending
-            </span>
-          </td>
-          <td class="px-6 py-4">
-            <div class="flex justify-end gap-4">
-              <a x-data="{ tooltip: 'Delete' }" href="#">   
-                <i class="ri-check-line"></i>     
-              </a>
-              <a x-data="{ tooltip: 'Edit' }" href="#">
-                <i class="ri-close-line"></i>     
-              </a>
-            </div>
-          </td>
-        </tr>               
-      </tbody>
-    </table>
-  </div> -->
-</div>
 <!-- End Leave Requests -->
   
 </main>
@@ -208,6 +111,7 @@ $stmt = null;
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 <script>
+  // REJECT MODAL
   document.getElementById('rejectButton').addEventListener('click', function() {
     document.getElementById('rejectModal').classList.remove('hidden');
   });
@@ -217,6 +121,20 @@ $stmt = null;
   });
 
   document.getElementById('confirmReject').addEventListener('click', function() {
+      // Handle the deletion here
+      console.log('Deleting...');
+  });
+
+  // ACCEPT MODAL
+  document.getElementById('acceptButton').addEventListener('click', function() {
+    document.getElementById('acceptModal').classList.remove('hidden');
+  });
+
+  document.getElementById('cancelAccept').addEventListener('click', function() {
+      document.getElementById('acceptModal').classList.add('hidden');
+  });
+
+  document.getElementById('confirmAccept').addEventListener('click', function() {
       // Handle the deletion here
       console.log('Deleting...');
   });

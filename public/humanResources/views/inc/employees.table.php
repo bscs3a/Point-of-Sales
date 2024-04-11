@@ -7,8 +7,6 @@
           <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
             Name</th>
           <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            ID</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
             Department</th>
           <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
             Action</th>
@@ -38,9 +36,6 @@
                   <div class="text-sm leading-5 text-gray-500"><?php echo $employee['email']; ?></div>
                 </div>
               </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900"><?php echo $employee['id']; ?></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
               <div class="text-sm leading-5 text-gray-900"><?php echo $employee['position']; ?></div>
