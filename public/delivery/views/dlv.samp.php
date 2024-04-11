@@ -31,11 +31,10 @@ if ($truck === false) {
 ?>
 
 <?php
-// Display orders from DeliveryOrders table and intersect with Products and Sales tables
+        // Display orders from DeliveryOrders table and intersect with Products and Sales tables
 $stmt = $conn->prepare("SELECT DeliveryOrders.*, Products.ProductName, Sales.SaleDate FROM DeliveryOrders 
-    INNER JOIN Products ON DeliveryOrders.ProductID = Products.ProductID
-    INNER JOIN Sales ON DeliveryOrders.SaleID = Sales.SaleID
-    WHERE DeliveryOrders.DeliveryStatus IN ('Pending', 'Failed to Deliver')");
+        INNER JOIN Products ON DeliveryOrders.ProductID = Products.ProductID
+        INNER JOIN Sales ON DeliveryOrders.SaleID = Sales.SaleID");
 $stmt->execute();
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -105,7 +104,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </button>
                 </div>
                 <!-- content -->
-
                 <!-- You could provide a form here to assign the truck to an order -->
                 <div class="m-4 font-bold text-lg flex flex-col space-y-4">
                     <div class="flex justify-start space-x-20">
@@ -115,43 +113,40 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="flex space-x-10">
                         <p>Select:</p>
                         <div class="border border-gray-200 overflow-auto max-h-[20rem] w-full">
-                            <form id="myForm" method="POST" action="/truckassign">
-                                <table id="myTable" class="w-full mb-4">
-                                    <thead class="sticky top-0 bg-white z-10">
+                            <table id="myTable" class="w-full mb-4">
+                                <thead class="sticky top-0 bg-white z-10">
+                                    <tr>
+                                        <th class="w-1/8 border px-4 py-2">Order ID</th>
+                                        <th class="w-1/8 border px-4 py-2">Sale ID</th>
+                                        <th class="w-1/8 border px-4 py-2">Item Name</th>
+                                        <th class="w-1/8 border px-4 py-2">Quantity</th>
+                                        <th class="w-1/8 border px-4 py-2">Order Date</th>
+                                        <th class="w-1/8 border px-4 py-2">Delivery Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="font-normal text-center">
+                                    <?php foreach ($results as $row): ?>        
                                         <tr>
-                                            <th class="w-1/8 border px-4 py-2">Order ID</th>
-                                            <th class="w-1/8 border px-4 py-2">Sale ID</th>
-                                            <th class="w-1/8 border px-4 py-2">Item Name</th>
-                                            <th class="w-1/8 border px-4 py-2">Quantity</th>
-                                            <th class="w-1/8 border px-4 py-2">Order Date</th>
-                                            <th class="w-1/8 border px-4 py-2">Delivery Date</th>
+                                            <td class="border px-4 py-2">
+                                                <input type="checkbox" name="selectRow" class="mr-4 select-checkbox" data-weight="<?php echo $row['ProductWeight']; ?>" data-id="<?php echo $row['ProductID']; ?>">
+                                            </td>
+                                            <td class="border px-4 py-2"><?php echo $row['SaleID']; ?></td>
+                                            <td class="border px-4 py-2"><?php echo $row['ProductName']; ?></td>
+                                            <td class="border px-4 py-2"><?php echo $row['Quantity']; ?></td>
+                                            <td class="border px-4 py-2"><?php echo date('Y-m-d', strtotime($row['SaleDate'])); ?></td>
+                                            <td class="border px-4 py-2"><?php echo $row['DeliveryDate']; ?></td>
                                         </tr>
-                                    </thead>
-                                    <tbody class="font-normal text-center">
-                                        <?php foreach ($results as $row): ?>        
-                                            <tr>
-                                                <td class="border px-4 py-2">
-                                                    <input type="checkbox" name="orderIds[]" class="mr-4 select-checkbox" data-weight="<?php echo $row['ProductWeight']; ?>" data-id="<?php echo $row['ProductID']; ?>" value="<?php echo $row['DeliveryOrderID']; ?>">
-                                                    <?php echo isset($row['DeliveryOrderID']) ? $row['DeliveryOrderID'] : ''; ?>
-                                                </td>
-                                                <td class="border px-4 py-2">#<?php echo $row['SaleID']; ?></td>
-                                                <td class="border px-4 py-2"><?php echo $row['ProductName']; ?></td>
-                                                <td class="border px-4 py-2"><?php echo $row['Quantity']; ?></td>
-                                                <td class="border px-4 py-2"><?php echo date('Y-m-d', strtotime($row['SaleDate'])); ?></td>
-                                                <td class="border px-4 py-2"><?php echo $row['DeliveryDate']; ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>         
-                                    </tbody>
-                                </table>
+                                    <?php endforeach; ?>         
+                                </tbody>
+                            </table>
                         </div>
-                    </div>    
-                            <input type="hidden" name="truckId" value="<?php echo $truckId; ?>">
-                                <div class="flex justify-center items-center">
-                                    <button type="button" onclick="validateAndSubmitForm()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl m-4">
-                                        Go
-                                    </button>
-                                </div>
-                            </form>
+                    </div>
+                    <!-- save -->
+                    <div class="flex justify-center items-center">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl">
+                            Go
+                        </button>
+                    </div>
                     <div class="flex justify-start items-center">
                         <button id="uncheck-all" class="px-2 py-1 bg-blue-500 text-white rounded text-sm w-auto">Uncheck All</button>
                     </div>
@@ -167,55 +162,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </main>
-                    <!-- Function to avoid not to click any order -->
-
-    <script>
-    function validateForm() {
-        var checkboxes = document.getElementsByName('orderIds[]');
-        var isChecked = false;
-
-        // Check if at least one checkbox is selected
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                isChecked = true;
-                break;
-            }
-        }
-
-        // If no checkbox is selected, show a SweetAlert2 notification
-        if (!isChecked) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'No Selection',
-                text: 'Please select at least one order.'
-            });
-        }
-
-        return isChecked;
-    }
-
-    function submitForm() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, go ahead!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('myForm').submit();
-            }
-        })
-    }
-
-    function validateAndSubmitForm() {
-        if (validateForm()) {
-            submitForm();
-        }
-    }
-    </script>                                    
                 <!-- function for sorting library  --> 
     <script>
         $(document).ready( function () {

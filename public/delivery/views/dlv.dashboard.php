@@ -1,6 +1,7 @@
 <?php
 //database connection
 require_once './src/dbconn.php';
+require_once 'updateTruckStatus.php';
 
 $db = Database::getInstance();
 $conn = $db->connect();

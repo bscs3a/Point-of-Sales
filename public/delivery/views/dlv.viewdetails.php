@@ -162,11 +162,10 @@ if ($conn === null) {
                     <div class="relative inline-flex justify-center items-center">
                         <form method="POST" id="statusForm" action="/statusupdateview">
                             <input type="hidden" name="orderId" value="<?php echo $order['DeliveryOrderID']; ?>">
-                            <select id="statusSelect" name="status" class="mt-4 mb-4 bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2 px-4 rounded-2xl" onchange="confirmStatusChange(this)">
+                            <select id="statusSelect" name="status" class="mt-4 mb-4 bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-2 px-4 rounded-2xl" onchange="confirmStatusChange(this)" data-previous="<?php echo $order['DeliveryStatus']; ?>">
                                 <option value="" disabled selected>Change Status</option>
-<!--                            <option value="Pending">Pending</option>
-                                <option value="In Transit">In Transit</option>  -->
                                 <option value="Delivered">Delivered</option>
+                                <option value="Failed to Deliver">Failed to Deliver</option>
                             </select>
                         </form>
                     </div>
@@ -187,24 +186,40 @@ if ($conn === null) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
 function confirmStatusChange(selectElement) {
-    var status = selectElement.value;
-    Swal.fire({
-        title: 'Are you sure?',
-        text: `You want to change the status to ${status}?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, change it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // User clicked 'OK'.
-            document.getElementById("statusForm").submit();
-        } else {
-            // User clicked 'Cancel'.
-            selectElement.value = '';
-        }
-    })
+    var previousStatus = selectElement.getAttribute('data-previous');
+    var newStatus = selectElement.value;
+
+    if (previousStatus === 'Pending' && (newStatus === 'Delivered' || newStatus === 'Failed to Deliver')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Pending status cannot be updated to Delivered or Failed to Deliver!',
+        });
+
+        // Reset the select value to the previous one
+        selectElement.value = previousStatus;
+    } else {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to change the status to ${newStatus}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, change it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User clicked 'OK'.
+                document.getElementById("statusForm").submit();
+            } else {
+                // User clicked 'Cancel'.
+                selectElement.value = previousStatus;
+            }
+        });
+
+        // Update the previous status data attribute
+        selectElement.setAttribute('data-previous', newStatus);
+    }
 }
 </script>
 

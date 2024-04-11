@@ -11,7 +11,7 @@ if ($conn === null) {
         
 <?php
         // query for delivery orders where is not delivered status
-$query = "SELECT * FROM deliveryorders WHERE DeliveryStatus != 'Delivered'";
+$query = "SELECT * FROM deliveryorders WHERE DeliveryStatus != 'Delivered' AND DeliveryStatus != 'Failed to Deliver'";
 
 $result = $conn->query($query);
 ?>
@@ -70,17 +70,17 @@ $result = $conn->query($query);
         </div>
 
             <!-- Content here -->
-    <div id="filter" class="py-2 px-10">
+<!--    <div id="filter" class="py-2 px-10">
         <select id="statusFilter" class="bg-white border hover:bg-gray-300 text-black py-2 px-4 rounded">
             <option value="all">All</option>
             <option value="In transit">In Transit</option>
             <option value="Pending">Pending</option>
-        </select>
-    </div>     
+        </select>   
+    </div>     -->
         <!--Table -->
     <div class="flex-1 pr-10 pl-10 h-full">
         <div class="h-auto bg-white p-4 rounded-lg shadow-xl border overflow-hidden">
-            <div class="max-h-[450px] overflow-y-auto">
+            <div class="max-h-[850px] overflow-y-auto">
                 <table id="orderTable" class="w-full">
                     <thead class="sticky top-0 bg-white z-10">
                         <tr>
@@ -98,7 +98,7 @@ $result = $conn->query($query);
                             {
                             ?>
                              <!-- detail result -->
-                                <td class="border px-4 py-2">#<?php echo $row['DeliveryOrderID']; ?></td>
+                                <td class="border px-4 py-2"><?php echo $row['DeliveryOrderID']; ?></td>
                                 <td class="border px-4 py-2">#<?php echo $row['SaleID']; ?></td>
                                 <td class="border px-4 py-2"><?php echo $row['DeliveryDate']; ?></td>
                                 <td class="border px-4 py-2"><?php echo $row['DeliveryStatus']; ?></td>

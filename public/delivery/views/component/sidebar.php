@@ -2,7 +2,7 @@
 
  <div id="sidebar-menu" class="fixed bg-sidebar left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform">
 
-<div href="#" class="flex items-center pb-4">
+<div route="/" class="flex items-center pb-4">
     <img src="https://placehold.co/50x50" alt="" class="w-10 h-10 rounded object-cover">
 
     <span class="text-4xl font-russo text-white ml-3">BSCS 3A</span>
