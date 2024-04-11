@@ -1,5 +1,5 @@
 <?php
-require_once '../../../src/dbconn.php';
+require_once 'src/dbconn.php';
 //get the value of 1 t-account - can return negative or positive
 function getAccountBalance($ledger, $considerDate = false, $year = null, $month = null) {
     $db = Database::getInstance();
