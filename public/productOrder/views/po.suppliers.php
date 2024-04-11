@@ -59,34 +59,24 @@
       <!-- Main Content -->
       <div class="py-4 px-10">
         <div class="justify-between items-start mt-4">
-          <!-- Button -->
+
           <div class="flex justify-between">
+
+
+
+            <!-- Search -->
             <div class="items-start">
               <div class="relative">
                 <div class="inline-flex items-center overflow-hidden rounded-lg border border-gray-500">
-                  <button
-                    class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
-                    <i class="ri-calendar-2-fill"></i>
-                    Filter
-                  </button>
-
-                  <div class="relative">
-                    <label for="Search" class="sr-only"> Search </label>
-
-                    <input type="text" id="Search" placeholder="Search by ID..."
-                      class="w-full rounded-md rounded-l-md p-1 border-gray-200 pe-10 shadow-sm sm:text-sm outline-none pl-4" />
-
-                    <span class="absolute inset-y-0 end-0 grid w-10 place-content-center">
-                      <button type="button" class="text-gray-600 hover:text-gray-700">
-                        <span class="sr-only">Search</span>
-
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                          stroke="currentColor" class="h-4 w-4">
-                          <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                        </svg>
-                      </button>
-                    </span>
+                  <div class="flex flex-row">
+                    <select id="filterSelect"
+                      class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
+                      <option value="">Filter</option>
+                      <option value="Supplier_Name">Supplier Name</option>
+                      <option value="Status">Status</option>
+                    </select>
+                    <input id="searchInput" placeholder="Search"
+                      class="w-full rounded-md rounded-l-md p-1 border-gray-200 pe-10-0 shadow-sm sm:text-sm outline-none pl-4" />
                   </div>
                 </div>
               </div>
@@ -98,6 +88,7 @@
                 <span>Add Supplier</span>
               </button>
             </div>
+
           </div>
         </div>
 
@@ -118,19 +109,21 @@
               while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <!-- Card 1 -->
-                <div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8">
+                <div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8 supplierCard"
+                  data-supplier_name="<?php echo $row['Supplier_Name']; ?>" data-status="<?php echo $row['Status']; ?>">
                   <div class="flex flex-col gap-2">
                     <div class="flex flex-row">
                       <a class="text-1xl font-semibold">Supplier Name:</a>
                       <a class="ml-3 text-black-500"><?php echo $row['Supplier_Name']; ?></a>
                     </div>
                     <div class="flex flex-row">
-                    <a class="text-1xl font-semibold">Status:</a>
+                      <a class="text-1xl font-semibold">Status:</a>
                       <a class="ml-3 text-green-600"><?php echo $row['Status']; ?></a>
                     </div>
                   </div>
                   <div class="flex justify-center items-center pt-3">
-                  <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>" class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
+                    <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
                   </div>
                 </div>
                 <?php
@@ -152,6 +145,44 @@
       </div>
     </div>
   </div>
+  <script>
+    // Function to filter suppliers based on the selected filter option and search input
+    function filterSuppliers() {
+      console.log("Filtering suppliers...");
+
+      var filterOption = document.getElementById("filterSelect").value.toLowerCase();
+      var searchValue = document.getElementById("searchInput").value.toLowerCase();
+      var supplierCards = document.querySelectorAll(".supplierCard");
+
+      supplierCards.forEach(card => {
+        var display = "none";
+
+        // Get the specific data based on the filter option
+        switch (filterOption) {
+          case "supplier_name":
+          case "status":
+            display = card.dataset[filterOption].toLowerCase().includes(searchValue) ? "" : "none";
+            break;
+          default:
+            display = "";
+        }
+
+        card.style.display = display;
+      });
+    }
+
+    // Event listeners for filter and search input
+    document.getElementById("filterSelect").addEventListener("change", function () {
+      console.log("Filter select changed...");
+      filterSuppliers();
+    });
+    document.getElementById("searchInput").addEventListener("input", function () {
+      console.log("Search input changed...");
+      filterSuppliers();
+    });
+  </script>
+  <script src="./../src/route.js"></script>
+  <script src="./../src/form.js"></script>
 </body>
 
 </html>

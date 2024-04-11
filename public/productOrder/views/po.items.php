@@ -203,8 +203,9 @@
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-</body>
-<script src="./../src/route.js"></script>
+  <script src="./../src/route.js"></script>
 <script src="./../src/form.js"></script>
+</body>
+
 
 </html>
