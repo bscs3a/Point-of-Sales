@@ -66,7 +66,7 @@ $stmt = null;
   <!-- Leave Requests -->
   <div class="flex flex-wrap">
     <!-- <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3> -->
-    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600">File a Leave</button>
+    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">File a Leave</button>
 
     <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -87,7 +87,7 @@ $stmt = null;
   <!-- Accept modal -->
   <div id="acceptModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
       <div class="bg-white p-5 rounded-lg text-center">
-          <h2 class="mb-4">Accept leave request?</h2>
+          <h2 class="mb-4">Allow request of leave?</h2>
           <button id="confirmAccept" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
           <button id="cancelAccept" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
       </div>
@@ -96,7 +96,7 @@ $stmt = null;
   <!-- Reject modal -->
   <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
       <div class="bg-white p-5 rounded-lg text-center">
-          <h2 class="mb-4">Reject leave request?</h2>
+          <h2 class="mb-4">Deny request of leave?</h2>
           <button id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
           <button id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
       </div>

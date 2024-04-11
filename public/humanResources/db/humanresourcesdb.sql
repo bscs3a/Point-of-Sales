@@ -23,8 +23,6 @@ CREATE TABLE employees (
     PRIMARY KEY (id)
 );
 
-
-
 CREATE TABLE employment_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
     dateofhire DATE NOT NULL,
@@ -77,10 +75,10 @@ CREATE TABLE attendance (
 CREATE TABLE leave_requests (
     id INT(10) NOT NULL AUTO_INCREMENT,
     type ENUM('Sick Leave','Vacation Leave','5 Days Forced Leave','Special Privilege Leave','Maternity Leave','Paternity Leave','Parental Leave','Rehabilitation Leave','Special Leave (For Women)','Study Leave','Terminal Leave','Special Emergency Leave') NOT NULL,
-    details VARCHAR(255) NOT NULL,
+    details VARCHAR(255),
     date_submitted TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    start_date DATETIME NOT NULL,
-    end_date DATETIME NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
     status ENUM('Pending','Approved','Denied') DEFAULT 'Pending' NOT NULL,
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
@@ -159,7 +157,7 @@ INSERT INTO account_info (username, password, role, employees_id) VALUES
 ('nae8f', 'gacha', 'Human Resources', 3);
 
 INSERT INTO leave_requests (type, details, start_date, end_date, status, employees_id) VALUES
-('Sick Leave', 'Enjoy this moon necklace. I got it for you. You remind me of the moon, because it\'s always there and it\'s beautiful.', '2022-08-28 08:00:00', '2022-08-28 08:00:00', 'Pending', 1);
+('Sick Leave', 'Enjoy this moon necklace. I got it for you. You remind me of the moon, because it\'s always there and it\'s beautiful.', '2024-08-27 08:00:00', '2024-08-28 08:00:00', 'Pending', 1);
 
 INSERT INTO applicants (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, applyingForDepartment, address, contact_no, email, applyingForPosition) VALUES
 ('https://pbs.twimg.com/profile_images/1776936537089089536/Ws5Ihsh7_400x400.jpg', 'Jaruu', 'Eveland', 'Rias', '2001-08-31', 'Male', 'Filipino', 'Single', 'Human Resources', 'Country Roads Take Me Home', '09123456789', 'foxwriter@example.com', 'HR Coordinator'),

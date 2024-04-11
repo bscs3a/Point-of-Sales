@@ -30,6 +30,11 @@ $hr = [
     // leave requests
     '/hr/leave-requests' => $basePath . "leave-requests.php",
     '/hr/leave-requests/file-leave' => $basePath . "leave-requests.file.php",
+    //view leave request detail
+    '/hr/leave-requests/id={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "leave-requests.view.php";
+    },
 
     '/hr/schedule' => $basePath . "schedule.php",
     '/hr/payroll' => $basePath . "payroll.php",
@@ -923,21 +928,31 @@ Router::post('/hr/leave-requests/file-leave-WIP', function () {
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
 
-    // BASIC EMPLOYEE INFORMATION
-    $firstName = $_POST['firstName'];
-    $middleName = $_POST['middleName'];
-    $lastName = $_POST['lastName'];
+    $employees_ID = $_SESSION['id'];
 
-    $query = "INSERT INTO table_here (column_here, column_here);";
+    // BASIC EMPLOYEE INFORMATION
+    $type = $_POST['type'];
+    $details = $_POST['details'];
+    $date_submitted = $_POST['date_submitted'];
+    $start_date = $_POST['start_date'];
+    $end_date = $_POST['end_date'];
+    $status = $_POST['status'];
+    $employees_id = $_POST['employees_id'];
+
+    $query = "INSERT INTO leave_requests (type, details, date_submitted, start_date, end_date, status, employees_id);";
     $stmt = $conn->prepare($query);
 
     $stmt->execute([
-        ':firstName' => $firstName,
-        ':middleName' => $middleName,
-        ':lastName' => $lastName,
+        ':type' => $type,
+        ':details' => $details,
+        ':date_submitted' => $date_submitted,
+        ':start_date' => $start_date,
+        ':end_date' => $end_date,
+        ':status' => $status,
+        ':employees_id' => $employees_id,
     ]);
 
-    $employeeId = $conn->lastInsertId();
+    $leaveID = $conn->lastInsertId();
 
     header("Location: $rootFolder/hr/leave-requests");
 });

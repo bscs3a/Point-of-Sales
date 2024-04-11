@@ -336,7 +336,7 @@
                 id="sssnumber"
                 type="text"
                 placeholder="SSS Number"
-                pattern="[0-9]{10}"  // 10-digit SSS number
+                pattern="[0-9]{10}"
                 title="Please enter a 10-digit SSS number"
               />
             </div>
@@ -350,7 +350,7 @@
                 id="philhealthnumber"
                 type="text"
                 placeholder="PhilHealth Number"
-                pattern="[0-9]{12}"  // 12-digit PhilHealth number
+                pattern="[0-9]{12}"
                 title="Please enter a 12-digit PhilHealth number"
               />
             </div>
@@ -364,7 +364,7 @@
                 id="tinnumber"
                 type="text"
                 placeholder="TIN Number"
-                pattern="[0-9]{9}"  // 9-digit TIN number
+                pattern="[0-9]{9}"  
                 title="Please enter a 9-digit TIN number"
               />
             </div>
@@ -381,7 +381,7 @@
           id="pagibignumber"
           type="text"
           placeholder="Pag-IBIG Number"
-          pattern="[0-9]{12}"  // 12-digit Pag-IBIG number
+          pattern="[0-9]{12}"   
           title="Please enter a 12-digit Pag-IBIG number"
         />
       </div>
@@ -396,7 +396,7 @@
                         Monthly Salary
                       </label>
                       <input
-                        class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                         name="monthlysalary"
                         id="monthlysalary"
                         type="text"
@@ -411,7 +411,7 @@
                           Income Tax
                         </label>
                         <input
-                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                           name="incometax"
                           id="incometax"
                           type="text"
@@ -424,7 +424,7 @@
                           Withholding tax
                         </label>
                         <input  
-                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                           name="withholdingtax"
                           id="withholdingtax"
                           type="number"
@@ -444,7 +444,7 @@
                               SSS
                             </label>
                             <input
-                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                               name="sss"
                               id="sss"
                               type="text"
@@ -457,7 +457,7 @@
                               Pag-IBIG Fund
                             </label>
                             <input
-                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                               name="pagibig"
                               id="pagibig"
                               type="text"
@@ -470,7 +470,7 @@
                               Philhealth
                             </label>
                             <input  
-                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                               name="philhealth"
                               id="philhealth"
                               type="text"
@@ -488,7 +488,7 @@
                                 13th Month Pay
                               </label>
                               <input
-                                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                                 name="thirteenthmonth"
                                 id="thirteenthmonth"
                                 type="number"
@@ -501,7 +501,7 @@
                                 Total Salary (with Tax reductions)
                               </label>
                               <input
-                                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
                                 name="totalsalary"
                                 id="totalsalary"
                                 type="number"
@@ -529,7 +529,6 @@
                           placeholder="Username"
                         />
                     </div>
-                    <!-- TAX INFO -->
                     <div class="mr-2">
                         <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="incometax">
                           Password
@@ -541,7 +540,21 @@
                           type="password"
                           placeholder="Password"
                         />
+                    </div>
+                    <div class="mr-2">
+                        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="incometax">
+                          Confirm Password
+                        </label>
+                        <input
+                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                          name="confirmPassword"
+                          id="confirmPassword"
+                          type="password"
+                          placeholder="Confirm Password"
+                        />
+                        <div>
                         <input type="checkbox" id="togglePassword"> Show Password
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -572,104 +585,104 @@
   });
 
   // DEPARTMENT AND POSITION DROPDOWN
-document.getElementById('Department').addEventListener('change', function() {
-    var positionSelect = document.getElementById('Position');
-    var department = this.value;
+  document.getElementById('Department').addEventListener('change', function() {
+  var positionSelect = document.getElementById('Position');
+  var department = this.value;
 
-    // Clear the position select
-    positionSelect.innerHTML = '<option value="">Select Position</option>';
+  // Clear the position select
+  positionSelect.innerHTML = '<option value="">Select Position</option>';
 
-    // Define the positions for each department
-    var positions = {
+  // Define the positions for each department
+  var positions = {
 
-        'Product Order': [
-          'Order Processor',
-          'Order Entry Clerk',
-          'Quality Control Inspector',
-          'Logistics Coordinator',
-          'Procurement Specialist'
-        ],
+      'Product Order': [
+        'Order Processor',
+        'Order Entry Clerk',
+        'Quality Control Inspector',
+        'Logistics Coordinator',
+        'Procurement Specialist'
+      ],
 
-        'Inventory': [
-          'Inventory Manager/Controller',
-          'Inventory Planner',
-          'Stock Controller',
-          'Purchasing Manager',
-          'Warehouse Manager',
-          'Materials Manager'
-        ],
+      'Inventory': [
+        'Inventory Manager/Controller',
+        'Inventory Planner',
+        'Stock Controller',
+        'Purchasing Manager',
+        'Warehouse Manager',
+        'Materials Manager'
+      ],
 
-        'Delivery': [
-          'Delivery Driver',
-          'Courier',
-          'Warehouse Associate',
-          'Customer Service Representative',
-          'Parcel Sorter'
-        ],
+      'Delivery': [
+        'Delivery Driver',
+        'Courier',
+        'Warehouse Associate',
+        'Customer Service Representative',
+        'Parcel Sorter'
+      ],
 
-        'Human Resources': [
-          'Recruiter',
-          'HR Manager/Director',
-          'Compensation and Benefits Specialist',
-          'HR Coordinator',
-          'HR Legal Compliance Specialist'
-        ],
+      'Human Resources': [
+        'Recruiter',
+        'HR Manager/Director',
+        'Compensation and Benefits Specialist',
+        'HR Coordinator',
+        'HR Legal Compliance Specialist'
+      ],
 
-        'Point of Sales': [
-          'Retail Associate/Cashier',
-          'Inventory Control Specialist',
-          'Sales Associate',
-          'Customer Service Representative',
-          'Business Analyst',
-          'E-commerce Coordinator'
-        ],
+      'Point of Sales': [
+        'Retail Associate/Cashier',
+        'Inventory Control Specialist',
+        'Sales Associate',
+        'Customer Service Representative',
+        'Business Analyst',
+        'E-commerce Coordinator'
+      ],
 
-        'Finance': [
-          'Accountant',
-          'Bookkeeper',
-          'Financial Analyst',
-          'Tax Accountant',
-          'Cost Accountant',
-          'Credit Analyst',
-          'Payroll Specialist'
-        ]
-    };
+      'Finance': [
+        'Accountant',
+        'Bookkeeper',
+        'Financial Analyst',
+        'Tax Accountant',
+        'Cost Accountant',
+        'Credit Analyst',
+        'Payroll Specialist'
+      ]
+  };
       
     // Define the salaries for each position
     var salaries = {
       'Order Processor': 18000,
-  'Order Entry Clerk': 15000,
-  'Quality Control Inspector': 20000,
-  'Logistics Coordinator': 30000,
-  'Procurement Specialist': 40000,
-  'Inventory Manager/Controller': 60000,
-  'Inventory Planner': 35000,
-  'Stock Controller': 25000,
-  'Purchasing Manager': 70000,
-  'Warehouse Manager': 55000,
-  'Materials Manager': 55000,
-  'Delivery Driver': 15000,
-  'Courier': 18000,
-  'Warehouse Associate': 18000,
-  'Customer Service Representative': 20000,
-  'Parcel Sorter': 15000,
-  'Recruiter': 30000,
-  'HR Manager/Director': 80000,
-  'Compensation and Benefits Specialist': 45000,
-  'HR Coordinator': 25000,
-  'HR Legal Compliance Specialist': 35000,
-  'Retail Associate/Cashier': 12000,
-  'Inventory Control Specialist': 25000,
-  'Sales Associate': 18000,
-  'Business Analyst': 45000,
-  'E-commerce Coordinator': 35000,
-  'Accountant': 35000,
-  'Bookkeeper': 20000,
-  'Financial Analyst': 45000,
-  'Tax Accountant': 45000,
-  'Cost Accountant': 45000,
-  'Credit Analyst': 35000,
-  'Payroll Specialist': 30000
+      'Order Entry Clerk': 15000,
+      'Quality Control Inspector': 20000,
+      'Logistics Coordinator': 30000,
+      'Procurement Specialist': 40000,
+      'Inventory Manager/Controller': 60000,
+      'Inventory Planner': 35000,
+      'Stock Controller': 25000,
+      'Purchasing Manager': 70000,
+      'Warehouse Manager': 55000,
+      'Materials Manager': 55000,
+      'Delivery Driver': 15000,
+      'Courier': 18000,
+      'Warehouse Associate': 18000,
+      'Customer Service Representative': 20000,
+      'Parcel Sorter': 15000,
+      'Recruiter': 30000,
+      'HR Manager/Director': 80000,
+      'Compensation and Benefits Specialist': 45000,
+      'HR Coordinator': 25000,
+      'HR Legal Compliance Specialist': 35000,
+      'Retail Associate/Cashier': 12000,
+      'Inventory Control Specialist': 25000,
+      'Sales Associate': 18000,
+      'Business Analyst': 45000,
+      'E-commerce Coordinator': 35000,
+      'Accountant': 35000,
+      'Bookkeeper': 20000,
+      'Financial Analyst': 45000,
+      'Tax Accountant': 45000,
+      'Cost Accountant': 45000,
+      'Credit Analyst': 35000,
+      'Payroll Specialist': 30000
     };
 
   // Add an event listener to the position select field

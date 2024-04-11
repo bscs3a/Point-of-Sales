@@ -60,7 +60,7 @@
           </td>
           <td class="px-6 py-4">
             <!-- ACTION -->
-              <a href="#" class="font-medium text-indigo-600 hover:text-indigo-900">View</a>
+              <a route="/hr/leave-requests/id=<?php echo htmlspecialchars($leaveRequest['id']); ?>"  class="font-medium text-indigo-600 hover:text-indigo-900">View</a>
           </td>
           <td class="px-6 py-4">
             <div class="flex justify-end gap-4">
