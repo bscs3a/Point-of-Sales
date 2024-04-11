@@ -110,36 +110,46 @@
           </div>
 
           <?php
-            try {
-              require_once 'dbconn.php';
-              // Query to retrieve all products
-              $query = "SELECT * FROM suppliers";
-              $statement = $conn->prepare($query);
-              $statement->execute();
-              // Check if there are any rows or results
-              if ($statement->rowCount() > 0) {
-                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                  // Debugging statement to print image path
+          try {
+            require_once 'dbconn.php';
+            // Query to retrieve all products
+            $query = "SELECT * FROM suppliers";
+            $statement = $conn->prepare($query);
+            $statement->execute();
+            // Check if there are any rows or results
+            if ($statement->rowCount() > 0) {
+              while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                // Debugging statement to print image path
+                echo '<tr>';
+                echo '<tr class="hover:bg-gray-50 data-row" data-supplier="' . $row['Supplier_Name'] . '">';
+                echo '<div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8">';
+                echo '<div class="flex flex-col gap-2 ">';
+                echo '<a class="text-2xl font-semibold">No Rank Yet</a>';
+                echo '<div class="flex flex-row">';
+                echo '<a>Supplier Name:</a>';
+                echo '<a class="ml-3 text-gray-500">' . $row['Supplier_Name'] . '</a>';
+                echo '</div>';
+                echo '<div class="flex flex-row">';
+                echo '<a>Status:</a>';
+                echo '<a class="ml-3 text-green-600">Active</a>';
+                echo '</div>';
+                echo '</div>';
+                echo '<div class="flex justify-center items-center pt-3">';
+                echo '<button href="/po/viewsupplier" class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</button>';
+                echo '</div>';
+                echo '</div>';
+                echo '</tr>';
                 
-                  echo'<tr>';
-                  echo '<tr class="hover:bg-gray-50 data-row" data-supplier="' . $row['Supplier_Name'] . '">';
-                  echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
-                  echo '</td>';
-                 
-                  echo '<td class="px-4 py-4">' . $row['Supplier_Name'] . '</td>';
-                 
-                  echo '</tr>';
-
-                }
-              } else {
-                echo "No products found.";
               }
-            } catch (PDOException $e) {
-              echo "Connection failed: " . $e->getMessage();
+            } else {
+              echo "No products found.";
             }
-            // Close the database connection
-            $conn = null;
-            ?>
+          } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+          }
+          // Close the database connection
+          $conn = null;
+          ?>
 
           <!-- Cards -->
         
