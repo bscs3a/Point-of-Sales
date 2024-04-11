@@ -150,6 +150,10 @@ Router::post('/hr/employees/add', function () {
     $email = $_POST['email'];
     $department = $_POST['department'];
     $position = $_POST['position'];
+    $sssNumber = $_POST['sssNumber'];
+    $philhealthNumber = $_POST['philhealthNumber'];
+    $tinNumber = $_POST['tinNumber'];
+    $pagibigNumber = $_POST['pagibigNumber'];
 
     // Handle the image upload
     if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] == 0) {
@@ -166,7 +170,7 @@ Router::post('/hr/employees/add', function () {
         return;
     }
 
-    $query = "INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, address, contact_no, email, department, position) VALUES (:image_url, :firstName, :middleName, :lastName, :dateofbirth, :gender, :nationality, :civilstatus, :address, :contactnumber, :email, :department, :position);";
+    $query = "INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, address, contact_no, email, department, position, sss_number, philhealth_number, tin_number, pagibig_number) VALUES (:image_url, :firstName, :middleName, :lastName, :dateofbirth, :gender, :nationality, :civilstatus, :address, :contactnumber, :email, :department, :position, :sssNumber, :philhealthNumber, :tinNumber, :pagibigNumber);";
     $stmt = $conn->prepare($query);
 
     if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
@@ -188,6 +192,10 @@ Router::post('/hr/employees/add', function () {
         ':email' => $email,
         ':department' => $department,
         ':position' => $position,
+        ':sssNumber' => $sssNumber,
+        ':philhealthNumber' => $philhealthNumber,
+        ':tinNumber' => $tinNumber,
+        ':pagibigNumber' => $pagibigNumber,
     ]);
 
     $employeeId = $conn->lastInsertId();

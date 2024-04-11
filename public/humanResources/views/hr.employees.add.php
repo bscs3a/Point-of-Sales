@@ -229,7 +229,7 @@
                 type="tel"
                 placeholder="Contact Number"
                 pattern="09[0-9]{9}"
-                title="Contact number should be 11 digits and start with 09"
+                title="Please enter a valid 11-digit phone number."
             />
         </div>
         </div>
@@ -280,6 +280,84 @@
         </div>
       </div>
 
+      <script>
+        function populatePositions() {
+          const departmentSelect = document.getElementById("department");
+          const positionSelect = document.getElementById("position");
+          const department = departmentSelect.value;
+
+          // Clear previous options
+          positionSelect.innerHTML = "";
+
+          // Populate positions based on department
+          if (department === "Product Order") {
+            const positions = [
+              "Order Processor",
+              "Inventory Coordinator",
+              "Shipping Clerk",
+              "Order Fulfillment Specialist",
+              "Logistics Coordinator"
+            ];
+            populateOptions(positions);
+          } else if (department === "Inventory") {
+            const positions = [
+              "Inventory Manager",
+              "Inventory Analyst",
+              "Stock Control Clerk",
+              "Warehouse Manager",
+              "Inventory Auditor"
+            ];
+            populateOptions(positions);
+          } else if (department === "Delivery") {
+            const positions = [
+              "Delivery Driver",
+              "Route Planner",
+              "Dispatch Coordinator",
+              "Shipping and Receiving Clerk",
+              "Warehouse Supervisor"
+            ];
+            populateOptions(positions);
+          } else if (department === "Human Resources") {
+            const positions = [
+              "HR Manager",
+              "HR Coordinator",
+              "Recruitment Specialist",
+              "Training and Development Officer",
+              "Compensation and Benefits Analyst"
+            ];
+            populateOptions(positions);
+          } else if (department === "Point of Sales") {
+            const positions = [
+              "Sales Associate",
+              "Cashier",
+              "Retail Supervisor",
+              "Customer Service Representative",
+              "Store Manager"
+            ];
+            populateOptions(positions);
+          } else if (department === "Finance") {
+            const positions = [
+              "Accountant",
+              "Financial Analyst",
+              "Accounts Payable Clerk",
+              "Accounts Receivable Clerk",
+              "Finance Manager"
+            ];
+            populateOptions(positions);
+          }
+        }
+
+        function populateOptions(options) {
+          const positionSelect = document.getElementById("position");
+          options.forEach(option => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option;
+            optionElement.text = option;
+            positionSelect.appendChild(optionElement);
+          });
+        }
+      </script>
+
     <!-- Employee Information 5 : EMPLOYMENT INFO-->
     <div class="flex flex-col">
       <div class="mb-4">
@@ -322,7 +400,69 @@
           </div>
         </div>
       </div>
-
+      
+      <div class="flex flex-col">
+        <div class="mb-4">
+          <div class="flex">
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="sssnumber">
+                SSS Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="sssNumber"
+                id="sssnumber"
+                type="text"
+                placeholder="SSS Number"
+                pattern="[0-9]{10}"  // 10-digit SSS number
+                title="Please enter a 10-digit SSS number"
+              />
+            </div>
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="philhealthnumber">
+                PhilHealth Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="philhealthNumber"
+                id="philhealthnumber"
+                type="text"
+                placeholder="PhilHealth Number"
+                pattern="[0-9]{12}"  // 12-digit PhilHealth number
+                title="Please enter a 12-digit PhilHealth number"
+              />
+            </div>
+            <div>
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="tinnumber">
+                TIN Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="tinNumber"
+                id="tinnumber"
+                type="text"
+                placeholder="TIN Number"
+                pattern="[0-9]{9}"  // 9-digit TIN number
+                title="Please enter a 9-digit TIN number"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="pagibignumber">
+          Pag-IBIG Number
+        </label>
+        <input  
+          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          name="pagibigNumber"
+          id="pagibignumber"
+          type="text"
+          placeholder="Pag-IBIG Number"
+          pattern="[0-9]{12}"  // 12-digit Pag-IBIG number
+          title="Please enter a 12-digit Pag-IBIG number"
+        />
+      </div>
                   <!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>
