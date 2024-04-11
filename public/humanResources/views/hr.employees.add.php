@@ -1,7 +1,3 @@
-<?php
-  // require_once './public/humanResources/func/add-employee.php';
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +50,34 @@
 <!-- Profile -->
 <div class="py-2 px-6 mt-4">
   <div class="flex">
+    
+    <!-- IMAGE -->
+    <!-- <div class="mr-4"> -->
+      <!-- <img src="#" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover"> -->
+      <!-- <span> -->
+      <!-- <div class="ml-2 mb-20 mt-4"> -->
+          <!-- The file input for uploading pictures. It's hidden because the custom upload button is used instead. -->
+          <!-- <input type="file" id="fileInput" style="display: none;"> -->
+
+          <!-- The custom upload button. When clicked, it triggers the click event of the file input. -->
+          <!-- <button type="button" onclick="document.getElementById('fileInput').click();" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Upload</button> -->
+
+          <!-- The remove button. When clicked, it removes the selected file from the file input. -->
+          <!-- <button type="button" onclick="removeFile();" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
+        </div>    
+      </span>
+    </div> -->
     <div class="mr-4">
+      <img src="#" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
+      <input type="file" id="fileInput" name="image_url" accept="image/*" style="display: none;">
+      <span>
+          <div class="ml-1 mb-20 mt-4"> 
+              <button type="button" id="uploadButton" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5  mb-2">Upload</button>
+              <button type="button" id="removeButton" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Remove</button>
+          </div>    
+      </span>
+    </div>
+    <!-- <div class="mr-4">
       <img src="#" alt="Profile Picture" class="w-48 h-48 object-cover">
       <span>
         <div class="ml-2 mb-20 mt-4"> 
@@ -62,26 +85,64 @@
           <button type="button" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Remove</button>
         </div>    
       </span>
-    </div>
+    </div> -->
 
   <!-- Employee Information -->
-  
-                            <form action= "/hr/employees/add" method="POST">
+<form action= "/hr/employees/add" method="POST">
   <div class="flex flex-col ml-20">
     <div class="mb-4">
       <div class="flex">
         <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
-              First Name
-            </label>
-            <input
-              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="firstName"
-              id="firstName"
-              type="text"
-              placeholder="First Name"
-            />
+          <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
+            First Name
+          </label>
+          <input
+            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+            name="firstName"
+            id="firstName"
+            type="text"
+            placeholder="First Name"
+          />
         </div>
+
+    <!--Required Fields modal -->
+    <div id="requiredFieldsModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-5 rounded-lg text-center">
+        <h2 class="mb-4">Please fill in all required fields.</h2>
+        <button id="confirmFill" type="button" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">OK</button>
+    </div>
+    </div>
+
+      <script>
+          document.addEventListener('DOMContentLoaded', () => {
+              const form = document.querySelector('form');
+              const inputs = form.querySelectorAll('input');
+              const requiredFieldsModal = document.querySelector('#requiredFieldsModal');
+              const confirmFill = document.querySelector('#confirmFill');
+
+              form.addEventListener('submit', (event) => {
+                  console.log('Form submitted'); // Add this line to check if the code is being triggered
+
+                  let hasEmptyField = false;
+
+                  inputs.forEach((input) => {
+                      if (input.value.trim() === '' && input.name !== 'middleName' && input.name !== 'email' && input.name !== 'contactnumber' && input.name !== 'enddate' && input.name !== 'image_url') {
+                          hasEmptyField = true;
+                      }
+                  });
+
+                  if (hasEmptyField) {
+                      event.preventDefault();
+                      requiredFieldsModal.classList.remove('hidden');
+                  }
+              });
+
+              confirmFill.addEventListener('click', () => {
+                  requiredFieldsModal.classList.add('hidden');
+              });
+          });
+      </script>
+
         <div class="mr-2">
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
               Middle Name
@@ -221,7 +282,7 @@
                         <option value="">Select Department</option>
                         <option value="Product Order">Product Order</option>
                         <option value="Inventory">Inventory</option>
-                        <option value="Inventory">Delivery</option>
+                        <option value="Delivery">Delivery</option>
                         <option value="Human Resources">Human Resources</option>
                         <option value="Point of Sales">Point of Sales</option>
                         <option value="Finance">Finance/Accounting</option>
@@ -461,8 +522,8 @@
 <script  src="./../../src/route.js"></script>
 <script  src="./../../src/form.js"></script>
 
-<!-- Sidebar active/inactive -->
 <script>
+  // Sidebar Toggle
   document.querySelector('.sidebar-toggle').addEventListener('click', function() {
     document.getElementById('sidebar-menu').classList.toggle('hidden');
     document.getElementById('sidebar-menu').classList.toggle('transform');
@@ -471,6 +532,7 @@
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
 
+  // Show/Hide Password
   document.getElementById('togglePassword').addEventListener('change', function () {
     const passwordInput = document.getElementById('password');
     if (this.checked) {
@@ -478,6 +540,23 @@
     } else {
         passwordInput.type = 'password';
     }
+  });
+
+  // Image Upload
+  document.getElementById('uploadButton').addEventListener('click', function() {
+    document.getElementById('fileInput').click();
+  });
+
+  document.getElementById('fileInput').addEventListener('change', function() {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+          document.getElementById('image_url').src = e.target.result;
+      }
+      reader.readAsDataURL(this.files[0]);
+  });
+
+  document.getElementById('removeButton').addEventListener('click', function() {
+      document.getElementById('image_url').src = '#';
   });
 
   // Automatic Tax Calculation for UI
