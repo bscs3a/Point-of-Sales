@@ -64,21 +64,33 @@
             <div class="items-start">
               <div class="relative">
                 <div class="inline-flex items-center overflow-hidden rounded-lg border border-gray-500">
-                  <div class="flex flex-row">
-                    <select id="filterSelect"
-                      class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
-                      <option value="">Filter</option>
-                      <option value="id">ID</option>
-                      <option value="name">Name</option>
-                      <option value="supplier">Supplier</option>
-                    </select>
-                    <input id="searchInput" placeholder="Search"
-                      class="w-full rounded-md rounded-l-md p-1 border-gray-200 pe-10-0 shadow-sm sm:text-sm outline-none pl-4" />
+                  <button
+                    class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
+                    <i class="ri-calendar-2-fill"></i>
+                    Filter
+                  </button>
+
+                  <div class="relative">
+                    <label for="Search" class="sr-only"> Search </label>
+
+                    <input type="text" id="Search" placeholder="Search by ID..."
+                      class="w-full rounded-md rounded-l-md p-1 border-gray-200 pe-10 shadow-sm sm:text-sm outline-none pl-4" />
+
+                    <span class="absolute inset-y-0 end-0 grid w-10 place-content-center">
+                      <button type="button" class="text-gray-600 hover:text-gray-700">
+                        <span class="sr-only">Search</span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                          stroke="currentColor" class="h-4 w-4">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                      </button>
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-
 
             <div class="flex place-content-end mt-2 m-3">
               <button route='/po/addsupplier' class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
@@ -89,96 +101,58 @@
           </div>
         </div>
 
+
         <!-- Sample cards for ranking -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pb-4">
-          <!-- Card 1 -->
-          <div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8">
-            <div class="flex flex-col gap-2 ">
-              <a class="text-2xl font-semibold">No Rank Yet</a>
-              <div class="flex flex-row">
-                <a>Supplier Name:</a>
-                <a class="ml-3 text-gray-500"></a>
-              </div>
-              <div class="flex flex-row">
-                <a>Status:</a>
-                <a class="ml-3 text-green-600">Active</a>
-              </div>
-            </div>
-            <div class="flex justify-center items-center pt-3">
-              <button route='/po/viewsupplier' class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</button>
-            </div>
-          </div>
 
+          <!-- PHP code for supplier cards -->
           <?php
-            try {
-              require_once 'dbconn.php';
-              // Query to retrieve all products
-              $query = "SELECT * FROM suppliers";
-              $statement = $conn->prepare($query);
-              $statement->execute();
-              // Check if there are any rows or results
-              if ($statement->rowCount() > 0) {
-                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                  // Debugging statement to print image path
-                
-                  echo'<tr>';
-                  echo '<tr class="hover:bg-gray-50 data-row" data-supplier="' . $row['Supplier_Name'] . '">';
-                  echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
-                  echo '</td>';
-                 
-                  echo '<td class="px-4 py-4">' . $row['Supplier_Name'] . '</td>';
-                 
-                  echo '</tr>';
-
-                }
-              } else {
-                echo "No products found.";
+          try {
+            require_once 'dbconn.php';
+            // Query to retrieve all suppliers
+            $query = "SELECT * FROM suppliers";
+            $statement = $conn->prepare($query);
+            $statement->execute();
+            // Check if there are any rows or results
+            if ($statement->rowCount() > 0) {
+              while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <!-- Card 1 -->
+                <div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8">
+                  <div class="flex flex-col gap-2">
+                    <div class="flex flex-row">
+                      <a class="text-1xl font-semibold">Supplier Name:</a>
+                      <a class="ml-3 text-black-500"><?php echo $row['Supplier_Name']; ?></a>
+                    </div>
+                    <div class="flex flex-row">
+                    <a class="text-1xl font-semibold">Status:</a>
+                      <a class="ml-3 text-green-600"><?php echo $row['Status']; ?></a>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center pt-3">
+                    <a href="/po/viewsupplier"
+                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
+                  </div>
+                </div>
+                <?php
               }
-            } catch (PDOException $e) {
-              echo "Connection failed: " . $e->getMessage();
+            } else {
+              echo "No suppliers found.";
             }
-            // Close the database connection
-            $conn = null;
-            ?>
-
-          <!-- Cards -->
-        
-          <!-- //end -->
-
-
+          } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+          }
+          // Close the database connection
+          $conn = null;
+          ?>
         </div>
-      </div>
 
+
+
+
+      </div>
     </div>
   </div>
-  </div>
-  <script>
-    // Filter and search functionality
-    function filterAndSearch() {
-      var filterValue = document.getElementById("filterSelect").value.toLowerCase();
-      var searchValue = document.getElementById("searchInput").value.toLowerCase();
-      var rows = document.querySelectorAll(".data-row");
-
-      rows.forEach(row => {
-        var display = "none";
-
-        switch (filterValue) {
-          case "supplier":
-            display = row.dataset.supplier.toLowerCase().includes(searchValue) ? "" : "none";
-            break;
-          default:
-            display = "";
-        }
-
-        row.style.display = display;
-      });
-    }
-
-    // Event listeners for filter and search
-    document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
-    document.getElementById("searchInput").addEventListener("input", filterAndSearch);
-  </script>
 </body>
-<script src="./../src/route.js"></script>
-<script src="./../src/form.js"></script>
+
 </html>
