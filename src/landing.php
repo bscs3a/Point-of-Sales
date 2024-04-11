@@ -37,7 +37,7 @@
                     class="px-6 py-3 mb-2 text-white  bg-sidebar rounded hover:bg-blue-700 whitespace-nowrap">Inventory
                     & Product Order Page</button><br>
                 <p>Group6</p>
-                <button route='/dlv/sample'
+                <button route='/dlv/dashboard'
                     class="px-6 py-3 mb-2 text-white  bg-sidebar rounded hover:bg-blue-700">Delivery Page</button><br>
             </div>
         </div>
