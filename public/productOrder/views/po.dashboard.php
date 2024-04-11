@@ -1,5 +1,5 @@
 <?php
-print_r($_SESSION);
+// print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -93,56 +93,56 @@ print_r($_SESSION);
       </div>
 
       <div class="px-10 py-2">
-        <!-- Table -->
-        <?php
-        // Establish database connection
-        $db = Database::getInstance();
-        $conn = $db->connect();
+  <!-- Table -->
+  <?php
+  // Establish database connection
+  $db = Database::getInstance();
+  $conn = $db->connect();
 
-        try {
-          // Prepare SQL statement to fetch data from the audit_log table
-          $stmt = $conn->query("SELECT audit_log.*, accounts.username AS username FROM audit_log INNER JOIN accounts ON audit_log.account_ID = accounts.account_ID ORDER BY audit_log.audit_ID ASC");
-          $audit_logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-          echo "Error: " . $e->getMessage();
-        }
-        ?>
+  try {
+    // Prepare SQL statement to fetch data from the audit_log table
+    $stmt = $conn->query("SELECT audit_log.*, accounts.username AS username FROM audit_log INNER JOIN accounts ON audit_log.account_ID = accounts.account_ID ORDER BY audit_log.audit_ID ASC");
+    $audit_logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  } catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+  }
+  ?>
 
-        <!-- Table -->
-        <div class="overflow-x-auto rounded-lg border border-gray-400">
-          <table class="min-w-full text-left mx-auto bg-white">
-            <thead class="bg-gray-200 border-b border-gray-400">
-              <tr>
-                <th class="px-4 py-2 font-semibold">Date</th>
-                <th class="px-4 py-2 font-semibold">User</th>
-                <th class="px-4 py-2 font-semibold">Time In</th>
-                <th class="px-4 py-2 font-semibold">Time Out</th>
-                <th class="px-4 py-2 font-semibold">Action</th>
-              </tr>
-            </thead>
+  <!-- Table -->
+  <div class="max-w-full rounded-lg border border-gray-400 overflow-x-auto">
+    <table class="min-w-full text-left bg-white overflow-x-scroll">
+      <thead class="bg-gray-200 border-b border-gray-400">
+        <tr>
+          <th class="px-4 py-2 font-semibold">Date</th>
+          <th class="px-4 py-2 font-semibold">User</th>
+          <th class="px-4 py-2 font-semibold">Time In</th>
+          <th class="px-4 py-2 font-semibold">Time Out</th>
+          <th class="px-4 py-2 font-semibold">Action</th>
+        </tr>
+      </thead>
 
-            <tbody class="">
-              <?php if (!empty($audit_logs)): ?>
-                <?php foreach ($audit_logs as $log): ?>
-                  <tr>
-                    <td class="px-4 py-4"><?= $log['date'] ?></td>
-                    <td class="px-4 py-4"><?= $log['username'] ?></td>
-                    <td class="px-4 py-4"><?= $log['time_in'] ?></td>
-                    <td class="px-4 py-4"><?= $log['time_out'] ?></td>
-                    <td class="px-4 py-4"><?= $log['action'] ?></td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php else: ?>
-                <tr>
-                  <td colspan="5" class="px-4 py-4 text-center">No data available</td>
-                </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
-        </div>
+      <tbody>
+        <?php if (!empty($audit_logs)): ?>
+          <?php foreach ($audit_logs as $log): ?>
+            <tr>
+              <td class="px-4 py-4"><?= $log['date'] ?></td>
+              <td class="px-4 py-4"><?= $log['username'] ?></td>
+              <td class="px-4 py-4"><?= $log['time_in'] ?></td>
+              <td class="px-4 py-4"><?= $log['time_out'] ?></td>
+              <td class="px-4 py-4"><?= $log['action'] ?></td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="5" class="px-4 py-4 text-center">No data available</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 
-      </div>
     </div>
 
   </div>
