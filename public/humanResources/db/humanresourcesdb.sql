@@ -3,7 +3,7 @@ USE bscs3a;
 
 CREATE TABLE employees (
     id INT(10) NOT NULL AUTO_INCREMENT,
-	image_url VARCHAR(255) NULL DEFAULT NULL,
+    image_url VARCHAR(255) NULL DEFAULT NULL,
     first_name VARCHAR(30) NOT NULL,
     middle_name VARCHAR(30),
     last_name VARCHAR(30) NOT NULL,
@@ -15,9 +15,13 @@ CREATE TABLE employees (
     email VARCHAR(30) DEFAULT 'N/A',
     civil_status ENUM('Single','Married','Divorced','Widowed') NOT NULL,
     department ENUM('Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery') NOT NULL,
-	position VARCHAR(50) NOT NULL,
+    position VARCHAR(50) NOT NULL,
+    sss_number VARCHAR(20), -- SSS number
+    philhealth_number VARCHAR(20), -- PhilHealth number
+    tin_number VARCHAR(20), -- TIN number
     PRIMARY KEY (id)
 );
+
 
 CREATE TABLE employment_info (
     id INT(10) NOT NULL AUTO_INCREMENT,

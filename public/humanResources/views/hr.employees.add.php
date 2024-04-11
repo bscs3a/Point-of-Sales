@@ -230,54 +230,141 @@
               placeholder="Contact Number"
             />
           </div>
+          <?php
+          if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $contactNumber = $_POST["contactnumber"];
+            
+            // Validate contact number
+            if (!preg_match("/^[0-9]{10}$/", $contactNumber)) {
+              echo "<p class='text-red-500'>Invalid contact number. Please enter a 10-digit number.</p>";
+            }
+          }
+          ?>
         </div>
       </div>
 
       <!-- Employee Information 4-->
       <div class="flex flex-col">
-      <div class="mb-4">
-        <div class="flex">
-          <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="email">
-              Email
-            </label>
-            <input
-              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="email"
-              id="email"
-              placeholder="example@example.com">
-          </div>
-          <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="department">
-              Department
-            </label>
-            <select
-              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        name="department" id="Department" placeholder="Department">
-                        
-                        <option value="">Select Department</option>
-                        <option value="Product Order">Product Order</option>
-                        <option value="Inventory">Inventory</option>
-                        <option value="Delivery">Delivery</option>
-                        <option value="Human Resources">Human Resources</option>
-                        <option value="Point of Sales">Point of Sales</option>
-                        <option value="Finance">Finance/Accounting</option>
-                      </select>
-          </div>
-          <div>
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="Position">
-              Position
-            </label>
-            <input  
-              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="position"
-              id="Position"
-              type="text"
-              placeholder="Position"
-            />  
+        <div class="mb-4">
+          <div class="flex">
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="email">
+                Email
+              </label>
+              <input
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="email"
+                id="email"
+                placeholder="example@example.com">
+            </div>
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="department">
+                Department
+              </label>
+              <select
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="department" id="department" placeholder="Department" onchange="populatePositions()">
+                <option value="">Select Department</option>
+                <option value="Product Order">Product Order</option>
+                <option value="Inventory">Inventory</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Point of Sales">Point of Sales</option>
+                <option value="Finance">Finance/Accounting</option>
+              </select>
+            </div>
+            <div>
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="position">
+                Position
+              </label>
+              <select  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="position"
+                id="position"
+                placeholder="Position"
+              ></select>
+            </div>
           </div>
         </div>
       </div>
+
+      <script>
+        function populatePositions() {
+          const departmentSelect = document.getElementById("department");
+          const positionSelect = document.getElementById("position");
+          const department = departmentSelect.value;
+
+          // Clear previous options
+          positionSelect.innerHTML = "";
+
+          // Populate positions based on department
+          if (department === "Product Order") {
+            const positions = [
+              "Order Processor",
+              "Inventory Coordinator",
+              "Shipping Clerk",
+              "Order Fulfillment Specialist",
+              "Logistics Coordinator"
+            ];
+            populateOptions(positions);
+          } else if (department === "Inventory") {
+            const positions = [
+              "Inventory Manager",
+              "Inventory Analyst",
+              "Stock Control Clerk",
+              "Warehouse Manager",
+              "Inventory Auditor"
+            ];
+            populateOptions(positions);
+          } else if (department === "Delivery") {
+            const positions = [
+              "Delivery Driver",
+              "Route Planner",
+              "Dispatch Coordinator",
+              "Shipping and Receiving Clerk",
+              "Warehouse Supervisor"
+            ];
+            populateOptions(positions);
+          } else if (department === "Human Resources") {
+            const positions = [
+              "HR Manager",
+              "HR Coordinator",
+              "Recruitment Specialist",
+              "Training and Development Officer",
+              "Compensation and Benefits Analyst"
+            ];
+            populateOptions(positions);
+          } else if (department === "Point of Sales") {
+            const positions = [
+              "Sales Associate",
+              "Cashier",
+              "Retail Supervisor",
+              "Customer Service Representative",
+              "Store Manager"
+            ];
+            populateOptions(positions);
+          } else if (department === "Finance") {
+            const positions = [
+              "Accountant",
+              "Financial Analyst",
+              "Accounts Payable Clerk",
+              "Accounts Receivable Clerk",
+              "Finance Manager"
+            ];
+            populateOptions(positions);
+          }
+        }
+
+        function populateOptions(options) {
+          const positionSelect = document.getElementById("position");
+          options.forEach(option => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option;
+            optionElement.text = option;
+            positionSelect.appendChild(optionElement);
+          });
+        }
+      </script>
 
     <!-- Employee Information 5 : EMPLOYMENT INFO-->
     <div class="flex flex-col">
@@ -321,7 +408,7 @@
           </div>
         </div>
       </div>
-
+      
                   <!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>
