@@ -66,6 +66,7 @@ $stmt = null;
   <!-- Leave Requests -->
   <div class="flex flex-wrap">
     <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3>
+    <button route="/hr/leave-requests/file-a-leave" class="mt-6 mr-4 flex ml-2 bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600"><i class="ri-add-line"></i></button>
 
     <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
