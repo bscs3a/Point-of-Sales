@@ -1,44 +1,73 @@
 <?php
 
+$_SESSION['user'] = 'admin';
+$_SESSION['role'] = 'admin';
+$_SESSION['employee_name'] = "Alfaro, Aian Louise";
+
 $path = './public/sales/views';
 $basePath = "$path/sls.";
 
 $sls = [
+    '/sls/Dashboard' => $basePath . "Dashboard.php",
     '/sls/Product-Catalog' => $basePath . "ProductCatalog.php",
     '/sls/Transaction-History' => $basePath . "transactionHistory.php",
     '/sls/Transaction-Details' => $basePath . "transactionDetails.php",
-    '/sls/Dashboard' => $basePath . "Dashboard.php",
     '/sls/POS' => $basePath . "POS.php",
     '/sls/TEST' => $basePath . "TEST.php",
     '/sls/POS/Checkout' => $basePath . "checkout.php",
     '/sls/POS/Receipt' => $basePath . "Receipt.php",
     '/sls/Audit-Trail' => $basePath . "AuditTrail.php",
     '/sls/Revenue' => $basePath . "Revenue.php",
+    '/sls/Returns' => $basePath . "ReturnTable.php",
+    '/sls/Sales-Management' => $basePath . "SalesManagement.php",
+    '/sls/ReturnProduct' => $basePath . "ReturnProduct.php",
+    '/sls/ReturnDetails' => $basePath . "ReturnDetails.php",
     // ... other routes ...
 
     '/sls/Transaction-Details/sale={saleId}' => function ($saleId) use ($basePath) {
         $_GET['sale'] = $saleId;
         include $basePath . "transactionDetails.php";
     },
+
+    '/sls/ReturnProduct/sale={saleId}/saledetails={saledetailsId}/product={productId}' => function ($saleId, $saledetailsId, $productId) use ($basePath) {
+        $_GET['sale'] = $saleId;
+        $_GET['saledetails'] = $saledetailsId;
+        $_GET['product'] = $productId;
+        include $basePath . "ReturnProduct.php";
+    },
+
+    // '/sls/ReturnDetails/returnID={returnId}' => function ($returnID) use ($basePath) {
+    //     $_GET['returnID'] = $returnID;
+    //     include $basePath . "ReturnDetails.php";
+    // },
+
+    '/sls/ReturnDetails/returnID={returnID}' => function ($returnID) use ($basePath) {
+        $_GET['returnID'] = $returnID;
+        include $basePath . "ReturnDetails.php";
+    },
+
+    // functions
+    // can't recognize by the router logout can proceed
+    '/sls/logout' => "./public/sales/views/function/logout.php",
 ];
 
-// Get the current URL path
-$urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// // Get the current URL path
+// $urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Loop through all routes
-foreach ($sls as $route => $action) {
-    // Check if the start of the URL path matches the route
-    if (strpos($urlPath, $route) === 0) {
-        // Get the sale ID from the URL path
-        $saleId = substr($urlPath, strlen($route));
+// // Loop through all routes
+// foreach ($sls as $route => $action) {
+//     // Check if the start of the URL path matches the route
+//     if (strpos($urlPath, $route) === 0) {
+//         // Get the sale ID from the URL path
+//         $saleId = substr($urlPath, strlen($route));
 
-        // Execute the action for the route
-        $action($saleId);
+//         // Execute the action for the route
+//         $action($saleId);
 
-        // Stop the loop
-        break;
-    }
-}
+//         // Stop the loop
+//         break;
+//     }
+// }
 
 
 // START: Add Sales
@@ -105,25 +134,25 @@ class SaleDetail
         $stmt->execute();
     }
 }
-
 class DeliveryOrder
 {
-    public function create($saleId, $productId, $quantity, $deliveryAddress, $deliveryDate, $productWeight)
+    public function create($saleId, $productId, $quantity, $province, $municipality, $streetBarangayAddress, $deliveryDate, $productWeight)
     {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        $stmt = $conn->prepare("INSERT INTO DeliveryOrders (SaleID, ProductID, Quantity, DeliveryAddress, DeliveryDate, DeliveryStatus, ProductWeight) VALUES (:saleId, :productId, :quantity, :deliveryAddress, :deliveryDate, 'Pending', :productWeight)");
+        $stmt = $conn->prepare("INSERT INTO DeliveryOrders (SaleID, ProductID, Quantity, Province, Municipality, StreetBarangayAddress, DeliveryDate, DeliveryStatus, ProductWeight) VALUES (:saleId, :productId, :quantity, :province, :municipality, :streetBarangayAddress, :deliveryDate, 'Pending', :productWeight)");
         $stmt->bindParam(':saleId', $saleId);
         $stmt->bindParam(':productId', $productId);
         $stmt->bindParam(':quantity', $quantity);
-        $stmt->bindParam(':deliveryAddress', $deliveryAddress);
+        $stmt->bindParam(':province', $province);
+        $stmt->bindParam(':municipality', $municipality);
+        $stmt->bindParam(':streetBarangayAddress', $streetBarangayAddress);
         $stmt->bindParam(':deliveryDate', $deliveryDate);
         $stmt->bindParam(':productWeight', $productWeight);
         $stmt->execute();
     }
 }
-
 
 
 class Product
@@ -167,8 +196,8 @@ Router::post('/addSales', function () {
     $cart = json_decode($_POST['cartData'], true);
     foreach ($cart as $item) {
         $subtotal = $item['price'] * $item['quantity'];
-        $tax = $subtotal * $item['TaxRate'];
-        $totalAmount = $subtotal + $tax;
+        $tax = $item['price'] * $item['TaxRate'];
+        $totalAmount = ($item['price'] + $tax) * $item['quantity'];
 
         $productWeight = $product->getWeight($item['id']);
         $totalProductWeight = $productWeight * $item['quantity'];  // Calculate total weight of each product purchased
@@ -176,7 +205,7 @@ Router::post('/addSales', function () {
 
         $product->decreaseQuantity($item['id'], $item['quantity']); // Decrease product quantity
         if ($_POST['SalePreference'] === 'delivery') {
-            $deliveryOrder->create($saleId, $item['id'], $item['quantity'], $_POST['deliveryAddress'], $_POST['deliveryDate'], $totalProductWeight);
+            $deliveryOrder->create($saleId, $item['id'], $item['quantity'], $_POST['province'], $_POST['municipality'], $_POST['streetBarangayAddress'], $_POST['deliveryDate'], $totalProductWeight);
         }
     }
 
@@ -184,6 +213,50 @@ Router::post('/addSales', function () {
     header("Location: $rootFolder/sls/POS/Receipt");
 });
 // END: Add Sales
+
+Router::post('/AddTarget', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $monthYear = $_POST['month_year'] . '-01';  // Append '-01' to make it a valid date
+    $targetSales = $_POST['target_sales'];
+
+    $stmt = $conn->prepare("INSERT INTO TargetSales (MonthYear, TargetAmount) VALUES (:monthYear, :targetSales)");
+    $stmt->bindParam(':monthYear', $monthYear);
+    $stmt->bindParam(':targetSales', $targetSales);
+
+    // Execute the statement
+    $stmt->execute();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/sls/Sales-Management");
+});
+
+Router::post('/returnProduct', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $saleId = $_POST['sale'];
+    $productId = $_POST['product_id'];
+    $quantity = $_POST['quantity'];
+    $reason = $_POST['reason'];
+    $paymentReturned = $_POST['payment_returned'];
+    $productStatus = $_POST['product_status']; // Get the product status from the form data
+
+    $stmt = $conn->prepare("INSERT INTO ReturnProducts (SaleID, ProductID, Quantity, Reason, PaymentReturned, ProductStatus) VALUES (:saleId, :productId, :quantity, :reason, :paymentReturned, :productStatus)");
+    $stmt->bindParam(':saleId', $saleId);
+    $stmt->bindParam(':productId', $productId);
+    $stmt->bindParam(':quantity', $quantity);
+    $stmt->bindParam(':reason', $reason);
+    $stmt->bindParam(':paymentReturned', $paymentReturned);
+    $stmt->bindParam(':productStatus', $productStatus); // Bind the product status parameter
+
+    // Execute the statement
+    $stmt->execute();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/sls/Returns");
+});
 
 Router::post('/remove', function () {
     $db = Database::getInstance();
