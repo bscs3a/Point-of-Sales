@@ -143,62 +143,77 @@
                 </div>
             </div>
 
-            <div class="flex flex-col justify-center items-center w-1/2 border max-w-md rounded-lg my-10 ml-10 shadow-md">
+            <div class="flex flex-col w-1/2 border max-w-md rounded-lg my-10 ml-10 shadow-md">
                 <h1 class="text-2xl font-semibold p-4 text-center rounded-t-lg text-white bg-green-800 w-full">Return Product</h1>
-                <form action="/returnProduct" method="post" class="w-full p-4">
-                    <div class="mb-4 hidden">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
-                            Product ID
-                        </label>
-                        <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_id" type="text" name="product_id" value="<?php echo $productId; ?>">
-                    </div>
-                    <div class="mb-4 hidden">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="product_name">
-                            Product Name
-                        </label>
-                        <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value="<?php echo $productName; ?>">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
-                            Quantity
-                        </label>
-                        <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" type="number" name="quantity" min="1" max="<?php echo $products[0]['Quantity']; ?>" oninput="calculatePaymentReturned()">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="reason">
-                            Reason(s)
-                        </label>
-                        <textarea required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="reason" name="reason"></textarea>
-                    </div>
+                <?php
+                // Assuming you have a PDO instance $pdo
+                $saleId = $_GET['sale']; // Get sale from URL
+                $productId = $_GET['product']; // Get product from URL
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="product_status">
-                            Product Status
-                        </label>
-                        <select required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_status" name="product_status">
-                            <option value="">Select a status</option>
-                            <option value="Defective">Defective</option>
-                            <option value="Damaged">Damaged</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                // Check if the SaleID and ProductID exist in the returnproducts table
+                $sql = "SELECT 1 FROM returnproducts WHERE SaleID = :sale_id AND ProductID = :product_id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([':sale_id' => $saleId, ':product_id' => $productId]);
+                $isReturned = $stmt->fetchColumn();
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="payment_returned">
-                            Payment to be Returned
-                        </label>
-                        <input readonly name="payment_returned" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="payment_returned" type="text">
-                    </div>
+                if (!$isReturned) : ?>
+                    <form action="/returnProduct" method="post" class="w-full p-4">
+                        <div class="mb-4 hidden">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
+                                Product ID
+                            </label>
+                            <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_id" type="text" name="product_id" value="<?php echo $productId; ?>">
+                        </div>
+                        <div class="mb-4 hidden">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="product_name">
+                                Product Name
+                            </label>
+                            <input readonly class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_name" type="text" name="product_name" value="<?php echo $productName; ?>">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
+                                Quantity
+                            </label>
+                            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" type="number" name="quantity" min="1" max="<?php echo $products[0]['Quantity']; ?>" oninput="calculatePaymentReturned()">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="reason">
+                                Reason(s)
+                            </label>
+                            <textarea required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="reason" name="reason"></textarea>
+                        </div>
 
-                    <!-- Add hidden input field for saleId -->
-                    <input type="hidden" name="sale" value="<?php echo $saleId; ?>">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="product_status">
+                                Product Status
+                            </label>
+                            <select required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="product_status" name="product_status">
+                                <option value="">Select a status</option>
+                                <option value="Defective">Defective</option>
+                                <option value="Damaged">Damaged</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
 
-                    <div class="flex items-center justify-end mt-4">
-                        <button class="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                            Submit
-                        </button>
-                    </div>
-                </form>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="payment_returned">
+                                Payment to be Returned
+                            </label>
+                            <input readonly name="payment_returned" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="payment_returned" type="text">
+                        </div>
+
+                        <!-- Add hidden input field for saleId -->
+                        <input type="hidden" name="sale" value="<?php echo $saleId; ?>">
+
+                        <div class="flex items-center justify-end mt-4">
+                            <button class="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                <?php else : ?>
+                    <p class="text-red-500 text-xl p-4">This product has already been returned.</p>
+                <?php endif; ?>
             </div>
 
             <script>
