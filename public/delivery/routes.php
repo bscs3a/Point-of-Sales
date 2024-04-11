@@ -54,6 +54,7 @@ Router::post('/statusupdateview', function () {
     $stmt->bindParam(':orderId', $orderId);
     $stmt->execute();
 
+
     // Check if all orders with the same TruckID are either delivered or Failed to Deliver
     $stmt = $conn->prepare("SELECT COUNT(*) FROM deliveryorders WHERE TruckID = :truckId AND DeliveryStatus NOT IN ('Delivered', 'Failed to Deliver')");
     $stmt->bindParam(':truckId', $truckId);
@@ -68,7 +69,9 @@ Router::post('/statusupdateview', function () {
     }
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/dlv/viewdetails/id=$orderId");
+    header("Location: $rootFolder/dlv/history");
+    //header("Location: $rootFolder/dlv/viewdetails/id=$orderId");
+   
 });
 
 Router::post('/truckassign', function () {

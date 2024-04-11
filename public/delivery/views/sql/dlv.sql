@@ -204,7 +204,8 @@ INSERT INTO attendance (attendance_date, clock_in, clock_out, employee_id) VALUE
 (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 2),
 (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 3);
 
---UPDATE deliveryorders
---SET DeliveryStatus = 'Pending',
---  ReceivedDate = NULL,
---  TruckID = NULL;
+-- To update delivery orders to 'Pending' status and clear the TruckID and ReceivedDate
+UPDATE deliveryorders
+SET DeliveryStatus = 'Pending',
+ReceivedDate = NULL,
+TruckID = NULL;

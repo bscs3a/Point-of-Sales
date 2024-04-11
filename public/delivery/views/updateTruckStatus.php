@@ -8,8 +8,8 @@ if ($conn === null) {
     die('Failed to connect to the database.');
 }
 
-// First, set all trucks to 'Available'
-$stmt = $conn->prepare("UPDATE Trucks SET TruckStatus = 'Available'");
+// First, set all trucks to 'Available' if they are not 'In Transit'
+$stmt = $conn->prepare("UPDATE Trucks SET TruckStatus = 'Available' WHERE TruckStatus != 'In Transit'");
 $stmt->execute();
 
 // Get the current date
