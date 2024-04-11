@@ -106,7 +106,7 @@
             </div>
             <p class="text-gray-600 my-3 text-lg">Total: 0</p>
             <!-- Donut Chart for Equity -->
-            <div class="flex justify-center w-max">
+            <div class="flex justify-center p-5 ">
                 <canvas id="equityDonutChart"></canvas>
             </div>
         </div>
