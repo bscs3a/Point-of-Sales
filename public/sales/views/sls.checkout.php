@@ -48,10 +48,10 @@
             <ul class="ml-auto flex items-center">
 
                 <div class="relative inline-block text-left">
-                     <div>
+                    <div>
                         <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -165,11 +165,27 @@
                             </div>
 
                             <div id="sale-details">
-                                <label for="address" class="block mb-2">Delivery Address:</label>
-                                <input type="text" id="deliveryAddress" name="deliveryAddress" class="w-full p-2 border border-gray-300 rounded mb-4">
+                                <label for="province" class="block mb-2">Province:</label>
+                                <select id="province" name="province" class="w-full p-2 border border-gray-300 rounded mb-4" required>
+                                    <!-- Replace with your actual data -->
+                                    <option value="">Select Province</option>
+                                    <option value="Pampanga">Pampanga</option>
+                                </select>
+
+                                <label for="municipality" class="block mb-2">Municipality:</label>
+                                <select id="municipality" name="municipality" class="w-full p-2 border border-gray-300 rounded mb-4" required>
+                                    <!-- Replace with your actual data -->
+                                    <option value="">Select Municipality</option>
+                                    <option value="Angeles">Angeles</option>
+                                    <option value="San Fernando">San Fernando</option>
+                                    <!-- ... -->
+                                </select>
+
+                                <label for="barangayStreet" class="block mb-2">Street and Barangay:</label>
+                                <input type="text" id="barangayStreet" name="streetBarangayAddress" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter Barangay and Street" required>
 
                                 <label for="deliveryDate" class="block mb-2">Delivery Date:</label>
-                                <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>">
+                                <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>" required>
                             </div>
 
                             <!-- Mode of payment -->

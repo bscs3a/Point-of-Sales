@@ -7,8 +7,8 @@ CREATE TABLE tbl_sls_audit (
     log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log in');
-INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log out');
+-- INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log in');
+-- INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log out');
 
 SELECT * FROM tbl_sls_audit;
 
@@ -104,7 +104,9 @@ CREATE TABLE IF NOT EXISTS DeliveryOrders (
     ProductID INT,
     Quantity INT,
     ProductWeight DECIMAL(10, 2),
-    DeliveryAddress TEXT,
+    Province VARCHAR(255),
+    Municipality VARCHAR(255),
+    StreetBarangayAddress VARCHAR(255),
     DeliveryDate DATE,
     ReceivedDate DATE,  
     DeliveryStatus ENUM('Pending', 'In Transit', 'Delivered') DEFAULT 'Pending',

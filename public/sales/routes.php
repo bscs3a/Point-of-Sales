@@ -134,25 +134,25 @@ class SaleDetail
         $stmt->execute();
     }
 }
-
 class DeliveryOrder
 {
-    public function create($saleId, $productId, $quantity, $deliveryAddress, $deliveryDate, $productWeight)
+    public function create($saleId, $productId, $quantity, $province, $municipality, $streetBarangayAddress, $deliveryDate, $productWeight)
     {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        $stmt = $conn->prepare("INSERT INTO DeliveryOrders (SaleID, ProductID, Quantity, DeliveryAddress, DeliveryDate, DeliveryStatus, ProductWeight) VALUES (:saleId, :productId, :quantity, :deliveryAddress, :deliveryDate, 'Pending', :productWeight)");
+        $stmt = $conn->prepare("INSERT INTO DeliveryOrders (SaleID, ProductID, Quantity, Province, Municipality, StreetBarangayAddress, DeliveryDate, DeliveryStatus, ProductWeight) VALUES (:saleId, :productId, :quantity, :province, :municipality, :streetBarangayAddress, :deliveryDate, 'Pending', :productWeight)");
         $stmt->bindParam(':saleId', $saleId);
         $stmt->bindParam(':productId', $productId);
         $stmt->bindParam(':quantity', $quantity);
-        $stmt->bindParam(':deliveryAddress', $deliveryAddress);
+        $stmt->bindParam(':province', $province);
+        $stmt->bindParam(':municipality', $municipality);
+        $stmt->bindParam(':streetBarangayAddress', $streetBarangayAddress);
         $stmt->bindParam(':deliveryDate', $deliveryDate);
         $stmt->bindParam(':productWeight', $productWeight);
         $stmt->execute();
     }
 }
-
 
 
 class Product
@@ -205,7 +205,7 @@ Router::post('/addSales', function () {
 
         $product->decreaseQuantity($item['id'], $item['quantity']); // Decrease product quantity
         if ($_POST['SalePreference'] === 'delivery') {
-            $deliveryOrder->create($saleId, $item['id'], $item['quantity'], $_POST['deliveryAddress'], $_POST['deliveryDate'], $totalProductWeight);
+            $deliveryOrder->create($saleId, $item['id'], $item['quantity'], $_POST['province'], $_POST['municipality'], $_POST['streetBarangayAddress'], $_POST['deliveryDate'], $totalProductWeight);
         }
     }
 

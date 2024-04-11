@@ -50,7 +50,7 @@
     $sale = $stmtSale->fetch(PDO::FETCH_ASSOC);
 
     // Query the database for the latest sale
-    $sqlSale = 'SELECT Sales.*, Customers.FirstName, Customers.LastName, Customers.Phone, Customers.Email, DeliveryOrders.DeliveryAddress 
+    $sqlSale = 'SELECT Sales.*, Customers.FirstName, Customers.LastName, Customers.Phone, Customers.Email, DeliveryOrders.Province, DeliveryOrders.Municipality, DeliveryOrders.StreetBarangayAddress 
                 FROM Sales 
                 INNER JOIN Customers ON Sales.CustomerID = Customers.CustomerID 
                 INNER JOIN DeliveryOrders ON Sales.SaleID = DeliveryOrders.SaleID
@@ -128,7 +128,7 @@
                                 <div class="grid grid-rows-4">
                                     <div class="border-b text-gray-400 text-xl font-bold pb-2 mb-2">Delivery Address</div>
                                     <div>Name: <?= $sale['FirstName'] . ' ' . $sale['LastName'] ?></div>
-                                    <div>Address: <?= $sale['DeliveryAddress'] ?></div>
+                                    <div>Address: <?= $sale['StreetBarangayAddress'] . ', ' . $sale['Municipality'] . ', ' . $sale['Province'] ?></div>
                                     <div>Phone: <?= $sale['Phone'] ?></div>
                                     <div>Email: <?= $sale['Email'] ?></div>
                                 </div>
