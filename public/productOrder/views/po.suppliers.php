@@ -130,8 +130,7 @@
                     </div>
                   </div>
                   <div class="flex justify-center items-center pt-3">
-                    <a href="/po/viewsupplier"
-                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
+                  <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>" class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
                   </div>
                 </div>
                 <?php
