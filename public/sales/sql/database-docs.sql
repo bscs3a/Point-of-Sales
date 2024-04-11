@@ -190,18 +190,18 @@ VALUES
     -- Dummy Sales Data for 2022
     INSERT INTO `sales` (`SaleDate`, `SalePreference`, `ShippingFee`, `PaymentMode`, `TotalAmount`, `EmployeeID`, `CustomerID`) 
     VALUES 
-        ('2022-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 150.00, 1, 1),
-        ('2022-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 250.00, 2, 2),
-        ('2022-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 180.00, 3, 3),
-        ('2022-04-10 09:15:00', 'Delivery', 15.00, 'Cash', 200.00, 1, 1),
-        ('2022-05-22 13:00:00', 'Pick-up', 0.00, 'Cash', 300.00, 2, 2),
-        ('2022-06-08 16:30:00', 'Delivery', 25.00, 'Card', 350.00, 3, 3),
-        ('2022-07-14 10:00:00', 'Delivery', 10.00, 'Cash', 180.00, 1, 1),
-        ('2022-08-29 12:45:00', 'Pick-up', 0.00, 'Cash', 270.00, 2, 2),
-        ('2022-09-05 15:20:00', 'Delivery', 20.00, 'Card', 400.00, 3, 3),
-        ('2022-10-18 09:30:00', 'Delivery', 15.00, 'Cash', 220.00, 1, 1),
-        ('2022-11-25 11:45:00', 'Pick-up', 0.00, 'Cash', 280.00, 2, 2),
-        ('2022-12-30 14:00:00', 'Delivery', 25.00, 'Card', 320.00, 3, 3);
+        ('2022-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 150.00, 1, NULL),
+        ('2022-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 250.00, 2, NULL),
+        ('2022-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 180.00, 3, NULL),
+        ('2022-04-10 09:15:00', 'Delivery', 15.00, 'Cash', 200.00, 1, NULL),
+        ('2022-05-22 13:00:00', 'Pick-up', 0.00, 'Cash', 300.00, 2, NULL),
+        ('2022-06-08 16:30:00', 'Delivery', 25.00, 'Card', 350.00, 3, NULL),
+        ('2022-07-14 10:00:00', 'Delivery', 10.00, 'Cash', 180.00, 1, NULL),
+        ('2022-08-29 12:45:00', 'Pick-up', 0.00, 'Cash', 270.00, 2, NULL),
+        ('2022-09-05 15:20:00', 'Delivery', 20.00, 'Card', 400.00, 3, NULL),
+        ('2022-10-18 09:30:00', 'Delivery', 15.00, 'Cash', 220.00, 1, NULL),
+        ('2022-11-25 11:45:00', 'Pick-up', 0.00, 'Cash', 280.00, 2, NULL),
+        ('2022-12-30 14:00:00', 'Delivery', 25.00, 'Card', 320.00, 3, NULL);
 
     -- Dummy Target Sales Data for 2022
     INSERT INTO `targetsales` (`MonthYear`, `TargetAmount`, `EmployeeID`) 
@@ -222,18 +222,18 @@ VALUES
     -- Dummy Sales Data for 2023
     INSERT INTO `sales` (`SaleDate`, `SalePreference`, `ShippingFee`, `PaymentMode`, `TotalAmount`, `EmployeeID`, `CustomerID`) 
     VALUES 
-        ('2023-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 200.00, 1, 1),
-        ('2023-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 300.00, 2, 2),
-        ('2023-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 250.00, 3, 3),
-        ('2023-04-10 09:15:00', 'Delivery', 15.00, 'Cash', 350.00, 1, 1),
-        ('2023-05-22 13:00:00', 'Pick-up', 0.00, 'Cash', 400.00, 2, 2),
-        ('2023-06-08 16:30:00', 'Delivery', 25.00, 'Card', 450.00, 3, 3),
-        ('2023-07-14 10:00:00', 'Delivery', 10.00, 'Cash', 300.00, 1, 1),
-        ('2023-08-29 12:45:00', 'Pick-up', 0.00, 'Cash', 350.00, 2, 2),
-        ('2023-09-05 15:20:00', 'Delivery', 20.00, 'Card', 500.00, 3, 3),
-        ('2023-10-18 09:30:00', 'Delivery', 15.00, 'Cash', 400.00, 1, 1),
-        ('2023-11-25 11:45:00', 'Pick-up', 0.00, 'Cash', 450.00, 2, 2),
-        ('2023-12-30 14:00:00', 'Delivery', 25.00, 'Card', 500.00, 3, 3);
+        ('2023-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 200.00, 1, NULL),
+        ('2023-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 300.00, 2, NULL),
+        ('2023-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 250.00, 3, NULL),
+        ('2023-04-10 09:15:00', 'Delivery', 15.00, 'Cash', 350.00, 1, NULL),
+        ('2023-05-22 13:00:00', 'Pick-up', 0.00, 'Cash', 400.00, 2, NULL),
+        ('2023-06-08 16:30:00', 'Delivery', 25.00, 'Card', 450.00, 3, NULL),
+        ('2023-07-14 10:00:00', 'Delivery', 10.00, 'Cash', 300.00, 1, NULL),
+        ('2023-08-29 12:45:00', 'Pick-up', 0.00, 'Cash', 350.00, 2, NULL),
+        ('2023-09-05 15:20:00', 'Delivery', 20.00, 'Card', 500.00, 3, NULL),
+        ('2023-10-18 09:30:00', 'Delivery', 15.00, 'Cash', 400.00, 1, NULL),
+        ('2023-11-25 11:45:00', 'Pick-up', 0.00, 'Cash', 450.00, 2, NULL),
+        ('2023-12-30 14:00:00', 'Delivery', 25.00, 'Card', 500.00, 3, NULL);
 
     -- Dummy Target Sales Data for 2023
     INSERT INTO `targetsales` (`MonthYear`, `TargetAmount`, `EmployeeID`) 
@@ -254,9 +254,9 @@ VALUES
     -- Dummy Sales Data for 2024
     INSERT INTO `sales` (`SaleDate`, `SalePreference`, `ShippingFee`, `PaymentMode`, `TotalAmount`, `EmployeeID`, `CustomerID`) 
     VALUES 
-        ('2024-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 210.00, 1, 1),
-        ('2024-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 310.00, 2, 2),
-        ('2024-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 260.00, 3, 3);
+        ('2024-01-15 10:30:00', 'Delivery', 10.00, 'Cash', 210.00, 1, NULL),
+        ('2024-02-05 14:45:00', 'Pick-up', 0.00, 'Card', 310.00, 2, NULL),
+        ('2024-03-20 11:00:00', 'Delivery', 20.00, 'Cash', 260.00, 3, NULL);
 
     -- Dummy Target Sales Data for 2024
     INSERT INTO `targetsales` (`MonthYear`, `TargetAmount`, `EmployeeID`) 
