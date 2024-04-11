@@ -220,16 +220,18 @@
           </div>
           <div>
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="contactnumber">
-              Contact Number
+                Contact Number
             </label>
             <input  
-              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="contactnumber"
-              id="contactnumber"
-              type="tel"
-              placeholder="Contact Number"
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="contactnumber"
+                id="contactnumber"
+                type="tel"
+                placeholder="Contact Number"
+                pattern="09[0-9]{9}"
+                title="Contact number should be 11 digits and start with 09"
             />
-          </div>
+        </div>
         </div>
       </div>
 
@@ -262,19 +264,18 @@
                         <option value="Human Resources">Human Resources</option>
                         <option value="Point of Sales">Point of Sales</option>
                         <option value="Finance">Finance/Accounting</option>
-                      </select>
+              </select>
           </div>
           <div>
             <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="Position">
               Position
             </label>
-            <input  
+            <select
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              name="position"
-              id="Position"
-              type="text"
-              placeholder="Position"
-            />  
+                        name="position" id="Position" placeholder="Position">
+                        
+                        <option value="">Select Position</option>
+              </select>
           </div>
         </div>
       </div>
@@ -507,6 +508,97 @@
     document.getElementById('mainContent').classList.toggle('md:w-full');
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
+
+  // DEPARTMENT AND POSITION DROPDOWN
+document.getElementById('Department').addEventListener('change', function() {
+    var positionSelect = document.getElementById('Position');
+    var department = this.value;
+
+    // Clear the position select
+    positionSelect.innerHTML = '<option value="">Select Position</option>';
+
+    // Define the positions for each department
+    var positions = {
+
+        'Product Order': [
+          'Order Processor',
+          'Order Entry Clerk',
+          'Quality Control Inspector',
+          'Logistics Coordinator',
+          'Procurement Specialist'
+        ],
+
+        'Inventory': [
+          'Inventory Manager/Controller',
+          'Inventory Planner',
+          'Stock Controller',
+          'Purchasing Manager',
+          'Warehouse Manager',
+          'Materials Manager'
+        ],
+
+        'Delivery': [
+          'Delivery Driver',
+          'Courier',
+          'Warehouse Associate',
+          'Customer Service Representative',
+          'Parcel Sorter'
+        ],
+
+        'Human Resources': [
+          'Recruiter',
+          'HR Manager/Director',
+          'Compensation and Benefits Specialist',
+          'HR Coordinator',
+          'HR Legal Compliance Specialist'
+        ],
+
+        'Point of Sales': [
+          'Retail Associate/Cashier',
+          'Inventory Control Specialist',
+          'Sales Associate',
+          'Customer Service Representative',
+          'Business Analyst',
+          'E-commerce Coordinator'
+        ],
+
+        'Finance': [
+          'Accountant',
+          'Bookkeeper',
+          'Financial Analyst',
+          'Tax Accountant',
+          'Cost Accountant',
+          'Credit Analyst',
+          'Payroll Specialist'
+        ]
+    };
+
+    // Get the positions for the selected department
+    var departmentPositions = positions[department];
+
+    // Add the positions to the position select
+    if (departmentPositions) {
+        departmentPositions.forEach(function(position) {
+            var option = document.createElement('option');
+            option.value = position;
+            option.text = position;
+            positionSelect.add(option);
+        });
+    }
+});
+
+// DATE OF HIRE AND START OF EMPLOYMENT VALIDATION
+document.getElementById('dateofhire').addEventListener('change', validateDates);
+document.getElementById('startdate').addEventListener('change', validateDates);
+
+function validateDates() {
+    var dateOfHire = new Date(document.getElementById('dateofhire').value);
+    var startDate = new Date(document.getElementById('startdate').value);
+
+    if (startDate < dateOfHire) {
+        alert('Start of employment should be on or after the date of hire.');
+    }
+}
 
   // Show/Hide Password
   document.getElementById('togglePassword').addEventListener('change', function () {
