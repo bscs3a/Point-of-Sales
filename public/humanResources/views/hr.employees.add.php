@@ -409,6 +409,48 @@
         </div>
       </div>
       
+      <div class="flex flex-col">
+        <div class="mb-4">
+          <div class="flex">
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="sssnumber">
+                SSS Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="sssnumber"
+                id="sssnumber"
+                type="text"
+                placeholder="SSS Number"
+              />
+            </div>
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="philhealthnumber">
+                PhilHealth Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="philhealthnumber"
+                id="philhealthnumber"
+                type="text"
+                placeholder="PhilHealth Number"
+              />
+            </div>
+            <div>
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="tinnumber">
+                TIN Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="tinnumber"
+                id="tinnumber"
+                type="text"
+                placeholder="TIN Number"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
                   <!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>
