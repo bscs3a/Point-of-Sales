@@ -174,12 +174,31 @@
 
                                 <label for="municipality" class="block mb-2">Municipality:</label>
                                 <select id="municipality" name="municipality" class="w-full p-2 border border-gray-300 rounded mb-4" required>
-                                    <!-- Replace with your actual data -->
                                     <option value="">Select Municipality</option>
                                     <option value="Angeles">Angeles</option>
                                     <option value="San Fernando">San Fernando</option>
-                                    <!-- ... -->
+                                    <option value="Mabalacat">Mabalacat</option>
+                                    <option value="Apalit">Apalit</option>
+                                    <option value="Arayat">Arayat</option>
+                                    <option value="Bacolor">Bacolor</option>
+                                    <option value="Candaba">Candaba</option>
+                                    <option value="Floridablanca">Floridablanca</option>
+                                    <option value="Guagua">Guagua</option>
+                                    <option value="Macabebe">Macabebe</option>
+                                    <option value="Magalang">Magalang</option>
+                                    <option value="Masantol">Masantol</option>
+                                    <option value="Mexico">Mexico</option>
+                                    <option value="Minalin">Minalin</option>
+                                    <option value="Porac">Porac</option>
+                                    <option value="San Luis">San Luis</option>
+                                    <option value="San Simon">San Simon</option>
+                                    <option value="Santa Ana">Santa Ana</option>
+                                    <option value="Santa Rita">Santa Rita</option>
+                                    <option value="Santo Tomas">Santo Tomas</option>
+                                    <option value="Sasmuan">Sasmuan</option>
+                                    <!-- Add more municipalities in Pampanga as needed -->
                                 </select>
+
 
                                 <label for="barangayStreet" class="block mb-2">Street and Barangay:</label>
                                 <input type="text" id="barangayStreet" name="streetBarangayAddress" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter Barangay and Street" required>

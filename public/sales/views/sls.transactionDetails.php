@@ -159,7 +159,7 @@
 
                         <div class="flex flex-col gap-4 font-semibold ">
                             <div class="bg-gray-200 rounded-full p-2 text-center font-bold">Heavy</div>
-                            <span class="p-2"><?php echo $deliveryOrder['DeliveryAddress']; ?></span>
+                            <span class="p-2"><?php echo $deliveryOrder['StreetBarangayAddress'] . ', ' . $deliveryOrder['Municipality'] . ', ' . $deliveryOrder['Province']; ?></span>
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryDate']; ?></span>
                             <div class="flex justify-center items-center">
                                 <span class="p-2 bg-gray-200 px-4 rounded-full font-bold flex flex-row items-center">

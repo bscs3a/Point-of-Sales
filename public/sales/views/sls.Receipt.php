@@ -125,7 +125,7 @@
 
                         <div class="<?= $sale_preferences == 'Delivery' ? 'grid grid-cols-2' : 'grid grid-cols-1' ?> gap-6 mt-6">
                             <?php if ($sale_preferences != 'Pick-up') : ?>
-                                <div class="grid grid-rows-4">
+                                <div class="grid">
                                     <div class="border-b text-gray-400 text-xl font-bold pb-2 mb-2">Delivery Address</div>
                                     <div>Name: <?= $sale['FirstName'] . ' ' . $sale['LastName'] ?></div>
                                     <div>Address: <?= $sale['StreetBarangayAddress'] . ', ' . $sale['Municipality'] . ', ' . $sale['Province'] ?></div>
