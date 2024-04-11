@@ -418,7 +418,7 @@
               </label>
               <input  
                 class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                name="sssnumber"
+                name="sssNumber"
                 id="sssnumber"
                 type="text"
                 placeholder="SSS Number"
@@ -430,7 +430,7 @@
               </label>
               <input  
                 class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                name="philhealthnumber"
+                name="philhealthNumber"
                 id="philhealthnumber"
                 type="text"
                 placeholder="PhilHealth Number"
@@ -442,7 +442,7 @@
               </label>
               <input  
                 class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                name="tinnumber"
+                name="tinNumber"
                 id="tinnumber"
                 type="text"
                 placeholder="TIN Number"
@@ -451,6 +451,18 @@
           </div>
         </div>
       </div>
+      <div>
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="pagibignumber">
+                Pag-IBIG Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="pagibigNumber"
+                id="pagibignumber"
+                type="text"
+                placeholder="Pag-IBIG Number"
+              />
+            </div>
                   <!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>

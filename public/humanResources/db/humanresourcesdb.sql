@@ -19,8 +19,10 @@ CREATE TABLE employees (
     sss_number VARCHAR(20), -- SSS number
     philhealth_number VARCHAR(20), -- PhilHealth number
     tin_number VARCHAR(20), -- TIN number
+    pagibig_number VARCHAR(20), -- Pag-IBIG number
     PRIMARY KEY (id)
 );
+
 
 
 CREATE TABLE employment_info (
