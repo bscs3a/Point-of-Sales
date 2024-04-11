@@ -270,7 +270,7 @@ function getAccountBalanceV2($ledger, $considerDate = false, $year = null, $mont
     }
 
     if ($considerDate && is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
-        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31';
+        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31 23:59:59';
         $sql = "SELECT * FROM LedgerTransaction WHERE (ledgerno = ? OR ledgerNo_Dr = ?) AND datetime <= ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$ledgerNo, $ledgerNo, $date]);
@@ -304,7 +304,7 @@ function getTotalOfAccountTypeV2($accountType, $year = null, $month = null) {
     }
     
     if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
-        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31';
+        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31 23:59:59';
     } else {
         $date = date('Y-m-d');
     }
@@ -351,7 +351,7 @@ function getTotalOfGroupV2($groupType, $year = null, $month = null) {
 
     $date = null;
     if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
-        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31';
+        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31 23:59:59';
     }
 
     $sql = "SELECT lt.* FROM LedgerTransaction lt

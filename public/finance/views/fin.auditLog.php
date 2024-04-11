@@ -83,9 +83,6 @@
 
         <!-- End: Header -->
 
-
-        <h2>Hello</h2>
-
         <div class="container mx-auto px-4 sm:px-8">
             <div class="py-8">
                 <div>
@@ -125,7 +122,7 @@
                             $db = Database::getInstance();
                             $pdo = $db->connect();
 
-                            $sql = "SELECT * FROM tbl_fin_audit WHERE employee_name = :employee_name";
+                            $sql = "SELECT * FROM tbl_fin_audit WHERE employee_name = :employee_name LIMIT 10";
 
                             $stmt = $pdo->prepare($sql);
                             $stmt->bindParam(":employee_name", $_SESSION['employee_name']);

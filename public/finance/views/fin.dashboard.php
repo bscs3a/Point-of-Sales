@@ -141,7 +141,7 @@
                                 <div class="flex justify-between mb-4">
                                     <div>
                                         <div class="flex items-center mb-1">
-                                            <p class="text-4xl sm:text-md md:text-lg font-semibold text-[#F8B721]">
+                                            <p class="text-4xl sm:text-md font-semibold text-[#F8B721]">
                                                 <?php
                                                 $amount = 2000;
                                                 echo number_format($amount, 2);
