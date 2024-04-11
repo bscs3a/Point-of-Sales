@@ -70,7 +70,6 @@ CREATE TABLE attendance (
 
 CREATE TABLE leave_requests (
     id INT(10) NOT NULL AUTO_INCREMENT,
-    type VARCHAR(30) NOT NULL,
     type ENUM('Sick Leave','Vacation Leave','5 Days Forced Leave','Special Privilege Leave','Maternity Leave','Paternity Leave','Parental Leave','Rehabilitation Leave','Special Leave (For Women)','Study Leave','Terminal Leave','Special Emergency Leave') NOT NULL,
     details VARCHAR(255) NOT NULL,
     date_submitted TIMESTAMP NOT NULL DEFAULT current_timestamp(),
