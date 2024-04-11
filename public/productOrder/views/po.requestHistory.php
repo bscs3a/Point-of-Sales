@@ -20,37 +20,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
 
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   </head>
-
-<body>
-  <div class="flex h-screen bg-gray-100">
-    <!-- sidebar -->
-    <?php include "components/po.sidebar.php" ?>
-
-    <!-- Navbar -->
-    <div class="flex flex-col flex-1 overflow-y-auto">
-      <!-- Header -->
-      <div class="flex items-center justify-between h-16 bg-zinc-200 border-b border-gray-200">
-        <div class="flex items-center px-4">
-          <button class="text-gray-500 focus:outline-none focus:text-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <h1 class="text-2xl font-semibold px-5">Product Order / Request History</h1>
+  <body>
+    <div class="flex h-screen bg-gray-100">
+      <!-- sidebar -->
+        <div id="sidebar" class="flex h-screen">
+          <?php include "components/po.sidebar.php" ?>
         </div>
 
-        <div class="flex items-center pr-4 text-xl font-semibold">
-          Sample User
+      <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-y-auto">
+          <!-- header -->
+          <div class="flex items-center justify-between h-16 bg-white shadow-md px-4">
+            <div class="flex items-center gap-4">
+              <button id="toggleSidebar" class="text-gray-500 focus:outline-none focus:text-gray-700">
+                <i class="ri-menu-line"></i>
+              </button>
+              <label class="text-black font-medium">Request History</label>
+            </div>
 
-          <span class="p-3">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </span>
-        </div>
-      </div>
+            <!-- dropdown -->
+            <div x-data="{ dropdownOpen: false }" class="relative my-32">
+              <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+                <div class="flex items-center gap-4">
+                  <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+              </button>
+
+                <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
+
+                <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                  <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
+                </div>
+            </div>
+          </div>
+
+          <script>
+            document.getElementById('toggleSidebar').addEventListener('click', function() {
+                var sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('hidden', !sidebar.classList.contains('hidden'));
+            });
+          </script>
+
 
       <!-- Calender Button -->
       <div class="m-5 flex justify-between items-center">
@@ -93,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
           </li>
           <li>
             <a href="#"
-              class="flex items-center justify-center px-3 h-8 font-bold text-3xl text-gray-500 dark:text-gray-400">
+            class="flex items-center justify-center px-3 h-8 font-semibold text-2xl text-gray-800 dark:text-gray-400">
               <?php echo $defaultMonth; ?>
             </a>
           </li>
@@ -104,9 +115,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
         </ul>
       </nav>
       <!-- Existing table -->
-      <div class="overflow-overflow rounded-lg border border-gray-300 shadow-md m-5">
-        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-          <thead class="bg-gray-200">
+      <div
+          class="overflow-overflow rounded-lg border border-gray-300 shadow-md m-5">
+          <table
+            class="w-full border-collapse bg-white text-left text-sm text-gray-500">
+            <thead class="bg-gray-200">
             <tr class="border-b border-y-gray-300">
               <th scope="col" class="px-6 py-4 font-medium text-gray-900">
                 Product
@@ -237,6 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['searchDate'])) {
             <?php
           }
           ?>
+          <!-- Your existing HTML code -->
 
           <!-- Display total quantity and total price in table footer -->
           <tfoot class="bg-gray-200">
