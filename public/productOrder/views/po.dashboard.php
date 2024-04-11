@@ -93,6 +93,7 @@
                             <th class="px-4 py-2 font-semibold">User</th>
                             <th class="px-4 py-2 font-semibold">Time In</th>
                             <th class="px-4 py-2 font-semibold">Time Out</th>
+                            <th class="px-4 py-2 font-semibold">Action</th>
                         </tr>
                     </thead>
 

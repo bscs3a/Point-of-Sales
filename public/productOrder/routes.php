@@ -17,12 +17,24 @@ $po = [
     '/po/transactionHistory' => $basePath . "transactionHistory.php",
     '/po/requestHistory' => $basePath . "requestHistory.php",
     '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
+    '/po/test' => $basePath . "test.php",
+    '/po/test1' => $basePath . "test1.php",
 
 //umm idk what to say here
     '/po/viewdetails/Order={id}' => function($id) use ($basePath) {
         // $_SESSION['id'] = $id;
         $_GET['id'] = $id;
         include $basePath . "viewdetails.php";
+},
+
+'/po/test/{month}' => function($month) use ($basePath) {
+    $_GET['month'] = $month; // Update the $_GET key to 'month' to match the parameter used in test.php
+    include $basePath . "test.php";
+},
+
+'/po/test1/pagenumber={page}' => function($page) use ($basePath) {
+    $_GET['page'] = $page; // Update the $_GET key to 'page' to match the parameter used in test.php
+    include $basePath . "test1.php";
 },
 
 ];
