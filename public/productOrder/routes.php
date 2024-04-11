@@ -397,6 +397,8 @@ Router::post('/accept/requestOrder', function () {
 });
 
 
+
+
 //function to change the "pending" status of requested orders to "accepted" and it will insert on the
 //orders_details table while also having a data in the requests tables to use it as a request history
 function updateRequestStatusToAccepted()
@@ -465,6 +467,9 @@ Router::post('/update/requestOrder', function () {
     updateRequestStatusToAccepted();
 });
 
+
+
+
 //function to set the order status of to complete and also add the data in the transaction history
 function updateOrderStatusToCompleted()
 {
@@ -498,6 +503,33 @@ function updateOrderStatusToCompleted()
             $insertStmt->bindParam(':supplierID', $supplierID);
             $insertStmt->execute();
 
+            // Insert log entry for successful order completion with the last time_in
+            $employee = $_SESSION['employee'];
+            $stmt = $conn->prepare("SELECT * FROM accounts WHERE employee = :employee");
+            $stmt->bindParam(':employee', $employee);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                // Retrieve the last time_in from the audit_log table based on account_ID
+                $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE account_ID = :accountID ORDER BY audit_ID DESC LIMIT 1");
+                $stmt->bindValue(':accountID', $user['account_ID']);
+                $stmt->execute();
+                $last_time_in = $stmt->fetchColumn();
+
+                $user_id = $user['account_ID'];
+                $action = "Completed Order #$orderID";
+                $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+                $sql = "INSERT INTO audit_log (account_ID, action, time_in, time_out) VALUES (:user_id, :action, :last_time_in, :time_out)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(':user_id', $user_id);
+                $stmt->bindValue(':action', $action);
+                $stmt->bindValue(':last_time_in', $last_time_in);
+                $stmt->bindValue(':time_out', $time_out);
+                $stmt->execute();
+            }
+
             // Commit the transaction
             $conn->commit();
 
@@ -513,6 +545,7 @@ function updateOrderStatusToCompleted()
         echo "Error: " . $e->getMessage();
     }
 }
+
 
 // Route to handle the update order status action
 Router::post('/complete/orderDetail', function () {
