@@ -47,7 +47,7 @@
 
     <main id="mainContent" class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main">
 
-        <div id="header" class="py-2 px-6 bg-white flex items-center shadow-md sticky top-0 left-0 z-51" style="z-index: 9999;">
+        <div id="header" class="py-2 px-6 bg-white flex items-center shadow-md sticky top-0 left-0 z-51" style="z-index: 99;">
 
             <!-- Sidebar toggle button -->
             <button type="button" class="text-lg sidebar-toggle" @click="cartOpen = false; sidebarOpen = true">
