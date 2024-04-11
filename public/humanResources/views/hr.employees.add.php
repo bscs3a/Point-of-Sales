@@ -227,19 +227,12 @@
               name="contactnumber"
               id="contactnumber"
               type="tel"
+              pattern="[0-9]{11}"
               placeholder="Contact Number"
+              title="Please enter a valid 11-digit phone number."
             />
           </div>
-          <?php
-          if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $contactNumber = $_POST["contactnumber"];
-            
-            // Validate contact number
-            if (!preg_match("/^[0-9]{10}$/", $contactNumber)) {
-              echo "<p class='text-red-500'>Invalid contact number. Please enter a 10-digit number.</p>";
-            }
-          }
-          ?>
+
         </div>
       </div>
 
@@ -422,6 +415,8 @@
                 id="sssnumber"
                 type="text"
                 placeholder="SSS Number"
+                pattern="[0-9]{10}"  // 10-digit SSS number
+                title="Please enter a 10-digit SSS number"
               />
             </div>
             <div class="mr-2">
@@ -434,6 +429,8 @@
                 id="philhealthnumber"
                 type="text"
                 placeholder="PhilHealth Number"
+                pattern="[0-9]{12}"  // 12-digit PhilHealth number
+                title="Please enter a 12-digit PhilHealth number"
               />
             </div>
             <div>
@@ -446,23 +443,27 @@
                 id="tinnumber"
                 type="text"
                 placeholder="TIN Number"
+                pattern="[0-9]{9}"  // 9-digit TIN number
+                title="Please enter a 9-digit TIN number"
               />
             </div>
           </div>
         </div>
       </div>
       <div>
-              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="pagibignumber">
-                Pag-IBIG Number
-              </label>
-              <input  
-                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                name="pagibigNumber"
-                id="pagibignumber"
-                type="text"
-                placeholder="Pag-IBIG Number"
-              />
-            </div>
+        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="pagibignumber">
+          Pag-IBIG Number
+        </label>
+        <input  
+          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          name="pagibigNumber"
+          id="pagibignumber"
+          type="text"
+          placeholder="Pag-IBIG Number"
+          pattern="[0-9]{12}"  // 12-digit Pag-IBIG number
+          title="Please enter a 12-digit Pag-IBIG number"
+        />
+      </div>
                   <!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>
