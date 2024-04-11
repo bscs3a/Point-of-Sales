@@ -201,6 +201,8 @@
             <?php include "components/dashboard/dashboard.request.php" ?>
             <!-- End: Request Section -->
 
+
+            
             <!-- Start: Report Section -->
             <?php include "components/dashboard/dashboard.reports.php" ?>
             <!-- End: Report Section -->
@@ -209,6 +211,7 @@
     </main>
     <!-- End: Dashboard -->
     <script src="./../src/route.js"></script>
+    <script  src="./../src/form.js"></script>
 </body>
 
 </html>

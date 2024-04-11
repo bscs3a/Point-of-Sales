@@ -1,17 +1,89 @@
+<div id="report_generation_modal" class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
+    role="dialog" aria-modal="true">
+    <div class=" pt-4 px-4 pb-20 text-center sm::block sm:p-0 bg-white rounded shadow-lg ">
+       
+    <form action="/reportGeneration" method="post" class="font-sans p-10 border-2 border-black rounded-md">
+            <h2 class="font-semibold text-lg m-1">
+                Generate Report
+            </h2>
+            <p class="italic opacity-50 m-1">
+                To generate your report, please choose the type of financial report and specify the date
+            </p>
+
+            <label for="report" class="font-medium m-1">
+                Type of Report
+            </label>
+            <select name="file" id="report"
+                class="m-1 bg-gray-50 border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                required>
+                <option selected>Choose a report</option>
+                <option value="Income">Income Report</option>
+                <option value="OwnerEquity">Owners' Equity</option>
+                <option value="TrialBalance">Trial Balance</option>
+            </select>
+            <label for="monthYear" class="font-medium m-1">
+                Date
+            </label>
+            <input type="month" id="monthYear" name="monthYear"
+                class="m-1 border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" required>
+
+            <br>
+            <div class="m-1 gap-3 flex justify-end">
+                <button id="cancel_btn" class="border-2 rounded-md border-black font-bold py-2.5 px-4 drop-shadow-md" type="button">
+                    Cancel
+                </button>
+                <button class="border-2 rounded-md border-black bg-[#F8B721] font-bold py-2.5 px-4 drop-shadow-md"
+                    type="submit">
+                    Generate
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <div class="mt-10  h-2/4">
     <!-- Start: Header Report -->
     <div class="my-10 flex justify-between">
         <h1 class="font-sans font-bold text-3xl">Report</h1>
-        <button class="font-sans font-bold text-2xl ">
+        <button id="generate_modal_btn" class="font-sans font-bold text-2xl ">
             <i class="ri-download-2-line"></i>
             Generate
         </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <script>
+        // Generate Report Modal
+        var report_generation_modal = document.getElementById('report_generation_modal');
+        // Get the button that opens the modal
+        var generate_modal_btn = document.getElementById('generate_modal_btn');
+
+        // Get the cancel button
+        var cancel_btn =document.getElementById('cancel_btn');
+
+        // When the user clicks the button, open the modal
+        generate_modal_btn.onclick = function () {
+            report_generation_modal.classList.remove('hidden');
+        }
+
+        // When the user clicks the cancel button, close the modal
+        cancel_btn.onclick = function () {
+            report_generation_modal.classList.add('hidden');
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == report_generation_modal) {
+                report_generation_modal.classList.add('hidden');
+            }
+        }
+    </script>
+
+    <div class="grid grid-co
+    ls-1 md:grid-cols-2 gap-4">
         <?php include_once 'dashboard.reports.income.php' ?>
-        
-        
+
+
         <div class="px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
             <div class="flex justify-between">
                 <h2 class="font-sans font-bold text-xl">Balance</h2>
@@ -35,13 +107,14 @@
         </div>
     </div>
 
-    
+
 
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-    
+
+
 
         // Get the context of the canvas element we want to select
         var balancePie = document.getElementById('balancePie').getContext('2d');
