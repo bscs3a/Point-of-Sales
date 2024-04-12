@@ -29,17 +29,19 @@ $po = [
         $_GET['id'] = $id;
         include $basePath . "viewdetails.php";
     },
-    // view supplier route
+    // view supplier information route
     '/po/viewsupplier/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
         // $_SESSION['id'] = $id;
         $_GET['Supplier_ID'] = $id;
         include $basePath . "viewsupplier.php";
     },
-
-    '/po/test/{month}' => function ($month) use ($basePath) {
-        $_GET['month'] = $month; // Update the $_GET key to 'month' to match the parameter used in test.php
-        include $basePath . "test.php";
+    // view supplier products route
+    '/po/viewsupplierproduct/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['Supplier_ID'] = $id;
+        include $basePath . "viewsupplierproduct.php";
     },
+    
 
     '/po/test1/pagenumber={page}' => function ($page) use ($basePath) {
         $_GET['page'] = $page; // Update the $_GET key to 'page' to match the parameter used in test.php

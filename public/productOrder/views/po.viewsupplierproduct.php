@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Suppliers Product List</title>
 
-  <link href="./../src/tailwind.css" rel="stylesheet" />
+  <link href="./../../src/tailwind.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -60,7 +60,7 @@
       <!-- Main Content -->
       <!-- new layout of table -->
       <div class="px-10 py-4">
-      <div class="justify-between items-start mt-4">
+        <div class="justify-between items-start mt-4">
           <!-- Button -->
           <div class="flex justify-between">
             <div class="items-start">
@@ -71,10 +71,9 @@
                       class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
                       <option value="">Filter</option>
                       <option value="id">ID</option>
-                      <option value="name">Name</option>
+                      <option value="name">Product Name</option>
                       <option value="supplier">Supplier</option>
                       <option value="category">Category</option>
-                      <option value="quality">Quality</option>
                       <option value="price">Price</option>
                       <option value="description">Description</option>
                     </select>
@@ -92,7 +91,7 @@
               </button>
             </div>
           </div>
-        
+
         </div>
 
         <!-- Table -->
@@ -100,64 +99,77 @@
           <table class="min-w-full text-left mx-auto bg-white">
             <thead class="bg-gray-200 border-b border-gray-400 text-sm">
               <tr>
-                <th class="px-4 py-2 font-semibold">Product ID</th>
                 <th class="px-4 py-2 font-semibold">Product Image</th>
-                <th class="px-4 py-2 font-semibold">Supplier Name</th>
-                <th class="px-4 py-2 font-semibold">Category</th>
-                <th class="px-4 py-2 font-semibold">Price</th>
-                <th class="px-4 py-2 font-semibold">Quantity</th>
-                <th class="px-4 py-2 font-semibold">Description</th>
-                <th class="px-4 py-2 font-semibold"></th>
+                <th class="px-10 py-2 font-semibold">Product ID</th>
+                <th class="px-20 py-2 font-semibold">Supplier Name</th>
+                <th class="px-30 py-2 font-semibold">Category</th>
+                <th class="px-40 py-2 font-semibold">Price</th>
+                <th class="px-60 py-2 font-semibold">Description</th>
+                <th class="px-70 py-2 font-semibold"></th>
               </tr>
             </thead>
 
             <tbody>
-          
-            <!-- Comment ko lnag rin muna -->
-            <!-- <?php
-            try {
-              require_once 'dbconn.php';
-              // Query to retrieve all products
-              $query = "SELECT * FROM products";
-              $statement = $conn->prepare($query);
-              $statement->execute();
-              // Check if there are any rows or results
-              if ($statement->rowCount() > 0) {
-                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                  // Debugging statement to print image path
-                  $imagePath = '../' . $row['ProductImage'];
-                  echo'<tr>';
-                  echo '<tr class="hover:bg-gray-50 data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-quality="5 stars..." data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
-                  echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
-                  echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">'; 
-                  echo '<div>' . $row['ProductName'] . '</div>';
-                  echo '</td>';
-                  echo '<td class="px-4 py-4">' . $row['ProductID'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['Supplier'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['ProductWeight'] . ' kg</td>';
-                  echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
-                  echo '<td class="px-4 py-4">Edit</td>';
-                  echo '</tr>';
 
+              <?php
+              function displayProductsBySupplierID($supplierID)
+              {
+                try {
+                  require_once 'dbconn.php';
+                  // Query to retrieve products based on Supplier_ID
+                  $query = "SELECT p.*, s.Supplier_Name 
+                  FROM products p 
+                  INNER JOIN suppliers s ON p.Supplier_ID = s.Supplier_ID
+                  WHERE p.Supplier_ID = :supplierID";
+                  $statement = $conn->prepare($query);
+                  $statement->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+                  $statement->execute();
+
+                  // Check if there are any rows or results
+                  if ($statement->rowCount() > 0) {
+                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                      // Debugging statement to print image path
+                      $imagePath = '../../' . $row['ProductImage'];
+                      echo '<tr>';
+                      echo '<tr class="hover:bg-gray-50 data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
+                      echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
+                      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">'; 
+                      echo '<div>' . $row['ProductName'] . '</div>';
+                      echo '</td>';
+                      echo '<td class="px-20 py-4">' . $row['ProductID'] . '</td>';
+                      echo '<td class="px-10 py-4">' . $row['Supplier'] . '</td>';
+                      echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
+                      echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
+                      echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
+                      echo '<td class="px-4 py-4">Edit</td>';
+                      echo '</tr>';
+
+                    }
+                  } else {
+                    echo "No products found for this supplier.";
+                  }
+                } catch (PDOException $e) {
+                  echo "Connection failed: " . $e->getMessage();
                 }
-              } else {
-                echo "No products found.";
+                // Close the database connection
+                $conn = null;
               }
-            } catch (PDOException $e) {
-              echo "Connection failed: " . $e->getMessage();
-            }
-            // Close the database connection
-            $conn = null;
-            ?> -->
-            <!-- //end -->
-          </tbody>
-        </table>
-      </div>
-    </div>
 
-  </div>
+              // Check if Supplier_ID is provided via GET method
+              if (isset($_GET['Supplier_ID'])) {
+                $supplierID = $_GET['Supplier_ID'];
+                displayProductsBySupplierID($supplierID);
+              } else {
+                echo "Supplier ID not provided.";
+              }
+              ?>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <script>
@@ -183,9 +195,6 @@
           case "category":
             display = row.dataset.category.toLowerCase().includes(searchValue) ? "" : "none";
             break;
-          case "quality":
-            display = row.dataset.quality.toLowerCase().includes(searchValue) ? "" : "none";
-            break;
           case "price":
             display = row.dataset.price.toLowerCase().includes(searchValue) ? "" : "none";
             break;
@@ -204,9 +213,9 @@
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-
+  <script src="./../../src/form.js"></script>
+  <script src="./../../src/route.js"></script>
 </body>
-<script src="./../src/route.js"></script>
-<script src="./../src/form.js"></script>
+
 
 </html>
