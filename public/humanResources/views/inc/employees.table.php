@@ -1,4 +1,4 @@
-<div class="ml-6 flex flex-col mt-8 mr-6">
+<div class="ml-6 flex flex-col mt-2 mr-6">
   <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
     <table class="min-w-full">
       <!-- START HEADER -->

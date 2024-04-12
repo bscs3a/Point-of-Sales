@@ -91,7 +91,7 @@ $stmt = null;
 
   <!-- Leave Requests -->
   <div class="flex flex-wrap">
-    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">File a Leave</button>
+    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 font-medium bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">File a Leave</button>
 
     <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">

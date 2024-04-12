@@ -63,8 +63,8 @@ $stmt = null;
 
   <!-- Employees -->
   <div class="flex items-center flex-wrap">
-    <h3 class="ml-6 mt-8 text-xl font-bold">All Employees</h3>
-    <button route="/hr/employees/add" class="mt-9 mr-4 flex ml-2 bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600"><i class="ri-add-line"></i></button>
+    <!-- <h3 class="ml-6 mt-8 text-xl font-bold">All Employees</h3> -->
+    <button route="/hr/employees/add" class="mt-9 mr-4 flex ml-6 bg-blue-500 font-medium text-white px-2 py-1 rounded-md hover:bg-blue-600"><i class="ri-add-line"></i>Add New</button>
     
     <form action="/hr/employees" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="text" id="search" name="search" placeholder="Search..." class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
