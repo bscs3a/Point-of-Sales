@@ -117,6 +117,10 @@
                                         <span x-text="'Subtotal:'"></span>
                                         <span x-text="'₱' + (cart.reduce((total, item) => total + item.price * item.quantity, 0)).toFixed(2)"></span>
                                     </li>
+                                    <li class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between">
+                                        <span x-text="'Discount:'"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0)).toFixed(2)"></span>
+                                    </li>
                                     <li id="shipping-fee-toggle" class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between" x-show="salePreference === 'delivery'">
                                         <span x-text="'Shipping Fee:'"></span>
                                         <span x-text="'₱' + (localStorage.getItem('shippingFee') || '0')"></span>
@@ -127,7 +131,7 @@
                                     </li>
                                     <li class="py-4 font-semibold  text-green-800 flex justify-between">
                                         <span x-text="'Total:'"></span>
-                                        <span x-text="'₱' + ((cart.reduce((total, item) => total + item.price * item.quantity * (1 + item.TaxRate), 0)) + parseFloat(localStorage.getItem('shippingFee') || '0')).toFixed(2)"></span>
+                                        <span x-text="'₱' + ((cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * (1 + item.TaxRate), 0)) + parseFloat(localStorage.getItem('shippingFee') || '0')).toFixed(2)"></span>
                                     </li>
                                 </div>
 
@@ -231,6 +235,7 @@
                             <input type="hidden" id="subtotal" name="subtotal">
                             <input type="hidden" id="tax" name="tax">
                             <input type="hidden" id="shippingFee" name="shippingFee">
+                            <input type="hidden" id="discount" name="discount">
 
                             <button type="submit" value="Submit" class="bg-green-800 text-white rounded px-4 py-2 mt-4 w-full hover:bg-gray-200 hover:text-green-800 hover:font-bold transition-colors ease-in-out">Complete Sale</button>
                         </form>
@@ -382,21 +387,23 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Get the cart from localStorage
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-            // Calculate the subtotal, tax, and total amount
+            
+            // Calculate the subtotal, tax, discount, and total amount
             const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-            const tax = cart.reduce((total, item) => total + item.price * item.quantity * item.TaxRate, 0);
-            const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity * (1 + item.TaxRate), 0);
-
+            const discount = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0);
+            const tax = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * item.TaxRate, 0);
+            const totalAmount = subtotal + tax - discount;
+            
             // Set the value of the hidden input fields
             document.getElementById('subtotal').value = subtotal.toFixed(2);
+            document.getElementById('discount').value = discount.toFixed(2);
             document.getElementById('tax').value = tax.toFixed(2);
             document.getElementById('totalAmount').value = totalAmount.toFixed(2);
             document.getElementById('cartData').value = JSON.stringify(cart);
-
+            
             // Assign the cart to a global variable
             window.cart = cart;
-
+            
             // Create a shippingFee variable in localStorage and set its value to 0
             localStorage.setItem('shippingFee', '0');
         });

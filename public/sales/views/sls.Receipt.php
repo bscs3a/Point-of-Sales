@@ -33,6 +33,7 @@
     $payment_method = $sale['PaymentMode'];
     $sale_preferences = $sale['SalePreference'];
     $shippingFee = $sale['ShippingFee'];
+    $discount = $sale['Discount'];
 
     // Query the database for the sale items
     $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, SaleDetails.TotalAmount, Products.ProductName, Products.TaxRate, Products.ProductImage 
@@ -151,6 +152,10 @@
                                 <div id="taxes" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">
                                     <span>Taxes</span>
                                     <span>₱<?= number_format($tax, 2) ?></span>
+                                </div>
+                                <div id="discount" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">
+                                    <span>Discount</span>
+                                    <span>₱<?= number_format($discount, 2) ?></span>
                                 </div>
                                 <?php if ($sale_preferences === 'Delivery') : ?>
                                     <div id="shippingFee" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">

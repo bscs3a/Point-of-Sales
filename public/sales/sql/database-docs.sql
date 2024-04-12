@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS Sales (
     CardNumber VARCHAR(16),
     ExpiryDate TEXT,
     CVV VARCHAR(3),
+    Discount DECIMAL(10, 2),
     TotalAmount DECIMAL(10, 2),
     EmployeeID INT,
     CustomerID INT,
