@@ -3,9 +3,9 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT employees.*, salary_info.*, payroll.* FROM employees";
+$query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
 $query .= " 
-LEFT JOIN payroll ON payroll.employees_id = employees.id
+LEFT JOIN employees ON payroll.employees_id = employees.id
 LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
 
 $params = [];
