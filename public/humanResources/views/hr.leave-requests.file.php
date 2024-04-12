@@ -109,10 +109,10 @@
           id="date_submitted"
           name="date_submitted"
           type="date"
-          value="<?php echo date('Y-m-d'); ?>"
+          value="<?php date_default_timezone_set('Asia/Manila'); echo date('Y-m-d'); ?>"
           readonly
         />
-      </div>
+    </div>
   </div>
   <!-- Column 2 -->
       <div class="flex flex-col">

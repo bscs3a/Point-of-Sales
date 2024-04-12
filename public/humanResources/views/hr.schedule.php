@@ -1,3 +1,16 @@
+<?php
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $query = "SELECT COUNT(*) as count FROM leave_requests WHERE CURDATE() BETWEEN start_date AND end_date AND status = 'Approved'";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $onLeave = $result['count'];
+
+    $pdo = null;
+    $stmt = null;
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,8 +98,7 @@
               dropdown.classList.toggle('hidden');
             });
           </script>
-          
-
+        
           <!--
             Dropdown menu, show/hide based on menu state.
 
@@ -139,49 +151,129 @@
       </div>
     </div>
   </header>
+  
   <div class="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
     <div class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
-      <div class="flex justify-center bg-white py-2">
+      <div class="flex justify-center bg-blue-400 py-2">
         <span>M</span>
         <span class="sr-only sm:not-sr-only">on</span>
       </div>
-      <div class="flex justify-center bg-white py-2">
+      <div class="flex justify-center bg-blue-400 py-2">
         <span>T</span>
         <span class="sr-only sm:not-sr-only">ue</span>
       </div>
-      <div class="flex justify-center bg-white py-2">
+      <div class="flex justify-center bg-blue-400 py-2">
         <span>W</span>
         <span class="sr-only sm:not-sr-only">ed</span>
       </div>
-      <div class="flex justify-center bg-white py-2">
+      <div class="flex justify-center bg-blue-400 py-2">
         <span>T</span>
         <span class="sr-only sm:not-sr-only">hu</span>
       </div>
-      <div class="flex justify-center bg-white py-2">
+      <div class="flex justify-center bg-blue-400 py-2">
         <span>F</span>
         <span class="sr-only sm:not-sr-only">ri</span>
       </div>
-      <div class="flex justify-center bg-white py-2">
+      <div class="flex justify-center bg-blue-400 py-2">
         <span>S</span>
         <span class="sr-only sm:not-sr-only">at</span>
       </div>
-      <div class="flex justify-center bg-white py-2">
+      <div class="flex justify-center bg-blue-400 py-2">
         <span>S</span>
         <span class="sr-only sm:not-sr-only">un</span>
       </div>
     </div>
-    <div class="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
-      <div class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
-        <!--
-          Always include: "relative py-2 px-3"
-          Is current month, include: "bg-white"
-          Is not current month, include: "bg-gray-50 text-gray-500"
-        -->
+<div class="flex bg-gray-50 text-xs leading-6 text-gray-700 lg:flex-auto">
+<div class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
+<?php
+    date_default_timezone_set('Asia/Manila');
+
+    // Get the current month and year
+    $month = date('m');
+    $year = date('Y');
+
+    // Get the number of days in the month
+    $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+    // Find out what day of the week the first day of the month is
+    $firstDayOfMonth = date('N', strtotime("$year-$month-01"));
+
+    // Calculate how many days to go back to the previous month
+    $daysToGoBack = $firstDayOfMonth - 1;
+
+    // Get the timestamp for the day to start from in the previous month
+    $startDayOfPrevMonth = strtotime("$year-$month-01 - $daysToGoBack day");
+
+    // Loop through each day of the month
+    for ($day = 1; $day <= $daysInMonth; $day++) {
+        // Format the date
+        $date = $year . '-' . $month . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
+
+        // Find out what day of the week this day is
+        $dayOfWeek = date('N', strtotime($date));
+
+        // If this is the first day of the loop, add divs for the last few days of the previous month
+        if ($day == 1) {
+            for ($i = 0; $i < $daysToGoBack; $i++) {
+                // Get the date for this day of the previous month
+                $prevMonthDate = date('Y-m-d', $startDayOfPrevMonth + ($i * 24 * 60 * 60));
+
+                // Output the div for this day
+                echo '<div class="relative bg-gray-100 px-3 py-2 text-gray-500">';
+                echo '<time datetime="' . $prevMonthDate . '">' . date('j', strtotime($prevMonthDate)) . '</time>';
+                echo '</div>';
+            }
+        }
+?>
+<div class="relative bg-white px-3 py-2">
+    <?php
+    $currentDate = date('Y-m-d');
+    $timeClass = $date == $currentDate ? 'flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 font-semibold text-white' : '';
+    ?>
+    <time datetime="<?php echo $date; ?>" class="<?php echo $timeClass; ?>"><?php echo $day; ?></time>
+    <?php if ($date == $currentDate && $onLeave > 0): ?>
+    <ol class="mt-2">
+    <li>
+        <a href="#" class="group flex">
+        <p class="flex-auto mt-2 mb-2 truncate text-sm font-medium text-gray-900">Employees</p>
+        </a>
+    </li>
+    <li>
+        <a href="#" class="group flex">
+        <p class="flex-auto mb-4 truncate text-sm font-medium text-gray-900">On Leave</p>
+        <p class="ml-3 hidden flex-none text-sm font-bold text-blue-500 xl:block"><?php echo $onLeave; ?></p>
+        </a>
+    </li>
+    </ol>
+    <?php endif; ?>
+</div>
+<?php
+    // If this is the last day of the loop and it's not a Sunday, add divs for the first few days of the next month
+    if ($day == $daysInMonth) {
+        // Get the timestamp for the first day of the next month
+        $firstDayOfNextMonth = strtotime("$year-$month-$day + 1 day");
+
+        for ($i = $dayOfWeek; $i < 7; $i++) {
+            // Get the date for this day of the next month
+            $nextMonthDate = date('Y-m-d', $firstDayOfNextMonth);
+
+            // Output the div for this day
+            echo '<div class="relative bg-gray-100 px-3 py-2 text-gray-500">';
+            echo '<time datetime="' . $nextMonthDate . '">' . date('j', $firstDayOfNextMonth) . '</time>';
+            echo '</div>';
+
+            // Add one day to the timestamp
+            $firstDayOfNextMonth += 24 * 60 * 60;
+        }
+    }
+    }
+?>
+</div>
+
+
+      <!-- <div class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
         <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
-          <!--
-            Is today, include: "flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white"
-          -->
-          <time datetime="2021-12-27">27</time>
+          <time datetime="<?php //echo date('Y-m') . '-27'; ?>">27</time>
         </div>
         <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
           <time datetime="2021-12-28">28</time>
@@ -358,7 +450,9 @@
         <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
           <time datetime="2022-02-06">6</time>
         </div>
-      </div>
+      </div> -->
+
+
       <div class="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden">
         <!--
           Always include: "flex h-14 flex-col py-2 px-3 hover:bg-gray-100 focus:z-10"
