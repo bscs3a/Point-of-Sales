@@ -3,8 +3,8 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT payroll.*, employees.*, salary.* FROM payroll";
-$query .= " LEFT JOIN employees ON payroll.employees_id = employees.id";
+$query = "SELECT leave_requests.*, employees.image_url, employees.first_name, employees.middle_name, employees.last_name, employees.position, employees.department FROM leave_requests";
+$query .= " LEFT JOIN employees ON leave_requests.employees_id = employees.id";
 
 $params = [];
 
@@ -21,7 +21,7 @@ $query .= " ORDER BY leave_requests.id DESC";
 
 $stmt = $conn->prepare($query);
 $stmt->execute($params);
-$payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$leaveRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $pdo = null;
 $stmt = null;
