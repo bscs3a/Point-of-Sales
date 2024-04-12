@@ -9,7 +9,7 @@ $query .= " LEFT JOIN employees ON leave_requests.employees_id = employees.id";
 $params = [];
 
 if (!empty($search)) {
-  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.employees_id = :search) AND";
+  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.status = :search OR leave_requests.employees_id = :search) AND";
   $params[':search'] = $search;
 } else {
   $query .= " WHERE";
@@ -119,5 +119,16 @@ $stmt = null;
 <script  src="./../../src/route.js"></script>
 <script  src="./../../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
+
+<!-- Sidebar active/inactive -->
+<script>
+  document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+    document.getElementById('sidebar-menu').classList.toggle('hidden');
+    document.getElementById('sidebar-menu').classList.toggle('transform');
+    document.getElementById('sidebar-menu').classList.toggle('-translate-x-full');
+    document.getElementById('mainContent').classList.toggle('md:w-full');
+    document.getElementById('mainContent').classList.toggle('md:ml-64');
+  });
+</script>
 </body>
 </html> 

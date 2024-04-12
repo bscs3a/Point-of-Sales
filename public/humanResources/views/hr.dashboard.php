@@ -1,19 +1,3 @@
-<?php
-  $db = Database::getInstance();
-  $conn = $db->connect();
-
-  $query = "SELECT COUNT(*) as total_employees FROM employees";
-  $stmt = $conn->prepare($query);
-  $stmt->execute();
-  $result = $stmt->fetch(PDO::FETCH_ASSOC);
-  $total_employees = $result['total_employees'];
-
-  $query = "SELECT * FROM employees ORDER BY id DESC LIMIT 3";
-  $stmt = $conn->prepare($query);
-  $stmt->execute();
-  $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
 <!doctype html>
 <html>
 
@@ -58,17 +42,73 @@
   <!-- Employee  -->
   <div class="p-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+    <?php
+      $db = Database::getInstance();
+      $conn = $db->connect();
+
+      $query = "SELECT COUNT(*) as total_employees FROM employees";
+      $stmt = $conn->prepare($query);
+      $stmt->execute();
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $total_employees = $result['total_employees'];
+
+      $query = "SELECT * FROM employees ORDER BY id DESC LIMIT 3";
+      $stmt = $conn->prepare($query);
+      $stmt->execute();
+      $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">Total Employees</div>
       <div class="text-2xl text-center font-semibold"><?php echo $total_employees; ?></div>
     </div>
+<!--  -->
+      <?php
+      $db = Database::getInstance();
+      $conn = $db->connect();
+
+      $query = "SELECT COUNT(*) as count FROM leave_requests WHERE CURDATE() BETWEEN start_date AND end_date AND status = 'Approved'";
+      $stmt = $conn->prepare($query);
+      $stmt->execute();
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $onLeave = $result['count'];
+
+      $pdo = null;
+      $stmt = null;
+      ?>
     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">On Leave</div>
-      <div class="text-2xl text-center font-semibold">0</div>
-    </div>        
-      <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
+      <div class="text-2xl text-center font-semibold"><?php echo $onLeave; ?></div>
+    </div>
+<!--  -->
+    <?php
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Query to get the total number of employees
+    $queryTotal = "SELECT COUNT(*) as count FROM employees";
+    $stmtTotal = $conn->prepare($queryTotal);
+    $stmtTotal->execute();
+    $resultTotal = $stmtTotal->fetch(PDO::FETCH_ASSOC);
+    $totalCount = $resultTotal['count'];
+
+    // Query to get the number of employees on leave
+    $queryLeave = "SELECT COUNT(*) as count FROM leave_requests WHERE CURDATE() BETWEEN start_date AND end_date AND status = 'Approved'";
+    $stmtLeave = $conn->prepare($queryLeave);
+    $stmtLeave->execute();
+    $resultLeave = $stmtLeave->fetch(PDO::FETCH_ASSOC);
+    $leaveCount = $resultLeave['count'];
+
+    // Calculate the number of employees on board
+    $onBoardCount = $totalCount - $leaveCount;
+
+    $pdo = null;
+    $stmtTotal = null;
+    $stmtLeave = null;
+    ?>
+    <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">On Board</div>
-      <div class="text-2xl text-center font-semibold">0</div>
+      <div class="text-2xl text-center font-semibold"><?php echo $onBoardCount; ?></div>
     </div>
     </div>
   </div>
@@ -84,6 +124,7 @@
     } 
   ?>
   </div>
+  
 </div>
 </div>
 </div>
