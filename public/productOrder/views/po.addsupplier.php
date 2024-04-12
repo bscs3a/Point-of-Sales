@@ -63,167 +63,161 @@
 
             <!-- NEW Form -->
             <div class="px-10">
-              <form  class="grid grid-cols-2 gap-6" id="productForm" action="save_product.php" method="post">
+              <form class="grid grid-cols-2 gap-6" id="productForm" action="/insert/addsupplier/" method="post" enctype="multipart/form-data">
 
                 <div>
                   <div class="mb-4">
                     <label for="productid" class="block text-black font-semibold mb-2">Supplier Name</label>
                     <input type="text" id="suppliername" name="suppliername"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                   </div>
                   <div class="mb-4">
-                    <label for="productname" class="block text-black font-semibold mb-2">Contact Name</label>
-                    <input type="text" id="contactname" name="cotactname"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
+                    <label for="contactname" class="block text-black font-semibold mb-2">Contact Name</label>
+                    <input type="text" id="contactname" name="contactname"
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                   </div>
                   <div class="mb-4">
                     <label for="contactnum" class="block text-black font-semibold mb-2">Contact Number</label>
                     <input type="number" id="contactnum" name="contactnum"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                   </div>
                 </div>
                 <div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Status</label>
                     <input type="text" id="status" name="status"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Email</label>
                     <input type="text" id="email" name="email"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Address</label>
                     <input type="text" id="address" name="address"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                   </div>
                 </div>
-              </div>
+            </div>
 
 
-              <!-- add rows function/ button -->
-              <div class="flex place-content-end mt-2 m-3">
-                <button id="addRows" class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
-                  <i class="ri-add-circle-line"></i>
-                  <span>Add Rows</span>
-                </button>
-              </div>
+            <div class="overflow-x-auto rounded-lg border border-gray-400">
+              <table id="productTable" class="min-w-full text-center mx-auto bg-white">
+                <thead class="bg-gray-200 border-b border-gray-400 text-sm">
+                  <tr>
+                    <th class="px-4 py-2 font-semibold">Product Image</th>
+                    <th class="px-4 py-2 font-semibold">Product Name</th>
+                    <th class="px-4 py-2 font-semibold">Category</th>
+                    <th class="px-4 py-2 font-semibold">Price</th>
+                    <!-- <th class="px-4 py-2 font-semibold">Quantity</th> -->
+                    <th class="px-4 py-2 font-semibold">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Row 1 -->
+                  <!-- Repeat this structure for each product row -->
+                  <tr>
+                  <td><input type="file" name="productImage1" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="text" name="productName1"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td>
+                      <select name="category1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <option value="Hand Tools">Hand Tools</option>
+                        <option value="Power Tools">Power Tools</option>
+                        <option value="Category 3">Category 3</option>
+                      </select>
+                    </td>
+                    <td><input type="number" name="price1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td><input type="text" name="description1"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  </tr>
+                  <!-- Repeat rows 2 to 5 similarly -->
+                  <tr>
+                  <td><input type="file" name="productImage2" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="text" name="productName2"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td>
+                      <select name="category2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <option value="Hand Tools">Hand Tools</option>
+                        <option value="Power Tools">Power Tools</option>
+                        <option value="Category 3">Category 3</option>
+                      </select>
+                    </td>
+                    <td><input type="number" name="price2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td><input type="text" name="description2"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  </tr>
+                  <!-- Row 3 -->
 
-              <!-- Table for product -->
-              <div class="overflow-x-auto rounded-lg border border-gray-400">
-                <table id="productTable" class="min-w-full text-center mx-auto bg-white">
-                  <thead class="bg-gray-200 border-b border-gray-400 text-sm">
-                    <tr>
-                      <th class="px-4 py-2 font-semibold">Product Image</th>
-                      <th class="px-4 py-2 font-semibold">Product Name</th>
-                      <th class="px-4 py-2 font-semibold">Category</th>
-                      <th class="px-4 py-2 font-semibold">Price</th>
-                      <th class="px-4 py-2 font-semibold">Quantity</th>
-                      <th class="px-4 py-2 font-semibold">Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Existing rows will be added here -->
-                  </tbody>
-                </table>
-              </div>
+                  <tr>
+                  <td><input type="file" name="productImage3" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="text" name="productName3"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td>
+                      <select name="category3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <option value="Hand Tools">Hand Tools</option>
+                        <option value="Power Tools">Power Tools</option>
+                        <option value="Category 3">Category 3</option>
+                      </select>
+                    </td>
+                    <td><input type="number" name="price3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td><input type="text" name="description3"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  </tr>
+                  <!-- Row 4 -->
+                  <tr>
+                  <td><input type="file" name="productImage4" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="text" name="productName4"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td>
+                      <select name="category4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <option value="Hand Tools">Hand Tools</option>
+                        <option value="Power Tools">Power Tools</option>
+                        <option value="Category 3">Category 3</option>
+                      </select>
+                    </td>
+                    <td><input type="number" name="price4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td><input type="text" name="description4"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  </tr>
+                  <!-- Row 5 -->
+                  <tr>
+                  <td><input type="file" name="productImage5" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="text" name="productName5"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td>
+                      <select name="category5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <option value="Hand Tools">Hand Tools</option>
+                        <option value="Power Tools">Power Tools</option>
+                        <option value="Category 3">Category 3</option>
+                      </select>
+                    </td>
+                    <td><input type="number" name="price5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td><input type="text" name="description5"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  </tr>
+                  <!-- You can copy the structure of Row 1 and paste it here for Rows 5 to 10 -->
+                </tbody>
+              </table>
+            </div>
 
-              <div class="flex flex-row justify-end gap-3 my-3">
-                <button route='/po/suppliers'
-                  class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
-                <button id="saveButton" type="submit"
-                  class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
-              </div>
-          </form>
+            <div class="flex flex-row justify-end gap-3 my-3">
+              <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
+              <button id="saveButton" type="submit"
+                class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
+            </div>
+            </form>
 
-              <script>
-                // Function to add an image input field to the cell
-                function addImageInput(cell) {
-                  // Create input element of type file
-                  let input = document.createElement('input');
-                  input.type = 'file';
-                  input.accept = 'image/*';
-                  input.className = 'w-full';
-                  // Set up drag and drop event listeners
-                  input.addEventListener('dragover', handleDragOver);
-                  input.addEventListener('drop', handleFileSelect);
-                  // Append the input element to the cell
-                  cell.appendChild(input);
-                }
 
-                // Function to handle file drop
-                function handleFileSelect(event) {
-                  event.preventDefault();
-                  var files = event.dataTransfer.files;
-                  var reader = new FileReader();
-                  reader.onload = function (e) {
-                    event.target.value = e.target.result;
-                  };
-                  reader.readAsDataURL(files[0]);
-                }
-
-                // Function to handle drag over
-                function handleDragOver(event) {
-                  event.preventDefault();
-                  event.dataTransfer.dropEffect = 'copy';
-                }
-
-                document.getElementById('addRows').addEventListener('click', function () {
-                  // Get the table body
-                  let tableBody = document.querySelector('#productTable tbody');
-                  // Create a new row
-                  let newRow = tableBody.insertRow();
-                  // Add cells to the new row
-                  for (let i = 0; i < 6; i++) {
-                    let cell = newRow.insertCell();
-                    // For simplicity, add input fields in most cells
-                    if (i === 0) { // If it's the cell under "Product Image"
-                      // Call the function to add an image file input field
-                      addImageInput(cell);
-                    } else if (i === 2) { // If it's the cell under "Category"
-                      cell.innerHTML = '<select class="px-4 py-2 border border-gray-300 rounded-md w-full">' +
-                        '<option value="Hand Tools">Hand Tools</option>' +
-                        '<option value="Power Tools">Power Tools</option>' +
-                        '<option value="Category 3">Category 3</option>' +
-                        // Add more categories as needed
-                        '</select>';
-                    } else {
-                      cell.innerHTML = '<input class="px-4 py-2 border border-gray-300 rounded-md w-full">';
-                    }
-                  }
-                });
-
-                document.getElementById('saveButton').addEventListener('click', function () {
-                  // Get the table body
-                  let tableBody = document.querySelector('#productTable tbody');
-                  // Loop through each row in the table body
-                  tableBody.querySelectorAll('tr').forEach(row => {
-                    // Get the input fields and select elements in the row
-                    let inputs = row.querySelectorAll('input');
-                    let selects = row.querySelectorAll('select');
-                    // Assuming you have a way to retrieve the data and save it to the database
-                    let rowData = [];
-                    inputs.forEach(input => {
-                      rowData.push(input.value);
-                    });
-                    selects.forEach(select => {
-                      rowData.push(select.value);
-                    });
-                    // Now you can send `rowData` to your backend for saving to the database
-                    console.log('Row data:', rowData);
-                    // Replace the console log with your actual logic for saving data to the database, typically using AJAX
-                  });
-                });
-              </script>
-              <script src="./../src/route.js"></script>
-              <script src="./../src/form.js"></script>
+            </script>
+            <script src="./../src/route.js"></script>
+            <script src="./../src/form.js"></script>
 
 </body>
 
