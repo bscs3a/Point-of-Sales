@@ -70,7 +70,7 @@
 
             // Prepare and execute a SQL query to fetch data based on the ID
             $stmt = $conn->prepare("
-        SELECT od.*, s.Supplier_Name, s.Status, s.Location
+        SELECT od.*, s.Supplier_Name, s.Status, s.Address
         FROM order_details od
         JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
         WHERE od.Order_ID = :id
@@ -107,9 +107,9 @@
                       </span>
                     </li>
                     <li class="flex py-2">
-                      <span class="font-bold w-24">Location:</span>
+                      <span class="font-bold w-24">Address:</span>
                       <span class="font-medium text-gray-900">
-                        <?= $data['Location'] ?>
+                        <?= $data['Address'] ?>
                       </span>
                     </li>
                   </ul>

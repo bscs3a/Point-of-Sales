@@ -63,40 +63,41 @@
 
             <!-- NEW Form -->
             <div class="px-10">
-              <form class="grid grid-cols-2 gap-6" id="productForm" action="/insert/addsupplier/" method="post" enctype="multipart/form-data">
+              <form class="grid grid-cols-2 gap-6" id="productForm" action="/insert/addsupplier/" method="post"
+                enctype="multipart/form-data">
 
                 <div>
                   <div class="mb-4">
                     <label for="productid" class="block text-black font-semibold mb-2">Supplier Name</label>
                     <input type="text" id="suppliername" name="suppliername"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
                   <div class="mb-4">
                     <label for="contactname" class="block text-black font-semibold mb-2">Contact Name</label>
                     <input type="text" id="contactname" name="contactname"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
                   <div class="mb-4">
                     <label for="contactnum" class="block text-black font-semibold mb-2">Contact Number</label>
                     <input type="number" id="contactnum" name="contactnum"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
                 </div>
                 <div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Status</label>
                     <input type="text" id="status" name="status"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Email</label>
                     <input type="text" id="email" name="email"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Address</label>
                     <input type="text" id="address" name="address"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
                 </div>
             </div>
@@ -118,7 +119,8 @@
                   <!-- Row 1 -->
                   <!-- Repeat this structure for each product row -->
                   <tr>
-                  <td><input type="file" name="productImage1" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="file" name="productImage1"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName1"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td>
@@ -135,7 +137,8 @@
                   </tr>
                   <!-- Repeat rows 2 to 5 similarly -->
                   <tr>
-                  <td><input type="file" name="productImage2" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="file" name="productImage2"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName2"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td>
@@ -153,7 +156,8 @@
                   <!-- Row 3 -->
 
                   <tr>
-                  <td><input type="file" name="productImage3" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="file" name="productImage3"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName3"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td>
@@ -170,7 +174,8 @@
                   </tr>
                   <!-- Row 4 -->
                   <tr>
-                  <td><input type="file" name="productImage4" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="file" name="productImage4"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName4"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td>
@@ -187,7 +192,8 @@
                   </tr>
                   <!-- Row 5 -->
                   <tr>
-                  <td><input type="file" name="productImage5" class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                    <td><input type="file" name="productImage5"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName5"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td>
@@ -208,7 +214,7 @@
             </div>
 
             <div class="flex flex-row justify-end gap-3 my-3">
-              <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
+              <a href='/master/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</a>
               <button id="saveButton" type="submit"
                 class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
             </div>
