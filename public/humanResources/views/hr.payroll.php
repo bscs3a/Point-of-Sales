@@ -1,3 +1,29 @@
+<?php
+$db = Database::getInstance();
+$conn = $db->connect();
+
+$search = $_POST['search'] ?? '';
+$query = "SELECT employees.*, salary_info.*, payroll.* FROM employees";
+$query .= " 
+LEFT JOIN payroll ON payroll.employees_id = employees.id
+LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
+
+$params = [];
+
+if (!empty($search)) {
+  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR payroll.id = :search OR payroll.status = :search OR payroll.month = :search) AND";
+  $params[':search'] = $search;
+} else {
+  $query .= " WHERE";
+}
+
+$stmt = $conn->prepare($query);
+$stmt->execute($params);
+$payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$pdo = null;
+$stmt = null;
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,10 +66,103 @@
   </div>
   <!-- End Top Bar -->
 
-<!-- Payroll --> 
-<h4 class="ml-6 mt-4 text-xl font-bold"> Payroll </h4>
+  <!-- Payroll-->
+<div class="mt-4 ml-6 font-bold text-lg">
+  <h1><i class="ri-hourglass-line"></i>Payroll List </h1>
+</div>
+<hr class="mt-4">
+    <div class="mt-4 ml-6 mr-4">
+        <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 mt-4 dark:focus:ring-yellow-900">Print</button> 
+        <input type="search" id="search" name="search" placeholder="Search..." class="mt-[16px] mr-3 w-50 float-right px-2 py-2 border text-sm font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2  focus:ring-blue-500 focus:border-transparent"> 
+    </div>
+
+  <!--Table-->
+<div class="mt-4 py-2 ml-4 mr-4">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<table class="w-full text-sm text-left text-gray-500">
+<thead class="text-xs text-gray-700 uppercase bg-gray-50">
+  <tr>
+    <th scope="col" class="px-6 py-3">
+      Employee 
+    </th>
+    <th scope="col" class="px-6 py-3">
+      <div class="flex items-center">
+        Month
+      </div>
+    </th>
+    <th scope="col" class="px-6 py-3">
+      <div class="flex items-center">
+        Salary
+      </div>
+    </th>
+    <th scope="col" class="px-6 py-3">
+      <div class="flex items-center">
+        Deduction
+    </th>
+    <th scope="col" class="px-6 py-3">
+      <div class="flex items-center">
+        Total Paid
+      </div>
+    </th>
+    <th scope="col" class="px-6 py-3">
+      <div class="flex items-center">
+        Pay Date
+      </div>
+    </th>
+    <th scope="col" class="px-6 py-3">
+      <div class="flex items-center">
+        Status
+      </div>
+    </th>
+    <th scope="col" class="px-6 py-3">
+      <span class="sr-only">Action</span> 
+    </th>
+  </tr>
+</thead>
+<?php foreach ($payroll as $pay): ?>
+<tbody>
+  <tr class="bg-white border-b">
+    <th scope="row" class="px-6 py-4 font-medium text-gray-500 whitespace-nowrap">
+      <?php 
+        echo $pay['first_name'] . ' ';
+        if (!empty($pay['middle_name'])) {
+            echo substr($pay['middle_name'], 0, 1) . '. ';
+        }
+        echo $pay['last_name']; 
+      ?>
+    </th>
+    <td class="px-6 py-4">
+      <?php echo $pay['month']; ?>
+    </td>
+    <td class="px-6 py-4">
+      <?php echo $pay['monthly_salary']; ?>
+    </td>
+    <td class="px-6 py-4">
+      <?php echo $pay['deduction']; ?>
+    </td>
+    <td class="px-6 py-4">
+      <?php echo $pay['net_pay']; ?>
+    </td>
+    <td class="px-6 py-4">
+      <?php echo $pay['pay_date']; ?>
+    </td>
+    <td class="px-6 py-4">
+      <?php echo $pay['status']; ?>
+    </td>
+    <td class="px-6 py-4 text-right">
+      <button type="button" class="text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 rounded-lg text-sm px-4 py-2"><i class="ri-bank-card-line"></i></button>
+    </td>
+  </tr>
+</tbody>
+<?php endforeach; ?>   
+</table>
+</div>
+</div>
+
+<!-- END of Payroll -->
+
 <!-- Chart -->
-<div>
+<!-- <div>
   <div class="flex items-center min-h-full max-w-full">
     <canvas id="myChart" style="height:400px;"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -69,7 +188,7 @@
           }
         }
       });
-    </script>  
+    </script>   -->
   </div>
 </div>
 <!-- End Chart -->

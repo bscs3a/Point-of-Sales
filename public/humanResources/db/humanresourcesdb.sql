@@ -36,7 +36,7 @@ CREATE TABLE employment_info (
 CREATE TABLE salary_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
     monthly_salary DECIMAL(10,2) NOT NULL,
-    total_salary DECIMAL(10,2) NOT NULL,
+    total_salary DECIMAL(10,2) NOT NULL, -- Total salary after deductions (taxes, benefits)
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id)
@@ -59,6 +59,20 @@ CREATE TABLE benefit_info (
     thirteenth_month DECIMAL(10,2) NOT NULL,
     salary_id INT(10) NOT NULL,
     PRIMARY KEY (id),
+    FOREIGN KEY (salary_id) REFERENCES salary_info (id)
+);
+
+CREATE TABLE payroll (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    pay_date DATE NOT NULL,
+    month VARCHAR(20) NOT NULL,
+    deductions DECIMAL(10,2) NOT NULL,
+    net_pay DECIMAL(10,2) NOT NULL, -- How much the employer paid the employee
+    status ENUM('Pending','Paid') DEFAULT 'Pending',
+    salary_id INT(10) NOT NULL,
+    employees_id INT(10) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (employees_id) REFERENCES employees (id),
     FOREIGN KEY (salary_id) REFERENCES salary_info (id)
 );
 
