@@ -188,22 +188,9 @@ Router::post('/insert/addsupplier/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage) 
-                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :categoryName, :productImage)";
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
+                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :categoryName, :productImage, :suppliername)";
                     $productStmt = $conn->prepare($productSql);
-
-                    // Retrieve the supplier_id based on the supplier name
-                    $stmt = $conn->prepare("SELECT supplier_id FROM suppliers WHERE supplier_name = ?");
-                    $stmt->bindParam(1, $suppliername, PDO::PARAM_STR);
-                    $stmt->execute();
-                    $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                    if (!$supplier) {
-                        echo "Supplier not found.";
-                        return;
-                    }
-
-                    $supplierId = $supplier['supplier_id'];
 
                     // Retrieve the category_id based on the category name
                     $stmt = $conn->prepare("SELECT category_id FROM categories WHERE category_name = ?");
@@ -226,6 +213,7 @@ Router::post('/insert/addsupplier/', function () {
                     $productStmt->bindParam(':price', $price);
                     $productStmt->bindParam(':categoryName', $categoryName);
                     $productStmt->bindParam(':productImage', $uploadPath);
+                    $productStmt->bindParam(':suppliername', $suppliername);
 
                     // Execute the product SQL statement
                     $productStmt->execute();
@@ -238,11 +226,10 @@ Router::post('/insert/addsupplier/', function () {
                 echo "No file uploaded for row $i.";
             }
         }
-
-        // Redirect to the supplier addition page upon successful insertion
-        $rootFolder = dirname($_SERVER['PHP_SELF']);
-        header("Location: $rootFolder/po/addsupplier");
-        exit; // Terminate script execution after redirect
+          // Redirect to the supplier addition page upon successful insertion
+          $rootFolder = dirname($_SERVER['PHP_SELF']);
+          header("Location: $rootFolder/po/suppliers");
+          exit; // Terminate script execution after redirect
     } catch (PDOException $e) {
         // Handle PDO exceptions
         echo "Error: " . $e->getMessage();
