@@ -27,7 +27,7 @@
               <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
                 <i class="ri-menu-line"></i>
               </button>
-              <label class="text-black font-medium">Product List / Add Supplier</label>
+              <label class="text-black font-medium">Product Order / Add Suppliers</label>
             </div>
 
             <!-- dropdown -->
@@ -55,46 +55,73 @@
           </script>
 
       <!-- New Form -->
-        <div class="container mx-auto py-10 px-5">
+        <div class="container mx-auto py-3">
             <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden"> 
-                <div id="main" class="m-8 px-6 pt-6">  
+                <div id="main" class="m-3 pt-6">  
                 
                     <!-- NEW Form -->
                     <div class="px-10">
                         <form class="grid grid-cols-2 gap-6">
                             <div>
                                 <div class="mb-4">
-                                    <label for="productid" class="block text-black font-semibold mb-2">Supplier ID</label>
-                                    <input type="number" id="productid" name="productid" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                                    <label for="productid" class="block text-black font-semibold mb-2">Supplier Name</label>
+                                    <input type="text" id="suppliername" name="suppliername" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="productname" class="block text-black font-semibold mb-2">Supplier Name</label>
-                                    <input type="text" id="productname" name="productname" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="status" class="block text-black font-semibold mb-2">Status</label>
-                                    <input type="text" id="status" name="status" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mb-4">
-                                    <label for="location" class="block text-black font-semibold mb-2">Location</label>
-                                    <input type="text" id="location" name="location" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                                    <label for="productname" class="block text-black font-semibold mb-2">Contact Name</label>
+                                    <input type="text" id="contactname" name="cotactname" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                                 </div>
                                 <div class="mb-4">
                                     <label for="contactnum" class="block text-black font-semibold mb-2">Contact Number</label>
                                     <input type="number" id="contactnum" name="contactnum" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                                 </div>
+                            </div>
+                            <div>
                                 <div class="mb-4">
-                                    <label for="category" class="block text-black font-semibold mb-2">Category</label>
-                                    <input type="text" id="category" name="category" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                                    <label for="location" class="block text-black font-semibold mb-2">Status</label>
+                                    <input type="text" id="status" name="status" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="location" class="block text-black font-semibold mb-2">Email</label>
+                                    <input type="text" id="email" name="email" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="location" class="block text-black font-semibold mb-2">Address</label>
+                                    <input type="text" id="address" name="address" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                                 </div>
                             </div>   
                         </form>
-                            <div class="flex flex-row justify-end gap-3 px-8 my-3">
-                                <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
-                                <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
-                            </div>
+
+                        <div class="flex place-content-end mt-2 m-3">
+                          <button route='/po/addItem' class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
+                            <i class="ri-add-circle-line"></i>
+                            <span>Add Product</span>
+                          </button>
+                        </div>
+
+                        <!-- Table for product -->
+                        <div class="overflow-x-auto rounded-lg border border-gray-400">
+                          <table class="min-w-full text-center mx-auto bg-white">
+                            <thead class="bg-gray-200 border-b border-gray-400 text-sm">
+                              <tr>
+                                <th class="px-4 py-2 font-semibold">Product ID</th>
+                                <th class="px-4 py-2 font-semibold">Product Image</th>
+                                <th class="px-4 py-2 font-semibold">Product Name</th>
+                                <th class="px-4 py-2 font-semibold">Category</th>
+                                <th class="px-4 py-2 font-semibold">Price</th>
+                                <th class="px-4 py-2 font-semibold">Quantity</th>
+                                <th class="px-4 py-2 font-semibold">Description</th>
+                              </tr>
+                            </thead>
+
+                          </table>
+                        </div>
+
+                        <div class="flex flex-row justify-end gap-3 my-3">
+                            <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
+                            <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </div>
