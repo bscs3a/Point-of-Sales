@@ -177,7 +177,7 @@ Router::post('/hr/employees/add', function () {
             return;
         }
     } else {
-        echo "No file uploaded.";
+        header("Location: $rootFolder/hr/employees/add");
         return;
     }
 
@@ -1005,21 +1005,4 @@ Router::post('/deny/leave-requests', function () {
     $stmt->execute([':id' => $id]);
 
     header("Location: $rootFolder/hr/leave-requests");
-});
-
-// EXAMPLE DELETE
-Router::post('/delete', function () {
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
-    $name = $_POST['name'];
-
-    $stmt = $conn->prepare("DELETE FROM name WHERE name = :name");
-    $stmt->bindParam(':name', $name);
-
-    // Execute the statement
-    $stmt->execute();
-
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/hr/employees");
 });
