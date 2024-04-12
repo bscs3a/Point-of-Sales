@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   </head>
   <body>
-    <div class="flex h-screen bg-gray-100">
+    <div class="flex h-screen bg-white">
       <!-- sidebar -->
       <div id="sidebar" class="flex h-screen">
           <?php include "components/po.sidebar.php" ?>
@@ -21,7 +21,7 @@
       <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-y-auto">
           <!-- header -->
-          <div class="flex items-center justify-between h-16 bg-white shadow-md px-4">
+          <div class="flex items-center justify-between h-16 bg-gray-200 shadow-md px-4 py-1">
             <div class="flex items-center gap-4">
               <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
                 <i class="ri-menu-line"></i>
@@ -31,7 +31,7 @@
 
             <!-- dropdown -->
             <div x-data="{ dropdownOpen: false }" class="relative my-32">
-              <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+              <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
                 <div class="flex items-center gap-4">
                   <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
                     <i class="ri-arrow-down-s-line"></i>
@@ -40,7 +40,7 @@
 
                 <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-                <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
                   <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
                 </div>
             </div>
@@ -56,7 +56,7 @@
         <!-- Main Content -->
         <div class="h-screen px-10">
           <div class="flex flex-row gap-10 drop-shadow-md my-8">
-              <div class="flex flex-col pl-8 border border-gray-300 bg-white rounded-lg w-64 h-40 justify-center">
+              <div class="flex flex-col pl-8 border border-gray-700 bg-white rounded-lg w-64 h-40 justify-center">
               <?php
           // Include your database connection file
           require_once 'dbconn.php';
@@ -90,7 +90,7 @@
               </div>
 
               
-              <div class="flex flex-col pl-8 border border-gray-300 bg-white rounded-lg w-64 h-40 justify-center">
+              <div class="flex flex-col pl-8 border border-gray-700 bg-white rounded-lg w-64 h-40 justify-center">
               <?php
           // Include your database connection file
           require_once 'dbconn.php';
@@ -124,16 +124,18 @@
               </div>
             </div>
           
-          <!-- NEW Table -->
-            <div class="overflow-x-auto rounded-lg border border-gray-400">
-                <table class="min-w-full text-left mx-auto bg-white">
-                    <thead class="bg-gray-200 border-b border-gray-400">
+          <!-- NEW Table --> 
+            <div class="overflow-x-auto overflow-auto rounded-lg border border-gray-400">
+                <table class="min-w-full text-left mx-auto bg-white px-6">
+                    <thead class="bg-gray-200 border-b border-gray-400 text-xs">
                         <tr>
-                            <th class="px-4 py-2 font-semibold">Order ID</th>
+                            <th class="px-4 py-2 font-semibold">Supplier ID</th>
                             <th class="px-4 py-2 font-semibold">Supplier Name</th>
-                            <th class="px-4 py-2 font-semibold">Order Date</th>
+                            <th class="px-4 py-2 font-semibold">Date Order</th>
                             <th class="px-4 py-2 font-semibold">Time</th>
-                            <th class="px-4 py-2 font-semibold">Action</th>
+                            <th class="px-4 py-2 font-semibold">Location</th>
+                            <th class="px-4 py-2 font-semibold">Estimated Delivery</th>
+                            <th class="px-4 py-2 font-semibold">Status</th>
                             <th class="px-4 py-2 font-semibold"></th>
                         </tr>
                     </thead>
@@ -162,22 +164,24 @@
          foreach ($rows as $row) {
              echo '<tbody>';
              echo '<tr>';
-             echo '<td class="px-4 py-10">' . $row['Order_ID'] . '</td>';
-             echo '<td class="px-4 py-10">' . $row['Supplier_Name'] . '</td>';
-             echo '<td class="px-4 py-10">' . $row['Date_Ordered'] . '</td>';
-             echo '<td class="px-4 py-10">' . $row['Time_Ordered'] . '</td>';
+             echo '<td class="px-4 py-7">' . $row['Order_ID'] . '</td>';
+             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
+             echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
+             echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';
+             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>'; // SAMPLE ONLY PA REVISE NALANG
+             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>'; // SAMPLE ONLY PA REVISE NALANG
            
-             echo '<td class="px-4 py-10">';
+             echo '<td class="px-4 py-6">';
              // Form for Completed status
-             echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data">';
+             echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2 pt-2">';
              echo '<input type="hidden" name="Order_ID" value="' . $row['Order_ID'] . '">';
-             echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Complete</button>';
+             echo '<button type="submit" class="rounded-full border border-green-900 border-b block px-5 py-1 text-sm font-semibold text-green-900 focus:outline-none">Complete</button>';
              echo '</form>';
              
              // Form for Cancel status
-             echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data">';
+             echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2">';
              echo '<input type="hidden" name="Order_ID" value="' . $row['Order_ID'] . '">';
-             echo '<button type="submit" class="rounded-lg border border-gray-400 border-b block px-3 py-1 bg-gray-300 text-sm text-black focus:bg-white focus:text-gray-700 focus:outline-none">Cancel</button>';
+             echo '<button type="submit" class="rounded-full border border-gray-500 border-b block px-5 py-1 text-sm font-semibold text-gray-900 focus:outline-none">Cancel</button>';
              echo '</form>';
              echo '</td>';
 
