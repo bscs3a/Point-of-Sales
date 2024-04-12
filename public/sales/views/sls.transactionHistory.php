@@ -118,7 +118,7 @@
                             <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
                                 <?php $saleId = $row['SaleID']; ?>
                                 <tr class='border border-gray-200 bg-white' data-sale-id='<?php echo $saleId; ?>'>
-                                    <td class='px-4 py-2'><?php echo $row['CustomerFirstName'] . " " . $row['CustomerLastName']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $row['CustomerName']; ?></td>
                                     <td class='px-4 py-2'><?php echo $saleId; ?></td>
                                     <td class='px-4 py-2'><?php echo date('F j, Y, g:i a', strtotime($row['SaleDate'])); ?></td>
                                     <td class='px-4 py-2'><?php echo $row['SalePreference']; ?></td>

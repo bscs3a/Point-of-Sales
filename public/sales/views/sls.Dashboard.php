@@ -323,7 +323,7 @@
 
                 // Query for sale details
                 $sqlSaleDetails = "
-                    SELECT SaleDetails.*, Sales.SaleDate, Sales.CustomerID, Products.ProductName, Products.ProductImage, Customers.FirstName, Customers.LastName 
+                    SELECT SaleDetails.*, Sales.SaleDate, Sales.CustomerID, Products.ProductName, Products.ProductImage, Customers.Name
                     FROM SaleDetails 
                     JOIN Sales ON SaleDetails.SaleID = Sales.SaleID 
                     JOIN Products ON SaleDetails.ProductID = Products.ProductID 
@@ -359,7 +359,7 @@
                                 </td>
                                 <td class="px-4 py-2"><?= $saleDetail["SaleID"] ?></td>
                                 <td class="px-4 py-2"><?= date("F j, Y, g:i a", strtotime($saleDetail["SaleDate"])) ?></td>
-                                <td class="px-4 py-2"><?= $saleDetail["FirstName"] . " " . $saleDetail["LastName"] ?></td>
+                                <td class="px-4 py-2"><?= $saleDetail["Name"] ?></td>
                                 <td class='px-4 py-2'><a route='/sls/Transaction-Details/sale=<?php echo $saleDetail["SaleID"] ?>' class='text-blue-500 hover:underline view-link'>View</a></td>
                             </tr>
                         <?php endforeach; ?>

@@ -13,8 +13,7 @@ $sql = "SELECT
             Sales.SalePreference,
             Sales.PaymentMode,
             Sales.TotalAmount,
-            Customers.FirstName AS CustomerFirstName,
-            Customers.LastName AS CustomerLastName
+            Customers.Name AS CustomerName
         FROM 
             Sales
         JOIN 

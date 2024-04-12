@@ -137,7 +137,7 @@
 
                     <div class="flex flex-col gap-4 font-semibold ">
 
-                        <span class="p-2"><?php echo $customer['FirstName'] . ' ' . $customer['LastName']; ?></span>
+                        <span class="p-2"><?php echo $customer['Name']; ?></span>
                         <span class="p-2"><?php echo $customer['Phone']; ?></span>
                         <span class="p-2"><?php echo $customer['Email']; ?></span>
                     </div>
