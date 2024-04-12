@@ -64,7 +64,8 @@
             <div class="flex items-center justify-between">
 
             </div>
-            <?php
+            <!-- Comment ko muna -->
+            <!-- <?php
 
             function displaySupplierData($supplierID)
             {
@@ -109,7 +110,37 @@
               displaySupplierData($supplierID);
             }
 
-            ?>
+            ?> -->
+
+            <div class="flex justify-between mb-5">
+              <a class="text-3xl font-bold">Supplier Name</a>
+              <a class="text-xl font-bold">#2334</a>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <div class="mb-2">
+                    <a class="font-bold mr-3">Contact Name:</a><a>Edgar</a>
+                </div>
+                <div class="mb-2">
+                    <a class="font-bold mr-3">Contact Number:</a><a>09434342</a>
+                </div>
+                <div class="mb-2">
+                    <a class="font-bold mr-3">Email:</a><a>Ma@gmail.com</a>
+                </div>
+              </div>
+              <div>
+                <div class="mb-2">
+                    <a class="font-bold mr-3">Status:</a><a>Active</a>
+                </div>
+                <div class="mb-2">
+                    <a class="font-bold mr-3">Location:</a><a>bacolor</a>
+                </div>
+                <div class="mb-2">
+                    <a class="font-bold mr-3">Estimated Delivery:</a><a>1 Day</a>
+                </div>
+              </div>   
+            </div>
 
             <div class="py-10">
               <div class="w-full h-auto mx-auto bg-white border border-gray-400 rounded-lg shadow-md overflow-hidden">
@@ -122,13 +153,6 @@
                     <div class="flex justify justify-between">
                       <div class="font-semibold text-lg">
                         David, Marc
-                      </div>
-                      <div class="flex p-1 gap-1" style="color: #fde047; font-size: 1.4em;">
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-half-fill"></i>
                       </div>
                     </div>
 
@@ -144,13 +168,6 @@
                     <div class="flex justify justify-between">
                       <div class="font-semibold text-lg">
                         David, Marc
-                      </div>
-                      <div class="flex p-1 gap-1" style="color: #fde047; font-size: 1.4em;">
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-fill"></i>
-                        <i class="ri-star-half-fill"></i>
                       </div>
                     </div>
 

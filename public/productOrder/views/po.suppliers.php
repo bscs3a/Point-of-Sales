@@ -121,9 +121,11 @@
                       <a class="ml-3 text-green-600"><?php echo $row['Status']; ?></a>
                     </div>
                   </div>
-                  <div class="flex justify-center items-center pt-3">
+                  <div class="flex justify-between items-center pt-3">
                     <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
                       class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
+                    <a href="/master/po/viewsupplierproduct"
+                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Product Lists</a>
                   </div>
                 </div>
                 <?php
