@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,36 +64,82 @@
             <div class="flex items-center justify-between">
 
             </div>
-            <!-- table -->
+            <!-- Comment ko muna -->
+            <!-- <?php
+
+            function displaySupplierData($supplierID)
+            {
+              try {
+                $db = Database::getInstance();
+                $conn = $db->connect();
+
+                // Query to retrieve supplier data based on Supplier_ID
+                $query = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
+                $statement = $conn->prepare($query);
+                $statement->bindParam(':supplierID', $supplierID);
+                $statement->execute();
+
+                // Check if there are any rows or results
+                if ($statement->rowCount() > 0) {
+                  echo '<ul class="mt-2 text-gray-900">';
+                  while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    echo '<li class="flex py-2">';
+                    echo '<span class="font-bold w-56">Supplier ID:</span>';
+                    echo '<span class="font-medium text-gray-900">' . $row['Supplier_ID'] . '</span>';
+                    echo '</li>';
+                    echo '<li class="flex py-2">';
+                    echo '<span class="font-bold w-56">Supplier Name:</span>';
+                    echo '<span class="font-medium text-gray-900">' . $row['Supplier_Name'] . '</span>';
+                    echo '</li>';
+                    // Add other data fields here
+                  }
+                  echo '</ul>';
+                } else {
+                  echo "Supplier not found.";
+                }
+              } catch (PDOException $e) {
+                echo "Connection failed: " . $e->getMessage();
+              }
+              // Close the database connection
+              $conn = null;
+            }
+
+            // Usage:
+            if (isset($_GET['Supplier_ID'])) {
+              $supplierID = $_GET['Supplier_ID'];
+              displaySupplierData($supplierID);
+            }
+
+            ?> -->
 
             <div class="flex justify-between mb-5">
               <a class="text-3xl font-bold">Supplier Name</a>
               <a class="text-xl font-bold">#2334</a>
             </div>
-
+            
             <div class="grid grid-cols-2 gap-6">
               <div>
                 <div class="mb-2">
-                  <a class="font-bold mr-3">Contact Name:</a><a>Edgar</a>
+                    <a class="font-bold mr-3">Contact Name:</a><a>Edgar</a>
                 </div>
                 <div class="mb-2">
-                  <a class="font-bold mr-3">Contact Number:</a><a>09434342</a>
+                    <a class="font-bold mr-3">Contact Number:</a><a>09434342</a>
                 </div>
                 <div class="mb-2">
-                  <a class="font-bold mr-3">Email:</a><a>Ma@gmail.com</a>
+                    <a class="font-bold mr-3">Email:</a><a>Ma@gmail.com</a>
                 </div>
               </div>
               <div>
                 <div class="mb-2">
-                  <a class="font-bold mr-3">Status:</a><a>Active</a>
+                    <a class="font-bold mr-3">Status:</a><a>Active</a>
                 </div>
                 <div class="mb-2">
-                  <a class="font-bold mr-3">Location:</a><a>bacolor</a>
+                    <a class="font-bold mr-3">Location:</a><a>bacolor</a>
                 </div>
                 <div class="mb-2">
-                  <a class="font-bold mr-3">Estimated Delivery:</a><a>1 Day</a>
+                    <a class="font-bold mr-3">Estimated Delivery:</a><a>1 Day</a>
                 </div>
-              </div>
+              </div>   
             </div>
 
             <div class="py-10">
