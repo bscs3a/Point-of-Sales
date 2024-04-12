@@ -13,8 +13,6 @@ $params = [];
 if (!empty($search)) {
   $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR payroll.id = :search OR payroll.status = :search OR payroll.month = :search) AND";
   $params[':search'] = $search;
-} else {
-  $query .= " WHERE";
 }
 
 $stmt = $conn->prepare($query);
@@ -138,7 +136,7 @@ $stmt = null;
       <?php echo $pay['monthly_salary']; ?>
     </td>
     <td class="px-6 py-4">
-      <?php echo $pay['deduction']; ?>
+      <?php echo $pay['deductions']; ?>
     </td>
     <td class="px-6 py-4">
       <?php echo $pay['net_pay']; ?>

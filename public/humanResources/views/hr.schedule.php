@@ -40,15 +40,12 @@
   </div>
   <!-- End Top Bar -->
   <br>
-  
-<!-- component -->
-<!-- component -->
-<!-- This is an example component -->   
+
 <!-- component -->
 <div class="lg:flex lg:h-auto lg:flex-col">
   <header class="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
     <h1 class="text-base font-semibold leading-6 text-gray-900">
-      <time datetime="2022-01">January 2024</time>
+        <time datetime="<?php echo date('Y-m'); ?>"><?php echo date('F Y'); ?></time>
     </h1>
     <div class="flex items-center">
       <div class="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
@@ -574,63 +571,6 @@
 <script  src="./../src/route.js"></script>
 <script  src="./../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
-    let currentMonth = 10; // Example: October
-    let currentYear = 2020; // Example: 2020
-
-    function previousMonth() {
-        currentMonth--;
-        if (currentMonth ===
-        0) {
-            currentYear--;
-            currentMonth = 12;
-        }
-        renderCalendar(currentYear, currentMonth);
-    }
-
-    function nextMonth() {
-        currentMonth++;
-        if (currentMonth === 13) {
-            currentYear++;
-            currentMonth = 1;
-        }
-        renderCalendar(currentYear, currentMonth);
-    }
-
-    function renderCalendar(year, month) {
-        // Clear previous calendar dates
-        document.getElementById('calendarBody').innerHTML = '';
-
-        // Dynamically generate calendar dates for the given month and year
-        let startDate = new Date(year, month - 1, 1);
-        let endDate = new Date(year, month, 0);
-        let daysInMonth = endDate.getDate();
-
-        let calendarBody = document.getElementById('calendarBody');
-
-        // Start from the first day of the month
-        let currentDay = 1;
-
-        // Loop through each week
-        for (let i = 0; i < 6; i++) {
-            let row = document.createElement('tr');
-            // Loop through each day of the week
-            for (let j = 0; j < 7; j++) {
-                let cell = document.createElement('td');
-                // Check if it's within the month's range
-                if (currentDay <= daysInMonth) {
-                    cell.textContent = currentDay;
-                    // You can add additional logic here for events or styling
-                    // Example: cell.classList.add('event-date') if it has an event
-                    currentDay++;
-                }
-                row.appendChild(cell);
-            }
-            calendarBody.appendChild(row);
-        }
-    }
-
-    // Initial render
-    renderCalendar(currentYear, currentMonth); -->
 </script>
 </body>
 </html>

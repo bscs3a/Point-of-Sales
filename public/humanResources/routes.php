@@ -1006,3 +1006,18 @@ Router::post('/deny/leave-requests', function () {
 
     header("Location: $rootFolder/hr/leave-requests");
 });
+
+// SEARCH payroll
+Router::post('/hr/payroll', function () {
+
+    $search = $_POST['search'];
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    if (empty($search)) {
+        header("Location: $rootFolder/hr/payroll");
+        return;
+    }
+
+    include './public/humanResources/views/hr.payroll.php';
+});
