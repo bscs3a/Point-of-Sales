@@ -133,74 +133,43 @@
                         <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                         <div class="p-5">
                             <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                            <form action="/test" method="POST">
+                            <form action="/addPayable" method="POST">
                                 <div class="mb-4 relative">
-                                    <label for="date" class="block text-xs font-medium text-gray-900"> Date </label>
-                                    <input type="text" id="date" name="date" required readonly
-                                        class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md  sm:text-sm" />
-                                    <i
-                                        class="ri-calendar-fill absolute left-2 top-6 transform -translate-y-0.5 h-6 w-6 text-gray-400"></i>
+                                    <label for="acctype" class="block text-xs font-medium text-gray-900">
+                                        Capital
+                                    </label>
+                                    <input type="text" id="description" name="acctype" required value="Account Payable" readonly
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+
                                 </div>
 
-                                <script>
-                                    var today = new Date();
-                                    var dd = String(today.getDate()).padStart(2, '0');
-                                    var monthNames = ["January", "February", "March", "April", "May", "June",
-                                        "July", "August", "September", "October", "November", "December"];
-                                    var mm = monthNames[today.getMonth()]; //January is 0!
-                                    var yyyy = today.getFullYear();
 
-                                    today = mm + ' ' + dd + ', ' + yyyy;
-                                    document.getElementById('date').value = today;
-                                </script>
                                 <div class="mb-4 relative">
-                                    <label for="description" class="block text-xs font-medium text-gray-900">
-                                        Description
+                                    <label for="name" class="block text-xs font-medium text-gray-900">
+                                        Name
                                     </label>
-                                    <input type="text" id="description" name="description" required
+                                    <input type="text" id="name" name="name" required
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
 
                                 </div>
                                 <div class="mb-4 relative">
-                                    <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
+                                    <label for="contact" class="block text-xs font-medium text-gray-900">
+                                        Contact
                                     </label>
-                                    <input type="text" id="amount" name="amount" placeholder="0.00" required
-                                        class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
-                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
-                                    <span
-                                        class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
+                                    <input type="text" id="contact" name="contact" required
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+
                                 </div>
-                                <div class="flex justify-between">
-                                    <?php
-                                    function generateSelect($id, $name, $onchange, $sql)
-                                    {
-                                        $db = Database::getInstance();
-                                        $conn = $db->connect();
+                                <div class="mb-4 relative">
+                                    <label for="contactName" class="block text-xs font-medium text-gray-900">
+                                        Contact Name
+                                    </label>
+                                    <input type="text" id="contactName" name="contactName" required
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
 
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-
-                                        echo "<div class=\"mb-4 relative p-1\">";
-                                        echo "<label for=\"$id\" class=\"block text-xs font-medium text-gray-900\"> $name </label>";
-                                        echo "<select id=\"$id\" name=\"$id\" required class=\"mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm\" onchange=\"$onchange\">";
-                                        echo "<option value=\"\" selected=\"selected\">...</option>";
-
-                                        if ($stmt->rowCount() > 0) {
-                                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                                echo "<option value=\"{$row['name']}\">{$row['name']}</option>";
-                                            }
-                                        } else {
-                                            echo "0 results";
-                                        }
-
-                                        echo "</select>";
-                                        echo "</div>";
-                                    }
-
-                                    generateSelect('debit', 'Debit', "updateOptions(event, 'credit')", "SELECT name FROM ledger");
-                                    generateSelect('credit', 'Credit', "updateOptions(event, 'debit')", "SELECT name FROM ledger");
-                                    ?>
                                 </div>
+
+
 
                                 <div class="flex justify-end items-start mb-2">
                                     <button id="cancelModal" type="button"
@@ -215,23 +184,7 @@
 
                 <!-- JavaScript -->
 
-                <script>
-                    function closeModalAndClearInputs() {
-                        document.getElementById('myModal').classList.add('hidden');
-                        ['description', 'credit', 'debit', 'amount'].forEach(id => document.getElementById(id).value = '');
-                    }
 
-                    document.getElementById('openModal').addEventListener('click', function () {
-                        document.getElementById('myModal').classList.remove('hidden');
-                    });
-                    //'closeModal',
-                    ['cancelModal'].forEach(id => {
-                        document.getElementById(id).addEventListener('click', function (event) {
-                            event.stopPropagation();
-                            closeModalAndClearInputs();
-                        });
-                    });
-                </script>
 
                 <!-- Equity -->
                 <div class="flex flex-wrap gap-5">
@@ -241,29 +194,193 @@
                     ?>
 
                     <?php foreach ($result as $results): ?>
+                        <?php $id = $results['ledgerno']; ?>
                         <div
                             class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
                             <div class="text-center p-5 ">
                                 <br><br><br>
                                 <h1 class="text-5xl">Credit</h1>
                                 <p><?= $results['name'] ?></p>
+                                <p>Total: <?= $results['total_amount'] ?></p>
                             </div>
                             <div class="p-10">
-                                <button
+                                <button id="openPayModal<?= $id ?>"
                                     class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                    Pay
+                                    Pay Loan
+                                </button>
+                                <button id="openLoanModal<?= $id ?>"
+                                    class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
+                                    Add Loan
                                 </button>
                             </div>
                         </div>
+                        <div id="payModal<?= $id ?>"
+                            class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded shadow-lg w-1/3">
+                                <div class="border-b pl-3 pr-3 pt-3 flex">
+                                    <h5 class="font-bold uppercase text-gray-600"><?= $results['name'] ?></h5>
+                                    <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
+                                <i class="ri-close-line"></i>
+                            </button> -->
+                                </div>
+                                <!-- form -->
+                                <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
+                                <div class="p-5">
+                                    <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
+                                    <form action="" method="POST">
+                                        <div class="mb-4 relative">
+                                            Total: <?= $results['total_amount'] ?>
+
+                                        </div>
+
+
+                                        <div class="mb-4 relative">
+                                            <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
+                                            </label>
+                                            <input type="text" id="amount" name="amount" placeholder="0.00" required
+                                                class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                            <span
+                                                class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
+                                        </div>
+
+
+
+                                        <div class="flex justify-end items-start mb-2">
+                                            <button id="cancelPayModal<?= $id ?>" type="button"
+                                                class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
+                                            <button type="submit"
+                                                class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="LoanModal<?= $id ?>"
+                            class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded shadow-lg w-1/3">
+                                <div class="border-b pl-3 pr-3 pt-3 flex">
+                                    <h5 class="font-bold uppercase text-gray-600"><?= $results['name'] ?></h5>
+                                    <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
+                                <i class="ri-close-line"></i>
+                            </button> -->
+                                </div>
+                                <!-- form -->
+                                <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
+                                <div class="p-5">
+                                    <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
+                                    <form action="/addToLoan" method="POST">
+                                        <input type="hidden" id="id" name="Modalid" value="<?= $id ?>" />
+                                        <div class="mb-4 relative">
+                                            <label for="description" class="block text-xs font-medium text-gray-900">
+                                                Description
+                                            </label>
+                                            <input type="text" id="description" name="description" required
+                                                class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
+
+                                        </div>
+                                        <div class="mb-4 relative">
+                                            <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
+                                            </label>
+                                            <input type="text" id="amount" name="amount" placeholder="0.00" required
+                                                class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                            <span
+                                                class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
+                                        </div>
+
+
+                                        <?php
+                                        $db = Database::getInstance();
+                                        $conn = $db->connect();
+
+                                        $query = "SELECT name FROM ledger";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+
+                                        ?>
+                                        <div class="mb-4 relative">
+                                            <label for="ledgerName" class="block text-xs font-medium text-gray-900">
+                                                Category
+                                            </label>
+                                            <select name="ledgerName" id="ledgerName"
+                                                class="mt-1 py-1 px-2 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
+                                                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="flex justify-end items-start mb-2">
+                                            <button id="cancelLoanModal<?= $id ?>" type="button"
+                                                class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
+                                            <button type="submit"
+                                                class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php endforeach; ?>
+                </div>
+                <script>
+                    <?php foreach ($result as $results): ?>
+                        <?php $id = $results['ledgerno']; ?>
+                        function closeModalAndClearInputs<?= $id ?>() {
+                            document.getElementById('payModal<?= $id ?>').classList.add('hidden');
+                            document.getElementById('LoanModal<?= $id ?>').classList.add('hidden');
+                            ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id + '<?= $id ?>').value = '');
+                        }
+
+                        document.getElementById('openPayModal<?= $id ?>').addEventListener('click', function () {
+                            document.getElementById('payModal<?= $id ?>').classList.remove('hidden');
+                        });
+
+                        document.getElementById('openLoanModal<?= $id ?>').addEventListener('click', function () {
+                            document.getElementById('LoanModal<?= $id ?>').classList.remove('hidden');
+                        });
+
+                        document.getElementById('cancelPayModal<?= $id ?>').addEventListener('click', function (event) {
+                            event.stopPropagation();
+                            closeModalAndClearInputs<?= $id ?>();
+                        });
+
+                        document.getElementById('cancelLoanModal<?= $id ?>').addEventListener('click', function (event) {
+                            event.stopPropagation();
+                            closeModalAndClearInputs<?= $id ?>();
+                        });
                     <?php endforeach; ?>
 
+                    function closeModalAndClearInputs() {
+                        document.getElementById('myModal').classList.add('hidden');
+                        ['name', 'contact', 'contactName'].forEach(id => document.getElementById(id).value = '');
+                    }
+
+                    document.getElementById('openModal').addEventListener('click', function () {
+                        document.getElementById('myModal').classList.remove('hidden');
+                    });
+
+                    ['cancelModal'].forEach(id => {
+                        document.getElementById(id).addEventListener('click', function (event) {
+                            event.stopPropagation();
+                            closeModalAndClearInputs();
+                            document.getElementById('myModal').classList.add('hidden');
+                        });
+                    });
+                </script>
 
 
-                </div>
+                <!-- JavaScript -->
+
+
+
             </div>
     </main>
-    <script src="./../../../src/route.js"></script>
 
+    <script src="./../../../src/form.js"></script>
+    <script src="./../../../src/route.js"></script>
 </body>
 
 </html>

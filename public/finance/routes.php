@@ -1,5 +1,5 @@
 <?php
-
+require_once "public/finance/functions/specialTransactions/payable.php";
 
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
@@ -16,7 +16,7 @@ $fin = [
 
     //ledger
     // '/fin/ledger' => $basePath . "ledger.gen.php",
-    '/fin/ledger/page={pageNumber}' => function($pageNumber) use ($basePath) {
+    '/fin/ledger/page={pageNumber}' => function ($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "ledger.gen.php";
     },
@@ -38,7 +38,7 @@ $fin = [
     // functions
     // can't recognize by the router logout can proceed
     '/fin/logout' => "./public/finance/functions/logout.php",
-    
+
     '/fin/report' => $path . "/reports/generateReport.php",
 ];
 
@@ -47,7 +47,7 @@ Router::post('/test', function () {
     $conn = $db->connect();
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     // Input validation
-    if (!isset($_POST['date'], $_POST['description'], $_POST['amount'], $_POST['debit'], $_POST['credit'])) {
+    if (!isset ($_POST['date'], $_POST['description'], $_POST['amount'], $_POST['debit'], $_POST['credit'])) {
         header("Location: $rootFolder/fin/ledger");
         echo "Missing input data.";
         return;
@@ -61,7 +61,8 @@ Router::post('/test', function () {
     $datetime = $datetime->format('Y-m-d H:i:s');
 
     // Function to get ledger number
-    function getLedgerNumber($conn, $ledgerName) {
+    function getLedgerNumber($conn, $ledgerName)
+    {
         $stmt = $conn->prepare("SELECT ledgerno FROM ledger WHERE name = :ledgername");
         $stmt->bindParam(':ledgername', $ledgerName);
         $stmt->execute();
@@ -92,12 +93,57 @@ Router::post('/test', function () {
     header("Location: $rootFolder/fin/ledger/page=1");
 });
 
-Router::post('/reportGeneration', function (){
+Router::post('/reportGeneration', function () {
     $_SESSION['postdata'] = $_POST;
-    list($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
+    list ($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
     header('Location: Finance/fin/report');
     exit;
 });
+
+Router::post('/addPayable', function () {
+    addPayable($_POST['name'], $_POST['contact'], $_POST['contactName']);
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/accounts/payable");
+});
+
+//does not seem to work or execute at all idk why
+Router::post('/addToLoan', function () {
+    $modalId = $_POST['Modalid'];
+    $details = $_POST['description'];
+    $amount = $_POST['amount'];
+    $ledgerName = $_POST['ledgerName'];
+
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Get the ledgerNo from the ledger table
+    $sql = "SELECT ledgerNo FROM ledger WHERE ledgerName = :ledgerName";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':ledgerName', $ledgerName);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $ledgerNo_Dr = $row['ledgerNo'];
+
+    $modalId = $_POST['Modalid'];
+    $details = $_POST['description'];
+    $amount = $_POST['amount'];
+
+    $sql = "INSERT INTO ledgertransaction (LedgerNo, details, amount, LedgerNo_Dr) VALUES (:modalId, :details, :amount, :ledgerNo_Dr)";
+    $stmt = $conn->prepare($sql);
+
+    $stmt->bindParam(':modalId', $modalId);
+    $stmt->bindParam(':details', $details);
+    $stmt->bindParam(':amount', $amount);
+    $stmt->bindParam(':ledgerNo_Dr', $ledgerNo_Dr);
+
+    $stmt->execute();
+    // insertLedgerXact($modalId, $ledgerName, $amount, $details);
+    // borrowAsset($_POST['LedgerNo'], $_POST['LedgerNo'], $_POST['amount']);
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/accounts/payable");
+});
+
 
 
 

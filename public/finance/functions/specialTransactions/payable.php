@@ -2,22 +2,39 @@
 require_once "public/finance/functions/generalFunctions.php";
 
 
+
 function getAllPayable(){
     $db = Database::getInstance();
     $conn = $db->connect();  
 
     $AP = getAccountCode("Accounts Payable");
     $TP = getAccountCode("Tax Payable");
-    $sql = "SELECT * FROM Ledger WHERE accounttype = :AP OR accounttype = :TP";
-
+    $sql = "SELECT * FROM ledger WHERE accounttype = :AP OR accounttype = :TP";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':AP', $AP);
     $stmt->bindParam(':TP', $TP);
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ledgers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return $result;
+    $results = [];
+    foreach ($ledgers as $ledger) {
+        $ledgerNo = $ledger['ledgerno'];
+        $name = $ledger['name'];
+        $query = "SELECT SUM(amount) as total_amount FROM ledgertransaction WHERE LedgerNo = :LedgerNo";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':LedgerNo', $ledgerNo);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $results[] = [
+            'ledgerno' => $ledgerNo,
+            'name' => $name,
+            'total_amount' => $result['total_amount']
+        ];
+    }
+
+    return $results;
 }
+
 
 // get total value of payble minus the paid amount
 function getValueOfPayable($accountNumber){
