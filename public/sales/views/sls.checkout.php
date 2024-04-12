@@ -139,12 +139,8 @@
                         <form action="/addSales" method="POST" onsubmit="clearCart()">
                             <div class="font-medium text-xl mb-4 text-gray-500 border-b pb-2">Shipping Information</div>
                             <div>
-                                <label for="customerFirstName" class="block mb-2">Customer First Name:</label>
-                                <input type="text" id="customerFirstName" name="customerFirstName" class="w-full p-2 border border-gray-300 rounded mb-4" required>
-                            </div>
-                            <div>
-                                <label for="customerLastName" class="block mb-2">Customer Last Name:</label>
-                                <input type="text" id="customerLastName" name="customerLastName" class="w-full p-2 border border-gray-300 rounded mb-4" required>
+                                <label for="customerName" class="block mb-2">Customer Name:</label>
+                                <input type="text" id="customerName" name="customerName" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter First and Last Name" required>
                             </div>
                             <div>
                                 <label for="customerEmail" class="block mb-2">Customer Email:</label>
@@ -277,6 +273,20 @@
                 localStorage.setItem('shippingFee', '0');
                 console.log('Shipping Fee:', localStorage.getItem('shippingFee')); // Log the shipping fee
             }
+
+            // Save form data to localStorage
+            const formData = {
+                customerName: document.getElementById('customerName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                customerEmail: document.getElementById('customerEmail').value,
+                province: document.getElementById('province').value,
+                municipality: document.getElementById('municipality').value,
+                streetBarangayAddress: document.getElementById('barangayStreet').value,
+                deliveryDate: document.getElementById('deliveryDate').value
+
+            };
+            localStorage.setItem('formData', JSON.stringify(formData));
+
             location.reload(); // Refresh the page
         });
 
@@ -296,19 +306,45 @@
         function toggleSaleDetails(salePreference) {
             const saleDetails = document.getElementById('sale-details');
             const shippingFee = document.getElementById('shipping-fee-toggle');
-
+            const province = document.getElementById('province');
+            const municipality = document.getElementById('municipality');
+            const barangayStreet = document.getElementById('barangayStreet');
+            const deliveryDate = document.getElementById('deliveryDate');
+        
             if (salePreference == 'delivery') {
                 saleDetails.style.display = 'block';
                 shippingFee.style.display = 'flex';
+                province.required = true;
+                municipality.required = true;
+                barangayStreet.required = true;
+                deliveryDate.required = true;
             } else {
                 saleDetails.style.display = 'none';
                 shippingFee.style.display = 'none';
+                province.required = false;
+                municipality.required = false;
+                barangayStreet.required = false;
+                deliveryDate.required = false;
             }
         }
 
         // Call the function on page load to set the initial state
         document.addEventListener('DOMContentLoaded', () => {
             toggleSaleDetails(document.getElementById('SalePreference').value);
+            togglePaymentDetails(document.getElementById('payment-mode').value);
+
+            // Retrieve form data from localStorage
+            const formData = JSON.parse(localStorage.getItem('formData')) || {};
+            document.getElementById('customerName').value = formData.customerName || '';
+            document.getElementById('customerPhone').value = formData.customerPhone || '';
+            document.getElementById('customerEmail').value = formData.customerEmail || '';
+            document.getElementById('province').value = formData.province || '';
+            document.getElementById('municipality').value = formData.municipality || '';
+            document.getElementById('barangayStreet').value = formData.streetBarangayAddress || '';
+            document.getElementById('deliveryDate').value = formData.deliveryDate || '';
+
+            // Remove the form data from localStorage
+            localStorage.removeItem('formData');
         });
     </script>
 

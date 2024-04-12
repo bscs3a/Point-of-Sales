@@ -73,14 +73,13 @@ $sls = [
 // START: Add Sales
 class Customer
 {
-    public function create($firstName, $lastName, $phone, $email)
+    public function create($name, $phone, $email)
     {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        $stmt = $conn->prepare("INSERT INTO Customers (FirstName, LastName, Phone, Email) VALUES (:firstName, :lastName, :phone, :email)");
-        $stmt->bindParam(':firstName', $firstName);
-        $stmt->bindParam(':lastName', $lastName);
+        $stmt = $conn->prepare("INSERT INTO Customers (Name, Phone, Email) VALUES (:name, :phone, :email)");
+        $stmt->bindParam(':name', $name);
         $stmt->bindParam(':phone', $phone);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
@@ -184,7 +183,7 @@ class Product
 
 Router::post('/addSales', function () {
     $customer = new Customer();
-    $customerId = $customer->create($_POST['customerFirstName'], $_POST['customerLastName'], $_POST['customerPhone'], $_POST['customerEmail']);
+    $customerId = $customer->create($_POST['customerName'], $_POST['customerPhone'], $_POST['customerEmail']);
 
     date_default_timezone_set('Asia/Manila');
     $sale = new Sale();
