@@ -323,9 +323,27 @@
         </div>
       </div>
       
+      <!-- Taxpayer Information -->
+    <div>
+      <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Taxpayer Information</h2>
+          <!-- TAXPAYER INFO: COLUMN 1 -->
       <div class="flex flex-col">
-        <div class="mb-4">
+        <div class="mb-4 mt-4">
           <div class="flex">
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="tinnumber">
+                TIN Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="tinNumber"
+                id="tinnumber"
+                type="text"
+                placeholder="TIN Number"
+                pattern="[0-9]{9}"  
+                title="Please enter a 9-digit TIN number"
+              />
+            </div>
             <div class="mr-2">
               <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="sssnumber">
                 SSS Number
@@ -354,38 +372,31 @@
                 title="Please enter a 12-digit PhilHealth number"
               />
             </div>
-            <div>
-              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="tinnumber">
-                TIN Number
-              </label>
-              <input  
-                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                name="tinNumber"
-                id="tinnumber"
-                type="text"
-                placeholder="TIN Number"
-                pattern="[0-9]{9}"  
-                title="Please enter a 9-digit TIN number"
-              />
-            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="pagibignumber">
-          Pag-IBIG Number
-        </label>
-        <input  
-          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-          name="pagibigNumber"
-          id="pagibignumber"
-          type="text"
-          placeholder="Pag-IBIG Number"
-          pattern="[0-9]{12}"   
-          title="Please enter a 12-digit Pag-IBIG number"
-        />
-      </div>
-                  <!-- Salary Information and Tax Information -->
+        <div>
+          <!-- TAXPAYER INFO: COLUMN 2 -->
+          <div class="flex flex-col">
+            <div class="mb-4">
+              <div class="flex">
+                <div class="mr-2">
+                  <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="pagibignumber">
+                    Pag-IBIG Number
+                  </label>
+                  <input  
+                    class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    name="pagibigNumber"
+                    id="pagibignumber"
+                    type="text"
+                    placeholder="Pag-IBIG Number"
+                    pattern="[0-9]{12}"   
+                    title="Please enter a 12-digit Pag-IBIG number"
+                  />
+                </div>
+              </div>
+            </div>
+
+<!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>
               <div class="flex flex-col">

@@ -15,7 +15,7 @@ if (!empty($search)) {
   $query .= " WHERE";
 }
 
-$query .= " leave_requests.status = 'pending'";
+$query .= " (leave_requests.status = 'approved' OR leave_requests.status = 'denied')";
 
 $query .= " ORDER BY leave_requests.id DESC";
 
@@ -33,7 +33,7 @@ $stmt = null;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
-  <link href="./../src/tailwind.css" rel="stylesheet">
+  <link href="./../../src/tailwind.css" rel="stylesheet">
   <title>Leave Requests</title>
 </head>
 <body class="text-gray-800 font-sans">
@@ -56,7 +56,9 @@ $stmt = null;
     <a route="/hr/dashboard" class="text-[#151313] hover:text-gray-600 font-medium">Human Resources</a>
   </li>
   <li class="text-[#151313] mr-2 font-medium">/</li>
-  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Leave Requests</a>
+  <a route="/hr/leave-requests" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Leave Requests</a>
+  <li class="text-[#151313] mr-2 font-medium">/</li>
+  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Reviewed</a>
    </ul>
    <ul class="ml-auto flex items-center">
   <li class="mr-1">
@@ -74,13 +76,13 @@ $stmt = null;
     <div class="hidden sm:block">
         <div class="border-b border-gray-200">
             <nav class="-mb-px flex flex-wrap gap-6" aria-label="Tabs">
-                <a route="/hr/leave-requests/"
-                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
-                    aria-current="page">
+                <a route="/hr/leave-requests"
+                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     All Requests
                 </a>
                 <a route="/hr/leave-requests/reviewed"
-                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
+                    aria-current="page">
                     Reviewed Requests
                 </a>
             </nav>
@@ -94,7 +96,7 @@ $stmt = null;
     <!-- <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3> -->
     <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">File a Leave</button>
 
-    <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
+    <form action="/hr/leave-requests/reviewed" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
@@ -106,70 +108,16 @@ $stmt = null;
         require_once 'inc/noResult.php';
     } 
     else {
-        require_once 'inc/leave-requests.table.php';
+        require_once 'inc/leave-requests.reviewed.table.php';
     } 
   ?>
 <!-- End Leave Requests -->
   
-<!-- Accept modal -->
-<div id="acceptModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-    <form action="/master/approve/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
-        <h2 class="mb-4">Approve request of leave?</h2>
-        <input type="hidden" name="id" id="idToAccept"> <!-- This will hold the ID of the row to delete -->
-        <input type="submit" value="Yes" id="confirmAccept" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
-        <input type="button" value="No" id="cancelAccept" class="px-4 py-2 bg-gray-300 text-black rounded">
-    </form>
-</div>
-
-  <!-- Reject modal -->
-  <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-    <form action="/master/deny/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
-        <h2 class="mb-4">Deny request of leave?</h2>
-        <input type="hidden" name="id" id="idToReject"> <!-- This will hold the ID of the row to delete -->
-        <input type="submit" value="Yes" id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
-        <input type="button" value="No" id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">
-    </form>
-</div>
   
 </main>
 <!-- End Main Bar -->
-<script  src="./../src/route.js"></script>
-<script  src="./../src/form.js"></script>
+<script  src="./../../src/route.js"></script>
+<script  src="./../../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
-<script>
-  // REJECT MODAL
-  document.querySelectorAll('.rejectButton').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var id = this.getAttribute('data-id');
-      document.getElementById('idToReject').value = id;
-      document.getElementById('rejectModal').classList.remove('hidden');
-    });
-  });
-
-  document.getElementById('cancelReject').addEventListener('click', function() {
-    document.getElementById('rejectModal').classList.add('hidden');
-  });
-
-  document.getElementById('confirmReject').addEventListener('click', function() {
-    document.getElementById('rejectModal').submit();
-  });
-
-  // ACCEPT MODAL
-  document.querySelectorAll('.acceptButton').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var id = this.getAttribute('data-id');
-      document.getElementById('idToAccept').value = id;
-      document.getElementById('acceptModal').classList.remove('hidden');
-    });
-  });
-
-  document.getElementById('cancelAccept').addEventListener('click', function() {
-    document.getElementById('acceptModal').classList.add('hidden');
-  });
-
-  document.getElementById('confirmAccept').addEventListener('click', function() {
-    document.getElementById('acceptModal').submit();
-  });
-</script>
 </body>
 </html> 

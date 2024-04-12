@@ -29,7 +29,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
   <link href="./../../src/tailwind.css" rel="stylesheet">
-  <title>Leave Request | 
+  <title><?php echo htmlspecialchars($leaveRequest['status']) ?> | 
     <?php 
       echo htmlspecialchars($leaveRequest['last_name']) . ', ';
       echo htmlspecialchars(substr($leaveRequest['first_name'], 0, 1)) . '. ';
@@ -169,7 +169,7 @@
         </div>
       </div>
 
-      <!-- Description-->
+      <!-- Description -->
       <div class="mt-4">
         <label for="details" class="block mb-2 text-sm font-bold text-gray-900">Description</label>
         <p id="details" class="mr-7 mt-4 block px-4 py-4 p-2.5 w-full sm:w-[780px] text-sm text-gray-700 bg-white">
@@ -177,19 +177,30 @@
         </p>
     </div>
 
-<script>
-  // Details 255 CHARACTERS
-  document.getElementById('details').addEventListener('input', function() {
-      var remaining = 255 - this.value.length;
-      document.getElementById('charCount').textContent = remaining + ' characters left';
-  });
-</script>
+    <!-- Status -->
+    <div class="mt-4">
+      <label for="details" class="block mb-2 text-sm font-bold text-gray-900">Status: 
+          <?php
+            $status = $leaveRequest['status'];
+            $colorClass = '';
 
-  <!-- BUTTONS -->
-  <span class="mt-4">   
-    <button route="/hr/leave-requests/file-leave" type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Approve</button>
-    <button route="/hr/leave-requests" type="button" class="focus:outline-none text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Deny</button>
-  </span>
+            switch ($status) {
+                case 'Pending':
+                    $colorClass = 'text-yellow-600';
+                    break;
+                case 'Denied':
+                    $colorClass = 'text-red-600';
+                    break;
+                case 'Approved':
+                    $colorClass = 'text-green-600';
+                    break;
+            }
+          ?>
+          <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-lg font-semibold <?php echo $colorClass; ?>">
+              <?php echo $status; ?>
+          </span>
+      </label>
+  </div>
   </div>
   </div>
 </main>

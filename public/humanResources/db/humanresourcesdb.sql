@@ -131,6 +131,7 @@ INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirt
 ('https://pbs.twimg.com/profile_images/1556154158860107776/1eTSWQJx_400x400.jpg', 'Ziggy', 'Castro', 'Co', '2001-12-19', 'Female', 'Filipino', 'Pampanga', '09123456789', 'ziggyco@example.com','Single', 'Human Resources', 'Compensation and Benefits Specialist','9842683190','222904801483','398938596','393260427062'),
 ('https://pbs.twimg.com/profile_images/1591010546899308544/9_n476w9_400x400.png', 'Nathaniel', '', 'Fernandez', '2003-04-06', 'Male', 'Filipino', 'Pampanga', '09123456789', 'nathZ@example.com','Single', 'Human Resources', 'HR Legal Compliance Specialist','3217127657','982459800458','175523699','723082092314'),
 ('https://pbs.twimg.com/profile_images/1746139769342742528/cDQRzJIV_400x400.jpg', 'Emmanuel Louise', '', 'Gonzales', '2001-01-27', 'Male', 'Filipino', 'Pampanga', '09123456789', 'emman@example.com','Divorced', 'Human Resources', 'Recruiter','3831913601','296757397697','136729120','687715123719'),
+('/master/public/humanResources/img/noPhotoAvailable.png', 'Joshua', '', 'Casupang', '2003-06-21', 'Male', 'Filipino', 'Pampanga', '09123456789', 'joshua@example.com','Married', 'Human Resources', 'HR Coordinator','1788631721','493539660119','579494717','254144900265'),
 ('/master/public/humanResources/img/noPhotoAvailable.png', 'Marc', 'Cruz', 'David', '2002-02-09', 'Male', 'Filipino', 'Pampanga', '09293883802', 'sinicchi123@gmail.com','Single', 'Product Order', 'Order Processor','5239186621','113821417235','293860405','677900026630');
 
 INSERT INTO employment_info (dateofhire, startdate, enddate, employees_id) VALUES
@@ -138,35 +139,40 @@ INSERT INTO employment_info (dateofhire, startdate, enddate, employees_id) VALUE
 ('2021-01-01', '2021-01-01', NULL, 2),
 ('2021-01-01', '2021-01-01', NULL, 3),
 ('2021-01-01', '2021-01-01', NULL, 4),
-('2024-04-11', '2024-04-11', '2025-04-11', 5);
+('2021-01-01', '2021-01-01', NULL, 5),
+('2024-04-11', '2024-04-11', '2025-04-11', 6);
 
 INSERT INTO salary_info (monthly_salary, total_salary, employees_id) VALUES
 (80000.00, 45507.54, 1),
 (45000.00, 30909.00, 2),
 (35000.00, 26357.00, 3),
 (30000.00, 23747.67, 4),
-(18000.00, 16093.60, 5);
+(25000.00, 20971.67, 5),
+(18000.00, 16093.60, 6);
 
 INSERT INTO tax_info (income_tax, withholding_tax, salary_id) VALUES
 (14833.33, 11875.13, 1),
 (5416.67, 4208.33, 2),
 (2916.67, 2208.33, 3),
 (1833.33, 1375.00, 4),
-(0.00, 0.00, 5);
+(833.33, 625.00, 5),
+(0.00, 0.00, 6);
 
 INSERT INTO benefit_info (philhealth, sss_fund, pagibig_fund, thirteenth_month, salary_id) VALUES
 (4000.00, 3584.00, 200.00, 80000.00, 1),
 (2250.00, 2016.00, 200.00, 45000.00, 2),
 (1750.00, 1568.00, 200.00, 35000.00, 3),
 (1500.00, 1344.00, 200.00, 30000.00, 4),
-(900.00, 806.40, 200.00, 18000.00, 5);
+(1250.00, 1120.00, 200.00, 25000.00, 5),
+(900.00, 806.40, 200.00, 18000.00, 6);
 
 INSERT INTO account_info (username, password, role, employees_id) VALUES
 ('bscs3a001', 'bscs3a1HR', 'Human Resources', 1),
 ('bscs3a002', 'bscs3a2HR', 'Human Resources', 2),
 ('bscs3a003', 'bscs3a3HR', 'Human Resources', 3),
 ('bscs3a004', 'bscs3a4HR', 'Human Resources', 4),
-('bscs3a005', 'bscs3a1PO', 'Product Order', 5);
+('bscs3a005', 'bscs3a5HR', 'Human Resources', 5),
+('bscs3a006', 'bscs3a1PO', 'Product Order', 6);
 
 INSERT INTO leave_requests (type, details, start_date, end_date, status, employees_id) VALUES
 ('Sick Leave', 'Enjoy this moon necklace. I got it for you. You remind me of the moon, because it\'s always there and it\'s beautiful.', '2024-08-27 08:00:00', '2024-08-28 08:00:00', 'Pending', 1);

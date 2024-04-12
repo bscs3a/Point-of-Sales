@@ -44,7 +44,7 @@
 
   <!-- Request For Leave -->
   <div class="flex ml-20 mt-8 font-bold text-xl ">
-    <h1>Request For Leave</h1>
+    <h1>Details of Request for Leave</h1>
    </div>
 
    <div class="flex flex-col ml-20">
@@ -70,7 +70,7 @@
               while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $fullName = $row['first_name'];
                   if (!empty($row['middle_name'])) {
-                      $fullName .= ' ' . substr($row['last_name'], 0, 1) . '.';
+                      $fullName .= ' ' . substr($row['middle_name'], 0, 1) . '.';
                   }
                   $fullName .= ' ' . $row['last_name'];
                   echo "<option value='{$row['id']}'>{$fullName}</option>";
@@ -79,36 +79,42 @@
         </select>
       </div>
       <div class="mr-2">
-        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="department">
-          Department
+        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="type">
+          Type of Leave       
         </label>
         <select
         class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-        name="department" id="department">
-            <option value="">Select Department</option>
-            <option value="Product Order">Product Order</option>
-            <option value="Inventory">Inventory</option>
-            <option value="Delivery">Delivery</option>
-            <option value="Human Resources">Human Resources</option>
-            <option value="Point of Sales">Point of Sales</option>
-            <option value="Finance">Finance/Accounting</option>
+        name="type" id="type">
+        <option value="">Select Type of Leave</option>
+        <option value="Sick Leave">Sick Leave</option>
+        <option value="Vacation Leave">Vacation Leave</option>
+        <option value="5 Days Forced Leave">5 Days Forced Leave</option>
+        <option value="Special Privilege Leave">Special Privilege Leave</option>
+        <option value="Maternity Leave">Maternity Leave</option>
+        <option value="Paternity Leave">Paternity Leave</option>
+        <option value="Parental Leave">Parental Leave</option>
+        <option value="Rehabilitation Leave">Rehabilitation Leave</option>
+        <option value="Special Leave (For Women)">Special Leave (for women)</option>
+        <option value="Study Leave">Study Leave</option>
+        <option value="Terminal Leave">Terminal Leave</option>
+        <option value="Special Emergency Leave">Special Emergency Leave</option>
         </select>
       </div>
       <div class="mr-2">
-        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="position">
-          Position
+        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="date_submitted">
+          Date of Submission
         </label>
-        <select
+        <input
           class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-          name="position" id="position">
-            <option value="">Select Position</option>
-          </select>
+          id="date_submitted"
+          name="date_submitted"
+          type="date"
+          value="<?php echo date('Y-m-d'); ?>"
+          readonly
+        />
       </div>
   </div>
-  <!-- Details of Leave -->
-  <div class="flex  mt-8 font-bold text-xl ">
-      <h1>Details of Leave</h1>
-      </div>
+  <!-- Column 2 -->
       <div class="flex flex-col">
       <div class="mb-4 mt-8">
         <div class="flex">
@@ -134,27 +140,17 @@
               type="date"
             />
           </div>
-          <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="type">
-              Type of Leave       
+          <div id="date_diff" class="mr-2">
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="numberOfDays">
+              Total No. of Days
             </label>
-            <select
-            class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-            name="type" id="type">
-            <option value="">Select Type of Leave</option>
-            <option value="Sick Leave">Sick Leave</option>
-            <option value="Vacation Leave">Vacation Leave</option>
-            <option value="5 Days Forced Leave">5 Days Forced Leave</option>
-            <option value="Special Privilege Leave">Special Privilege Leave</option>
-            <option value="Maternity Leave">Maternity Leave</option>
-            <option value="Paternity Leave">Paternity Leave</option>
-            <option value="Parental Leave">Parental Leave</option>
-            <option value="Rehabilitation Leave">Rehabilitation Leave</option>
-            <option value="Special Leave (For Women)">Special Leave (for women)</option>
-            <option value="Study Leave">Study Leave</option>
-            <option value="Terminal Leave">Terminal Leave</option>
-            <option value="Special Emergency Leave">Special Emergency Leave</option>
-            </select>
+            <input
+              class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              id="numberOfDays"
+              name="numberOfDays"
+              type="text"
+              readonly
+            />
           </div>
         </div>
       </div>
@@ -197,79 +193,18 @@
     document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
 
-   // DEPARTMENT AND POSITION DROPDOWN
-   document.getElementById('department').addEventListener('change', function() {
-    var department = this.value;
-    var positionSelect = document.getElementById('position');
+  // Calculate Date Difference
+  document.getElementById('start_date').addEventListener('change', calculateDateDiff);
+  document.getElementById('end_date').addEventListener('change', calculateDateDiff);
 
-    // Clear the position select
-    positionSelect.innerHTML = '<option value="">Select Position</option>';
+  function calculateDateDiff() {
+    var startDate = new Date(document.getElementById('start_date').value);
+    var endDate = new Date(document.getElementById('end_date').value);
+    var diffInTime = endDate.getTime() - startDate.getTime();
+    var diffInDays = diffInTime / (1000 * 3600 * 24);
+    document.getElementById('numberOfDays').value = diffInDays;
+  }
 
-    // Define the positions for each department
-    var positions = {
-      'Product Order': [
-        'Order Processor',
-        'Order Entry Clerk',
-        'Quality Control Inspector',
-        'Logistics Coordinator',
-        'Procurement Specialist'
-      ],
-
-      'Inventory': [
-        'Inventory Manager/Controller',
-        'Inventory Planner',
-        'Stock Controller',
-        'Purchasing Manager',
-        'Warehouse Manager',
-        'Materials Manager'
-      ],
-
-      'Delivery': [
-        'Delivery Driver',
-        'Courier',
-        'Warehouse Associate',
-        'Customer Service Representative',
-        'Parcel Sorter'
-      ],
-
-      'Human Resources': [
-        'Recruiter',
-        'HR Manager/Director',
-        'Compensation and Benefits Specialist',
-        'HR Coordinator',
-        'HR Legal Compliance Specialist'
-      ],
-
-      'Point of Sales': [
-        'Retail Associate/Cashier',
-        'Inventory Control Specialist',
-        'Sales Associate',
-        'Customer Service Representative',
-        'Business Analyst',
-        'E-commerce Coordinator'
-      ],
-
-      'Finance': [
-        'Accountant',
-        'Bookkeeper',
-        'Financial Analyst',
-        'Tax Accountant',
-        'Cost Accountant',
-        'Credit Analyst',
-        'Payroll Specialist'
-      ]
-    };
-
-    // If the selected department has positions, add them to the position select
-    if (positions[department]) {
-        positions[department].forEach(function(position) {
-            var option = document.createElement('option');
-            option.value = position;
-            option.text = position;
-            positionSelect.appendChild(option);
-        });
-    }
-});
 </script>
 </body>
 </html> 

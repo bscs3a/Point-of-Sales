@@ -29,11 +29,17 @@ $hr = [
 
     // leave requests
     '/hr/leave-requests' => $basePath . "leave-requests.php",
+    '/hr/leave-requests/reviewed' => $basePath . "leave-requests.reviewed.php",
     '/hr/leave-requests/file-leave' => $basePath . "leave-requests.file.php",
-    //view leave request detail
+    //view leave request (approve/deny)
     '/hr/leave-requests/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
         include $basePath . "leave-requests.view.php";
+    },
+    //view leave request (approve/deny)
+    '/hr/leave-requests/details={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "leave-requests.details.php";
     },
 
     '/hr/schedule' => $basePath . "schedule.php",
@@ -919,6 +925,23 @@ Router::post('/hr/leave-requests', function () {
     $leaveRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     include './public/humanResources/views/hr.leave-requests.php';
+});
+
+// search leave_requests (reviewed)
+Router::post('/hr/leave-requests/reviewed', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $search = $_POST['search'];
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    if (empty($search)) {
+        header("Location: $rootFolder/hr/leave-requests/reviewed");
+        return;
+    }
+
+    include './public/humanResources/views/hr.leave-requests.reviewed.php';
 });
 
 // file leave requests [WORK IN PROGRESS]

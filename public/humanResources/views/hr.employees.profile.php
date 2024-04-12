@@ -337,6 +337,88 @@
         </div>
       </div>
 
+      
+      <!-- Taxpayer Information -->
+    <div>
+      <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Taxpayer Information</h2>
+          <!-- TAXPAYER INFO: COLUMN 1 -->
+      <div class="flex flex-col">
+        <div class="mb-4 mt-4">
+          <div class="flex">
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="tinnumber">
+                TIN Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
+                name="tinNumber"
+                id="tinnumber"
+                type="text"
+                placeholder="TIN Number"
+                pattern="[0-9]{9}"  
+                title="Please enter a 9-digit TIN number"
+                value="<?php echo htmlspecialchars($employees['tin_number']); ?>"
+                readonly
+              />
+            </div>
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="sssnumber">
+                SSS Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
+                name="sssNumber"
+                id="sssnumber"
+                type="text"
+                placeholder="SSS Number"
+                pattern="[0-9]{10}"
+                title="Please enter a 10-digit SSS number"
+                value="<?php echo htmlspecialchars($employees['sss_number']); ?>"
+                readonly
+              />
+            </div>
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="philhealthnumber">
+                PhilHealth Number
+              </label>
+              <input  
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
+                name="philhealthNumber"
+                id="philhealthnumber"
+                type="text"
+                placeholder="PhilHealth Number"
+                pattern="[0-9]{12}"
+                title="Please enter a 12-digit PhilHealth number"
+                value="<?php echo htmlspecialchars($employees['philhealth_number']); ?>"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <!-- TAXPAYER INFO: COLUMN 2 -->
+          <div class="flex flex-col">
+            <div class="mb-4">
+              <div class="flex">
+                <div class="mr-2">
+                  <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="pagibignumber">
+                    Pag-IBIG Number
+                  </label>
+                  <input  
+                    class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 rounded appearance-none focus:outline-none focus:shadow-outline"
+                    name="pagibigNumber"
+                    id="pagibignumber"
+                    type="text"
+                    placeholder="Pag-IBIG Number"
+                    pattern="[0-9]{12}"   
+                    title="Please enter a 12-digit Pag-IBIG number"
+                    value="<?php echo htmlspecialchars($employees['pagibig_number']); ?>"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+
                   <!-- Salary Information and Tax Information -->
             <div>
               <h2 class="block mb-2 mt-8 text-base font-bold text-gray-700">Salary and Tax Information</h2>
