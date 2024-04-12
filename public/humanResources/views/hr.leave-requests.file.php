@@ -59,7 +59,7 @@
         </label>
         <select
         class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-        name="employee" id="employee">
+        name="employee" id="employee" required>
             <option value="">Select Employee</option>
             <?php
               $db = Database::getInstance();
@@ -84,7 +84,7 @@
         </label>
         <select
         class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-        name="type" id="type">
+        name="type" id="type" required>
         <option value="">Select Type of Leave</option>
         <option value="Sick Leave">Sick Leave</option>
         <option value="Vacation Leave">Vacation Leave</option>
@@ -127,6 +127,7 @@
               id="start_date"
               name="start_date"
               type="date"
+              required
             />
           </div>
           <div class="mr-2">
@@ -138,6 +139,7 @@
               id="end_date"
               name="end_date"
               type="date"
+              required
             />
           </div>
           <div id="date_diff" class="mr-2">
