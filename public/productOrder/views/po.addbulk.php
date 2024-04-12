@@ -28,7 +28,7 @@
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
           </button>
-          <label class="text-black font-medium">Supplier / View</label>
+          <label class="text-black font-medium">Product Order / Add Items (bulk)</label>
         </div>
 
         <!-- dropdown -->
