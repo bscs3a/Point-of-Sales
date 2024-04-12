@@ -15,6 +15,17 @@
           <i class="ri-arrow-right-s-line"></i>
         </span>
       </a>
+
+      <a route='/po/suppliers' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
+        <span class="flex items-center">
+          <i class="ri-list-unordered" style="font-size: 1.2em;"></i>
+          <span class="mx-4 text-sm font-medium">Supplier</span>
+        </span>
+
+        <span>
+          <i class="ri-arrow-right-s-line"></i>
+        </span>
+      </a>
       
       <a route='/po/orderDetail' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
         <span class="flex items-center">
@@ -31,6 +42,18 @@
         <span class="flex items-center">
           <i class="ri-history-line" style="font-size: 1.2em;"></i>
           <span class="mx-4 text-sm font-medium">Transaction History</span>
+        </span>
+
+        <span>
+          <i class="ri-arrow-right-s-line"></i>
+        </span>
+      </a>
+
+      <!-- TRANSACTION VIEW PAGE -->
+      <a route='/po/viewtransaction' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
+        <span class="flex items-center">
+          <i class="ri-history-line" style="font-size: 1.2em;"></i>
+          <span class="mx-4 text-sm font-medium">View Transaction</span>
         </span>
 
         <span>

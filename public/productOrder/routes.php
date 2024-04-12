@@ -7,7 +7,6 @@ $po = [
     // Sample Routes
     '/po/login' => $basePath . "login.php",
     '/po/dashboard' => $basePath . "dashboard.php",
-    '/po/requestOrder' => $basePath . "requestOrder.php",
     '/po/suppliers' => $basePath . "suppliers.php",
     '/po/addsupplier' => $basePath . "addsupplier.php",
     '/po/viewsupplier' => $basePath . "viewsupplier.php",
@@ -18,10 +17,16 @@ $po = [
     '/po/orderDetail' => $basePath . "orderDetail.php",
     '/po/viewdetails' => $basePath . "viewdetails.php",
     '/po/transactionHistory' => $basePath . "transactionHistory.php",
-    '/po/requestHistory' => $basePath . "requestHistory.php",
-    '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
+    '/po/viewtransaction' => $basePath . "viewtransaction.php",
+    
     '/po/test' => $basePath . "test.php",
     '/po/test1' => $basePath . "test1.php",
+
+    // removed
+    '/po/requestHistory' => $basePath . "requestHistory.php",
+    '/po/requestOrder' => $basePath . "requestOrder.php",
+    '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
+
 
     //umm idk what to say here view orders route
     '/po/viewdetails/Order={id}' => function ($id) use ($basePath) {
