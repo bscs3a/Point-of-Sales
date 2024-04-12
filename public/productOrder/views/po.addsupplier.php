@@ -27,7 +27,7 @@
               <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
                 <i class="ri-menu-line"></i>
               </button>
-              <label class="text-black font-medium">Product List / Add Supplier</label>
+              <label class="text-black font-medium">Product Order / Add Items (bulk)</label>
             </div>
 
             <!-- dropdown -->
@@ -121,7 +121,7 @@
                             <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
                             <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
                         </div>
-                          
+                      </div>
                     </div>
                 </div>
             </div>
