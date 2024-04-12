@@ -34,7 +34,7 @@ $hr = [
     //view leave request (approve/deny)
     '/hr/leave-requests/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
-        include $basePath . "leave-requests.view.php";
+        include $basePath . "leave-requests.pending.php";
     },
     //view leave request (approve/deny)
     '/hr/leave-requests/details={id}' => function($id) use ($basePath) {
