@@ -84,11 +84,51 @@
               </div>
             </div>
 
+            <!-- add bulk products button -->
             <div class="flex place-content-end mt-2 m-3">
-              <button route='/po/addbulk' class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
-                <i class="ri-add-circle-line"></i>
-                <span>Add Product</span>
-              </button>
+            <?php
+// Fetch data from the database
+// Assuming $conn is your database connection
+$db = Database::getInstance();
+$conn = $db->connect();
+
+// Check if $_GET['supplier_ID'] is set and not empty
+if (isset($_GET['Supplier_ID']) && !empty($_GET['Supplier_ID'])) {
+    // Sanitize and store the supplier ID from the GET parameter
+    $supplierID = htmlspecialchars($_GET['Supplier_ID']);
+
+    // Prepare the SQL statement to select data from the suppliers table based on supplier_ID
+    $query = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        // Check if there are any rows returned
+        if ($stmt->rowCount() > 0) {
+            // Fetch each row as an associative array
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // Now $row contains the data for each row
+                // You can use $row here
+                // For example:
+                echo '<a href="/master/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">';
+                echo '<i class="ri-add-circle-line"></i>';
+                echo '<span>Add Product</span>';
+                echo '</a>';
+            }
+        } else {
+            echo "No data found for the specified supplier ID.";
+        }
+    } else {
+        echo "Error executing the query.";
+    }
+} else {
+    echo "Supplier ID not provided.";
+}
+
+// Close the database connection
+$conn = null;
+?>
             </div>
           </div>
 
@@ -133,7 +173,7 @@
                       echo '<tr>';
                       echo '<tr class="hover:bg-gray-50 data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
                       echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
-                      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">'; 
+                      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
                       echo '<div>' . $row['ProductName'] . '</div>';
                       echo '</td>';
                       echo '<td class="px-20 py-4">' . $row['ProductID'] . '</td>';

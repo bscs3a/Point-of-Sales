@@ -41,7 +41,12 @@ $po = [
         $_GET['Supplier_ID'] = $id;
         include $basePath . "viewsupplierproduct.php";
     },
-    
+     // for adding bulk orders based on the supplier id
+     '/po/addbulk/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['Supplier_ID'] = $id;
+        include $basePath . "addbulk.php";
+    },
 
     '/po/test1/pagenumber={page}' => function ($page) use ($basePath) {
         $_GET['page'] = $page; // Update the $_GET key to 'page' to match the parameter used in test.php
