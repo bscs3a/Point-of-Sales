@@ -152,7 +152,7 @@
                     </select>
                   </div>
                   <div class="mb-4">
-                      <label for="weight" class="block text-black font-semibold mb-2">Weight</label>
+                      <label for="weight" class="block text-black font-semibold mb-2">Weight(KG)</label>
                       <input type="text" id="weight" name="weight" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
                   <div class="mb-4">

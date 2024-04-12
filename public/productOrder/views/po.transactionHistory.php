@@ -179,7 +179,7 @@
             <tr>
               <th class="px-4 py-2 font-semibold">Transaction ID</th>
               <th class="px-4 py-2 font-semibold">Supplier Name</th>
-              <th class="px-4 py-2 font-semibold">Order Date</th>
+              <th class="px-4 py-2 font-semibold">Date Received</th>
               <th class="px-4 py-2 font-semibold">Time</th>
               <th class="px-4 py-2 font-semibold">Status</th>
               <th class="px-4 py-2 font-semibold"></th>

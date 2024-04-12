@@ -5,6 +5,7 @@ $basePath = "$path/po.";
 
 $po = [
     // Sample Routes
+    '/po/login' => $basePath . "login.php",
     '/po/dashboard' => $basePath . "dashboard.php",
     '/po/requestOrder' => $basePath . "requestOrder.php",
     '/po/suppliers' => $basePath . "suppliers.php",
@@ -17,15 +18,133 @@ $po = [
     '/po/transactionHistory' => $basePath . "transactionHistory.php",
     '/po/requestHistory' => $basePath . "requestHistory.php",
     '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
+    '/po/test' => $basePath . "test.php",
+    '/po/test1' => $basePath . "test1.php",
 
-//umm idk what to say here
-    '/po/viewdetails/Order={id}' => function($id) use ($basePath) {
+    //umm idk what to say here view orders route
+    '/po/viewdetails/Order={id}' => function ($id) use ($basePath) {
         // $_SESSION['id'] = $id;
         $_GET['id'] = $id;
         include $basePath . "viewdetails.php";
-},
+    },
+    // view supplier route
+    '/po/viewsupplier/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['Supplier_ID'] = $id;
+        include $basePath . "viewsupplier.php";
+    },
 
+    '/po/test/{month}' => function ($month) use ($basePath) {
+        $_GET['month'] = $month; // Update the $_GET key to 'month' to match the parameter used in test.php
+        include $basePath . "test.php";
+    },
+
+    '/po/test1/pagenumber={page}' => function ($page) use ($basePath) {
+        $_GET['page'] = $page; // Update the $_GET key to 'page' to match the parameter used in test.php
+        include $basePath . "test1.php";
+    },
 ];
+
+Router::post('/login/user', function () {
+    // Establish database connection
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    try {
+        // Retrieve username from POST request
+        $username = $_POST['username'];
+
+        // Prepare SQL statement to fetch user record from the database
+        $stmt = $conn->prepare("SELECT * FROM accounts WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Check if the user exists
+        if ($user) {
+            // Authentication successful
+            // Set a session variable to indicate the user is logged in
+
+            $_SESSION['employee'] = $user['employee'];
+
+            // Insert log entry for successful login audit log
+            $user_id = $user['account_ID']; // Assuming you have an 'account_ID' column in the 'accounts' table
+            $action = "Logged In";
+            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+            $sql = "INSERT INTO audit_log (account_ID, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':user_id', $user_id);
+            $stmt->bindValue(':action', $action);
+            $stmt->bindValue(':time_out', $time_out);
+            $stmt->execute();
+
+            $rootFolder = dirname($_SERVER['PHP_SELF']);
+            // Redirect to the dashboard page after successful login
+            header("Location: $rootFolder/po/dashboard");
+            exit ();
+        } else {
+            // Authentication failed
+            echo "Invalid username or password!";
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+});
+
+
+Router::post('/logout/user', function () {
+    // Establish database connection
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    try {
+        if (isset ($_SESSION['employee'])) {
+            // Retrieve the last time_in from the audit_log table based on account_ID
+            $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE account_ID = (SELECT account_ID FROM accounts WHERE employee = :employee) ORDER BY audit_ID DESC LIMIT 1");
+            $stmt->bindParam(':employee', $_SESSION['employee']);
+            $stmt->execute();
+            $last_time_in = $stmt->fetchColumn();
+
+            // // Update the time_out column with the current timestamp
+            // $current_time_out = date("Y-m-d H:i:s");
+            // $stmt = $conn->prepare("UPDATE audit_log SET time_out = :current_time_out WHERE account_ID = (SELECT account_ID FROM accounts WHERE employee = :employee) AND time_in = :last_time_in");
+            // $stmt->bindParam(':current_time_out', $current_time_out);
+            // $stmt->bindParam(':employee', $_SESSION['employee']);
+            // $stmt->bindParam(':last_time_in', $last_time_in);
+            // $stmt->execute();
+        }
+
+        // Insert logout action into audit_log table
+        if (isset ($_SESSION['employee'])) {
+            $employee = $_SESSION['employee'];
+            $action = "Logged Out";
+            // Use the last_time_in value obtained earlier as the time_in value when logging out
+            $sql = "INSERT INTO audit_log (account_ID, action, time_in) VALUES ((SELECT account_ID FROM accounts WHERE employee = :employee), :action, :last_time_in)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':employee', $employee);
+            $stmt->bindParam(':action', $action);
+            $stmt->bindParam(':last_time_in', $last_time_in);
+            $stmt->execute();
+        }
+
+        // Unset all of the session variables
+        $_SESSION = array ();
+
+        // Destroy the session
+        session_destroy();
+
+        // Redirect the user to the login page after logout
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/po/login");
+        exit ();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+});
+
+
+
 Router::post('/po/addItem', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -38,7 +157,7 @@ Router::post('/po/addItem', function () {
     $weight = $_POST['weight'];
 
     // Check if all necessary data is provided
-    if (empty($supplierName) || empty($productName)) {
+    if (empty ($supplierName) || empty ($productName)) {
         $rootFolder = dirname($_SERVER['PHP_SELF']);
         header("Location: $rootFolder/po/items");
         return;
@@ -71,7 +190,7 @@ Router::post('/po/addItem', function () {
     $categoryId = $category['category_id'];
 
     // Handle image upload
-    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+    if (isset ($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
         $fileName = $_FILES['file']['name'];
         $fileTmpName = $_FILES['file']['tmp_name'];
         $fileDestination = 'uploads/' . $fileName;
@@ -93,7 +212,7 @@ Router::post('/po/addItem', function () {
             // Redirect after successful insertion
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/items");
-            exit();
+            exit ();
         } else {
             echo "Failed to move uploaded file.";
             return;
@@ -105,7 +224,8 @@ Router::post('/po/addItem', function () {
 });
 
 //function to get all the categories in the addItem.php
-function getAllCategories() {
+function getAllCategories()
+{
     $db = Database::getInstance();
     $conn = $db->connect();
 
@@ -277,6 +397,8 @@ Router::post('/accept/requestOrder', function () {
 });
 
 
+
+
 //function to change the "pending" status of requested orders to "accepted" and it will insert on the
 //orders_details table while also having a data in the requests tables to use it as a request history
 function updateRequestStatusToAccepted()
@@ -300,7 +422,7 @@ function updateRequestStatusToAccepted()
         foreach ($pendingRequests as $request) {
             $requestID = $request['Request_ID'];
             $productID = $request['Product_ID'];
-            
+
             // Retrieve Category_ID and Supplier_ID from products table
             $productStmt = $conn->prepare("SELECT Category_ID, Supplier_ID FROM products WHERE ProductID = :productID");
             $productStmt->bindParam(':productID', $productID);
@@ -345,6 +467,9 @@ Router::post('/update/requestOrder', function () {
     updateRequestStatusToAccepted();
 });
 
+
+
+
 //function to set the order status of to complete and also add the data in the transaction history
 function updateOrderStatusToCompleted()
 {
@@ -378,6 +503,33 @@ function updateOrderStatusToCompleted()
             $insertStmt->bindParam(':supplierID', $supplierID);
             $insertStmt->execute();
 
+            // Insert log entry for successful order completion with the last time_in
+            $employee = $_SESSION['employee'];
+            $stmt = $conn->prepare("SELECT * FROM accounts WHERE employee = :employee");
+            $stmt->bindParam(':employee', $employee);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                // Retrieve the last time_in from the audit_log table based on account_ID
+                $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE account_ID = :accountID ORDER BY audit_ID DESC LIMIT 1");
+                $stmt->bindValue(':accountID', $user['account_ID']);
+                $stmt->execute();
+                $last_time_in = $stmt->fetchColumn();
+
+                $user_id = $user['account_ID'];
+                $action = "Completed Order #$orderID";
+                $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+                $sql = "INSERT INTO audit_log (account_ID, action, time_in, time_out) VALUES (:user_id, :action, :last_time_in, :time_out)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(':user_id', $user_id);
+                $stmt->bindValue(':action', $action);
+                $stmt->bindValue(':last_time_in', $last_time_in);
+                $stmt->bindValue(':time_out', $time_out);
+                $stmt->execute();
+            }
+
             // Commit the transaction
             $conn->commit();
 
@@ -393,6 +545,7 @@ function updateOrderStatusToCompleted()
         echo "Error: " . $e->getMessage();
     }
 }
+
 
 // Route to handle the update order status action
 Router::post('/complete/orderDetail', function () {
@@ -465,7 +618,7 @@ function fetchAllRequestsData()
         $conn = $db->connect();
 
         // Prepare SQL query to fetch all requests data
-      $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
+        $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
                     FROM requests r
                     INNER JOIN order_details od ON r.Request_ID = od.Order_ID
                     INNER JOIN products p ON od.Product_ID = p.ProductID
@@ -482,7 +635,7 @@ function fetchAllRequestsData()
         $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $requests;
-        
+
     } catch (PDOException $e) {
         // Handle database errors
         echo "Error: " . $e->getMessage();

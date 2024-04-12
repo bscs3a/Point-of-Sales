@@ -58,6 +58,7 @@
       <!-- New Form for add product -->
       <div class="container mx-auto py-10 px-5">
         <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+          
           <?php
           // Include your database connection file
           include 'dbconn.php';

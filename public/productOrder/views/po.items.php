@@ -60,7 +60,7 @@
       <!-- Main Content -->
       <!-- new layout of table -->
       <div class="px-10 py-4">
-        <div class="justify-between items-start">
+      <div class="justify-between items-start mt-4">
           <!-- Button -->
           <div class="flex justify-between">
             <div class="items-start">
@@ -92,6 +92,7 @@
               </button>
             </div>
           </div>
+        
         </div>
 
         <!-- Table -->
@@ -202,8 +203,9 @@
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-</body>
-<script src="./../src/route.js"></script>
+  <script src="./../src/route.js"></script>
 <script src="./../src/form.js"></script>
+</body>
+
 
 </html>
