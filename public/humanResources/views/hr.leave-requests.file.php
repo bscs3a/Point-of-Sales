@@ -46,13 +46,15 @@
   <div class="flex ml-20 mt-8 font-bold text-xl ">
     <h1>Request For Leave</h1>
    </div>
+
    <div class="flex flex-col ml-20">
     <!-- Column 1-->
+<form action= "/hr/leave-requests/file-leave" method="POST" enctype="multipart/form-data">
   <div class="flex flex-col">
   <div class="mb-4 mt-8">
     <div class="flex">
       <div class="mr-2">
-        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
+        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="employee">
           Employee
         </label>
         <select
@@ -77,7 +79,7 @@
         </select>
       </div>
       <div class="mr-2">
-        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
+        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="department">
           Department
         </label>
         <select
@@ -93,7 +95,7 @@
         </select>
       </div>
       <div class="mr-2">
-        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
+        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="position">
           Position
         </label>
         <select
@@ -111,32 +113,34 @@
       <div class="mb-4 mt-8">
         <div class="flex">
           <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="firstName">
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="start_date">
               Start Date
             </label>
             <input
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              id="startdate"
+              id="start_date"
+              name="start_date"
               type="date"
             />
           </div>
           <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="end_date">
               End Date
             </label>
             <input
               class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              id="enddate"
+              id="end_date"
+              name="end_date"
               type="date"
             />
           </div>
           <div class="mr-2">
-            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="middleName">
+            <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="type">
               Type of Leave       
             </label>
             <select
             class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-            name="typeOfLeave" id="typeOfLeave">
+            name="type" id="type">
             <option value="">Select Type of Leave</option>
             <option value="Sick Leave">Sick Leave</option>
             <option value="Vacation Leave">Vacation Leave</option>
@@ -146,7 +150,7 @@
             <option value="Paternity Leave">Paternity Leave</option>
             <option value="Parental Leave">Parental Leave</option>
             <option value="Rehabilitation Leave">Rehabilitation Leave</option>
-            <option value="Special Leave (for women)">Special Leave (for women)</option>
+            <option value="Special Leave (For Women)">Special Leave (for women)</option>
             <option value="Study Leave">Study Leave</option>
             <option value="Terminal Leave">Terminal Leave</option>
             <option value="Special Emergency Leave">Special Emergency Leave</option>
@@ -158,7 +162,7 @@
       <!-- Description-->
       <div class="mt-4">
     <label for="details" class="block mb-2 text-sm font-bold text-gray-900">Description</label>
-    <textarea id="details" rows="8" style="resize: none;" class="mr-7 mt-4 block px-4 py-4 p-2.5 w-full sm:w-[780px] text-sm text-gray-700 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:focus:ring-blue-500 dark:focus:border-blue-500" maxlength="255"></textarea>
+    <textarea id="details" name="details" rows="8" style="resize: none;" class="mr-7 mt-4 block px-4 py-4 p-2.5 w-full sm:w-[780px] text-sm text-gray-700 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:focus:ring-blue-500 dark:focus:border-blue-500" maxlength="255"></textarea>
     <div id="charCount" class="text-sm text-gray-500">255 characters left</div>
 </div>
 <script>
@@ -171,11 +175,12 @@
 
   <!-- BUTTONS -->
   <span class="mt-4">   
-    <button route="/hr/leave-requests/file-leave" type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Submit</button>
+    <button type="submit" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Submit</button>
     <button route="/hr/leave-requests" type="button" class="focus:outline-none text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Cancel</button>
   </span>
   </div>
   </div>
+</form>
 </main>
 <!-- End Main Bar -->
 <script  src="./../../src/route.js"></script>
@@ -193,16 +198,15 @@
   });
 
    // DEPARTMENT AND POSITION DROPDOWN
-   document.getElementById('Department').addEventListener('change', function() {
-  var positionSelect = document.getElementById('Position');
-  var department = this.value;
+   document.getElementById('department').addEventListener('change', function() {
+    var department = this.value;
+    var positionSelect = document.getElementById('position');
 
-  // Clear the position select
-  positionSelect.innerHTML = '<option value="">Select Position</option>';
+    // Clear the position select
+    positionSelect.innerHTML = '<option value="">Select Position</option>';
 
-  // Define the positions for each department
-  var positions = {
-
+    // Define the positions for each department
+    var positions = {
       'Product Order': [
         'Order Processor',
         'Order Entry Clerk',
@@ -254,7 +258,17 @@
         'Credit Analyst',
         'Payroll Specialist'
       ]
-  };
+    };
+
+    // If the selected department has positions, add them to the position select
+    if (positions[department]) {
+        positions[department].forEach(function(position) {
+            var option = document.createElement('option');
+            option.value = position;
+            option.text = position;
+            positionSelect.appendChild(option);
+        });
+    }
 });
 </script>
 </body>

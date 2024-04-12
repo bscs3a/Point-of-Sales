@@ -83,27 +83,27 @@ $stmt = null;
         require_once 'inc/leave-requests.table.php';
     } 
   ?>
+<!-- End Leave Requests -->
   
-  <!-- Accept modal -->
-  <div id="acceptModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-      <div class="bg-white p-5 rounded-lg text-center">
-          <h2 class="mb-4">Allow request of leave?</h2>
-          <button id="confirmAccept" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
-          <button id="cancelAccept" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
-      </div>
-  </div>
+<!-- Accept modal -->
+<div id="acceptModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
+    <form action="/master/approve/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
+        <h2 class="mb-4">Approve request of leave?</h2>
+        <input type="hidden" name="id" id="idToAccept"> <!-- This will hold the ID of the row to delete -->
+        <input type="submit" value="Yes" id="confirmAccept" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+        <input type="button" value="No" id="cancelAccept" class="px-4 py-2 bg-gray-300 text-black rounded">
+    </form>
+</div>
 
   <!-- Reject modal -->
   <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-      <div class="bg-white p-5 rounded-lg text-center">
-          <h2 class="mb-4">Deny request of leave?</h2>
-          <button id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">Yes</button>
-          <button id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">No</button>
-      </div>
-  </div>
-
-
-<!-- End Leave Requests -->
+    <form action="/master/deny/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
+        <h2 class="mb-4">Deny request of leave?</h2>
+        <input type="hidden" name="id" id="idToReject"> <!-- This will hold the ID of the row to delete -->
+        <input type="submit" value="Yes" id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+        <input type="button" value="No" id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">
+    </form>
+</div>
   
 </main>
 <!-- End Main Bar -->
@@ -112,31 +112,37 @@ $stmt = null;
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 <script>
   // REJECT MODAL
-  document.getElementById('rejectButton').addEventListener('click', function() {
-    document.getElementById('rejectModal').classList.remove('hidden');
+  document.querySelectorAll('.rejectButton').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      document.getElementById('idToReject').value = id;
+      document.getElementById('rejectModal').classList.remove('hidden');
+    });
   });
 
   document.getElementById('cancelReject').addEventListener('click', function() {
-      document.getElementById('rejectModal').classList.add('hidden');
+    document.getElementById('rejectModal').classList.add('hidden');
   });
 
   document.getElementById('confirmReject').addEventListener('click', function() {
-      // Handle the deletion here
-      console.log('Deleting...');
+    document.getElementById('rejectModal').submit();
   });
 
   // ACCEPT MODAL
-  document.getElementById('acceptButton').addEventListener('click', function() {
-    document.getElementById('acceptModal').classList.remove('hidden');
+  document.querySelectorAll('.acceptButton').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      document.getElementById('idToAccept').value = id;
+      document.getElementById('acceptModal').classList.remove('hidden');
+    });
   });
 
   document.getElementById('cancelAccept').addEventListener('click', function() {
-      document.getElementById('acceptModal').classList.add('hidden');
+    document.getElementById('acceptModal').classList.add('hidden');
   });
 
   document.getElementById('confirmAccept').addEventListener('click', function() {
-      // Handle the deletion here
-      console.log('Deleting...');
+    document.getElementById('acceptModal').submit();
   });
 </script>
 </body>

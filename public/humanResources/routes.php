@@ -922,37 +922,64 @@ Router::post('/hr/leave-requests', function () {
 });
 
 // file leave requests [WORK IN PROGRESS]
-Router::post('/hr/leave-requests/file-leave-WIP', function () {
+Router::post('/hr/leave-requests/file-leave', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
 
-    $employees_ID = $_SESSION['id'];
-
-    // BASIC EMPLOYEE INFORMATION
     $type = $_POST['type'];
     $details = $_POST['details'];
-    $date_submitted = $_POST['date_submitted'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
-    $status = $_POST['status'];
-    $employees_id = $_POST['employees_id'];
+    $employees_id = $_POST['employee'];
 
-    $query = "INSERT INTO leave_requests (type, details, date_submitted, start_date, end_date, status, employees_id);";
+    $query = "INSERT INTO leave_requests (type, details, date_submitted, start_date, end_date, employees_id) VALUES (:type, :details, NOW(), :start_date, :end_date, :employees_id)";
     $stmt = $conn->prepare($query);
 
     $stmt->execute([
         ':type' => $type,
         ':details' => $details,
-        ':date_submitted' => $date_submitted,
         ':start_date' => $start_date,
         ':end_date' => $end_date,
-        ':status' => $status,
         ':employees_id' => $employees_id,
     ]);
 
-    $leaveID = $conn->lastInsertId();
+    header("Location: $rootFolder/hr/leave-requests");
+});
+
+// approve leave requests (update status to 'Approved')
+Router::post('/approve/leave-requests', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    $id = $_SESSION['id'];
+    $status = $_POST['status'];
+
+    $query = "UPDATE leave_requests SET status = 'Approved' WHERE id = :id";
+    $stmt = $conn->prepare($query);
+     
+    $stmt->execute([':id' => $id]);
+
+    header("Location: $rootFolder/hr/leave-requests");
+});
+
+// deny leave requests (update status to 'Denied')
+Router::post('/deny/leave-requests', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    $id = $_SESSION['id'];
+    $status = $_POST['status'];
+
+    $query = "UPDATE leave_requests SET status = 'Denied' WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    
+    $stmt->execute([':id' => $id]);
 
     header("Location: $rootFolder/hr/leave-requests");
 });

@@ -13,7 +13,7 @@
       </thead>
       <?php foreach ($leaveRequests as $leaveRequest): ?>
       <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-        <tr class="hover:bg-gray-50">
+        <tr class="hover:bg-gray-50 row">
           <th class="flex gap-3 px-6 py-4 font-normal text-gray-900 items-center">
             <div class="relative h-10 w-10">
                 <!-- THIS IS FROM EMPLOYEES TABLE -->
@@ -54,9 +54,26 @@
           </td>
           <td class="px-6 py-4">
             <!-- STATUS -->
-            <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-            <?php echo $leaveRequest['status']; ?>
-            </span>
+            <?php
+              $status = $leaveRequest['status'];
+              $colorClass = '';
+
+              switch ($status) {
+                  case 'Pending':
+                      $colorClass = 'text-yellow-600';
+                      break;
+                  case 'Denied':
+                      $colorClass = 'text-red-600';
+                      break;
+                  case 'Approved':
+                      $colorClass = 'text-green-600';
+                      break;
+              }
+            ?>
+
+<span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold <?php echo $colorClass; ?>">
+    <?php echo $status; ?>
+</span>
           </td>
           <td class="px-6 py-4">
             <!-- ACTION -->
@@ -64,10 +81,10 @@
           </td>
           <td class="px-6 py-4">
             <div class="flex justify-end gap-4">
-              <a id="acceptButton" x-data="{ tooltip: 'Accept' }" href="#">   
+              <a class="acceptButton" data-id="<?php echo $leaveRequest['id']; ?>" x-data="{ tooltip: 'Accept' }" href="#">   
                 <i class="ri-check-line"></i>     
               </a>
-              <a id="rejectButton" x-data="{ tooltip: 'Reject' }" href="#">
+              <a class="rejectButton" data-id="<?php echo $leaveRequest['id']; ?>" x-data="{ tooltip: 'Reject' }" href="#">
                 <i class="ri-close-line"></i>     
               </a>
             </div>
