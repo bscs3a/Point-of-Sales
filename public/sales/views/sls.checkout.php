@@ -97,7 +97,7 @@
                         <div class="mb-4">
                             <ul id="order-summary" x-data="cartData()" class="text-gray-700">
                                 <h2 class="text-xl font-medium mb-6 text-gray-500">Order Summary</h2>
-                                <div class="text-6xl font-medium mb-10" x-text="'₱' + total.toFixed(2)"></div>
+                                <!-- <div class="text-6xl font-medium mb-10" x-text="'₱' + total.toFixed(2)"></div> -->
 
                                 <!-- Cart item rows -->
                                 <template x-for="(item, index) in cart" :key="index">
@@ -157,7 +157,7 @@
                             <div class="font-medium text-xl mb-4 text-gray-500 border-b pb-2">Shipping Information</div>
                             <div>
                                 <label for="customerName" class="block mb-2">Customer Name:</label>
-                                <input type="text" id="customerName" name="customerName" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter First and Last Name" required>
+                                <input type="text" id="customerName" name="customerName" class="w-full p-2 border border-gray-300 rounded mb-4" required>
                             </div>
                             <div>
                                 <label for="customerEmail" class="block mb-2">Customer Email:</label>
@@ -264,12 +264,23 @@
     <script>
         // Get cart from local storage
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        console.log('Cart:', cart);
 
         // Compute weight for each item in the cart
         cart.forEach(item => item.totalWeight = item.ProductWeight * item.quantity);
 
         // Compute total weight of all products in the cart
         const totalWeight = cart.reduce((total, item) => total + item.totalWeight, 0);
+
+        // Compute price for each item in the cart
+        cart.forEach(item => item.totalPrice = (item.priceWithTax * item.quantity));
+
+        // Compute total price of all products in the cart
+        const totalAmount = cart.reduce((total, item) => total + item.totalPrice, 0);
+
+        // Log the total amount to the console
+        console.log('Total Amount:', totalAmount);
+
 
         const salePreference = document.getElementById('SalePreference');
         if (totalWeight >= 300) { // Check if total weight is 300 or more
@@ -284,7 +295,8 @@
         salePreference.addEventListener('change', function() {
             const shippingFeeElement = document.getElementById('shippingFee');
             const shippingFeeInput = document.getElementById('shippingFee');
-            if (this.value === 'delivery' && totalWeight < 300) {
+
+            if (this.value === 'delivery' && totalWeight < 300 ) {
                 localStorage.setItem('shippingFee', '50');
                 console.log('Shipping Fee:', localStorage.getItem('shippingFee')); // Log the shipping fee
             } else {
@@ -403,24 +415,43 @@
 
             // Calculate the subtotal, tax, discount, and total amount
             const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-            const discount = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0);
+            
+            const discount = cart.reduce((total, item) => {
+                if (item.quantity >= 100) {
+                    return total + item.price * 0.2 * item.quantity; // 20% discount for quantity >= 100
+                } else if (item.quantity >= 50) {
+                    return total + item.price * 0.1 * item.quantity; // 10% discount for quantity >= 50
+                } else {
+                    return total;
+                }
+            }, 0);
+            
             const tax = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * item.TaxRate, 0);
 
-            const shippingFee = salePreference.value === 'delivery' ? parseFloat(localStorage.getItem('shippingFee') || '0') : 0;
-            const totalAmount = subtotal + tax - discount + shippingFee;
+            const totalAmount = subtotal + tax - discount;
+            let shippingFee = 0;
+
+            // Compute the shipping fee
+            if (salePreference.value === 'delivery' && totalAmount < 10000) {
+                shippingFee = 50;
+            }
+
+            const finalTotal = totalAmount + shippingFee;
 
             // Set the value of the hidden input fields
             document.getElementById('subtotal').value = subtotal.toFixed(2);
             document.getElementById('discount').value = discount.toFixed(2);
             document.getElementById('tax').value = tax.toFixed(2);
-            document.getElementById('totalAmount').value = totalAmount.toFixed(2);
+            document.getElementById('shippingFee').value = shippingFee.toFixed(2);
+            document.getElementById('totalAmount').value = finalTotal.toFixed(2);
             document.getElementById('cartData').value = JSON.stringify(cart);
 
             // Assign the cart to a global variable
             window.cart = cart;
 
-            // Create a shippingFee variable in localStorage and set its value to 0
-            localStorage.setItem('shippingFee', '0');
+            // Store the shipping fee and total amount in localStorage
+            localStorage.setItem('shippingFee', shippingFee.toFixed(2));
+            localStorage.setItem('totalAmount', finalTotal.toFixed(2));
         });
     </script>
 
