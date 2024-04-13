@@ -1050,7 +1050,7 @@ Router::post('/remove/schedule', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    $idToDelete = $_POST['id'];
+    $idToDelete = $_POST['event'];
 
     $query = "DELETE FROM calendar WHERE id = :id";
     $stmt = $conn->prepare($query);
