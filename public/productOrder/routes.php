@@ -246,6 +246,73 @@ Router::post('/insert/addsupplier/', function () {
     }
 });
 
+// Function for adding bulk items on a supplier
+Router::post('/po/addbulk/', function () {
+    // Establish database connection
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    try {
+        // Retrieve the 'Supplier_ID' from the $_POST superglobal
+        $supplierID = $_POST["supplierID"];
+
+        // Loop through each row of product data
+        for ($i = 1; $i <= 13; $i++) { // Assuming there are 13 rows of product data
+            $productName = $_POST["productName$i"];
+            $categoryName = $_POST["category$i"];
+            $price = $_POST["price$i"];
+            $description = $_POST["description$i"];
+
+            // Handle file upload for each row
+            $fileFieldName = "productImage$i";
+            $fileUploadPath = "uploads/"; // Adjust this path accordingly
+
+            if ($_FILES[$fileFieldName]['error'] == UPLOAD_ERR_OK) {
+                $fileName = basename($_FILES[$fileFieldName]['name']);
+                $uploadPath = $fileUploadPath . $fileName;
+
+                if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
+                    // File uploaded successfully, proceed with database insertion
+                    // Prepare SQL statement for inserting product data
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
+                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :categoryName, :productImage, s.Supplier_Name 
+                                FROM suppliers s 
+                                INNER JOIN categories c ON c.category_name = :categoryName 
+                                WHERE s.Supplier_ID = :supplierID";
+                    $productStmt = $conn->prepare($productSql);
+
+                    // Bind parameters for product SQL statement
+                    $productStmt->bindParam(':supplierID', $supplierID);
+                    $productStmt->bindParam(':categoryName', $categoryName);
+                    $productStmt->bindParam(':productName', $productName);
+                    $productStmt->bindParam(':description', $description);
+                    $productStmt->bindParam(':price', $price);
+                    $productStmt->bindParam(':productImage', $uploadPath);
+
+                    // Execute the product SQL statement
+                    $productStmt->execute();
+                } else {
+                    // Failed to move the uploaded file, handle the error
+                    echo "Error uploading file.";
+                }
+            } else {
+                // No file uploaded for this row, handle accordingly
+                echo "No file uploaded for row $i.";
+            }
+        }
+          // Redirect to the products page upon successful insertion
+          $rootFolder = dirname($_SERVER['PHP_SELF']);
+          header("Location: $rootFolder/po/addbulk/Supplier=$supplierID");
+          exit; // Terminate script execution after redirect
+    } catch (PDOException $e) {
+        // Handle PDO exceptions
+        echo "Error: " . $e->getMessage();
+    } finally {
+        // Close connection
+        $conn = null;
+    }
+});
+
 
 Router::post('/po/addItem', function () {
     $db = Database::getInstance();
