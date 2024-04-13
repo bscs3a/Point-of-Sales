@@ -3,11 +3,11 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Suppliers Add Product</title>
 
-  <link href="./../src/tailwind.css" rel="stylesheet" />
+  <link href="../../src/tailwind.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -28,7 +28,7 @@
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
           </button>
-          <label class="text-black font-medium">Product Order / Add Items (bulk)</label>
+          <label class="text-black font-medium">Product Order / Add Items</label>
         </div>
 
         <!-- dropdown -->
@@ -59,39 +59,279 @@
 
       <!-- New Form for add bulk product -->
       <div class="flex flex-col justify-center my-24 mx-10">
-        <div class="flex place-content-end mt-2 m-3">
-          <button class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
+        <!--<div class="flex place-content-end mt-2 m-3">
+           <button class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
             <i class="ri-add-circle-line"></i>
             <span>Add Row</span>
-          </button>
-        </div>
+          </button> 
+        </div> -->
 
         <div class="overflow-x-auto rounded-lg border border-gray-400">
           <table class="min-w-full text-center mx-auto bg-white">
             <thead class="bg-gray-200 border-b border-gray-400 text-sm">
               <tr>
-                <th class="px-4 py-2 font-semibold">Product ID</th>
                 <th class="px-4 py-2 font-semibold">Product Image</th>
                 <th class="px-4 py-2 font-semibold">Product Name</th>
                 <th class="px-4 py-2 font-semibold">Category</th>
                 <th class="px-4 py-2 font-semibold">Price</th>
-                <th class="px-4 py-2 font-semibold">Quantity</th>
                 <th class="px-4 py-2 font-semibold">Description</th>
               </tr>
             </thead>
 
-          </table>
-        </div>
+            <form method="post" action="/po/addbulk/" enctype="multipart/form-data">
+              <input type="hidden" name="supplierID" value="<?php echo $_GET['Supplier_ID']; ?>">
+
+              <!-- Table structure for product details -->
+              <tbody>
+                <!-- Row 1 -->
+                <tr>
+                  <td><input type="file" name="productImage1"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 2 -->
+                <tr>
+                  <td><input type="file" name="productImage2"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 3 -->
+                <tr>
+                  <td><input type="file" name="productImage3"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 4 -->
+                <tr>
+                  <td><input type="file" name="productImage4"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 5 -->
+                <tr>
+                  <td><input type="file" name="productImage5"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 6 -->
+                <tr>
+                  <td><input type="file" name="productImage6"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 7 -->
+                <tr>
+                  <td><input type="file" name="productImage7"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 8 -->
+                <tr>
+                  <td><input type="file" name="productImage8"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 9 -->
+                <tr>
+                  <td><input type="file" name="productImage9"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td>
+                    <select name="category9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                </tr>
+                <!-- Row 10 -->
+                <tr>
+                  <td><input type="file" name="productImage10"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName10"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td>
+                    <select name="category10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description10"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                </tr>
+                <!-- Row 11 -->
+                <tr>
+                  <td><input type="file" name="productImage11"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName11"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td>
+                    <select name="category11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description11"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                </tr>
+                <!-- Row 12 -->
+                <tr>
+                  <td><input type="file" name="productImage12"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName12"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td>
+                    <select name="category12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description12"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                </tr>
+                <!-- Row 13 -->
+                <tr>
+                  <td><input type="file" name="productImage13"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="text" name="productName13"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td>
+                    <select name="category13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Hand Tools">Hand Tools</option>
+                      <option value="Power Tools">Power Tools</option>
+                      <option value="Category 3">Category 3</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="price13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
+                  <td><input type="text" name="description13"
+                      class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                </tr>
+              </tbody>
+         </div>
 
         <div class="flex flex-row justify-end gap-3 my-3">
-            <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
-            <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save</button>
+          <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
+          <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save
+            </button>
         </div>
+        </form>
       </div>
     </div>
   </div>
+  <script src="./../../src/form.js"></script>
+  <script src="./../../src/route.js"></script>
+
 </body>
-<script src="./../../src/form.js"></script>
-<script src="./../../src/route.js"></script>
 
 </html>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,91 +63,85 @@
             <div class="flex items-center justify-between">
 
             </div>
-            <!-- Comment ko muna -->
-            <!-- <?php
+            <!-- table -->
 
-            function displaySupplierData($supplierID)
-            {
+            <?php
+            function displaySupplierDetails($supplierID) {
+              // Establish database connection
+              $db = Database::getInstance();
+              $conn = $db->connect();
+          
               try {
-                $db = Database::getInstance();
-                $conn = $db->connect();
-
-                // Query to retrieve supplier data based on Supplier_ID
-                $query = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
-                $statement = $conn->prepare($query);
-                $statement->bindParam(':supplierID', $supplierID);
-                $statement->execute();
-
-                // Check if there are any rows or results
-                if ($statement->rowCount() > 0) {
-                  echo '<ul class="mt-2 text-gray-900">';
-                  while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                    echo '<li class="flex py-2">';
-                    echo '<span class="font-bold w-56">Supplier ID:</span>';
-                    echo '<span class="font-medium text-gray-900">' . $row['Supplier_ID'] . '</span>';
-                    echo '</li>';
-                    echo '<li class="flex py-2">';
-                    echo '<span class="font-bold w-56">Supplier Name:</span>';
-                    echo '<span class="font-medium text-gray-900">' . $row['Supplier_Name'] . '</span>';
-                    echo '</li>';
-                    // Add other data fields here
+                  // Prepare SQL statement to retrieve supplier details
+                  $sql = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
+                  $stmt = $conn->prepare($sql);
+                  $stmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+                  $stmt->execute();
+                  
+                  // Fetch supplier details
+                  $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
+          
+                  if ($supplier) {
+                      // Display supplier details
+                      echo '<div class="flex justify-between mb-5">';
+                      echo '<a class="text-3xl font-bold">' . $supplier['Supplier_Name'] . '</a>';
+                      echo '<a class="text-xl font-bold">#' . $supplier['Supplier_ID'] . '</a>';
+                      echo '</div>';
+                      echo '<div class="grid grid-cols-2 gap-6">';
+                      echo '<div>';
+                      echo '<div class="mb-2">';
+                      echo '<a class="font-bold mr-3">Contact Name:</a><a>' . $supplier['Contact_Name'] . '</a>';
+                      echo '</div>';
+                      echo '<div class="mb-2">';
+                      echo '<a class="font-bold mr-3">Contact Number:</a><a>' . $supplier['Contact_Number'] . '</a>';
+                      echo '</div>';
+                      echo '<div class="mb-2">';
+                      echo '<a class="font-bold mr-3">Email:</a><a>' . $supplier['Email'] . '</a>';
+                      echo '</div>';
+                      echo '</div>';
+                      echo '<div>';
+                      echo '<div class="mb-2">';
+                      echo '<a class="font-bold mr-3">Status:</a><a>' . $supplier['Status'] . '</a>';
+                      echo '</div>';
+                      echo '<div class="mb-2">';
+                      echo '<a class="font-bold mr-3">Location:</a><a>' . $supplier['Address'] . '</a>';
+                      echo '</div>';
+                      echo '<div class="mb-2">';
+                      echo '<a class="font-bold mr-3">Estimated Delivery:</a><a>' . $supplier['Estimated_Delivery'] . '</a>';
+                      echo '</div>';
+                      echo '</div>';
+                      echo '</div>';
+                  } else {
+                      // Supplier not found
+                      echo "Supplier not found.";
                   }
-                  echo '</ul>';
-                } else {
-                  echo "Supplier not found.";
-                }
               } catch (PDOException $e) {
-                echo "Connection failed: " . $e->getMessage();
+                  // Handle PDO exceptions
+                  echo "Error: " . $e->getMessage();
+              } finally {
+                  // Close connection
+                  $conn = null;
               }
-              // Close the database connection
-              $conn = null;
-            }
-
-            // Usage:
-            if (isset($_GET['Supplier_ID'])) {
+          }
+          
+          // Check if Supplier_ID is set in the $_GET superglobal
+          if (isset($_GET['Supplier_ID'])) {
+              // Call the function to display supplier details
               $supplierID = $_GET['Supplier_ID'];
-              displaySupplierData($supplierID);
-            }
+              displaySupplierDetails($supplierID);
+          }
+          
+            ?>
 
-            ?> -->
-
-            <div class="flex justify-between mb-5">
-              <a class="text-3xl font-bold">Supplier Name</a>
-              <a class="text-xl font-bold">#2334</a>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-6">
-              <div>
-                <div class="mb-2">
-                    <a class="font-bold mr-3">Contact Name:</a><a>Edgar</a>
-                </div>
-                <div class="mb-2">
-                    <a class="font-bold mr-3">Contact Number:</a><a>09434342</a>
-                </div>
-                <div class="mb-2">
-                    <a class="font-bold mr-3">Email:</a><a>Ma@gmail.com</a>
-                </div>
-              </div>
-              <div>
-                <div class="mb-2">
-                    <a class="font-bold mr-3">Status:</a><a>Active</a>
-                </div>
-                <div class="mb-2">
-                    <a class="font-bold mr-3">Location:</a><a>bacolor</a>
-                </div>
-                <div class="mb-2">
-                    <a class="font-bold mr-3">Estimated Delivery:</a><a>1 Day</a>
-                </div>
-              </div>   
-            </div>
-
+            <!-- reviews and feedback area -->
             <div class="py-10">
               <div class="w-full h-auto mx-auto bg-white border border-gray-400 rounded-lg shadow-md overflow-hidden">
-                <div class="font-bold py-4 pl-8 text-xl border-b border-gray-400">Reviews and Feedbacks</div>
+                <div class="font-bold py-4 pl-8 text-xl border-b border-gray-400">Reviews and Feedbacks(not yet complete)</div>
 
                 <!-- Item Container -->
                 <div class="flex flex-col gap-3 p-4">
                   <div class="flex flex-col gap-1 p-4 border-b border-gray-300">
+
                     <!-- Profile and Rating -->
                     <div class="flex justify justify-between">
                       <div class="font-semibold text-lg">
@@ -158,6 +151,8 @@
 
                     <div class="font-medium">
                       Gorgeous design! Even more responsive than the previous version. A pleasure to use!
+                      this should have a query that will show the review feedback based on the selected ID on the $get method 
+                      in the url so that the data will show after succesfully reviewing a order otherwise it should be empty
                     </div>
 
                     <div class="font-normal text-sm">Feb 13, 2021</div>

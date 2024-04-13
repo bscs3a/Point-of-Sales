@@ -34,16 +34,23 @@ $po = [
         $_GET['id'] = $id;
         include $basePath . "viewdetails.php";
     },
-    // view supplier route
+    // view supplier information route
     '/po/viewsupplier/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
         // $_SESSION['id'] = $id;
         $_GET['Supplier_ID'] = $id;
         include $basePath . "viewsupplier.php";
     },
-
-    '/po/test/{month}' => function ($month) use ($basePath) {
-        $_GET['month'] = $month; // Update the $_GET key to 'month' to match the parameter used in test.php
-        include $basePath . "test.php";
+    // view supplier products route
+    '/po/viewsupplierproduct/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['Supplier_ID'] = $id;
+        include $basePath . "viewsupplierproduct.php";
+    },
+     // for adding bulk orders based on the supplier id
+     '/po/addbulk/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['Supplier_ID'] = $id;
+        include $basePath . "addbulk.php";
     },
 
     '/po/test1/pagenumber={page}' => function ($page) use ($basePath) {
@@ -113,13 +120,7 @@ Router::post('/logout/user', function () {
             $stmt->execute();
             $last_time_in = $stmt->fetchColumn();
 
-            // // Update the time_out column with the current timestamp
-            // $current_time_out = date("Y-m-d H:i:s");
-            // $stmt = $conn->prepare("UPDATE audit_log SET time_out = :current_time_out WHERE account_ID = (SELECT account_ID FROM accounts WHERE employee = :employee) AND time_in = :last_time_in");
-            // $stmt->bindParam(':current_time_out', $current_time_out);
-            // $stmt->bindParam(':employee', $_SESSION['employee']);
-            // $stmt->bindParam(':last_time_in', $last_time_in);
-            // $stmt->execute();
+
         }
 
         // Insert logout action into audit_log table
@@ -150,7 +151,219 @@ Router::post('/logout/user', function () {
     }
 });
 
+Router::post('/insert/addsupplier/', function () {
+    // Establish database connection
+    $db = Database::getInstance();
+    $conn = $db->connect();
 
+    try {
+        // Retrieve form data directly from the $_POST superglobal
+        $suppliername = $_POST["suppliername"];
+        $contactname = $_POST["contactname"];
+        $contactnum = $_POST["contactnum"];
+        $status = $_POST["status"];
+        $email = $_POST["email"];
+        $address = $_POST["address"];
+
+        // Prepare SQL statement for inserting supplier data
+        $supplierSql = "INSERT INTO suppliers (Supplier_Name, Contact_Name, Contact_Number, Status, Email, Address) 
+                        VALUES (:suppliername, :contactname, :contactnum, :status, :email, :address)";
+        $supplierStmt = $conn->prepare($supplierSql);
+        $supplierStmt->bindParam(':suppliername', $suppliername);
+        $supplierStmt->bindParam(':contactname', $contactname);
+        $supplierStmt->bindParam(':contactnum', $contactnum);
+        $supplierStmt->bindParam(':status', $status);
+        $supplierStmt->bindParam(':email', $email);
+        $supplierStmt->bindParam(':address', $address);
+
+        // Execute the supplier SQL statement
+        $supplierStmt->execute();
+
+        // Retrieve the last inserted supplier ID
+        $supplierId = $conn->lastInsertId();
+
+        // Loop through each row of product data
+        for ($i = 1; $i <= 5; $i++) { // Assuming there are 5 rows of product data
+            $productName = $_POST["productName$i"];
+            $categoryName = $_POST["category$i"];
+            $price = $_POST["price$i"];
+            $description = $_POST["description$i"];
+
+            // Handle file upload for each row
+            $fileFieldName = "productImage$i";
+            $fileUploadPath = "uploads/"; // Adjust this path accordingly
+
+            if ($_FILES[$fileFieldName]['error'] == UPLOAD_ERR_OK) {
+                $fileName = basename($_FILES[$fileFieldName]['name']);
+                $uploadPath = $fileUploadPath . $fileName;
+
+                if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
+                    // File uploaded successfully, proceed with database insertion
+                    // Prepare SQL statement for inserting product data
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
+                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :categoryName, :productImage, :suppliername)";
+                    $productStmt = $conn->prepare($productSql);
+
+                    // Retrieve the category_id based on the category name
+                    $stmt = $conn->prepare("SELECT category_id FROM categories WHERE category_name = ?");
+                    $stmt->bindParam(1, $categoryName, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $category = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    if (!$category) {
+                        echo "Category not found.";
+                        return;
+                    }
+
+                    $categoryId = $category['category_id'];
+
+                    // Bind parameters for product SQL statement
+                    $productStmt->bindParam(':supplierId', $supplierId);
+                    $productStmt->bindParam(':categoryId', $categoryId);
+                    $productStmt->bindParam(':productName', $productName);
+                    $productStmt->bindParam(':description', $description);
+                    $productStmt->bindParam(':price', $price);
+                    $productStmt->bindParam(':categoryName', $categoryName);
+                    $productStmt->bindParam(':productImage', $uploadPath);
+                    $productStmt->bindParam(':suppliername', $suppliername);
+
+                    // Execute the product SQL statement
+                    $productStmt->execute();
+                } else {
+                    // Failed to move the uploaded file, handle the error
+                    echo "Error uploading file.";
+                }
+            } else {
+                // No file uploaded for this row, handle accordingly
+                echo "No file uploaded for row $i.";
+            }
+        }
+          // Redirect to the supplier addition page upon successful insertion
+          $rootFolder = dirname($_SERVER['PHP_SELF']);
+          header("Location: $rootFolder/po/suppliers");
+          exit; // Terminate script execution after redirect
+    } catch (PDOException $e) {
+        // Handle PDO exceptions
+        echo "Error: " . $e->getMessage();
+    } finally {
+        // Close connection
+        $conn = null;
+    }
+});
+
+// Function for adding bulk items on a supplier
+Router::post('/po/addbulk/', function () {
+    // Establish database connection
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    try {
+        // Retrieve the 'Supplier_ID' from the $_POST superglobal
+        $supplierID = $_POST["supplierID"];
+
+        // Loop through each row of product data
+        for ($i = 1; $i <= 13; $i++) { // Assuming there are 13 rows of product data
+            $productName = $_POST["productName$i"];
+            $categoryName = $_POST["category$i"];
+            $price = $_POST["price$i"];
+            $description = $_POST["description$i"];
+
+            // Handle file upload for each row
+            $fileFieldName = "productImage$i";
+            $fileUploadPath = "uploads/"; // Adjust this path accordingly
+
+            if ($_FILES[$fileFieldName]['error'] == UPLOAD_ERR_OK) {
+                $fileName = basename($_FILES[$fileFieldName]['name']);
+                $uploadPath = $fileUploadPath . $fileName;
+
+                if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
+                    // File uploaded successfully, proceed with database insertion
+                    // Prepare SQL statement for inserting product data
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
+                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :categoryName, :productImage, s.Supplier_Name 
+                                FROM suppliers s 
+                                INNER JOIN categories c ON c.category_name = :categoryName 
+                                WHERE s.Supplier_ID = :supplierID";
+                    $productStmt = $conn->prepare($productSql);
+
+                    // Bind parameters for product SQL statement
+                    $productStmt->bindParam(':supplierID', $supplierID);
+                    $productStmt->bindParam(':categoryName', $categoryName);
+                    $productStmt->bindParam(':productName', $productName);
+                    $productStmt->bindParam(':description', $description);
+                    $productStmt->bindParam(':price', $price);
+                    $productStmt->bindParam(':productImage', $uploadPath);
+
+                    // Execute the product SQL statement
+                    $productStmt->execute();
+                } else {
+                    // Failed to move the uploaded file, handle the error
+                    echo "Error uploading file.";
+                }
+            } else {
+                // No file uploaded for this row, handle accordingly
+                echo "No file uploaded for row $i.";
+            }
+        }
+          // Redirect to the products page upon successful insertion
+          $rootFolder = dirname($_SERVER['PHP_SELF']);
+          header("Location: $rootFolder/po/addbulk/Supplier=$supplierID");
+          exit; // Terminate script execution after redirect
+    } catch (PDOException $e) {
+        // Handle PDO exceptions
+        echo "Error: " . $e->getMessage();
+    } finally {
+        // Close connection
+        $conn = null;
+    }
+});
+
+//function for ordering products while viewing the suppliers products
+// Place order function
+Router::post('/placeorder/supplier/', function () {
+    // Establish database connection
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    try {
+        // Check if products are selected for ordering
+        if (!isset($_POST['products']) || empty($_POST['products'])) {
+            echo "No products selected for ordering.";
+            return;
+        }
+
+        // Retrieve selected product IDs
+        $selectedProducts = $_POST['products'];
+
+        // Start a transaction
+        $conn->beginTransaction();
+
+        // Prepare SQL statement for inserting orders into order_details table
+        $orderStmt = $conn->prepare("INSERT INTO requests (Product_ID, Product_Quantity, Order_Date) VALUES (:productID, 1, NOW())");
+
+        // Loop through each selected product
+        foreach ($selectedProducts as $productID) {
+            // Bind parameters
+            $orderStmt->bindParam(':productID', $productID);
+
+            // Execute the statement
+            $orderStmt->execute();
+        }
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/po/orderDetail");
+        // Commit the transaction
+        $conn->commit();
+
+        echo "Order placed successfully.";
+    } catch (PDOException $e) {
+        // Rollback the transaction on error
+        $conn->rollBack();
+        echo "Error placing order: " . $e->getMessage();
+    } finally {
+        // Close connection
+        $conn = null;
+    }
+});
 
 Router::post('/po/addItem', function () {
     $db = Database::getInstance();
