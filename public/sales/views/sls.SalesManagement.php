@@ -13,6 +13,7 @@
 
     <?php
     require_once './src/dbconn.php';
+    require_once 'function/fetchSalesData.php';
 
     // Get PDO instance
     $database = Database::getInstance();
@@ -54,10 +55,9 @@
     ?>
 
     <style>
-    ::-webkit-scrollbar {
-    display: none;
-}
-
+        ::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 
 </head>
@@ -96,7 +96,7 @@
                     <div>
                         <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -128,96 +128,331 @@
         </div>
 
         <!-- End: Header -->
-       
+
         <div class="flex flex-col items-center min-h-screen mb-10 mt-14">
             <!-- Title -->
-            
+
 
             <!-- Sales Chart Card -->
             <div class="flex flex-row w-full items-center px-20 justify-center gap-8">
-            <div class="w-full bg-white rounded-md border border-gray-200 p-6 shadow-md">
-                <!-- Card header -->
-                <div class="flex justify-between items-center mb-6">
-                    <!-- Card title -->
-                    <h2 class="text-lg font-semibold text-gray-800">
-                        <i class="ri-funds-box-fill ri-fw" style="color: #262261;"></i> Sales Overview
-                    </h2>
-                    <!-- Year Select -->
-                    <div>
-                        <select id="yearSelect" class="border rounded-md px-2 py-1">
-                            <?php foreach ($years as $year) : ?>
-                                <option value="<?php echo $year['Year']; ?>"><?php echo $year['Year']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                <div class="w-full bg-white rounded-md border border-gray-200 p-6 shadow-md">
+                    <!-- Card header -->
+                    <div class="flex justify-between items-center mb-6">
+                        <!-- Card title -->
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            <i class="ri-funds-box-fill ri-fw" style="color: #262261;"></i> Sales Overview
+                        </h2>
+                        <!-- Year Select -->
+                        <div>
+                            <select id="yearSelect" class="border rounded-md px-2 py-1">
+                                <?php foreach ($years as $year) : ?>
+                                    <option value="<?php echo $year['Year']; ?>"><?php echo $year['Year']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Sales Chart -->
+                    <div class="h-60">
+                        <canvas id="myChart" class="w-full h-full"></canvas>
                     </div>
                 </div>
 
-                <!-- Sales Chart -->
-                <div class="h-60">
-                    <canvas id="myChart" class="w-full h-full"></canvas>
-                </div>
+                <!-- Target Sales Form -->
+                <section id="target-sales-form" class="w-1/3 h-full">
+                    <div class="bg-white shadow-md border rounded px-8 py-10">
+                        <h2 class="mb-4 text-lg font-bold text-gray-700">Set Target Sales for This Month</h2>
+                        <form action="/AddTarget" method="POST">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="month-year">Month and Year:</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="month" id="month-year" name="month_year" value="<?php echo date('Y-m'); ?>" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="target-sales">Target Sales:</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="target-sales" name="target_sales" required>
+                            </div>
+                            <div class="flex items-center justify-center pt-4">
+                                <button class="bg-green-800 w-full hover:bg-green-900 hover:font-bold text-white font-semibold transition-all py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Set Target</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
             </div>
 
-             <!-- Target Sales Form -->
-             <section id="target-sales-form" class="w-1/3 h-full">
-                <div class="bg-white shadow-md border rounded px-8 py-10">
-                    <h2 class="mb-4 text-lg font-bold text-gray-700">Set Target Sales for This Month</h2>
-                    <form action="/AddTarget" method="POST">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="month-year">Month and Year:</label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="month" id="month-year" name="month_year" value="<?php echo date('Y-m'); ?>" required>
+            <!-- Start: Sales Summary -->
+            <section id="sales-summary" class="w-full px-20 py-10 justify-center">
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 border">
+                    <h2 class="mb-4 text-lg font-bold text-gray-700">Sales Summary</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="text-md font-semibold mb-2">Total Sales</h3>
+                            <p class="text-lg text-gray-800">₱<?php echo number_format(array_sum($totalSalesData), 2); ?></p>
                         </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="target-sales">Target Sales:</label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="target-sales" name="target_sales" required>
+                        <div>
+                            <h3 class="text-md font-semibold mb-2">Average Sales per Month</h3>
+                            <p class="text-lg text-gray-800">₱<?php echo number_format(array_sum($totalSalesData) / count($totalSalesData), 2); ?></p>
                         </div>
-                        <div class="flex items-center justify-center pt-4">
-                            <button class="bg-green-800 w-full hover:bg-green-900 hover:font-bold text-white font-semibold transition-all py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Set Target</button>
-                        </div>
-                    </form>
+                        <!-- You can add more metrics here -->
+                    </div>
                 </div>
             </section>
-            </div>
+            <!-- End: Sales Summary -->
+
+            <!-- Start: Daily Sales Table -->
+            <section id="daily-sales" class="w-full px-20 py-10 justify-center">
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 border">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-gray-700">Daily Sales</h2>
+                        <!-- Styled date picker button -->
+                        <div class="relative">
+                            <label for="searchInput" class="text-gray-700">Search by Date:</label>
+                            <input type="date" id="searchInput" onchange="searchTable()" class="border pl-8 pr-4 py-2 rounded-md border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <!-- End of styled date picker button -->
+                    </div>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table class="w-full" id="salesTable">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 w-1/2">Date</th>
+                                    <th class="px-4 py-2 w-1/2">Total Sales</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sqlDailySales = "SELECT DATE(SaleDate) AS Date, SUM(TotalAmount) AS TotalSales FROM Sales GROUP BY DATE(SaleDate)";
+                                $stmtDailySales = $pdo->query($sqlDailySales);
+                                while ($row = $stmtDailySales->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<tr>";
+                                    echo "<td class='border px-4 py-2 w-1/2' data-date='" . $row['Date'] . "'>" . date("F j, Y", strtotime($row['Date'])) . "</td>";
+                                    echo "<td class='border px-4 py-2 w-1/2'>₱" . number_format($row['TotalSales'], 2) . "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- End: Daily Sales Table -->
+
+            <script>
+                function searchTable() {
+                    var input, filter, table, tr, td, i, txtValue;
+                    input = document.getElementById("searchInput");
+                    filter = input.value;
+                    table = document.getElementById("salesTable");
+                    tr = table.getElementsByTagName("tr");
+
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            txtValue = td.getAttribute('data-date');
+                            if (txtValue.indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            </script>
+
+
+            <!-- Start: Monthly Sales Table -->
+            <section id="monthly-sales" class="w-full px-20 py-10 justify-center">
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 border">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-gray-700">Monthly Sales</h2>
+                        <div>
+                            <label for="searchInputMonthly" class="mr-2">Search by Month:</label>
+                            <input type="month" id="searchInputMonthly" onchange="searchTableMonthly()" class="border pl-8 pr-4 py-2 rounded-md border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                    </div>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table class="w-full" id="salesTableMonthly">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 w-1/2">Month</th>
+                                    <th class="px-4 py-2 w-1/2">Total Sales</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sqlMonthlySales = "SELECT DATE_FORMAT(SaleDate, '%Y-%m') AS Month, SUM(TotalAmount) AS TotalSales FROM Sales GROUP BY DATE_FORMAT(SaleDate, '%Y-%m')";
+                                $stmtMonthlySales = $pdo->query($sqlMonthlySales);
+                                while ($row = $stmtMonthlySales->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<tr>";
+                                    echo "<td class='border px-4 py-2 w-1/2' data-month='" . $row['Month'] . "'>" . date("F Y", strtotime($row['Month'])) . "</td>";
+                                    echo "<td class='border px-4 py-2 w-1/2'>₱" . number_format($row['TotalSales'], 2) . "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- End: Monthly Sales Table -->
+
+            <script>
+                function searchTableMonthly() {
+                    var input, filter, table, tr, td, i, txtValue;
+                    input = document.getElementById("searchInputMonthly");
+                    filter = input.value;
+                    table = document.getElementById("salesTableMonthly");
+                    tr = table.getElementsByTagName("tr");
+
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            txtValue = td.getAttribute('data-month');
+                            if (txtValue.indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            </script>
+
+            <!-- Start: Yearly Sales Table -->
+            <section id="yearly-sales" class="w-full px-20 py-10 justify-center">
+                <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 border">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-gray-700">Yearly Sales</h2>
+                        <div>
+                            <label for="searchInputYearly" class="text-gray-700 mr-2">Search by Year:</label>
+                            <input type="year" id="searchInputYearly" onchange="searchTableYearly()" class="border pl-2 pr-2 py-2 rounded-md border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                    </div>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table class="w-full" id="salesTableYearly">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 w-1/2">Year</th>
+                                    <th class="px-4 py-2 w-1/2">Total Sales</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sqlYearlySales = "SELECT YEAR(SaleDate) AS Year, SUM(TotalAmount) AS TotalSales FROM Sales GROUP BY YEAR(SaleDate)";
+                                $stmtYearlySales = $pdo->query($sqlYearlySales);
+                                while ($row = $stmtYearlySales->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<tr>";
+                                    echo "<td class='border px-4 py-2 w-1/2' data-year='" . $row['Year'] . "'>" . $row['Year'] . "</td>";
+                                    echo "<td class='border px-4 py-2 w-1/2'>₱" . number_format($row['TotalSales'], 2) . "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- End: Yearly Sales Table -->
+
+            <script>
+                function searchTableYearly() {
+                    var input, filter, table, tr, td, i, txtValue;
+                    input = document.getElementById("searchInputYearly");
+                    filter = input.value;
+                    table = document.getElementById("salesTableYearly");
+                    tr = table.getElementsByTagName("tr");
+
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            txtValue = td.getAttribute('data-year');
+                            if (txtValue.indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            </script>
+
+
 
             <!-- Previous Target Sales Table -->
-            <section id="previous-target-sales" class="w-full p-20 justify-center">
+            <section id="previous-target-sales" class="w-full px-20 py-10 justify-center">
                 <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 border">
-
-                
                     <div class="flex justify-between border-b py-2 mb-4">
-                    <h2 class="mb-4 text-lg font-bold text-gray-700">Previous Target Sales</h2>
-                    <div class="relative mb-3">
-                        <input type="text" id="searchInput" placeholder="Search by Year" title="Search by product name..." class="h-10 px-3 py-2 pl-5 pr-10 border rounded-r-lg rounded-l-none">
-                        <svg id="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-6a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                        <svg id="clear-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6 hidden">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+                        <h2 class="mb-4 text-lg font-bold text-gray-700">Previous Target Sales</h2>
+                        <!-- <div class="relative mb-3">
+                            <input type="month" id="searchInputPrevTarget" class="h-10 px-2 py-2 pl-5 pr-5 border rounded-lg" onkeyup="searchPrevTargetSales()">
+                        </div> -->
                     </div>
-
-                    
-                    </div>
-                    <table class="w-full">
-                        <thead>
-                            <tr>
-                                <th class="px-4 py-2">Month and Year</th>
-                                <th class="px-4 py-2">Target Sales</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($targetSales as $sale) : ?>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table class="w-full" id="prevTargetSalesTable">
+                            <thead>
                                 <tr>
-                                    <td class="border px-4 py-2"><?php echo date("F Y", strtotime($sale['MonthYear'])); ?></td>
-                                    <td class="border px-4 py-2"><?php echo $sale['TargetAmount']; ?></td>
+                                    <th class="px-4 py-2">Month and Year</th>
+                                    <th class="px-4 py-2">Target Sales</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sqlYearlySales = "SELECT DATE_FORMAT(SaleDate, '%Y-%m') AS MonthYear, SUM(TotalAmount) AS TotalSales FROM Sales GROUP BY DATE_FORMAT(SaleDate, '%Y-%m')";
+                                $stmtYearlySales = $pdo->query($sqlYearlySales);
+                                while ($row = $stmtYearlySales->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<tr>";
+                                    echo "<td class='border px-4 py-2 w-1/2' data-month-year='" . $row['MonthYear'] . "'>" . date("F Y", strtotime($row['MonthYear'])) . "</td>";
+                                    echo "<td class='border px-4 py-2 w-1/2'>₱" . number_format($row['TotalSales'], 2) . "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
-           
+            <!-- <script>
+                function searchPrevTargetSales() {
+                    var input, filter, table, tr, td, i, txtValue;
+                    input = document.getElementById("searchInputPrevTarget");
+                    filter = input.value;
+                    // Convert the filter to the format "yyyy-mm"
+                    if (filter) {
+                        var parts = filter.split("-");
+                        var year = parts[0];
+                        var month = parts[1];
+                        filter = year + "-" + ("0" + month).slice(-2);
+                    }
+                    table = document.getElementById("prevTargetSalesTable");
+                    tr = table.getElementsByTagName("tr");
+
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            txtValue = td.getAttribute('data-month-year').substring(0, 7);
+                            if (txtValue === filter) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            </script> -->
+
+
+            <script>
+                document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+                    document.getElementById('sidebar-menu').classList.toggle('hidden');
+                    document.getElementById('sidebar-menu').classList.toggle('transform');
+                    document.getElementById('sidebar-menu').classList.toggle('-translate-x-full');
+                    document.getElementById('mainContent').classList.toggle('md:w-full');
+                    document.getElementById('mainContent').classList.toggle('md:ml-64');
+                });
+            </script>
+
+
+
         </div>
 
 
