@@ -114,42 +114,38 @@
                                 <!-- Cart item Total -->
                                 <div class="ml-16">
                                     <li class="mt-4 pb-4 pt-6 font-semibold border-t border-b mb-4 flex justify-between">
-                                        <span>Subtotal:</span>
-                                        <span id="subtotal"></span>
+                                        <span x-text="'Subtotal:'"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + item.price * item.quantity, 0)).toFixed(2)"></span>
                                     </li>
                                     <li class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between">
-                                        <span>Discount:</span>
-                                        <span id="discount"></span>
+                                        <span x-text="'Discount:'"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0)).toFixed(2)"></span>
                                     </li>
                                     <li id="shipping-fee-toggle" class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between" x-show="salePreference === 'delivery'">
-                                        <span>Shipping Fee:</span>
-                                        <span id="shippingFee"></span>
+                                        <span x-text="'Shipping Fee:'"></span>
+                                        <span x-text="'₱' + (salePreference.value === 'delivery' ? parseFloat(localStorage.getItem('shippingFee') || '0') : 0).toFixed(2)"></span>
                                     </li>
                                     <li class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between">
-                                        <span>Tax:</span>
-                                        <span id="tax"></span>
+                                        <span x-text="'Tax:'"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * item.TaxRate, 0)).toFixed(2)"></span>
                                     </li>
                                     <li class="py-4 font-semibold text-green-800 flex justify-between">
-                                        <span>Total:</span>
-                                        <span id="totalAmount"></span>
+                                        <span x-text="'Total:'"></span>
+                                        <span x-text="'₱' + ((function() {
+                                                        const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+                                                        console.log('Subtotal:', subtotal);
+                                                        const discount = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0);
+                                                        console.log('Discount:', discount);
+                                                        const tax = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * item.TaxRate, 0);
+                                                        console.log('Tax:', tax);
+                                                        const shippingFee = salePreference.value === 'delivery' ? parseFloat(localStorage.getItem('shippingFee') || '0') : 0;
+                                                        console.log('Shipping Fee:', shippingFee);
+                                                        const total = subtotal + tax - discount + shippingFee;
+                                                        console.log('Total:', total);
+                                                        return total;
+                                                    })()).toFixed(2)"></span>
                                     </li>
                                 </div>
-
-                                <script>
-                                    window.onload = function() {
-                                        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-                                        const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-                                        const discount = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0);
-                                        const tax = cart.reduce((total, item) => total + item.price * item.quantity * item.TaxRate, 0);
-                                        const totalAmount = subtotal + tax - discount + parseFloat(localStorage.getItem('shippingFee') || '0');
-
-                                        document.getElementById('subtotal').innerText = '₱' + subtotal.toFixed(2);
-                                        document.getElementById('discount').innerText = '₱' + discount.toFixed(2);
-                                        document.getElementById('tax').innerText = '₱' + tax.toFixed(2);
-                                        document.getElementById('totalAmount').innerText = '₱' + totalAmount.toFixed(2);
-                                    }
-                                </script>
 
                         </div>
                     </div>
@@ -285,7 +281,7 @@
 
         // Add shipping fee if customer chooses 'delivery' and total weight is less than 300
         salePreference.addEventListener('change', function() {
-            const shippingFeeElement = document.getElementById('ShippingFee');
+            const shippingFeeElement = document.getElementById('shippingFee');
             const shippingFeeInput = document.getElementById('shippingFee');
             if (this.value === 'delivery' && totalWeight < 300) {
                 localStorage.setItem('shippingFee', '50');
@@ -408,7 +404,9 @@
             const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
             const discount = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0);
             const tax = cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * item.TaxRate, 0);
-            const totalAmount = subtotal + tax - discount;
+
+            const shippingFee = salePreference.value === 'delivery' ? parseFloat(localStorage.getItem('shippingFee') || '0') : 0;
+            const totalAmount = subtotal + tax - discount + shippingFee;
 
             // Set the value of the hidden input fields
             document.getElementById('subtotal').value = subtotal.toFixed(2);
@@ -423,7 +421,9 @@
             // Create a shippingFee variable in localStorage and set its value to 0
             localStorage.setItem('shippingFee', '0');
         });
+    </script>
 
+    <script>
         // Add an event listener for the click event
         document.querySelector('.sidebar-toggle').addEventListener('click', function() {
             // Toggle the hidden, transform, and -translate-x-full classes
@@ -435,10 +435,6 @@
             document.getElementById('mainContent').classList.toggle('md:w-full');
             document.getElementById('mainContent').classList.toggle('md:ml-64');
         });
-    </script>
-
-    <script>
-        
     </script>
 
     <script src="./../../src/form.js"></script>

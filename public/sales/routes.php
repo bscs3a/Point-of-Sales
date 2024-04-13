@@ -95,8 +95,8 @@ class Sale
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        // Add the shippingFee to the totalAmount
-        $totalAmount += $shippingFee;
+        // Remove the line that adds the shippingFee to the totalAmount
+        // $totalAmount += $shippingFee;
 
         $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee, Discount) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee, :discount)");
         $stmt->bindParam(':saleDate', $saleDate);
