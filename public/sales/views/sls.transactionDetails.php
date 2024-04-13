@@ -368,7 +368,7 @@
                         <span class="p-2">&#8369;<?php echo number_format(array_sum(array_column($items, 'Subtotal')), 2); ?></span>
                         <span class="p-2">&#8369;<?php echo number_format(array_sum(array_column($items, 'Tax')), 2); ?></span>
                         <span class="p-2">&#8369;<?php echo number_format($sale['ShippingFee'], 2); ?></span>
-                        <span class="p-2">N/A</span>
+                        <span class="p-2">&#8369;<?php echo number_format($sale['Discount'], 2); ?></span>
                         <span class="text-xl text-green-800 bg-gray-200 rounded-full p-1 px-8 text-center font-bold">₱<?php echo number_format($sale['TotalAmount'], 2); ?></span>
                     </div>
                 </div>
