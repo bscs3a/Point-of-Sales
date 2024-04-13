@@ -107,7 +107,8 @@
                                                 <img class="object-contain" :src="'../../' + item.image" :alt="item.name">
                                             </div>
                                             <span class="ml-2" x-text="item.quantity + ' x ' + item.name"></span>
-                                            <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
+                                            <span x-text="'₱' + ((item.quantity >= 50 ? item.priceWithTax * 0.9 : item.priceWithTax) * item.quantity).toFixed(2)"></span>
+                                        </div>
                                     </li>
                                 </template>
 
