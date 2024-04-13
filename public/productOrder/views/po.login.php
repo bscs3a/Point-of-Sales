@@ -8,9 +8,9 @@
 </head>
 <body>
   <!-- temp login -->
-  <div id="temp-login" class="flex flex-row h-screen w-screen">
+  <div id="temp-login" class="flex justify-center items-center h-screens">
     <!-- left panel -->
-    <div class="flex flex-col h-screen w-1/2 bg-[#262261] justify-center items-center">
+    <div class="flex flex-col h-screen w-full bg-[#262261] justify-center items-center">
       <div class="flex flex-col text-white items-center">
         <p class="text-7xl font-sans font-bold">BSCS 3A</p>
         <p class="text-sm mt-3">A Web Application</p>
@@ -19,9 +19,9 @@
     </div>
 
     <!-- right panel -->
-    <div class="flex flex-col h-screen w-1/2 justify-center items-center">
-      <p class="text-6xl font-sans font-bold">Login</p>
-      <p class="mt-3 text-sm text-gray-400">Welcome Back! Please enter your details</p>
+    <div class="lg:p-36 md:p-52 sm:20 p-20 w-full lg:w-1/2 mx-32">
+      <p class="text-6xl font-sans font-bold text-center">Login</p>
+      <p class="mt-4 pb-5 text-sm text-gray-400 text-center">Welcome Back! Please enter your details</p>
     
       <!-- user info form -->
       <form action="/login/user" method="POST">
@@ -40,7 +40,7 @@
 
  
   <script src="./../src/route.js"></script>
-<script src="./../src/form.js"></script>
+  <script src="./../src/form.js"></script>
 </body>
 
 </html>

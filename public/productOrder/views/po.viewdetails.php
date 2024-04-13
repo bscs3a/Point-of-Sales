@@ -21,7 +21,7 @@
     <!-- Main Content -->
     <div class="flex flex-col flex-1 overflow-y-auto">
       <!-- header -->
-      <div class="flex items-center justify-between h-20 bg-white shadow-md px-4 py-2">
+      <div class="flex items-center justify-between h-16 bg-gray-200 shadow-md px-4 py-1">
         <div class="flex items-center gap-4">
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
@@ -32,7 +32,7 @@
         <!-- dropdown -->
         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+            class="relative z-10 border border-gray-200 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
               <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
               <i class="ri-arrow-down-s-line"></i>
@@ -42,7 +42,7 @@
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
           <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+            class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
             <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
           </div>
         </div>
@@ -56,9 +56,9 @@
       </script>
 
       <!-- New Form for add product -->
-      <div class="container mx-auto py-10 px-5">
-        <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
-          
+      <div class="container mx-auto py-8 px-5">
+        <div class="max-w-5xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+
           <?php
           // Include your database connection file
           include 'dbconn.php';
@@ -113,19 +113,74 @@
                       </span>
                     </li>
                   </ul>
+       
+                <div class="flex justify-between pb-3">
+                  <div class="font-bold text-3xl">
+                    <?= $data['Supplier_Name'] ?>
+                  </div>
+                  <div class="font-bold text-xl">
+                    <?= $data['Supplier_ID'] ?>
+                  </div>
                 </div>
-                <!-- Table -->
+                
+                <!-- Supplier Information -->
+                  <div class="flex item-center gap-60 px-4">
+                    <ul class="text-gray-900">
+                      <li class="flex py-1">
+                        <span class="font-semibold w-40">Contact Name:</span>
+                        <span class="font-medium text-gray-900">
+                          
+                        </span>
+                      </li>
+                      <li class="flex">
+                        <span class="font-semibold w-40">Order Date:</span>
+                        <span class="font-medium text-gray-900"> 
+                
+                        </span>
+                      </li>
+                      <li class="flex py-1">
+                        <span class="font-semibold w-40">Order Time:</span>
+                        <span class="font-medium text-gray-900"> 
+                
+                        </span>
+                      </li>
+                    </ul>
+
+                    <ul class=" text-gray-900 ">
+                      <li class="flex py-1">
+                        <span class="font-semibold w-24">Location:</span>
+                        <span class="font-medium text-gray-900">
+                          <?= $data['Location'] ?>
+                        </span>
+                      </li>
+                      <li class="flex">
+                        <span class="font-semibold w-32">Estimate Delivery:</span>
+                        <span class="font-medium text-gray-900">
+                          
+                        </span>
+                      </li>
+                      <li class="flex py-1">
+                        <span class="font-semibold w-20">Status:</span>
+                        <span class="font-medium text-green-900">
+                          <?= $data['Status'] ?>
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+              <!-- Table for products -->
                 <div class="py-4">
-                  <div class="overflow-x-auto rounded-lg border border-gray-400">
+                  <div class="overflow-x-auto overflow-auto rounded-lg border border-gray-400">
                     <table class="min-w-full text-left mx-auto bg-white">
-                      <thead class="bg-gray-200 border-b border-gray-400 text-sm">
+                      <thead class="bg-gray-200 border-b border-gray-400 text-xs">
                         <tr>
-                          <th class="px-4 py-2 font-semibold">Product</th>
-                          <th class="px-4 py-2 font-semibold">Product ID</th>
-                          <th class="px-4 py-2 font-semibold">Category</th>
-                          <th class="px-4 py-2 font-semibold">Price</th>
-                          <th class="px-4 py-2 font-semibold">Weight</th>
-                          <th class="px-4 py-2 font-semibold">Status</th>
+                          <th class="px-6 py-2 font-semibold">ProductName</th>
+                          <th class="px-6 py-2 font-semibold">ProductID</th>
+                          <th class="px-6 py-2 font-semibold">Category</th>
+                          <th class="px-6 py-2 font-semibold">Price</th>
+                          <th class="px-6 py-2 font-semibold">Weight</th>
+                          <th class="px-6 py-2 font-semibold">Status</th>
+                          <th class="px-6 py-2 font-semibold"></th>
                         </tr>
                       </thead>
 
@@ -165,29 +220,32 @@
               foreach ($requestData as $data) {
                 ?>
                         <tr>
-                          <td class="px-4 py-2 flex items-center justify-center">
+                          <td class="px-6 py-2 flex items-center justify-center">
                             <?php
                             // <!-- Display product image or placeholder -->
-                            echo '<img src="../../' . $data['ProductImage'] . '" alt="Product Image" class="w-20 h-20 object-cover mr-4">'; ?>
+                            echo '<img src="../../' . $data['ProductImage'] . '" alt="Product Image" class="w-16 h-16 object-cover mr-4">'; ?>
                             <div>
                               <?= $data['ProductName'] ?>
                             </div> <!-- Display product name -->
                           </td>
-                          <td class="px-4 py-2">
+                          <td class="px-6 py-2">
                             <?= $data['ProductID'] ?>
                           </td> <!-- Display product ID -->
-                          <td class="px-4 py-2">
+                          <td class="px-6 py-2">
                             <?= $data['Category'] ?>
                           </td> <!-- Display category -->
-                          <td class="px-4 py-2">
+                          <td class="px-6 py-2">
                             <?= $data['Price'] ?>
                           </td> <!-- Display price -->
-                          <td class="px-4 py-2">
+                          <td class="px-6 py-2">
                             <?= $data['ProductWeight'] ?>
                           </td> <!-- Display weight -->
-                          <td class="px-4 py-2">
+                          <td class="px-6 py-2">
                             <?= $data['Order_Status'] ?>
                           </td> <!-- Display status -->
+                          <td class="px-6 py-2">
+                            <button type="submit" class="rounded-full border border-gray-900 border-b block px-5 py-1 text-sm font-semibold text-red-900 focus:outline-none">Delete</button>
+                          </td> <!-- Display delete -->
                         </tr>
                         <?php
                         // Calculate subtotal and total amount
@@ -205,15 +263,20 @@
                           <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                           <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                           <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
-                            <div class="flex flex-col font-medium text-gray-700 gap-3">
-                              <a>Items Subtotal:
-                                <?= $subtotal ?>
+                            <div class="flex flex-col text-sm gap-3">
+                              <a class="font-bold">Items Subtotal:
+                                <div class="font-medium">
+                                  <?= $subtotal ?>
+                                </div>
                               </a>
-                              <a>Total Amount: Php
-                                <?= $totalAmount ?>
+                              <a class="font-bold">Total Amount: 
+                                <div class="font-medium"> Php
+                                  <?= $totalAmount ?>
+                                </div>
                               </a>
                             </div>
                           </th>
+                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                         </tr>
                       </tfoot>
 
@@ -226,11 +289,11 @@
                 </table>
               </div>
 
-            </div>
+                </div>
 
             <div class="flex justify-end">
               <button route='/po/orderDetail'
-                class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
+                class="py-2 px-6 border border-gray-600 bg-yellow-500 font-bold rounded-md">Back</button>
             </div>
 
           </div>
@@ -240,6 +303,8 @@
 
     <script src="./../../src/form.js"></script>
     <script src="./../../src/route.js"></script>
+
+  </div>
 </body>
 
 </html>
