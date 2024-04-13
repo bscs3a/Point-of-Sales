@@ -86,49 +86,49 @@
 
             <!-- add bulk products button -->
             <div class="flex place-content-end mt-2 m-3">
-            <?php
-// Fetch data from the database
+              <?php
+              // Fetch data from the database
 // Assuming $conn is your database connection
-$db = Database::getInstance();
-$conn = $db->connect();
+              $db = Database::getInstance();
+              $conn = $db->connect();
 
-// Check if $_GET['supplier_ID'] is set and not empty
-if (isset($_GET['Supplier_ID']) && !empty($_GET['Supplier_ID'])) {
-    // Sanitize and store the supplier ID from the GET parameter
-    $supplierID = htmlspecialchars($_GET['Supplier_ID']);
+              // Check if $_GET['supplier_ID'] is set and not empty
+              if (isset($_GET['Supplier_ID']) && !empty($_GET['Supplier_ID'])) {
+                // Sanitize and store the supplier ID from the GET parameter
+                $supplierID = htmlspecialchars($_GET['Supplier_ID']);
 
-    // Prepare the SQL statement to select data from the suppliers table based on supplier_ID
-    $query = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+                // Prepare the SQL statement to select data from the suppliers table based on supplier_ID
+                $query = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
+                $stmt = $conn->prepare($query);
+                $stmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
 
-    // Execute the query
-    if ($stmt->execute()) {
-        // Check if there are any rows returned
-        if ($stmt->rowCount() > 0) {
-            // Fetch each row as an associative array
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                // Now $row contains the data for each row
-                // You can use $row here
-                // For example:
-                echo '<a href="/master/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">';
-                echo '<i class="ri-add-circle-line"></i>';
-                echo '<span>Add Product</span>';
-                echo '</a>';
-            }
-        } else {
-            echo "No data found for the specified supplier ID.";
-        }
-    } else {
-        echo "Error executing the query.";
-    }
-} else {
-    echo "Supplier ID not provided.";
-}
+                // Execute the query
+                if ($stmt->execute()) {
+                  // Check if there are any rows returned
+                  if ($stmt->rowCount() > 0) {
+                    // Fetch each row as an associative array
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                      // Now $row contains the data for each row
+                      // You can use $row here
+                      // For example:
+                      echo '<a href="/master/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">';
+                      echo '<i class="ri-add-circle-line"></i>';
+                      echo '<span>Add Product</span>';
+                      echo '</a>';
+                    }
+                  } else {
+                    echo "No data found for the specified supplier ID.";
+                  }
+                } else {
+                  echo "Error executing the query.";
+                }
+              } else {
+                echo "Supplier ID not provided.";
+              }
 
-// Close the database connection
-$conn = null;
-?>
+              // Close the database connection
+              $conn = null;
+              ?>
             </div>
           </div>
 
@@ -150,7 +150,6 @@ $conn = null;
             </thead>
 
             <tbody>
-
               <?php
               function displayProductsBySupplierID($supplierID)
               {
@@ -167,6 +166,7 @@ $conn = null;
 
                   // Check if there are any rows or results
                   if ($statement->rowCount() > 0) {
+                    echo '<form method="post" action="/placeorder/supplier/">';
                     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                       // Debugging statement to print image path
                       $imagePath = '../../' . $row['ProductImage'];
@@ -181,10 +181,11 @@ $conn = null;
                       echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
                       echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
                       echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
-                      echo '<td class="px-4 py-4">Edit</td>';
+                      echo '<td class="px-4 py-4"><input type="checkbox" name="products[]" value="' . $row['ProductID'] . '"></td>';
                       echo '</tr>';
-
                     }
+                    echo '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Order</button>';
+                    echo '</form>';
                   } else {
                     echo "No products found for this supplier.";
                   }

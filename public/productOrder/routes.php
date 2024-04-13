@@ -313,6 +313,52 @@ Router::post('/po/addbulk/', function () {
     }
 });
 
+//function for ordering products while viewing the suppliers products
+// Place order function
+Router::post('/placeorder/supplier/', function () {
+    // Establish database connection
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    try {
+        // Check if products are selected for ordering
+        if (!isset($_POST['products']) || empty($_POST['products'])) {
+            echo "No products selected for ordering.";
+            return;
+        }
+
+        // Retrieve selected product IDs
+        $selectedProducts = $_POST['products'];
+
+        // Start a transaction
+        $conn->beginTransaction();
+
+        // Prepare SQL statement for inserting orders into order_details table
+        $orderStmt = $conn->prepare("INSERT INTO requests (Product_ID, Product_Quantity, Order_Date) VALUES (:productID, 1, NOW())");
+
+        // Loop through each selected product
+        foreach ($selectedProducts as $productID) {
+            // Bind parameters
+            $orderStmt->bindParam(':productID', $productID);
+
+            // Execute the statement
+            $orderStmt->execute();
+        }
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/po/orderDetail");
+        // Commit the transaction
+        $conn->commit();
+
+        echo "Order placed successfully.";
+    } catch (PDOException $e) {
+        // Rollback the transaction on error
+        $conn->rollBack();
+        echo "Error placing order: " . $e->getMessage();
+    } finally {
+        // Close connection
+        $conn = null;
+    }
+});
 
 Router::post('/po/addItem', function () {
     $db = Database::getInstance();
