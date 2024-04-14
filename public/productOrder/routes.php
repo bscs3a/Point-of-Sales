@@ -48,8 +48,8 @@ $po = [
         $_GET['Supplier_ID'] = $id;
         include $basePath . "viewsupplierproduct.php";
     },
-     // for adding bulk orders based on the supplier id
-     '/po/addbulk/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
+    // for adding bulk orders based on the supplier id
+    '/po/addbulk/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
         // $_SESSION['id'] = $id;
         $_GET['Supplier_ID'] = $id;
         include $basePath . "addbulk.php";
@@ -84,11 +84,11 @@ Router::post('/login/user', function () {
             $_SESSION['employee'] = $user['employee'];
 
             // Insert log entry for successful login audit log
-            $user_id = $user['account_ID']; // Assuming you have an 'account_ID' column in the 'accounts' table
+            $user_id = $user['employee']; 
             $action = "Logged In";
             $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            $sql = "INSERT INTO audit_log (account_ID, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $sql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue(':user_id', $user_id);
             $stmt->bindValue(':action', $action);
@@ -116,8 +116,8 @@ Router::post('/logout/user', function () {
 
     try {
         if (isset ($_SESSION['employee'])) {
-            // Retrieve the last time_in from the audit_log table based on account_ID
-            $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE account_ID = (SELECT account_ID FROM accounts WHERE employee = :employee) ORDER BY audit_ID DESC LIMIT 1");
+            // Retrieve the last time_in from the audit_log table based on user
+            $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE user = (SELECT employee FROM accounts WHERE employee = :employee) ORDER BY audit_ID DESC LIMIT 1");
             $stmt->bindParam(':employee', $_SESSION['employee']);
             $stmt->execute();
             $last_time_in = $stmt->fetchColumn();
@@ -130,7 +130,7 @@ Router::post('/logout/user', function () {
             $employee = $_SESSION['employee'];
             $action = "Logged Out";
             // Use the last_time_in value obtained earlier as the time_in value when logging out
-            $sql = "INSERT INTO audit_log (account_ID, action, time_in) VALUES ((SELECT account_ID FROM accounts WHERE employee = :employee), :action, :last_time_in)";
+            $sql = "INSERT INTO audit_log (user, action, time_in) VALUES ((SELECT employee FROM accounts WHERE employee = :employee), :action, :last_time_in)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':employee', $employee);
             $stmt->bindParam(':action', $action);
@@ -242,10 +242,24 @@ Router::post('/insert/addsupplier/', function () {
                 echo "No file uploaded for row $i.";
             }
         }
-          // Redirect to the supplier addition page upon successful insertion
-          $rootFolder = dirname($_SERVER['PHP_SELF']);
-          header("Location: $rootFolder/po/suppliers");
-          exit; // Terminate script execution after redirect
+
+
+        // Audit log for adding a supplier
+        $user_id = $_SESSION['employee']; // Assuming you have a user session
+        $action = "Added Supplier: $suppliername";
+        $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+        $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+        $auditStmt = $conn->prepare($auditSql);
+        $auditStmt->bindParam(':user_id', $user_id);
+        $auditStmt->bindParam(':action', $action);
+        $auditStmt->bindParam(':time_out', $time_out);
+        $auditStmt->execute();
+
+        // Redirect to the supplier addition page upon successful insertion
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/po/suppliers");
+        exit; // Terminate script execution after redirect
     } catch (PDOException $e) {
         // Handle PDO exceptions
         echo "Error: " . $e->getMessage();
@@ -254,6 +268,7 @@ Router::post('/insert/addsupplier/', function () {
         $conn = null;
     }
 });
+
 
 // Function for adding bulk items on a supplier
 Router::post('/po/addbulk/', function () {
@@ -309,10 +324,31 @@ Router::post('/po/addbulk/', function () {
                 echo "No file uploaded for row $i.";
             }
         }
-          // Redirect to the products page upon successful insertion
-          $rootFolder = dirname($_SERVER['PHP_SELF']);
-          header("Location: $rootFolder/po/viewsupplierproduct/Supplier=$supplierID");
-          exit; // Terminate script execution after redirect
+
+       // Audit log for adding bulk items on a supplier
+        $user_id = $_SESSION['employee']; // Assuming you have a user session
+
+        // Fetch Supplier_Name based on Supplier_ID
+        $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
+        $supplierNameStmt = $conn->prepare($supplierNameQuery);
+        $supplierNameStmt->bindParam(':supplierID', $supplierID);
+        $supplierNameStmt->execute();
+        $supplierName = $supplierNameStmt->fetchColumn();
+
+        $action = "Added items for Supplier: $supplierName";
+        $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+        $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+        $auditStmt = $conn->prepare($auditSql);
+        $auditStmt->bindParam(':user_id', $user_id);
+        $auditStmt->bindParam(':action', $action);
+        $auditStmt->bindParam(':time_out', $time_out);
+        $auditStmt->execute();
+
+        // Redirect to the products page upon successful insertion
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/po/viewsupplierproduct/Supplier=$supplierID");
+        exit; // Terminate script execution after redirect
     } catch (PDOException $e) {
         // Handle PDO exceptions
         echo "Error: " . $e->getMessage();
@@ -322,8 +358,10 @@ Router::post('/po/addbulk/', function () {
     }
 });
 
+
 // Function to get the next available batch ID
-function getNextBatchID($conn) {
+function getNextBatchID($conn)
+{
     $query = "SELECT MAX(Batch_ID) AS MaxBatchID FROM order_details";
     $statement = $conn->prepare($query);
     $statement->execute();
@@ -332,7 +370,7 @@ function getNextBatchID($conn) {
 }
 
 Router::post('/placeorder/supplier/', function () {
-    if (!isset($_POST['products']) || !is_array($_POST['products'])) {
+    if (!isset ($_POST['products']) || !is_array($_POST['products'])) {
         echo "No products selected for ordering.";
         return;
     }
@@ -342,7 +380,7 @@ Router::post('/placeorder/supplier/', function () {
     try {
         // Start a transaction
         $conn->beginTransaction();
-        
+
         // Prepare SQL statement for inserting orders into order_details table
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
@@ -360,7 +398,7 @@ Router::post('/placeorder/supplier/', function () {
         // Loop through each selected product
         foreach ($_POST['products'] as $productID) {
             $quantityField = 'quantity_' . $productID;
-            $quantity = isset($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
+            $quantity = isset ($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
             if ($quantity > 0) {
                 // Bind parameters for order details insertion
                 $orderStmt->bindParam(':supplierID', $supplierID);
@@ -393,12 +431,34 @@ Router::post('/placeorder/supplier/', function () {
 
         // Execute the statement for batch order insertion
         $batchOrderStmt->execute();
+
+        // Audit log for adding bulk items on a supplier
+        $user_id = $_SESSION['employee']; // Assuming you have a user session
+
+        // Fetch Supplier_Name based on Supplier_ID
+        $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
+        $supplierNameStmt = $conn->prepare($supplierNameQuery);
+        $supplierNameStmt->bindParam(':supplierID', $supplierID);
+        $supplierNameStmt->execute();
+        $supplierName = $supplierNameStmt->fetchColumn();
+
+        $action = "Placed an Order for Supplier: $supplierName";
+        $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+        $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+        $auditStmt = $conn->prepare($auditSql);
+        $auditStmt->bindParam(':user_id', $user_id);
+        $auditStmt->bindParam(':action', $action);
+        $auditStmt->bindParam(':time_out', $time_out);
+        $auditStmt->execute();
+
         // Commit the transaction
         $conn->commit();
+
         // Redirect the user after successful order placement
         $rootFolder = dirname($_SERVER['PHP_SELF']);
         header("Location: $rootFolder/po/orderDetail");
-        exit(); // Ensure that script execution stops after redirection
+        exit (); // Ensure that script execution stops after redirection
     } catch (PDOException $e) {
         // Rollback the transaction on error
         $conn->rollBack();
@@ -409,11 +469,10 @@ Router::post('/placeorder/supplier/', function () {
     }
 });
 
-//function to delete the product in the vieworder list if there are no products from the supplier and also minus the Items
-//subotal and total amout in the batch order table
+
 Router::post('/delete/viewdetails', function () {
     // Check if the delete request was submitted
-    if (isset($_POST['product_id']) && isset($_POST['batch_id'])) {
+    if (isset ($_POST['product_id']) && isset ($_POST['batch_id'])) {
         $productID = $_POST['product_id'];
         $batchID = $_POST['batch_id'];
 
@@ -451,13 +510,25 @@ Router::post('/delete/viewdetails', function () {
             $updateStmt->bindParam(':batchID', $batchID);
             $updateStmt->execute();
 
+            // Audit log for deleting a product
+            $user_id = $_SESSION['employee']; // Assuming you have a user session
+            $action = "Deleted Product ID: $productID from Order #$batchID";
+            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $auditStmt = $conn->prepare($auditSql);
+            $auditStmt->bindParam(':user_id', $user_id);
+            $auditStmt->bindParam(':action', $action);
+            $auditStmt->bindParam(':time_out', $time_out);
+            $auditStmt->execute();
+
             // Commit the transaction
             $conn->commit();
 
             // Redirect back to the view details page
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/viewdetails/Batch=$batchID");
-            exit();
+            exit ();
         } catch (PDOException $e) {
             // Rollback the transaction on error
             $conn->rollBack();
@@ -468,6 +539,7 @@ Router::post('/delete/viewdetails', function () {
         }
     }
 });
+
 
 
 
@@ -621,181 +693,199 @@ Router::post('/addfeedback/viewtransaction', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    // Retrieve data from the form submission
-    $reviews = $_POST['reviews'];
-    $supplierID = $_POST['supplierID'];
-    $user = $_POST['user'];
-    $batchID = $_POST['batchID']; // Retrieve the batchID from the form submission
-
-    // Check if feedback has already been provided for this supplier and batch
-    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM feedbacks WHERE batch_ID = :batchID");
-    $checkStmt->bindParam(':batchID', $batchID);
-    $checkStmt->execute();
-    $feedbackCount = $checkStmt->fetchColumn();
-
-    // If feedback hasn't been provided yet, save the feedback and update the "Done" status
-    if ($feedbackCount == 0) {
-        // Prepare and execute the SQL query to insert feedback into the database
-        $stmt = $conn->prepare("INSERT INTO feedbacks (reviews, supplier_id, user, batch_ID) VALUES (:reviews, :supplierID, :user, :batchID)");
-        $stmt->bindParam(':reviews', $reviews);
-        $stmt->bindParam(':supplierID', $supplierID);
-        $stmt->bindParam(':user', $user);
-        $stmt->bindParam(':batchID', $batchID);
-        $stmt->execute();
-
-        // Update the "Feedback" column in the transaction history table
-        $updateStmt = $conn->prepare("UPDATE transaction_history SET Feedback = 'Done' WHERE supplier_id = :supplierID AND batch_ID = :batchID");
-        $updateStmt->bindParam(':supplierID', $supplierID);
-        $updateStmt->bindParam(':batchID', $batchID);
-        $updateStmt->execute();
-    }
-
-    // Close the database connection
-    $conn = null;
-
-    // Redirect back to the previous page after saving feedback
-    header("Location: /master/po/transactionHistory", true, 303);
-});
-
-
-
-
-
-//function to show all the product details
-function getProductDetails($productID, $conn)
-{
     try {
-        // Prepare the SQL statement to fetch product details including the image path
-        $query = "SELECT p.ProductImage, p.ProductName, p.Supplier, p.Category, p.Price, r.Product_Quantity, r.Product_Total_Price
-                  FROM products p
-                  INNER JOIN requests r ON p.ProductID = r.Product_ID
-                  WHERE p.ProductID = :product_id";
-        $statement = $conn->prepare($query);
-        $statement->bindParam(':product_id', $productID);
-        $statement->execute();
+        // Retrieve data from the form submission
+        $reviews = $_POST['reviews'];
+        $supplierID = $_POST['supplierID'];
+        $user = $_POST['user'];
+        $batchID = $_POST['batchID']; // Retrieve the batchID from the form submission
 
-        // Fetch the product details
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        // Check if feedback has already been provided for this supplier and batch
+        $checkStmt = $conn->prepare("SELECT COUNT(*) FROM feedbacks WHERE batch_ID = :batchID");
+        $checkStmt->bindParam(':batchID', $batchID);
+        $checkStmt->execute();
+        $feedbackCount = $checkStmt->fetchColumn();
 
-        // Check if a result is returned
-        if ($result) {
-            return $result; // Return an associative array containing all product details
-        } else {
-            return false; // Return false if no result found
-        }
-    } catch (PDOException $e) {
-        // Handle the exception
-        echo "Error: " . $e->getMessage();
-        return false; // Return false in case of an error
-    }
-}
+        // If feedback hasn't been provided yet, save the feedback and update the "Done" status
+        if ($feedbackCount == 0) {
+            // Prepare and execute the SQL query to insert feedback into the database
+            $stmt = $conn->prepare("INSERT INTO feedbacks (reviews, supplier_id, user, batch_ID) VALUES (:reviews, :supplierID, :user, :batchID)");
+            $stmt->bindParam(':reviews', $reviews);
+            $stmt->bindParam(':supplierID', $supplierID);
+            $stmt->bindParam(':user', $user);
+            $stmt->bindParam(':batchID', $batchID);
+            $stmt->execute();
 
+            // Update the "Feedback" column in the transaction history table
+            $updateStmt = $conn->prepare("UPDATE transaction_history SET Feedback = 'Done' WHERE supplier_id = :supplierID AND batch_ID = :batchID");
+            $updateStmt->bindParam(':supplierID', $supplierID);
+            $updateStmt->bindParam(':batchID', $batchID);
+            $updateStmt->execute();
 
-// Function to update request status to 'Ok' this code is for the finance team
-function updateRequestStatusToOk()
-{
-    try {
-        $db = Database::getInstance();
-        $conn = $db->connect();
+            // Audit log for adding feedback
+            $user_id = $_SESSION['employee']; // Assuming you have a user session
+            $action = "Added feedback a for Order #$batchID";
+            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-        // Begin a transaction
-        $conn->beginTransaction();
-
-        // Update the request status in the requests table
-        $query = "UPDATE requests SET request_Status = 'Ready to order' WHERE request_Status = 'pending'";
-        $statement = $conn->prepare($query);
-        $statement->execute();
-
-        // Commit the transaction
-        $conn->commit();
-
-        echo "All pending requests have been updated to 'Ok' status.";
-        $rootFolder = dirname($_SERVER['PHP_SELF']);
-        header("Location: $rootFolder/po/requestOrder");
-
-    } catch (PDOException $e) {
-        // Rollback the transaction in case of error
-        $conn->rollBack();
-        echo "Error: " . $e->getMessage();
-    }
-}
-
-// Route to handle the update request status action
-Router::post('/accept/requestOrder', function () {
-    // Call the function to update request status
-    updateRequestStatusToOk();
-});
-
-
-
-
-//function to change the "pending" status of requested orders to "accepted" and it will insert on the
-//orders_details table while also having a data in the requests tables to use it as a request history
-function updateRequestStatusToAccepted()
-{
-    try {
-        $db = Database::getInstance();
-        $conn = $db->connect();
-
-        // Begin a transaction
-        $conn->beginTransaction();
-
-        // Retrieve pending requests
-        $pendingRequestsStmt = $conn->prepare("SELECT * FROM requests WHERE request_Status = 'Ready to order'");
-        $pendingRequestsStmt->execute();
-        $pendingRequests = $pendingRequestsStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Prepare the SQL statement to insert into order_details
-        $insertStmt = $conn->prepare("INSERT INTO order_details (Request_ID, Product_ID, Category_ID, Supplier_ID, Order_Status) VALUES (:requestID, :productID, :categoryID, :supplierID, 'to receive')");
-
-        // Loop through each pending request and insert into order_details
-        foreach ($pendingRequests as $request) {
-            $requestID = $request['Request_ID'];
-            $productID = $request['Product_ID'];
-
-            // Retrieve Category_ID and Supplier_ID from products table
-            $productStmt = $conn->prepare("SELECT Category_ID, Supplier_ID FROM products WHERE ProductID = :productID");
-            $productStmt->bindParam(':productID', $productID);
-            $productStmt->execute();
-            $product = $productStmt->fetch(PDO::FETCH_ASSOC);
-            $categoryID = $product['Category_ID'];
-            $supplierID = $product['Supplier_ID'];
-
-            // Bind parameters and execute the insert statement
-            $insertStmt->bindParam(':requestID', $requestID);
-            $insertStmt->bindParam(':productID', $productID);
-            $insertStmt->bindParam(':categoryID', $categoryID);
-            $insertStmt->bindParam(':supplierID', $supplierID);
-            $insertStmt->execute();
+            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $auditStmt = $conn->prepare($auditSql);
+            $auditStmt->bindParam(':user_id', $user_id);
+            $auditStmt->bindParam(':action', $action);
+            $auditStmt->bindParam(':time_out', $time_out);
+            $auditStmt->execute();
         }
 
-        // Commit the transaction
-        $conn->commit();
+        // Close the database connection
+        $conn = null;
 
-        // Update the request status to 'accepted' after inserting into order_details
-        $updateStmt = $conn->prepare("UPDATE requests SET request_Status = 'accepted' WHERE request_Status = 'Ready to order'");
-        $updateStmt->execute();
-
-        echo "Request status updated to 'accepted' for all pending requests.";
-
-        $rootFolder = dirname($_SERVER['PHP_SELF']);
-        header("Location: $rootFolder/po/requestOrder");
-        exit(); // Stop script execution after redirection
-
+        // Redirect back to the previous page after saving feedback
+        header("Location: /master/po/transactionHistory", true, 303);
     } catch (PDOException $e) {
-        // Rollback the transaction in case of error
-        $conn->rollBack();
+        // Handle PDO exceptions
         echo "Error: " . $e->getMessage();
     }
-}
-
-
-
-// Route to handle the update request status action
-Router::post('/update/requestOrder', function () {
-    // Call the function to update request status
-    updateRequestStatusToAccepted();
 });
+
+
+
+
+
+
+// //function to show all the product details
+// function getProductDetails($productID, $conn)
+// {
+//     try {
+//         // Prepare the SQL statement to fetch product details including the image path
+//         $query = "SELECT p.ProductImage, p.ProductName, p.Supplier, p.Category, p.Price, r.Product_Quantity, r.Product_Total_Price
+//                   FROM products p
+//                   INNER JOIN requests r ON p.ProductID = r.Product_ID
+//                   WHERE p.ProductID = :product_id";
+//         $statement = $conn->prepare($query);
+//         $statement->bindParam(':product_id', $productID);
+//         $statement->execute();
+
+//         // Fetch the product details
+//         $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+//         // Check if a result is returned
+//         if ($result) {
+//             return $result; // Return an associative array containing all product details
+//         } else {
+//             return false; // Return false if no result found
+//         }
+//     } catch (PDOException $e) {
+//         // Handle the exception
+//         echo "Error: " . $e->getMessage();
+//         return false; // Return false in case of an error
+//     }
+// }
+
+
+// // Function to update request status to 'Ok' this code is for the finance team
+// function updateRequestStatusToOk()
+// {
+//     try {
+//         $db = Database::getInstance();
+//         $conn = $db->connect();
+
+//         // Begin a transaction
+//         $conn->beginTransaction();
+
+//         // Update the request status in the requests table
+//         $query = "UPDATE requests SET request_Status = 'Ready to order' WHERE request_Status = 'pending'";
+//         $statement = $conn->prepare($query);
+//         $statement->execute();
+
+//         // Commit the transaction
+//         $conn->commit();
+
+//         echo "All pending requests have been updated to 'Ok' status.";
+//         $rootFolder = dirname($_SERVER['PHP_SELF']);
+//         header("Location: $rootFolder/po/requestOrder");
+
+//     } catch (PDOException $e) {
+//         // Rollback the transaction in case of error
+//         $conn->rollBack();
+//         echo "Error: " . $e->getMessage();
+//     }
+// }
+
+// // Route to handle the update request status action
+// Router::post('/accept/requestOrder', function () {
+//     // Call the function to update request status
+//     updateRequestStatusToOk();
+// });
+
+
+
+
+// //function to change the "pending" status of requested orders to "accepted" and it will insert on the
+// //orders_details table while also having a data in the requests tables to use it as a request history
+// function updateRequestStatusToAccepted()
+// {
+//     try {
+//         $db = Database::getInstance();
+//         $conn = $db->connect();
+
+//         // Begin a transaction
+//         $conn->beginTransaction();
+
+//         // Retrieve pending requests
+//         $pendingRequestsStmt = $conn->prepare("SELECT * FROM requests WHERE request_Status = 'Ready to order'");
+//         $pendingRequestsStmt->execute();
+//         $pendingRequests = $pendingRequestsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+//         // Prepare the SQL statement to insert into order_details
+//         $insertStmt = $conn->prepare("INSERT INTO order_details (Request_ID, Product_ID, Category_ID, Supplier_ID, Order_Status) VALUES (:requestID, :productID, :categoryID, :supplierID, 'to receive')");
+
+//         // Loop through each pending request and insert into order_details
+//         foreach ($pendingRequests as $request) {
+//             $requestID = $request['Request_ID'];
+//             $productID = $request['Product_ID'];
+
+//             // Retrieve Category_ID and Supplier_ID from products table
+//             $productStmt = $conn->prepare("SELECT Category_ID, Supplier_ID FROM products WHERE ProductID = :productID");
+//             $productStmt->bindParam(':productID', $productID);
+//             $productStmt->execute();
+//             $product = $productStmt->fetch(PDO::FETCH_ASSOC);
+//             $categoryID = $product['Category_ID'];
+//             $supplierID = $product['Supplier_ID'];
+
+//             // Bind parameters and execute the insert statement
+//             $insertStmt->bindParam(':requestID', $requestID);
+//             $insertStmt->bindParam(':productID', $productID);
+//             $insertStmt->bindParam(':categoryID', $categoryID);
+//             $insertStmt->bindParam(':supplierID', $supplierID);
+//             $insertStmt->execute();
+//         }
+
+//         // Commit the transaction
+//         $conn->commit();
+
+//         // Update the request status to 'accepted' after inserting into order_details
+//         $updateStmt = $conn->prepare("UPDATE requests SET request_Status = 'accepted' WHERE request_Status = 'Ready to order'");
+//         $updateStmt->execute();
+
+//         echo "Request status updated to 'accepted' for all pending requests.";
+
+//         $rootFolder = dirname($_SERVER['PHP_SELF']);
+//         header("Location: $rootFolder/po/requestOrder");
+//         exit(); // Stop script execution after redirection
+
+//     } catch (PDOException $e) {
+//         // Rollback the transaction in case of error
+//         $conn->rollBack();
+//         echo "Error: " . $e->getMessage();
+//     }
+// }
+
+
+
+// // Route to handle the update request status action
+// Router::post('/update/requestOrder', function () {
+//     // Call the function to update request status
+//     updateRequestStatusToAccepted();
+// });
 
 
 
@@ -804,7 +894,8 @@ Router::post('/complete/orderDetail', function () {
     // Call the function to update order status
     updateOrderStatusToCompleted();
 });
-//function to set the order status of to complete and also add the data in the transaction history
+
+// Function to set the order status to complete and add data in the transaction history
 function updateOrderStatusToCompleted()
 {
     try {
@@ -822,16 +913,13 @@ function updateOrderStatusToCompleted()
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
-           // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
+            // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
             $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status FROM batch_orders WHERE Batch_ID = :batchID");
             $orderDetailsStmt->bindParam(':batchID', $batchID);
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
             $supplierID = $orderDetails['Supplier_ID'];
             $orderStatus = $orderDetails['Order_Status'];
-
-            
-
 
             // Insert data into transaction_history table
             $insertStmt = $conn->prepare("INSERT INTO transaction_history (Batch_ID, Supplier_ID, Order_Status) VALUES (:batchID, :supplierID, :orderStatus)");
@@ -840,32 +928,17 @@ function updateOrderStatusToCompleted()
             $insertStmt->bindParam(':orderStatus', $orderStatus);
             $insertStmt->execute();
 
-            // Insert log entry for successful order completion with the last time_in
-            $employee = $_SESSION['employee'];
-            $stmt = $conn->prepare("SELECT * FROM accounts WHERE employee = :employee");
-            $stmt->bindParam(':employee', $employee);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Audit log for completing an order
+            $user_id = $_SESSION['employee']; // Assuming you have a user session
+            $action = "Completed Order #$batchID";
+            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            if ($user) {
-                // Retrieve the last time_in from the audit_log table based on account_ID
-                $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE account_ID = :accountID ORDER BY audit_ID DESC LIMIT 1");
-                $stmt->bindValue(':accountID', $user['account_ID']);
-                $stmt->execute();
-                $last_time_in = $stmt->fetchColumn();
-
-                $user_id = $user['account_ID'];
-                $action = "Completed Order #$batchID";
-                $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
-
-                $sql = "INSERT INTO audit_log (account_ID, action, time_in, time_out) VALUES (:user_id, :action, :last_time_in, :time_out)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindValue(':user_id', $user_id);
-                $stmt->bindValue(':action', $action);
-                $stmt->bindValue(':last_time_in', $last_time_in);
-                $stmt->bindValue(':time_out', $time_out);
-                $stmt->execute();
-            }
+            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $auditStmt = $conn->prepare($auditSql);
+            $auditStmt->bindParam(':user_id', $user_id);
+            $auditStmt->bindParam(':action', $action);
+            $auditStmt->bindParam(':time_out', $time_out);
+            $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -882,6 +955,7 @@ function updateOrderStatusToCompleted()
         echo "Error: " . $e->getMessage();
     }
 }
+
 
 
 
@@ -912,16 +986,13 @@ function updateOrderStatusToCancel()
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
-           // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
+            // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
             $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status FROM batch_orders WHERE Batch_ID = :batchID");
             $orderDetailsStmt->bindParam(':batchID', $batchID);
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
             $supplierID = $orderDetails['Supplier_ID'];
             $orderStatus = $orderDetails['Order_Status'];
-
-            
-
 
             // Insert data into transaction_history table
             $insertStmt = $conn->prepare("INSERT INTO transaction_history (Batch_ID, Supplier_ID, Order_Status) VALUES (:batchID, :supplierID, :orderStatus)");
@@ -930,32 +1001,17 @@ function updateOrderStatusToCancel()
             $insertStmt->bindParam(':orderStatus', $orderStatus);
             $insertStmt->execute();
 
-            // Insert log entry for successful order completion with the last time_in
-            $employee = $_SESSION['employee'];
-            $stmt = $conn->prepare("SELECT * FROM accounts WHERE employee = :employee");
-            $stmt->bindParam(':employee', $employee);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Audit log for cancelling an order
+            $user_id = $_SESSION['employee']; // Assuming you have a user session
+            $action = "Cancelled Order #$batchID";
+            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            if ($user) {
-                // Retrieve the last time_in from the audit_log table based on account_ID
-                $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE account_ID = :accountID ORDER BY audit_ID DESC LIMIT 1");
-                $stmt->bindValue(':accountID', $user['account_ID']);
-                $stmt->execute();
-                $last_time_in = $stmt->fetchColumn();
-
-                $user_id = $user['account_ID'];
-                $action = "Cancelled Order #$batchID";
-                $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
-
-                $sql = "INSERT INTO audit_log (account_ID, action, time_in, time_out) VALUES (:user_id, :action, :last_time_in, :time_out)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindValue(':user_id', $user_id);
-                $stmt->bindValue(':action', $action);
-                $stmt->bindValue(':last_time_in', $last_time_in);
-                $stmt->bindValue(':time_out', $time_out);
-                $stmt->execute();
-            }
+            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $auditStmt = $conn->prepare($auditSql);
+            $auditStmt->bindParam(':user_id', $user_id);
+            $auditStmt->bindParam(':action', $action);
+            $auditStmt->bindParam(':time_out', $time_out);
+            $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -975,86 +1031,86 @@ function updateOrderStatusToCancel()
 
 
 //function to just fetch the data in the requestHistory
-function fetchAllRequestsData()
-{
-    try {
-        // Connect to the database
-        $db = Database::getInstance();
-        $conn = $db->connect();
+// function fetchAllRequestsData()
+// {
+//     try {
+//         // Connect to the database
+//         $db = Database::getInstance();
+//         $conn = $db->connect();
 
-        // Prepare SQL query to fetch all requests data
-        $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
-                    FROM requests r
-                    INNER JOIN order_details od ON r.Request_ID = od.Order_ID
-                    INNER JOIN products p ON od.Product_ID = p.ProductID
-                WHERE r.Request_Status = 'accepted'
-                ORDER BY r.Request_ID ASC"; // Order by Request_ID from lowest to highest
+//         // Prepare SQL query to fetch all requests data
+//         $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
+//                     FROM requests r
+//                     INNER JOIN order_details od ON r.Request_ID = od.Order_ID
+//                     INNER JOIN products p ON od.Product_ID = p.ProductID
+//                 WHERE r.Request_Status = 'accepted'
+//                 ORDER BY r.Request_ID ASC"; // Order by Request_ID from lowest to highest
 
-        // Prepare the SQL statement
-        $stmt = $conn->prepare($sql);
+//         // Prepare the SQL statement
+//         $stmt = $conn->prepare($sql);
 
-        // Execute the statement
-        $stmt->execute();
+//         // Execute the statement
+//         $stmt->execute();
 
-        // Fetch all rows as an associative array
-        $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//         // Fetch all rows as an associative array
+//         $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        return $requests;
+//         return $requests;
 
-    } catch (PDOException $e) {
-        // Handle database errors
-        echo "Error: " . $e->getMessage();
-        return []; // Set requests to an empty array in case of error
-    }
-}
+//     } catch (PDOException $e) {
+//         // Handle database errors
+//         echo "Error: " . $e->getMessage();
+//         return []; // Set requests to an empty array in case of error
+//     }
+// }
 
 
-// Function to search requests by date
-function searchByDate()
-{
-    try {
-        // Connect to the database
-        $db = Database::getInstance();
-        $conn = $db->connect();
+// // Function to search requests by date
+// function searchByDate()
+// {
+//     try {
+//         // Connect to the database
+//         $db = Database::getInstance();
+//         $conn = $db->connect();
 
-        if (isset($_POST['searchDate'])) {
-            $searchDate = $_POST['searchDate'];
+//         if (isset($_POST['searchDate'])) {
+//             $searchDate = $_POST['searchDate'];
 
-            // Prepare SQL query to fetch requests data based on the search date
-            $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
-                    FROM requests r
-                    INNER JOIN order_details od ON r.Request_ID = od.Order_ID
-                    INNER JOIN products p ON od.Product_ID = p.ProductID
-                    WHERE DATE(od.Date_Ordered) = :searchDate AND r.Request_Status = 'accepted'
-                    ORDER BY r.Request_ID ASC"; // Order by Request_ID from lowest to highest
+//             // Prepare SQL query to fetch requests data based on the search date
+//             $sql = "SELECT r.*, od.*, p.ProductName, p.Price 
+//                     FROM requests r
+//                     INNER JOIN order_details od ON r.Request_ID = od.Order_ID
+//                     INNER JOIN products p ON od.Product_ID = p.ProductID
+//                     WHERE DATE(od.Date_Ordered) = :searchDate AND r.Request_Status = 'accepted'
+//                     ORDER BY r.Request_ID ASC"; // Order by Request_ID from lowest to highest
 
-            // Prepare the SQL statement
-            $stmt = $conn->prepare($sql);
+//             // Prepare the SQL statement
+//             $stmt = $conn->prepare($sql);
 
-            // Bind parameters
-            $stmt->bindParam(':searchDate', $searchDate);
+//             // Bind parameters
+//             $stmt->bindParam(':searchDate', $searchDate);
 
-            // Execute the statement
-            $stmt->execute();
+//             // Execute the statement
+//             $stmt->execute();
 
-            // Fetch all rows as an associative array
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//             // Fetch all rows as an associative array
+//             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Return the fetched data
-            return $result;
-        }
-    } catch (PDOException $e) {
-        // Handle database errors
-        echo "Error: " . $e->getMessage();
-        return []; // Return an empty array in case of error
-    }
-}
-// Route to handle the search request
-Router::post('/search/requestHistory', function () {
-    // Call the function to search requests by date
-    $searchedRequests = searchByDate();
+//             // Return the fetched data
+//             return $result;
+//         }
+//     } catch (PDOException $e) {
+//         // Handle database errors
+//         echo "Error: " . $e->getMessage();
+//         return []; // Return an empty array in case of error
+//     }
+// }
+// // Route to handle the search request
+// Router::post('/search/requestHistory', function () {
+//     // Call the function to search requests by date
+//     $searchedRequests = searchByDate();
 
-    // Include the requestHistory.php file to display the search results
-    include 'views/po.requestHistory.php';
-});
+//     // Include the requestHistory.php file to display the search results
+//     include 'views/po.requestHistory.php';
+// });
 
