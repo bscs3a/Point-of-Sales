@@ -341,15 +341,11 @@ Router::post('/placeorder/supplier/', function () {
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
         // Prepare SQL statement for inserting batch into batch_orders table
-        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive')");
+        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Order_Status) VALUES (:supplierID, 'to receive')");
 
         // Get Supplier_ID and Batch_ID from the form data
         $supplierID = $_POST['supplierID'];
         $batchID = getNextBatchID($conn); // Function to get the next available batch ID
-
-        // Initialize total quantity and total amount
-        $totalQuantity = 0;
-        $totalAmount = 0;
 
         // Loop through each selected product
         foreach ($_POST['products'] as $productID) {
@@ -364,26 +360,11 @@ Router::post('/placeorder/supplier/', function () {
 
                 // Execute the statement for order details insertion
                 $orderStmt->execute();
-
-                // Calculate subtotal quantity
-                $totalQuantity += $quantity;
-
-                // Retrieve product price from the database
-                $productPriceQuery = "SELECT Price FROM products WHERE ProductID = :productID";
-                $productPriceStmt = $conn->prepare($productPriceQuery);
-                $productPriceStmt->bindParam(':productID', $productID);
-                $productPriceStmt->execute();
-                $productPrice = $productPriceStmt->fetchColumn();
-
-                // Calculate total amount
-                $totalAmount += $quantity * $productPrice;
             }
         }
 
         // Bind parameters for batch order insertion
         $batchOrderStmt->bindParam(':supplierID', $supplierID);
-        $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
-        $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
 
         // Execute the statement for batch order insertion
         $batchOrderStmt->execute();
@@ -405,86 +386,124 @@ Router::post('/placeorder/supplier/', function () {
     }
 });
 
+//function to delete some of the items in the orderDetails view 
+Router::post('/delete/viewdetails/', function () {
+    // Check if the delete request was submitted
+    if (isset($_POST['product_id']) && isset($_POST['batch_id'])) {
+        $productID = $_POST['product_id'];
+        $batchID = $_POST['batch_id'];
 
+        // Establish database connection
+        $db = Database::getInstance();
+        $conn = $db->connect();
 
+        try {
+            // Begin a transaction
+            $conn->beginTransaction();
 
-Router::post('/po/addItem', function () {
-    $db = Database::getInstance();
-    $conn = $db->connect();
+            // Delete the row from the order_details table
+            $stmt = $conn->prepare("DELETE FROM order_details WHERE Product_ID = :productID AND Batch_ID = :batchID");
+            $stmt->bindParam(':productID', $productID);
+            $stmt->bindParam(':batchID', $batchID);
+            $stmt->execute();
 
-    $productName = $_POST['productname'];
-    $supplierName = $_POST['supplier'];
-    $description = $_POST['description'];
-    $categoryName = $_POST['category'];
-    $price = $_POST['price'];
-    $weight = $_POST['weight'];
+            // Commit the transaction
+            $conn->commit();
 
-    // Check if all necessary data is provided
-    if (empty ($supplierName) || empty ($productName)) {
-        $rootFolder = dirname($_SERVER['PHP_SELF']);
-        header("Location: $rootFolder/po/items");
-        return;
-    }
-
-    // Retrieve the supplier_id based on the supplier name
-    $stmt = $conn->prepare("SELECT supplier_id FROM suppliers WHERE supplier_name = ?");
-    $stmt->bindParam(1, $supplierName, PDO::PARAM_STR);
-    $stmt->execute();
-    $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$supplier) {
-        echo "Supplier not found.";
-        return;
-    }
-
-    $supplierId = $supplier['supplier_id'];
-
-    // Retrieve the category_id based on the category name
-    $stmt = $conn->prepare("SELECT category_id FROM categories WHERE category_name = ?");
-    $stmt->bindParam(1, $categoryName, PDO::PARAM_STR);
-    $stmt->execute();
-    $category = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$category) {
-        echo "Category not found.";
-        return;
-    }
-
-    $categoryId = $category['category_id'];
-
-    // Handle image upload
-    if (isset ($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $fileName = $_FILES['file']['name'];
-        $fileTmpName = $_FILES['file']['tmp_name'];
-        $fileDestination = 'uploads/' . $fileName;
-
-        if (move_uploaded_file($fileTmpName, $fileDestination)) {
-            // Insert data into products table with supplier_id and category_id
-            $stmt1 = $conn->prepare("INSERT INTO products (ProductImage, ProductName, supplier_id, category_id, Description, Supplier, Category, Price, ProductWeight) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt1->bindParam(1, $fileDestination, PDO::PARAM_STR);
-            $stmt1->bindParam(2, $productName, PDO::PARAM_STR);
-            $stmt1->bindParam(3, $supplierId, PDO::PARAM_INT);
-            $stmt1->bindParam(4, $categoryId, PDO::PARAM_INT);
-            $stmt1->bindParam(5, $description, PDO::PARAM_STR);
-            $stmt1->bindParam(6, $supplierName, PDO::PARAM_STR);
-            $stmt1->bindParam(7, $categoryName, PDO::PARAM_STR);
-            $stmt1->bindParam(8, $price, PDO::PARAM_INT);
-            $stmt1->bindParam(9, $weight, PDO::PARAM_INT);
-            $stmt1->execute();
-
-            // Redirect after successful insertion
+            // Redirect back to the view details page
             $rootFolder = dirname($_SERVER['PHP_SELF']);
-            header("Location: $rootFolder/po/items");
-            exit ();
-        } else {
-            echo "Failed to move uploaded file.";
-            return;
+            header("Location: $rootFolder/po/viewdetails/Batch=$batchID");
+            exit();
+        } catch (PDOException $e) {
+            // Rollback the transaction on error
+            $conn->rollBack();
+            echo "Error deleting row: " . $e->getMessage();
+        } finally {
+            // Close connection
+            $conn = null;
         }
-    } else {
-        echo "No file uploaded or an error occurred.";
-        return;
     }
 });
+
+
+
+// Router::post('/po/addItem', function () {
+//     $db = Database::getInstance();
+//     $conn = $db->connect();
+
+//     $productName = $_POST['productname'];
+//     $supplierName = $_POST['supplier'];
+//     $description = $_POST['description'];
+//     $categoryName = $_POST['category'];
+//     $price = $_POST['price'];
+//     $weight = $_POST['weight'];
+
+//     // Check if all necessary data is provided
+//     if (empty ($supplierName) || empty ($productName)) {
+//         $rootFolder = dirname($_SERVER['PHP_SELF']);
+//         header("Location: $rootFolder/po/items");
+//         return;
+//     }
+
+//     // Retrieve the supplier_id based on the supplier name
+//     $stmt = $conn->prepare("SELECT supplier_id FROM suppliers WHERE supplier_name = ?");
+//     $stmt->bindParam(1, $supplierName, PDO::PARAM_STR);
+//     $stmt->execute();
+//     $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//     if (!$supplier) {
+//         echo "Supplier not found.";
+//         return;
+//     }
+
+//     $supplierId = $supplier['supplier_id'];
+
+//     // Retrieve the category_id based on the category name
+//     $stmt = $conn->prepare("SELECT category_id FROM categories WHERE category_name = ?");
+//     $stmt->bindParam(1, $categoryName, PDO::PARAM_STR);
+//     $stmt->execute();
+//     $category = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//     if (!$category) {
+//         echo "Category not found.";
+//         return;
+//     }
+
+//     $categoryId = $category['category_id'];
+
+//     // Handle image upload
+//     if (isset ($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+//         $fileName = $_FILES['file']['name'];
+//         $fileTmpName = $_FILES['file']['tmp_name'];
+//         $fileDestination = 'uploads/' . $fileName;
+
+//         if (move_uploaded_file($fileTmpName, $fileDestination)) {
+//             // Insert data into products table with supplier_id and category_id
+//             $stmt1 = $conn->prepare("INSERT INTO products (ProductImage, ProductName, supplier_id, category_id, Description, Supplier, Category, Price, ProductWeight) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+//             $stmt1->bindParam(1, $fileDestination, PDO::PARAM_STR);
+//             $stmt1->bindParam(2, $productName, PDO::PARAM_STR);
+//             $stmt1->bindParam(3, $supplierId, PDO::PARAM_INT);
+//             $stmt1->bindParam(4, $categoryId, PDO::PARAM_INT);
+//             $stmt1->bindParam(5, $description, PDO::PARAM_STR);
+//             $stmt1->bindParam(6, $supplierName, PDO::PARAM_STR);
+//             $stmt1->bindParam(7, $categoryName, PDO::PARAM_STR);
+//             $stmt1->bindParam(8, $price, PDO::PARAM_INT);
+//             $stmt1->bindParam(9, $weight, PDO::PARAM_INT);
+//             $stmt1->execute();
+
+//             // Redirect after successful insertion
+//             $rootFolder = dirname($_SERVER['PHP_SELF']);
+//             header("Location: $rootFolder/po/items");
+//             exit ();
+//         } else {
+//             echo "Failed to move uploaded file.";
+//             return;
+//         }
+//     } else {
+//         echo "No file uploaded or an error occurred.";
+//         return;
+//     }
+// });
 
 //function to get all the categories in the addItem.php
 function getAllCategories()
@@ -510,6 +529,8 @@ function getAllCategories()
 
     return $categories;
 }
+
+
 //function to delete/remove requested orders of the Inventory Team 
 Router::post('/delete/requestOrder', function () {
     try {
@@ -642,18 +663,23 @@ function updateRequestStatusToAccepted()
         // Prepare the SQL statement to insert into order_details
         $insertStmt = $conn->prepare("INSERT INTO order_details (Request_ID, Product_ID, Category_ID, Supplier_ID, Order_Status) VALUES (:requestID, :productID, :categoryID, :supplierID, 'to receive')");
 
+        // Initialize total amount and items subtotal
+        $totalAmount = 0;
+        $itemsSubtotal = 0;
+
         // Loop through each pending request and insert into order_details
         foreach ($pendingRequests as $request) {
             $requestID = $request['Request_ID'];
             $productID = $request['Product_ID'];
 
             // Retrieve Category_ID and Supplier_ID from products table
-            $productStmt = $conn->prepare("SELECT Category_ID, Supplier_ID FROM products WHERE ProductID = :productID");
+            $productStmt = $conn->prepare("SELECT Category_ID, Supplier_ID, Price FROM products WHERE ProductID = :productID");
             $productStmt->bindParam(':productID', $productID);
             $productStmt->execute();
             $product = $productStmt->fetch(PDO::FETCH_ASSOC);
             $categoryID = $product['Category_ID'];
             $supplierID = $product['Supplier_ID'];
+            $productPrice = $product['Price'];
 
             // Bind parameters and execute the insert statement
             $insertStmt->bindParam(':requestID', $requestID);
@@ -661,7 +687,18 @@ function updateRequestStatusToAccepted()
             $insertStmt->bindParam(':categoryID', $categoryID);
             $insertStmt->bindParam(':supplierID', $supplierID);
             $insertStmt->execute();
+
+            // Update total amount and items subtotal
+            $itemsSubtotal++;
+            $totalAmount += $productPrice;
         }
+
+        // Prepare the SQL statement to insert into batch_orders
+        $batchInsertStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive')");
+        $batchInsertStmt->bindParam(':supplierID', $supplierID);
+        $batchInsertStmt->bindParam(':itemsSubtotal', $itemsSubtotal);
+        $batchInsertStmt->bindParam(':totalAmount', $totalAmount);
+        $batchInsertStmt->execute();
 
         // Commit the transaction
         $conn->commit();
@@ -682,9 +719,6 @@ function updateRequestStatusToAccepted()
         echo "Error: " . $e->getMessage();
     }
 }
-
-
-
 // Route to handle the update request status action
 Router::post('/update/requestOrder', function () {
     // Call the function to update request status
@@ -693,7 +727,11 @@ Router::post('/update/requestOrder', function () {
 
 
 
-
+// Route to handle the update order status action
+Router::post('/complete/orderDetail', function () {
+    // Call the function to update order status
+    updateOrderStatusToCompleted();
+});
 //function to set the order status of to complete and also add the data in the transaction history
 function updateOrderStatusToCompleted()
 {
@@ -701,30 +739,33 @@ function updateOrderStatusToCompleted()
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        if (isset($_POST['Order_ID'])) {
-            $orderID = $_POST['Order_ID'];
+        if (isset($_POST['Batch_ID'])) {
+            $batchID = $_POST['Batch_ID'];
 
             // Begin a transaction
             $conn->beginTransaction();
 
-            // Update the order status in the order_details table
-            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Completed' WHERE Order_ID = :orderID");
-            $stmt->bindParam(':orderID', $orderID);
+            // Update the order status in the batch_orders table
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = 'Completed' WHERE Batch_ID = :batchID");
+            $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
-            // Fetch order details
-            $orderDetailsStmt = $conn->prepare("SELECT request_Id, Supplier_ID FROM order_details WHERE Order_ID = :orderID");
-            $orderDetailsStmt->bindParam(':orderID', $orderID);
+           // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
+            $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status FROM batch_orders WHERE Batch_ID = :batchID");
+            $orderDetailsStmt->bindParam(':batchID', $batchID);
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
-            $requestID = $orderDetails['request_Id'];
             $supplierID = $orderDetails['Supplier_ID'];
+            $orderStatus = $orderDetails['Order_Status'];
+
+            
+
 
             // Insert data into transaction_history table
-            $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Completed')");
-            $insertStmt->bindParam(':orderID', $orderID);
-            $insertStmt->bindParam(':requestID', $requestID);
+            $insertStmt = $conn->prepare("INSERT INTO transaction_history (Batch_ID, Supplier_ID, Order_Status) VALUES (:batchID, :supplierID, :orderStatus)");
+            $insertStmt->bindParam(':batchID', $batchID);
             $insertStmt->bindParam(':supplierID', $supplierID);
+            $insertStmt->bindParam(':orderStatus', $orderStatus);
             $insertStmt->execute();
 
             // Insert log entry for successful order completion with the last time_in
@@ -742,7 +783,7 @@ function updateOrderStatusToCompleted()
                 $last_time_in = $stmt->fetchColumn();
 
                 $user_id = $user['account_ID'];
-                $action = "Completed Order #$orderID";
+                $action = "Completed Order #$batchID";
                 $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
                 $sql = "INSERT INTO audit_log (account_ID, action, time_in, time_out) VALUES (:user_id, :action, :last_time_in, :time_out)";
@@ -757,7 +798,7 @@ function updateOrderStatusToCompleted()
             // Commit the transaction
             $conn->commit();
 
-            echo "Order status updated to 'Completed' for Order ID: $orderID";
+            echo "Order status updated to 'Completed' for Order ID: $batchID";
 
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/orderDetail");
@@ -771,53 +812,88 @@ function updateOrderStatusToCompleted()
 }
 
 
-// Route to handle the update order status action
-Router::post('/complete/orderDetail', function () {
-    // Call the function to update order status
-    updateOrderStatusToCompleted();
-});
+
+
+
 
 //function to set the order status of to complete and also add the data in the transaction history
+// Route to handle the cancel order status action
+Router::post('/cancel/orderDetail', function () {
+    // Call the function to cancel order status
+    updateOrderStatusToCancel();
+});
+
+
 function updateOrderStatusToCancel()
 {
     try {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        if (isset($_POST['Order_ID'])) {
-            $orderID = $_POST['Order_ID'];
+        if (isset($_POST['Batch_ID'])) {
+            $batchID = $_POST['Batch_ID'];
 
             // Begin a transaction
             $conn->beginTransaction();
 
-            // Update the order status in the order_details table
-            $stmt = $conn->prepare("UPDATE order_details SET Order_Status = 'Canceled' WHERE Order_ID = :orderID");
-            $stmt->bindParam(':orderID', $orderID);
+            // Update the order status in the batch_orders table
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = 'Cancelled' WHERE Batch_ID = :batchID");
+            $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
-            // Fetch order details
-            $orderDetailsStmt = $conn->prepare("SELECT request_Id, Supplier_ID FROM order_details WHERE Order_ID = :orderID");
-            $orderDetailsStmt->bindParam(':orderID', $orderID);
+           // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
+            $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status FROM batch_orders WHERE Batch_ID = :batchID");
+            $orderDetailsStmt->bindParam(':batchID', $batchID);
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
-            $requestID = $orderDetails['request_Id'];
             $supplierID = $orderDetails['Supplier_ID'];
+            $orderStatus = $orderDetails['Order_Status'];
+
+            
+
 
             // Insert data into transaction_history table
-            $insertStmt = $conn->prepare("INSERT INTO transaction_history (order_id, request_Id, Supplier_ID, Order_Status) VALUES (:orderID, :requestID, :supplierID, 'Canceled')");
-            $insertStmt->bindParam(':orderID', $orderID);
-            $insertStmt->bindParam(':requestID', $requestID);
+            $insertStmt = $conn->prepare("INSERT INTO transaction_history (Batch_ID, Supplier_ID, Order_Status) VALUES (:batchID, :supplierID, :orderStatus)");
+            $insertStmt->bindParam(':batchID', $batchID);
             $insertStmt->bindParam(':supplierID', $supplierID);
+            $insertStmt->bindParam(':orderStatus', $orderStatus);
             $insertStmt->execute();
+
+            // Insert log entry for successful order completion with the last time_in
+            $employee = $_SESSION['employee'];
+            $stmt = $conn->prepare("SELECT * FROM accounts WHERE employee = :employee");
+            $stmt->bindParam(':employee', $employee);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                // Retrieve the last time_in from the audit_log table based on account_ID
+                $stmt = $conn->prepare("SELECT time_in FROM audit_log WHERE account_ID = :accountID ORDER BY audit_ID DESC LIMIT 1");
+                $stmt->bindValue(':accountID', $user['account_ID']);
+                $stmt->execute();
+                $last_time_in = $stmt->fetchColumn();
+
+                $user_id = $user['account_ID'];
+                $action = "Cancelled Order #$batchID";
+                $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+                $sql = "INSERT INTO audit_log (account_ID, action, time_in, time_out) VALUES (:user_id, :action, :last_time_in, :time_out)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(':user_id', $user_id);
+                $stmt->bindValue(':action', $action);
+                $stmt->bindValue(':last_time_in', $last_time_in);
+                $stmt->bindValue(':time_out', $time_out);
+                $stmt->execute();
+            }
 
             // Commit the transaction
             $conn->commit();
 
-            echo "Order status updated to 'Completed' for Order ID: $orderID";
+            echo "Order status updated to 'Cancelled' for Order ID: $batchID";
 
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/orderDetail");
-            exit(); // Stop script execution
+            exit(); // Stop script execution after redirection
         }
     } catch (PDOException $e) {
         // Rollback the transaction in case of error
@@ -825,12 +901,6 @@ function updateOrderStatusToCancel()
         echo "Error: " . $e->getMessage();
     }
 }
-
-// Route to handle the update order status action
-Router::post('/cancel/orderDetail', function () {
-    // Call the function to update order status
-    updateOrderStatusToCancel();
-});
 
 
 //function to just fetch the data in the requestHistory

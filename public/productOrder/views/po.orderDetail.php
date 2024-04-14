@@ -129,7 +129,7 @@
                 <table class="min-w-full text-left mx-auto bg-white px-6">
                     <thead class="bg-gray-200 border-b border-gray-400 text-xs">
                         <tr>
-                            <th class="px-4 py-2 font-semibold">Supplier ID</th>
+                            <th class="px-4 py-2 font-semibold">Order #</th>
                             <th class="px-4 py-2 font-semibold">Supplier Name</th>
                             <th class="px-4 py-2 font-semibold">Date Order</th>
                             <th class="px-4 py-2 font-semibold">Time</th>
@@ -164,7 +164,7 @@ function displayPendingOrders()
         foreach ($rows as $row) {
               echo '<tbody>';
               echo '<tr>';
-              echo '<td class="px-4 py-7">' . $row['Supplier_ID'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Batch_ID'] . '</td>';
               echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
               echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
               echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';

@@ -178,25 +178,26 @@ if (isset($_GET['id'])) {
 // Function to fetch and display product data based on Batch_ID
 function displayProductData($batchId, $conn)
 {
-    // Prepare and execute SQL query to fetch product data based on Batch_ID
+    // Prepare and execute SQL query to fetch data
     $stmt = $conn->prepare("
-        SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, od.Product_Quantity
-        FROM batch_orders bo
-        JOIN order_details od ON bo.Batch_ID = od.Batch_ID
-        JOIN products p ON od.Product_ID = p.ProductID
-        WHERE od.Batch_ID = :batchId
-    ");
+    SELECT p.*, od.Product_Quantity, bo.Order_Status
+    FROM order_details od
+    JOIN products p ON od.Product_ID = p.ProductID
+    JOIN batch_orders bo ON od.Batch_ID = bo.Batch_ID
+    JOIN suppliers s ON p.Supplier_ID = s.Supplier_ID
+    WHERE od.Batch_ID = :batchId
+");
     $stmt->execute(['batchId' => $batchId]);
 
     // Fetch data
     $productData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Initialize variables for subtotal and total amount
+    $subtotal = 0;
+    $totalAmount = 0;
+
     // Check if data was found
     if ($productData) {
-        // Initialize variables for subtotal and total amount
-        $subtotal = 0;
-        $totalAmount = 0;
-
         // Display the fetched data
         foreach ($productData as $data) {
             ?>
@@ -220,10 +221,22 @@ function displayProductData($batchId, $conn)
                 </td> <!-- Display price -->
                 <td class="px-6 py-2">
                     <?= $data['Product_Quantity'] ?>
-                </td> <!-- Display weight -->
+                </td> <!-- Display status -->
+                <td class="px-6 py-2">
+                    <?= $data['Order_Status'] ?>
+                </td> 
+                <td class="px-6 py-2">
+                    <form action="/delete/viewdetails/" method="post">
+                        <input type="hidden" name="product_id" value="<?= $data['ProductID'] ?>">
+                        <input type="hidden" name="batch_id" value="<?= $batchId ?>">
+                        <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                    </form>
+                </td>
             </tr>
             <?php
-           
+            // Calculate subtotal and total amount
+            $subtotal += $data['Product_Quantity'];
+            $totalAmount += $data['Price'] * $data['Product_Quantity'];
         }
 
         // Display items subtotal and total amount
@@ -239,12 +252,12 @@ function displayProductData($batchId, $conn)
                     <div class="flex flex-col text-sm gap-3">
                         <a class="font-bold">Items Subtotal:
                             <div class="font-medium">
-                            <?= $data['Items_Subtotal'] ?>                            
-                        </div>
+                                <?= $subtotal ?>
+                            </div>
                         </a>
                         <a class="font-bold">Total Amount:
                             <div class="font-medium"> Php
-                            <?= $data['Total_Amount'] ?>
+                                <?= $totalAmount ?>
                             </div>
                         </a>
                     </div>
