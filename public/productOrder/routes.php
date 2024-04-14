@@ -401,7 +401,8 @@ Router::post('/placeorder/supplier/', function () {
     }
 });
 
-//function to delete some of the items in the orderDetails view 
+//function to delete the product in the vieworder list if there are no products from the supplier and also minus the Items
+//subotal and total amout in the batch order table
 Router::post('/delete/viewdetails/', function () {
     // Check if the delete request was submitted
     if (isset($_POST['product_id']) && isset($_POST['batch_id'])) {
@@ -416,11 +417,31 @@ Router::post('/delete/viewdetails/', function () {
             // Begin a transaction
             $conn->beginTransaction();
 
-            // Delete the row from the order_details table
-            $stmt = $conn->prepare("DELETE FROM order_details WHERE Product_ID = :productID AND Batch_ID = :batchID");
+            // Get the Price and Quantity of the product being deleted
+            $stmt = $conn->prepare("SELECT p.Price, od.Product_Quantity 
+                                    FROM order_details od 
+                                    INNER JOIN products p ON od.Product_ID = p.ProductID
+                                    WHERE od.Product_ID = :productID AND od.Batch_ID = :batchID");
             $stmt->bindParam(':productID', $productID);
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
+            $productData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Delete the row from the order_details table
+            $deleteStmt = $conn->prepare("DELETE FROM order_details WHERE Product_ID = :productID AND Batch_ID = :batchID");
+            $deleteStmt->bindParam(':productID', $productID);
+            $deleteStmt->bindParam(':batchID', $batchID);
+            $deleteStmt->execute();
+
+            // Subtract the Product_Quantity from batch_orders table
+            $subtotal = $productData['Product_Quantity'];
+            $totalAmount = $productData['Price'] * $subtotal;
+
+            $updateStmt = $conn->prepare("UPDATE batch_orders SET Items_Subtotal = Items_Subtotal - :subtotal, Total_Amount = Total_Amount - :totalAmount WHERE Batch_ID = :batchID");
+            $updateStmt->bindParam(':subtotal', $subtotal);
+            $updateStmt->bindParam(':totalAmount', $totalAmount);
+            $updateStmt->bindParam(':batchID', $batchID);
+            $updateStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -439,6 +460,7 @@ Router::post('/delete/viewdetails/', function () {
         }
     }
 });
+
 
 
 
