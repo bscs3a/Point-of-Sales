@@ -1,6 +1,6 @@
 <?php
 require_once "public/finance/functions/specialTransactions/payable.php";
-
+require_once "public/finance/functions/generalFunctions.php";
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
 $_SESSION['employee_name'] = "Tagle, Aries";
@@ -107,38 +107,44 @@ Router::post('/addPayable', function () {
 });
 
 //does not seem to work or execute at all idk why
-Router::post('/addToLoan', function () {
-    $modalId = $_POST['Modalid'];
-    $details = $_POST['description'];
-    $amount = $_POST['amount'];
-    $ledgerName = $_POST['ledgerName'];
 
+Router::post('/addToLoan', function () {
+   
+    
+    // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
+    $details = isset($_POST['description']) ? $_POST['description'] : null;
+    $amount = intval($_POST['amount']);
+    $ledgerNo = ($_POST['ledgerNo']);
+    $ledgerNo_Dr = ($_POST['ledgerName']);
+    // $datetime = $datetime->format('Y-m-d H:i:s');
+
+    // borrowAsset($ledgerNo, $ledgerNo_Dr, $amount);
+  
+  
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    // Get the ledgerNo from the ledger table
-    $sql = "SELECT ledgerNo FROM ledger WHERE ledgerName = :ledgerName";
+    
+    $sql = "SELECT ledgerno FROM ledger WHERE ledgerno = ? OR name = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':ledgerName', $ledgerName);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $ledgerNo_Dr = $row['ledgerNo'];
-
-    $modalId = $_POST['Modalid'];
-    $details = $_POST['description'];
-    $amount = $_POST['amount'];
+    $stmt->execute([$ledgerNo_Dr, $ledgerNo_Dr]);
+    $ledgerName = $stmt->fetchColumn();
 
     $sql = "INSERT INTO ledgertransaction (LedgerNo, details, amount, LedgerNo_Dr) VALUES (:modalId, :details, :amount, :ledgerNo_Dr)";
     $stmt = $conn->prepare($sql);
 
-    $stmt->bindParam(':modalId', $modalId);
+    $stmt->bindParam(':modalId', $ledgerNo);
     $stmt->bindParam(':details', $details);
     $stmt->bindParam(':amount', $amount);
-    $stmt->bindParam(':ledgerNo_Dr', $ledgerNo_Dr);
+    $stmt->bindParam(':ledgerNo_Dr', $ledgerName);
+    // $stmt->bindParam(':DateTime', $datetime);
 
-    $stmt->execute();
-    // insertLedgerXact($modalId, $ledgerName, $amount, $details);
-    // borrowAsset($_POST['LedgerNo'], $_POST['LedgerNo'], $_POST['amount']);
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return;
+    }
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/accounts/payable");

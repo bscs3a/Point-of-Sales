@@ -138,7 +138,8 @@
                                     <label for="acctype" class="block text-xs font-medium text-gray-900">
                                         Capital
                                     </label>
-                                    <input type="text" id="description" name="acctype" required value="Account Payable" readonly
+                                    <input type="text" id="description" name="acctype" required value="Account Payable"
+                                        readonly
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
 
                                 </div>
@@ -227,13 +228,13 @@
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                                    <form action="" method="POST">
+                                    <form action="/addToLoan" method="POST">
                                         <div class="mb-4 relative">
                                             Total: <?= $results['total_amount'] ?>
 
                                         </div>
 
-
+                                        <input type="hidden" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
                                         <div class="mb-4 relative">
                                             <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
                                             </label>
@@ -242,6 +243,27 @@
                                                 onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
                                             <span
                                                 class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
+                                        </div>
+
+                                        <?php
+                                        $db = Database::getInstance();
+                                        $conn = $db->connect();
+
+                                        $query = "SELECT name FROM ledger WHERE AccountType = 2";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->execute();
+
+                                        ?>
+                                        <div class="mb-4 relative">
+                                            <label for="ledgerName" class="block text-xs font-medium text-gray-900">
+                                                Pay Using
+                                            </label>
+                                            <select name="ledgerName" id="ledgerName"
+                                                class="mt-1 py-1 px-2 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
+                                                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                                                    <option value="<?= $row['name'] ?>"><?= $row['name'] ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
                                         </div>
 
 
@@ -263,15 +285,15 @@
                                 <div class="border-b pl-3 pr-3 pt-3 flex">
                                     <h5 class="font-bold uppercase text-gray-600"><?= $results['name'] ?></h5>
                                     <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
-                                <i class="ri-close-line"></i>
-                            </button> -->
+                                    <i class="ri-close-line"></i>
+                                </button> -->
                                 </div>
                                 <!-- form -->
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
                                     <form action="/addToLoan" method="POST">
-                                        <input type="hidden" id="id" name="Modalid" value="<?= $id ?>" />
+                                        <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
                                         <div class="mb-4 relative">
                                             <label for="description" class="block text-xs font-medium text-gray-900">
                                                 Description
@@ -378,6 +400,18 @@
 
             </div>
     </main>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const forms = document.querySelectorAll('form');
+            const pathSegments = window.location.pathname.split('/');
+            const rootFolder = pathSegments.length > 1 ? pathSegments[1] : '';
+
+            forms.forEach(form => {
+                const existingAction = form.getAttribute('action');
+                form.action = `/${rootFolder}${existingAction}`;
+            });
+        });
+    </script>
 
     <script src="./../../../src/form.js"></script>
     <script src="./../../../src/route.js"></script>

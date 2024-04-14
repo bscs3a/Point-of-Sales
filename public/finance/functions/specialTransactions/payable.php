@@ -3,9 +3,10 @@ require_once "public/finance/functions/generalFunctions.php";
 
 
 
-function getAllPayable(){
+function getAllPayable()
+{
     $db = Database::getInstance();
-    $conn = $db->connect();  
+    $conn = $db->connect();
 
     $AP = getAccountCode("Accounts Payable");
     $TP = getAccountCode("Tax Payable");
@@ -20,15 +21,33 @@ function getAllPayable(){
     foreach ($ledgers as $ledger) {
         $ledgerNo = $ledger['ledgerno'];
         $name = $ledger['name'];
-        $query = "SELECT SUM(amount) as total_amount FROM ledgertransaction WHERE LedgerNo = :LedgerNo";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':LedgerNo', $ledgerNo);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $query1 = "SELECT SUM(lt.amount) as total_amount 
+                  FROM ledgertransaction lt 
+                  JOIN ledger l ON lt.LedgerNo_Dr = l.ledgerno 
+                  WHERE lt.LedgerNo = :LedgerNo AND l.AccountType != 2";
+
+        $query2 = "SELECT SUM(lt.amount) as total_amount 
+                  FROM ledgertransaction lt 
+                  JOIN ledger l ON lt.LedgerNo_Dr = l.ledgerno 
+                  WHERE lt.LedgerNo = :LedgerNo AND l.AccountType = 2";
+
+        $stmt1 = $conn->prepare($query1);
+        $stmt1->bindParam(':LedgerNo', $ledgerNo);
+        $stmt1->execute();
+        $result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+
+        $stmt2 = $conn->prepare($query2);
+        $stmt2->bindParam(':LedgerNo', $ledgerNo);
+        $stmt2->execute();
+        $result2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+        $total_amount = $result1['total_amount'] - $result2['total_amount'];
+
         $results[] = [
             'ledgerno' => $ledgerNo,
             'name' => $name,
-            'total_amount' => $result['total_amount']
+            'total_amount' => $total_amount
         ];
     }
 
@@ -37,55 +56,59 @@ function getAllPayable(){
 
 
 // get total value of payble minus the paid amount
-function getValueOfPayable($accountNumber){
+function getValueOfPayable($accountNumber)
+{
     return abs(getAccountBalanceV2($accountNumber));
 }
 
 
 // add loan to account
-function borrowAsset($accountNumber, $assetCode, $amount){
+function borrowAsset($accountNumber, $assetCode, $amount)
+{
     $accountNumber = getAccountCode($accountNumber);
     $assetCode = getAccountCode($assetCode);
 
-    if ($amount <= 0){
+    if ($amount <= 0) {
         throw new Exception("Amount must be greater than 0");
     }
-    if(!$accountNumber){
+    if (!$accountNumber) {
         throw new Exception("Account number not found");
     }
-    if(!$assetCode){
+    if (!$assetCode) {
         throw new Exception("Asset code not found");
     }
 
-    insertLedgerXact($assetCode,$accountNumber,$amount,"Boroww on $accountNumber with $assetCode");
+    insertLedgerXact($assetCode, $accountNumber, $amount, "Boroww on $accountNumber with $assetCode");
     return;
 }
 
 //withdraw investment 
-function payPayable($accountNumber, $assetCode, $amount){
+function payPayable($accountNumber, $assetCode, $amount)
+{
     $accountNumber = getAccountCode($accountNumber);
     $assetCode = getAccountCode($assetCode);
 
     $currentPayable = getValueOfPayable($accountNumber);
 
-    if ($amount <= 0){
+    if ($amount <= 0) {
         throw new Exception("Amount must be greater than 0");
     }
-    if($amount > $currentPayable){
+    if ($amount > $currentPayable) {
         throw new Exception("Amount is greater than current payable");
     }
-    if(!$accountNumber){
+    if (!$accountNumber) {
         throw new Exception("Account number not found");
     }
-    if(!$assetCode){
+    if (!$assetCode) {
         throw new Exception("Asset code not found");
     }
 
-    insertLedgerXact($accountNumber,$assetCode,$amount,"Paid $accountNumber using $assetCode");
+    insertLedgerXact($accountNumber, $assetCode, $amount, "Paid $accountNumber using $assetCode");
     return;
 }
 
-function addPayable($name, $contact, $contactName){
+function addPayable($name, $contact, $contactName)
+{
     $CAPITAL = getAccountCode("Accounts Payable");
 
     $db = Database::getInstance();
