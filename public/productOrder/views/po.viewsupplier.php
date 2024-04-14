@@ -136,43 +136,51 @@
             <!-- reviews and feedback area -->
             <div class="py-10">
               <div class="w-full h-auto mx-auto bg-white border border-gray-400 rounded-lg shadow-md overflow-hidden">
-                <div class="font-bold py-4 pl-8 text-xl border-b border-gray-400">Reviews and Feedbacks(not yet complete)</div>
+                <div class="font-bold py-4 pl-8 text-xl border-b border-gray-400">Feedbacks</div>
 
-                <!-- Item Container -->
-                <div class="flex flex-col gap-3 p-4">
-                  <div class="flex flex-col gap-1 p-4 border-b border-gray-300">
+               <!-- Item Container -->
+              <div class="flex flex-col gap-3 p-4">
 
-                    <!-- Profile and Rating -->
-                    <div class="flex justify justify-between">
-                      <div class="font-semibold text-lg">
-                        David, Marc
+                <?php
+                require_once 'dbconn.php';
+                // Fetch feedbacks based on the Supplier_ID from the URL parameter
+                $supplierID = $_GET['Supplier_ID']; // Assuming 'supplierID' is the key in the URL parameter
+                $query = "SELECT * FROM feedbacks WHERE supplier_id = :supplierID";
+                $stmt = $conn->prepare($query);
+                $stmt->bindParam(':supplierID', $supplierID);
+                $stmt->execute();
+                $feedbacks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Check if feedbacks exist
+                if ($feedbacks) {
+                  // Iterate through each feedback and display it
+                  foreach ($feedbacks as $feedback) {
+                ?>
+                    <div class="flex flex-col gap-1 p-4 border-b border-gray-300">
+                      <!-- Profile and Rating -->
+                      <div class="flex justify justify-between">
+                        <div class="font-semibold text-lg">
+                          <?= $feedback['user'] ?>
+                        </div>
                       </div>
-                    </div>
-
-                    <div class="font-medium">
-                      Gorgeous design! Even more responsive than the previous version. A pleasure to use!
-                      this should have a query that will show the review feedback based on the selected ID on the $get method 
-                      in the url so that the data will show after succesfully reviewing a order otherwise it should be empty
-                    </div>
-
-                    <div class="font-normal text-sm">Feb 13, 2021</div>
-                  </div>
-
-                  <div class="flex flex-col gap-1 p-4 border-b border-gray-300">
-                    <!-- Profile and Rating -->
-                    <div class="flex justify justify-between">
-                      <div class="font-semibold text-lg">
-                        David, Marc
+                      <div class="font-medium">Order #
+                        <?= $feedback['batch_ID'] ?>
                       </div>
-                    </div>
+                      <div class="font-medium">
+                        <?= $feedback['reviews'] ?>
+                      </div>
 
-                    <div class="font-medium">
-                      Gorgeous design! Even more responsive than the previous version. A pleasure to use!
+                      <div class="font-normal text-sm"><?= $feedback['date'] ?></div>
                     </div>
-
-                    <div class="font-normal text-sm">Feb 13, 2021</div>
-                  </div>
-                </div>
+                <?php
+                  }
+                } else {
+                  // No feedbacks found
+                  echo "<div>No feedbacks available</div>";
+                }
+                ?>
+              </div>
+                
               </div>
             </div>
 
