@@ -25,7 +25,7 @@ $po = [
     '/po/test1' => $basePath . "test1.php",
 
     //umm idk what to say here view orders route
-    '/po/viewdetails/Order={id}' => function ($id) use ($basePath) {
+    '/po/viewdetails/Batch={id}' => function ($id) use ($basePath) {
         // $_SESSION['id'] = $id;
         $_GET['id'] = $id;
         include $basePath . "viewdetails.php";
@@ -303,7 +303,7 @@ Router::post('/po/addbulk/', function () {
         }
           // Redirect to the products page upon successful insertion
           $rootFolder = dirname($_SERVER['PHP_SELF']);
-          header("Location: $rootFolder/po/addbulk/Supplier=$supplierID");
+          header("Location: $rootFolder/po/viewsupplierproduct/Supplier=$supplierID");
           exit; // Terminate script execution after redirect
     } catch (PDOException $e) {
         // Handle PDO exceptions
@@ -336,36 +336,58 @@ Router::post('/placeorder/supplier/', function () {
     try {
         // Start a transaction
         $conn->beginTransaction();
-        $status = "to receive";
-        // Prepare SQL statement for inserting orders into requests table
-        $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID, Order_Status) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID, :status)");
         
+        // Prepare SQL statement for inserting orders into order_details table
+        $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
+
+        // Prepare SQL statement for inserting batch into batch_orders table
+        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive')");
+
         // Get Supplier_ID and Batch_ID from the form data
         $supplierID = $_POST['supplierID'];
         $batchID = getNextBatchID($conn); // Function to get the next available batch ID
-        
+
+        // Initialize total quantity and total amount
+        $totalQuantity = 0;
+        $totalAmount = 0;
+
         // Loop through each selected product
         foreach ($_POST['products'] as $productID) {
             $quantityField = 'quantity_' . $productID;
             $quantity = isset($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
             if ($quantity > 0) {
-                // Bind parameters
+                // Bind parameters for order details insertion
                 $orderStmt->bindParam(':supplierID', $supplierID);
                 $orderStmt->bindParam(':productID', $productID);
                 $orderStmt->bindParam(':quantity', $quantity);
                 $orderStmt->bindParam(':batchID', $batchID);
-                $orderStmt->bindParam(':status', $status); // Bind $status separately
-        
-                // Execute the statement
+
+                // Execute the statement for order details insertion
                 $orderStmt->execute();
+
+                // Calculate subtotal quantity
+                $totalQuantity += $quantity;
+
+                // Retrieve product price from the database
+                $productPriceQuery = "SELECT Price FROM products WHERE ProductID = :productID";
+                $productPriceStmt = $conn->prepare($productPriceQuery);
+                $productPriceStmt->bindParam(':productID', $productID);
+                $productPriceStmt->execute();
+                $productPrice = $productPriceStmt->fetchColumn();
+
+                // Calculate total amount
+                $totalAmount += $quantity * $productPrice;
             }
         }
 
-        // Insert into batch_order table
-        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID) VALUES (:supplierID)");
+        // Bind parameters for batch order insertion
         $batchOrderStmt->bindParam(':supplierID', $supplierID);
+        $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
+        $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
+
+        // Execute the statement for batch order insertion
         $batchOrderStmt->execute();
-        
+
         // Commit the transaction
         $conn->commit();
 
