@@ -328,11 +328,9 @@ Router::post('/placeorder/supplier/', function () {
         echo "No products selected for ordering.";
         return;
     }
-
     // Establish database connection
     $db = Database::getInstance();
     $conn = $db->connect();
-
     try {
         // Start a transaction
         $conn->beginTransaction();
@@ -341,11 +339,15 @@ Router::post('/placeorder/supplier/', function () {
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
         // Prepare SQL statement for inserting batch into batch_orders table
-        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Order_Status) VALUES (:supplierID, 'to receive')");
+        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive')");
 
         // Get Supplier_ID and Batch_ID from the form data
         $supplierID = $_POST['supplierID'];
         $batchID = getNextBatchID($conn); // Function to get the next available batch ID
+
+        // Initialize total quantity and total amount
+        $totalQuantity = 0;
+        $totalAmount = 0;
 
         // Loop through each selected product
         foreach ($_POST['products'] as $productID) {
@@ -360,18 +362,31 @@ Router::post('/placeorder/supplier/', function () {
 
                 // Execute the statement for order details insertion
                 $orderStmt->execute();
+
+                // Calculate subtotal quantity
+                $totalQuantity += $quantity;
+
+                // Retrieve product price from the database
+                $productPriceQuery = "SELECT Price FROM products WHERE ProductID = :productID";
+                $productPriceStmt = $conn->prepare($productPriceQuery);
+                $productPriceStmt->bindParam(':productID', $productID);
+                $productPriceStmt->execute();
+                $productPrice = $productPriceStmt->fetchColumn();
+
+                // Calculate total amount
+                $totalAmount += $quantity * $productPrice;
             }
         }
 
         // Bind parameters for batch order insertion
         $batchOrderStmt->bindParam(':supplierID', $supplierID);
+        $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
+        $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
 
         // Execute the statement for batch order insertion
         $batchOrderStmt->execute();
-
         // Commit the transaction
         $conn->commit();
-
         // Redirect the user after successful order placement
         $rootFolder = dirname($_SERVER['PHP_SELF']);
         header("Location: $rootFolder/po/orderDetail");
@@ -663,23 +678,18 @@ function updateRequestStatusToAccepted()
         // Prepare the SQL statement to insert into order_details
         $insertStmt = $conn->prepare("INSERT INTO order_details (Request_ID, Product_ID, Category_ID, Supplier_ID, Order_Status) VALUES (:requestID, :productID, :categoryID, :supplierID, 'to receive')");
 
-        // Initialize total amount and items subtotal
-        $totalAmount = 0;
-        $itemsSubtotal = 0;
-
         // Loop through each pending request and insert into order_details
         foreach ($pendingRequests as $request) {
             $requestID = $request['Request_ID'];
             $productID = $request['Product_ID'];
 
             // Retrieve Category_ID and Supplier_ID from products table
-            $productStmt = $conn->prepare("SELECT Category_ID, Supplier_ID, Price FROM products WHERE ProductID = :productID");
+            $productStmt = $conn->prepare("SELECT Category_ID, Supplier_ID FROM products WHERE ProductID = :productID");
             $productStmt->bindParam(':productID', $productID);
             $productStmt->execute();
             $product = $productStmt->fetch(PDO::FETCH_ASSOC);
             $categoryID = $product['Category_ID'];
             $supplierID = $product['Supplier_ID'];
-            $productPrice = $product['Price'];
 
             // Bind parameters and execute the insert statement
             $insertStmt->bindParam(':requestID', $requestID);
@@ -687,18 +697,7 @@ function updateRequestStatusToAccepted()
             $insertStmt->bindParam(':categoryID', $categoryID);
             $insertStmt->bindParam(':supplierID', $supplierID);
             $insertStmt->execute();
-
-            // Update total amount and items subtotal
-            $itemsSubtotal++;
-            $totalAmount += $productPrice;
         }
-
-        // Prepare the SQL statement to insert into batch_orders
-        $batchInsertStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive')");
-        $batchInsertStmt->bindParam(':supplierID', $supplierID);
-        $batchInsertStmt->bindParam(':itemsSubtotal', $itemsSubtotal);
-        $batchInsertStmt->bindParam(':totalAmount', $totalAmount);
-        $batchInsertStmt->execute();
 
         // Commit the transaction
         $conn->commit();
@@ -719,6 +718,9 @@ function updateRequestStatusToAccepted()
         echo "Error: " . $e->getMessage();
     }
 }
+
+
+
 // Route to handle the update request status action
 Router::post('/update/requestOrder', function () {
     // Call the function to update request status

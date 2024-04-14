@@ -180,13 +180,12 @@ function displayProductData($batchId, $conn)
 {
     // Prepare and execute SQL query to fetch data
     $stmt = $conn->prepare("
-    SELECT p.*, od.Product_Quantity, bo.Order_Status
-    FROM order_details od
-    JOIN products p ON od.Product_ID = p.ProductID
-    JOIN batch_orders bo ON od.Batch_ID = bo.Batch_ID
-    JOIN suppliers s ON p.Supplier_ID = s.Supplier_ID
-    WHERE od.Batch_ID = :batchId
-");
+        SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity
+        FROM batch_orders bo
+        JOIN order_details od ON bo.Batch_ID = od.Batch_ID
+        JOIN products p ON od.Product_ID = p.ProductID
+        WHERE od.Batch_ID = :batchId
+    ");
     $stmt->execute(['batchId' => $batchId]);
 
     // Fetch data
@@ -234,9 +233,7 @@ function displayProductData($batchId, $conn)
                 </td>
             </tr>
             <?php
-            // Calculate subtotal and total amount
-            $subtotal += $data['Product_Quantity'];
-            $totalAmount += $data['Price'] * $data['Product_Quantity'];
+          
         }
 
         // Display items subtotal and total amount
@@ -252,12 +249,14 @@ function displayProductData($batchId, $conn)
                     <div class="flex flex-col text-sm gap-3">
                         <a class="font-bold">Items Subtotal:
                             <div class="font-medium">
-                                <?= $subtotal ?>
+                            <?= $data['Items_Subtotal'] ?>
+
                             </div>
                         </a>
                         <a class="font-bold">Total Amount:
                             <div class="font-medium"> Php
-                                <?= $totalAmount ?>
+                            <?= $data['Total_Amount'] ?>
+
                             </div>
                         </a>
                     </div>
