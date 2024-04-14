@@ -120,7 +120,7 @@ if ($conn === null) {
                             </tr>
                             <tr>
                                 <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Address</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryAddress']; ?></td>
+                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Province'] . ' ' . $order['Municipality'] . ' ' . $order['StreetBarangayAddress']; ?></td>
                             </tr>
                             <tr>
                                 <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Contact Number</td>

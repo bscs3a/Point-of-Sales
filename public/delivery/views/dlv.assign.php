@@ -105,7 +105,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </button>
                 </div>
                 <!-- content -->
-
+                
                 <!-- You could provide a form here to assign the truck to an order -->
                 <div class="m-4 font-bold text-lg flex flex-col space-y-4">
                     <div class="flex justify-start space-x-20">
@@ -125,6 +125,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <th class="w-1/8 border px-4 py-2">Quantity</th>
                                             <th class="w-1/8 border px-4 py-2">Order Date</th>
                                             <th class="w-1/8 border px-4 py-2">Delivery Date</th>
+                                            <th class="w-1/8 border px-4 py-2">Municipality</th>
                                         </tr>
                                     </thead>
                                     <tbody class="font-normal text-center">
@@ -139,6 +140,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <td class="border px-4 py-2"><?php echo $row['Quantity']; ?></td>
                                                 <td class="border px-4 py-2"><?php echo date('Y-m-d', strtotime($row['SaleDate'])); ?></td>
                                                 <td class="border px-4 py-2"><?php echo $row['DeliveryDate']; ?></td>
+                                                <td class="border px-4 py-2"><?php echo $row['Municipality']; ?></td>
                                             </tr>
                                         <?php endforeach; ?>         
                                     </tbody>

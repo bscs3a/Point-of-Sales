@@ -1,11 +1,22 @@
--- Categories Table
+-- (Sales) Audit Trail Table
+CREATE TABLE tbl_sls_audit (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_name VARCHAR(255),
+    log_action VARCHAR(255),
+    log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log in');
+-- INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES ('Alfaro, Aian Louise', 'Log out');
+
+-- (Sales) Categories Table
 CREATE TABLE IF NOT EXISTS Categories (
     Category_ID INT(11) NOT NULL AUTO_INCREMENT,
     Category_Name VARCHAR(50) NOT NULL,
     PRIMARY KEY (Category_ID)
 );
 
--- Products Table
+-- (Sales) Products Table
 CREATE TABLE IF NOT EXISTS Products (
     ProductID INT(11) NOT NULL AUTO_INCREMENT,
     Supplier_ID INT(11) NOT NULL,
@@ -24,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Products (
     PRIMARY KEY (ProductID)
 );
 
--- Customers Table
+-- (Sales) Customers Table
 CREATE TABLE IF NOT EXISTS Customers (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(100),
@@ -33,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Customers (
     Email VARCHAR(100)
 );
 
--- Sales Table with DeliveryDate column
+-- (Sales) Table with DeliveryDate column
 CREATE TABLE IF NOT EXISTS Sales (
     SaleID INT AUTO_INCREMENT PRIMARY KEY,
     SaleDate DATETIME,
@@ -46,11 +57,11 @@ CREATE TABLE IF NOT EXISTS Sales (
     TotalAmount DECIMAL(10, 2),
     EmployeeID INT,
     CustomerID INT,
-
+ -- FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
 
--- SaleDetails Table
+-- (Sales) SaleDetails Table
 CREATE TABLE IF NOT EXISTS SaleDetails (
     SaleDetailID INT AUTO_INCREMENT PRIMARY KEY,
     SaleID INT,
@@ -73,7 +84,7 @@ CREATE TABLE IF NOT EXISTS Trucks (
     TruckStatus ENUM('Available', 'In Transit', 'Unavailable') DEFAULT 'Available'
 );
 
--- DeliveryOrders Table
+-- (SALES) DeliveryOrders Table
 CREATE TABLE IF NOT EXISTS DeliveryOrders (
     DeliveryOrderID INT AUTO_INCREMENT PRIMARY KEY,
     SaleID INT,  
@@ -110,7 +121,7 @@ CREATE TABLE employees (
 	position VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
--- (HR)
+-- (HR) attendance table
 CREATE TABLE IF NOT EXISTS attendance (
     id INT(10) NOT NULL AUTO_INCREMENT,
     attendance_date DATETIME NOT NULL,
@@ -129,6 +140,16 @@ CREATE TABLE IF NOT EXISTS EmployeeTrucks (
     FOREIGN KEY (TruckID) REFERENCES Trucks(TruckID)
 );
 
+-- (Sales) TargetSales Table
+CREATE TABLE IF NOT EXISTS TargetSales (
+    TargetID INT AUTO_INCREMENT PRIMARY KEY,
+    MonthYear DATE,
+    TargetAmount DECIMAL(10, 2),
+    EmployeeID INT,
+--  FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+-- (Sales) ReturnProducts Table
 CREATE TABLE ReturnProducts (
     ReturnID INT AUTO_INCREMENT PRIMARY KEY,
     SaleID INT,
@@ -239,7 +260,7 @@ INSERT INTO EmployeeTrucks (EmployeeID, TruckID) VALUES
     (18, 6);
 
     -- Attendance check
-    INSERT INTO attendance (attendance_date, clock_in, clock_out, employee_id) VALUES
+    INSERT INTO attendance (attendance_date, clock_in, clock_out, employees_id) VALUES
     (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 1),
     (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 2),
     (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 3);
