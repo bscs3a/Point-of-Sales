@@ -194,8 +194,9 @@
               $conn = $db->connect();
               // Query to retrieve data from transaction_history table
               $query = "SELECT th.Transaction_ID, s.Supplier_Name, th.Date_Delivered, th.Time_Delivered, th.Order_Status, th.Batch_ID
-                  FROM transaction_history th
-                  JOIN suppliers s ON th.Supplier_ID = s.Supplier_ID"; // Assuming Product_ID links to the products table
+              FROM transaction_history th
+              JOIN suppliers s ON th.Supplier_ID = s.Supplier_ID
+              ORDER BY th.Batch_ID ASC";
               $statement = $conn->prepare($query);
               $statement->execute();
               $transactions = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -209,7 +210,10 @@
                 echo '<td class="px-4 py-4">' . $transaction['Date_Delivered'] . '</td>';
                 echo '<td class="px-4 py-4">' . $transaction['Time_Delivered'] . '</td>';
                 echo '<td class="px-4 py-4">' . $transaction['Order_Status'] . '</td>';
-                echo '<td class="px-4 py-4">view</td>';
+               // for VIEW order
+                echo '<td class="px-4 py-4">';
+                echo '<a href="/master/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
+                echo '</td>';
                 echo '</tr>';
                 echo '</tbody>';
               }

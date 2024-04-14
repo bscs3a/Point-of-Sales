@@ -49,37 +49,10 @@
         </span>
       </a>
 
-      <!-- TRANSACTION VIEW PAGE -->
-      <a route='/po/viewtransaction' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
-        <span class="flex items-center">
-          <i class="ri-history-line" style="font-size: 1.2em;"></i>
-          <span class="mx-4 text-sm font-medium">View Transaction</span>
-        </span>
+    
 
-        <span>
-          <i class="ri-arrow-right-s-line"></i>
-        </span>
-      </a>
-
-      <a route='/po/requestHistory' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
-        <span class="flex items-center">
-          <i class="ri-history-line" style="font-size: 1.2em;"></i>
-          <span class="mx-4 text-sm font-medium">Request History(AALISIN NA DAW TO)</span>
-        </span>
-
-        <span>
-          <i class="ri-arrow-right-s-line"></i>
-        </span>
-      </a>
-
-      <!-- testing area -->
-      <a
-        route='/po/test'
-        class="flex justify-between items-center px-4 py-2 text-gray-100 hover:bg-violet-300">
-        <span class="flex items-center">
-          <span class="mx-4 font-normal">Tester</span>
-        </span>
-
+     
+   
         <span>
           <svg
             class="h-4 w-4"

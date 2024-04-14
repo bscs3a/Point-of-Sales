@@ -30,6 +30,12 @@ $po = [
         $_GET['id'] = $id;
         include $basePath . "viewdetails.php";
     },
+    //for viewing the transaction information based on the batch id
+    '/po/viewtransaction/Batch={id}' => function ($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['id'] = $id;
+        include $basePath . "viewtransaction.php";
+    },
     // view supplier information route
     '/po/viewsupplier/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
         // $_SESSION['id'] = $id;
@@ -608,6 +614,46 @@ Router::post('/delete/requestOrder', function () {
     }
 });
 
+// Function to add feedback
+Router::post('/addfeedback/viewtransaction', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Retrieve data from the form submission
+    $reviews = $_POST['reviews'];
+    $supplierID = $_POST['supplierID'];
+    $user = $_POST['user'];
+    $batchID = $_POST['batchID']; // Retrieve the batchID from the form submission
+
+    // Check if feedback has already been provided for this supplier and batch
+    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM feedbacks WHERE batch_ID = :batchID");
+    $checkStmt->bindParam(':batchID', $batchID);
+    $checkStmt->execute();
+    $feedbackCount = $checkStmt->fetchColumn();
+
+    // If feedback hasn't been provided yet, save the feedback and update the "Done" status
+    if ($feedbackCount == 0) {
+        // Prepare and execute the SQL query to insert feedback into the database
+        $stmt = $conn->prepare("INSERT INTO feedbacks (reviews, supplier_id, user, batch_ID) VALUES (:reviews, :supplierID, :user, :batchID)");
+        $stmt->bindParam(':reviews', $reviews);
+        $stmt->bindParam(':supplierID', $supplierID);
+        $stmt->bindParam(':user', $user);
+        $stmt->bindParam(':batchID', $batchID);
+        $stmt->execute();
+
+        // Update the "Feedback" column in the transaction history table
+        $updateStmt = $conn->prepare("UPDATE transaction_history SET Feedback = 'Done' WHERE supplier_id = :supplierID AND batch_ID = :batchID");
+        $updateStmt->bindParam(':supplierID', $supplierID);
+        $updateStmt->bindParam(':batchID', $batchID);
+        $updateStmt->execute();
+    }
+
+    // Close the database connection
+    $conn = null;
+
+    // Redirect back to the previous page after saving feedback
+    header("Location: /master/po/transactionHistory", true, 303);
+});
 
 
 
