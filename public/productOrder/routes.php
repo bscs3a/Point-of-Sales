@@ -7,6 +7,7 @@ $po = [
     // Sample Routes
     '/po/login' => $basePath . "login.php",
     '/po/dashboard' => $basePath . "dashboard.php",
+    '/po/requestOrder' => $basePath . "requestOrder.php",
     '/po/suppliers' => $basePath . "suppliers.php",
     '/po/addsupplier' => $basePath . "addsupplier.php",
     '/po/viewsupplier' => $basePath . "viewsupplier.php",
@@ -17,16 +18,11 @@ $po = [
     '/po/orderDetail' => $basePath . "orderDetail.php",
     '/po/viewdetails' => $basePath . "viewdetails.php",
     '/po/transactionHistory' => $basePath . "transactionHistory.php",
+    '/po/requestHistory' => $basePath . "requestHistory.php",
+    '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
     '/po/viewtransaction' => $basePath . "viewtransaction.php",
-    
     '/po/test' => $basePath . "test.php",
     '/po/test1' => $basePath . "test1.php",
-
-    // removed
-    '/po/requestHistory' => $basePath . "requestHistory.php",
-    '/po/requestOrder' => $basePath . "requestOrder.php",
-    '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
-
 
     //umm idk what to say here view orders route
     '/po/viewdetails/Order={id}' => function ($id) use ($basePath) {
@@ -318,43 +314,65 @@ Router::post('/po/addbulk/', function () {
     }
 });
 
-//function for ordering products while viewing the suppliers products
-// Place order function
+// Function to get the next available batch ID
+function getNextBatchID($conn) {
+    $query = "SELECT MAX(Batch_ID) AS MaxBatchID FROM order_details";
+    $statement = $conn->prepare($query);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return ($result['MaxBatchID'] ?? 0) + 1;
+}
+
 Router::post('/placeorder/supplier/', function () {
+    if (!isset($_POST['products']) || !is_array($_POST['products'])) {
+        echo "No products selected for ordering.";
+        return;
+    }
+
     // Establish database connection
     $db = Database::getInstance();
     $conn = $db->connect();
 
     try {
-        // Check if products are selected for ordering
-        if (!isset($_POST['products']) || empty($_POST['products'])) {
-            echo "No products selected for ordering.";
-            return;
-        }
-
-        // Retrieve selected product IDs
-        $selectedProducts = $_POST['products'];
-
         // Start a transaction
         $conn->beginTransaction();
-
-        // Prepare SQL statement for inserting orders into order_details table
-        $orderStmt = $conn->prepare("INSERT INTO requests (Product_ID, Product_Quantity, Order_Date) VALUES (:productID, 1, NOW())");
-
+        $status = "to receive";
+        // Prepare SQL statement for inserting orders into requests table
+        $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID, Order_Status) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID, :status)");
+        
+        // Get Supplier_ID and Batch_ID from the form data
+        $supplierID = $_POST['supplierID'];
+        $batchID = getNextBatchID($conn); // Function to get the next available batch ID
+        
         // Loop through each selected product
-        foreach ($selectedProducts as $productID) {
-            // Bind parameters
-            $orderStmt->bindParam(':productID', $productID);
-
-            // Execute the statement
-            $orderStmt->execute();
+        foreach ($_POST['products'] as $productID) {
+            $quantityField = 'quantity_' . $productID;
+            $quantity = isset($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
+            if ($quantity > 0) {
+                // Bind parameters
+                $orderStmt->bindParam(':supplierID', $supplierID);
+                $orderStmt->bindParam(':productID', $productID);
+                $orderStmt->bindParam(':quantity', $quantity);
+                $orderStmt->bindParam(':batchID', $batchID);
+                $orderStmt->bindParam(':status', $status); // Bind $status separately
+        
+                // Execute the statement
+                $orderStmt->execute();
+            }
         }
-        $rootFolder = dirname($_SERVER['PHP_SELF']);
-        header("Location: $rootFolder/po/orderDetail");
+
+        // Insert into batch_order table
+        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID) VALUES (:supplierID)");
+        $batchOrderStmt->bindParam(':supplierID', $supplierID);
+        $batchOrderStmt->execute();
+        
         // Commit the transaction
         $conn->commit();
 
-        echo "Order placed successfully.";
+        // Redirect the user after successful order placement
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/po/orderDetail");
+        exit(); // Ensure that script execution stops after redirection
     } catch (PDOException $e) {
         // Rollback the transaction on error
         $conn->rollBack();
@@ -364,6 +382,9 @@ Router::post('/placeorder/supplier/', function () {
         $conn = null;
     }
 });
+
+
+
 
 Router::post('/po/addItem', function () {
     $db = Database::getInstance();
@@ -509,45 +530,6 @@ Router::post('/delete/requestOrder', function () {
 
 
 
-// //testing chit
-// Router::post('/po/test', function () {
-//     $db = Database::getInstance();
-//     $conn = $db->connect();
-
-//     $productID = $_POST['productID'];
-//     $quantity = $_POST['quantity'];
-
-//     $query = "SELECT Price FROM products WHERE ProductID = :productID";
-//         $statement = $conn->prepare($query);
-//         $statement->bindParam(':productID', $productID);
-//         $statement->execute();
-//         $row = $statement->fetch(PDO::FETCH_ASSOC);
-//         $price = $row['Price'];
-
-//     $rootFolder = dirname($_SERVER['PHP_SELF']);
-//  // Calculate total price
-//  $totalPrice = $price * $quantity;
-
-//  // Prepare the SQL statement
-//  $query = "INSERT INTO requests (Product_ID, Product_Quantity, Product_Total_Price) VALUES (:productID, :quantity, :totalPrice)";
-//  $statement = $conn->prepare($query);
-
-//  // Bind parameters
-//  $statement->bindParam(':productID', $productID);
-//  $statement->bindParam(':quantity', $quantity);
-//  $statement->bindParam(':totalPrice', $totalPrice);
-
-//  // Execute the statement
-//  if ($statement->execute()) {
-//      echo "Request saved successfully.";
-//  } else {
-//      echo "Failed to save request.";
-
-//     // Execute the statement
-
-
-//     header("Location: $rootFolder/test");
-// }});
 
 
 

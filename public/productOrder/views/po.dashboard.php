@@ -72,7 +72,7 @@
 
         try {
           // Prepare SQL statement to fetch data from the audit_log table
-          $stmt = $conn->query("SELECT audit_log.*, accounts.username AS username FROM audit_log INNER JOIN accounts ON audit_log.account_ID = accounts.account_ID ORDER BY audit_log.audit_ID ASC");
+          $stmt = $conn->query("SELECT audit_log.*, accounts.username AS username FROM audit_log INNER JOIN accounts ON audit_log.account_ID = accounts.account_ID ORDER BY audit_log.audit_ID DESC");
           $audit_logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
           echo "Error: " . $e->getMessage();

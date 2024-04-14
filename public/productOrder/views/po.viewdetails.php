@@ -150,7 +150,7 @@
                       <li class="flex py-1">
                         <span class="font-semibold w-24">Location:</span>
                         <span class="font-medium text-gray-900">
-                          <?= $data['Location'] ?>
+                          <?= $data['Address'] ?>
                         </span>
                       </li>
                       <li class="flex">

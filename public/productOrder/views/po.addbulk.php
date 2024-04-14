@@ -321,7 +321,7 @@
          </div>
 
         <div class="flex flex-row justify-end gap-3 my-3">
-          <button route='/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</button>
+        <a href='/master/po/viewsupplierproduct/Supplier=<?php echo isset($_GET['Supplier_ID']) ? $_GET['Supplier_ID'] : ''; ?>' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</a>
           <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save
             </button>
         </div>

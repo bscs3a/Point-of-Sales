@@ -137,39 +137,42 @@
                             <th class="px-4 py-2 font-semibold">Estimated Delivery</th>
                             <th class="px-4 py-2 font-semibold">Status</th>
                             <th class="px-4 py-2 font-semibold"></th>
+                            <th class="px-4 py-2 font-semibold"></th>
+
                         </tr>
                     </thead>
 
-<?php
- function displayPendingOrders()
- {
-     try {
-         require_once 'dbconn.php'; // Include your database connection file
-         $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
- 
-         // Query to retrieve order IDs with status "pending"
-         $query = "SELECT od.Order_ID, od.Supplier_ID, s.Supplier_Name, od.Date_Ordered, od.Time_Ordered
-                             FROM order_details od
-                             JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
-                             WHERE od.Order_Status = 'to receive'
-                             GROUP BY od.Order_ID"; // Group by Order_ID to show each unique order
- 
-         $statement = $conn->prepare($query);
-         $statement->execute();
- 
-         // Fetch all rows as associative array
-         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
- 
-         // Loop through each row and display data in HTML table format
-         foreach ($rows as $row) {
-             echo '<tbody>';
-             echo '<tr>';
-             echo '<td class="px-4 py-7">' . $row['Order_ID'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>'; // SAMPLE ONLY PA REVISE NALANG
-             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>'; // SAMPLE ONLY PA REVISE NALANG
+                    <?php
+function displayPendingOrders()
+{
+    try {
+        // require_once 'dbconn.php'; // Include your database connection file
+        $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
+
+        $query = "SELECT od.Order_ID, od.Supplier_ID, s.Supplier_Name, s.Address, s.Estimated_Delivery, od.Date_Ordered, od.Time_Ordered, od.Order_Status
+        FROM order_details od
+        JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
+        JOIN batch_orders bo ON od.Batch_ID = bo.Batch_ID
+        WHERE od.Order_Status = 'to receive'
+        GROUP BY od.Order_ID";
+
+        $statement = $conn->prepare($query);
+        $statement->execute();
+
+        // Fetch all rows as associative array
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // Loop through each row and display data in HTML table format
+        foreach ($rows as $row) {
+              echo '<tbody>';
+              echo '<tr>';
+              echo '<td class="px-4 py-7">' . $row['Supplier_ID'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Address'] . '</td>'; 
+              echo '<td class="px-4 py-7">' . $row['Estimated_Delivery'] . '</td>'; 
+              echo '<td class="px-4 py-7">' . $row['Order_Status'] . '</td>'; 
            
              echo '<td class="px-4 py-6">';
              // Form for Completed status

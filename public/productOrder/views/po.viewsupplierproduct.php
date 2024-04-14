@@ -145,65 +145,72 @@
                 <th class="px-30 py-2 font-semibold">Category</th>
                 <th class="px-40 py-2 font-semibold">Price</th>
                 <th class="px-60 py-2 font-semibold">Description</th>
+                <th class="px-60 py-2 font-semibold">Quantity</th>
                 <th class="px-70 py-2 font-semibold"></th>
               </tr>
             </thead>
 
             <tbody>
-              <?php
-              function displayProductsBySupplierID($supplierID)
-              {
-                try {
-                  require_once 'dbconn.php';
-                  // Query to retrieve products based on Supplier_ID
-                  $query = "SELECT p.*, s.Supplier_Name 
+            <?php
+function displayProductsBySupplierID($supplierID)
+{
+    try {
+        require_once 'dbconn.php';
+        // Query to retrieve products based on Supplier_ID
+        $query = "SELECT p.*, s.Supplier_Name 
                   FROM products p 
                   INNER JOIN suppliers s ON p.Supplier_ID = s.Supplier_ID
                   WHERE p.Supplier_ID = :supplierID";
-                  $statement = $conn->prepare($query);
-                  $statement->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
-                  $statement->execute();
+        $statement = $conn->prepare($query);
+        $statement->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+        $statement->execute();
 
-                  // Check if there are any rows or results
-                  if ($statement->rowCount() > 0) {
-                    echo '<form method="post" action="/placeorder/supplier/">';
-                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                      // Debugging statement to print image path
-                      $imagePath = '../../' . $row['ProductImage'];
-                      echo '<tr>';
-                      echo '<tr class="hover:bg-gray-50 data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
-                      echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
-                      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
-                      echo '<div>' . $row['ProductName'] . '</div>';
-                      echo '</td>';
-                      echo '<td class="px-20 py-4">' . $row['ProductID'] . '</td>';
-                      echo '<td class="px-10 py-4">' . $row['Supplier'] . '</td>';
-                      echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
-                      echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
-                      echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="checkbox" name="products[]" value="' . $row['ProductID'] . '"></td>';
-                      echo '</tr>';
-                    }
-                    echo '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Order</button>';
-                    echo '</form>';
-                  } else {
-                    echo "No products found for this supplier.";
-                  }
-                } catch (PDOException $e) {
-                  echo "Connection failed: " . $e->getMessage();
-                }
-                // Close the database connection
-                $conn = null;
-              }
+        // Check if there are any rows or results
+        if ($statement->rowCount() > 0) {
+            echo '<form method="post" action="/placeorder/supplier/">';
 
-              // Check if Supplier_ID is provided via GET method
-              if (isset($_GET['Supplier_ID'])) {
-                $supplierID = $_GET['Supplier_ID'];
-                displayProductsBySupplierID($supplierID);
-              } else {
-                echo "Supplier ID not provided.";
-              }
-              ?>
+            // Add hidden input for Supplier_ID
+            echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
+
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                // Debugging statement to print image path
+                $imagePath = '../../' . $row['ProductImage'];
+                echo '<tr>';
+                echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
+                echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                echo '<div>' . $row['ProductName'] . '</div>';
+                echo '</td>';
+                echo '<td class="px-20 py-4">' . $row['ProductID'] . '</td>';
+                echo '<td class="px-10 py-4">' . $row['Supplier'] . '</td>';
+                echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
+                echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
+                echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
+                echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border"></td>';
+                echo '<td class="px-4 py-4">Edit</td>';
+                echo '</tr>';
+                echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
+            }
+
+            echo '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Order</button>';
+            echo '</form>';
+        } else {
+            echo "No products found for this supplier.";
+        }
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
+    // Close the database connection
+    $conn = null;
+}
+
+// Check if Supplier_ID is provided via GET method
+if (isset($_GET['Supplier_ID'])) {
+    $supplierID = $_GET['Supplier_ID'];
+    displayProductsBySupplierID($supplierID);
+} else {
+    echo "Supplier ID not provided.";
+}
+?>
 
             </tbody>
           </table>
