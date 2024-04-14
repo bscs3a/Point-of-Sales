@@ -403,7 +403,7 @@ Router::post('/placeorder/supplier/', function () {
 
 //function to delete the product in the vieworder list if there are no products from the supplier and also minus the Items
 //subotal and total amout in the batch order table
-Router::post('/delete/viewdetails/', function () {
+Router::post('/delete/viewdetails', function () {
     // Check if the delete request was submitted
     if (isset($_POST['product_id']) && isset($_POST['batch_id'])) {
         $productID = $_POST['product_id'];
@@ -846,7 +846,6 @@ Router::post('/cancel/orderDetail', function () {
     // Call the function to cancel order status
     updateOrderStatusToCancel();
 });
-
 
 function updateOrderStatusToCancel()
 {

@@ -225,7 +225,7 @@ function displayProductData($batchId, $conn)
                     <?= $data['Order_Status'] ?>
                 </td> 
                 <td class="px-6 py-2">
-                    <form action="/delete/viewdetails/" method="post">
+                    <form action="/master/delete/viewdetails" method="post">
                         <input type="hidden" name="product_id" value="<?= $data['ProductID'] ?>">
                         <input type="hidden" name="batch_id" value="<?= $batchId ?>">
                         <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
