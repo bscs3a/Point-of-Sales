@@ -99,6 +99,11 @@
                     <input type="text" id="address" name="address"
                       class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
                   </div>
+                  <div class="mb-4">
+                    <label for="location" class="block text-black font-semibold mb-2">Estimated_Delivery</label>
+                    <input type="text" id="delivery" name="delivery"
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                  </div>
                 </div>
             </div>
 
