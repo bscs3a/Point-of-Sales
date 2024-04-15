@@ -196,6 +196,7 @@
 
                     <?php foreach ($result as $results): ?>
                         <?php $id = $results['ledgerno']; ?>
+
                         <div
                             class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
                             <div class="text-center p-5 ">
@@ -346,6 +347,7 @@
                         </div>
 
                     <?php endforeach; ?>
+
                 </div>
                 <script>
                     <?php foreach ($result as $results): ?>
@@ -400,6 +402,7 @@
 
             </div>
     </main>
+
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
             const forms = document.querySelectorAll('form');
@@ -415,6 +418,7 @@
 
     <script src="./../../../src/form.js"></script>
     <script src="./../../../src/route.js"></script>
+
 </body>
 
 </html>

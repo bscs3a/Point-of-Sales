@@ -1,6 +1,10 @@
 <?php
+
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
+
+
+
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
 $_SESSION['employee_name'] = "Tagle, Aries";
@@ -23,10 +27,12 @@ $fin = [
     '/fin/ledger/accounts/investors' => $basePath . "ledger.investors.php",
     '/fin/ledger/accounts/payable' => $basePath . "ledger.payable.php",
 
+
     //request
     '/fin/expense' => $basePath . "requestExpense.php",
     '/fin/request' => $basePath . "requestInventory.php",
     '/fin/salary' => $basePath . "requestSalary.php",
+
 
     '/fin/test' => $basePath . "test.php",
 
@@ -38,7 +44,6 @@ $fin = [
     // functions
     // can't recognize by the router logout can proceed
     '/fin/logout' => "./public/finance/functions/logout.php",
-
     '/fin/report' => $path . "/reports/generateReport.php",
 ];
 
