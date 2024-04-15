@@ -252,6 +252,8 @@
       </div>
     </div>
   </div>
+  <script src="../../src/route.js"></script>
+  <script src="../../src/form.js"></script>
 </body>
 
 </html>

@@ -851,7 +851,7 @@ Router::post('/edit/editsupplier', function () {
     header("Location: $rootFolder/po/editsupplier/Supplier=$supplierID");
 });
 
-//function to delete the supplier
+// Function to delete the supplier
 Router::post('/delete/supplier', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -859,15 +859,33 @@ Router::post('/delete/supplier', function () {
     // Retrieve supplier ID from the POST data
     $supplierID = $_POST['supplier_id'];
 
+    // Retrieve the supplier name before deleting
+    $stmt_supplier_name = $conn->prepare("SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID");
+    $stmt_supplier_name->bindParam(':supplierID', $supplierID);
+    $stmt_supplier_name->execute();
+    $supplierName = $stmt_supplier_name->fetchColumn();
+
     // Prepare and execute the SQL statement to delete the supplier
     $stmt = $conn->prepare("DELETE FROM suppliers WHERE Supplier_ID = :supplierID");
     $stmt->bindParam(':supplierID', $supplierID);
     $stmt->execute();
 
     // Optionally, you can also delete related products, if needed
-    // $stmt_products = $conn->prepare("DELETE FROM products WHERE Supplier_ID = :supplierID");
-    // $stmt_products->bindParam(':supplierID', $supplierID);
-    // $stmt_products->execute();
+    $stmt_products = $conn->prepare("DELETE FROM products WHERE Supplier_ID = :supplierID");
+    $stmt_products->bindParam(':supplierID', $supplierID);
+    $stmt_products->execute();
+
+    // Audit log for updating supplier and product information
+    $user_id = $_SESSION['employee']; // Assuming you have a user session
+    $action = "Deleted Supplier: $supplierName";
+    $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+    $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+    $auditStmt = $conn->prepare($auditSql);
+    $auditStmt->bindParam(':user_id', $user_id);
+    $auditStmt->bindParam(':action', $action);
+    $auditStmt->bindParam(':time_out', $time_out);
+    $auditStmt->execute();
 
     // Redirect back to a specific page after deletion
     $rootFolder = dirname($_SERVER['PHP_SELF']);
