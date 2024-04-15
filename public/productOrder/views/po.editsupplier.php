@@ -222,6 +222,11 @@
                         </button>
                       </div>
                     </form>
+                    <!-- Delete Supplier Form -->
+                    <form action="/master/delete/supplier" method="POST" onsubmit="return confirm('Are you sure you want to delete this supplier?');">
+                      <input type="hidden" name="supplier_id" value="<?php echo $supplierID; ?>">
+                      <button type="submit" class="py-2 px-6 border border-red-600 font-bold rounded-md bg-red-400 text-white">Delete Supplier</button>
+                    </form>
                   </div>
                   <?php
                 } else {
