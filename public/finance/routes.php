@@ -106,6 +106,12 @@ Router::post('/addPayable', function () {
     header("Location: $rootFolder/fin/ledger/accounts/payable");
 });
 
+Router::post('/addInvestor', function () {
+    addInvestor($_POST['name'], $_POST['contact'], $_POST['contactName']);
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/accounts/investors");
+});
+
 //does not seem to work or execute at all idk why
 
 Router::post('/addToLoan', function () {
@@ -148,6 +154,48 @@ Router::post('/addToLoan', function () {
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/accounts/payable");
+});
+
+Router::post('/inveees', function () {
+   
+    
+    // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
+    $details = isset($_POST['description']) ? $_POST['description'] : null;
+    $amount = intval($_POST['amount']);
+    $ledgerNo = ($_POST['ledgerNo']);
+    $ledgerNo_Dr = ($_POST['ledgerName']);
+    // $datetime = $datetime->format('Y-m-d H:i:s');
+
+    // borrowAsset($ledgerNo, $ledgerNo_Dr, $amount);
+  
+  
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    
+    $sql = "SELECT ledgerno FROM ledger WHERE ledgerno = ? OR name = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$ledgerNo_Dr, $ledgerNo_Dr]);
+    $ledgerName = $stmt->fetchColumn();
+
+    $sql = "INSERT INTO ledgertransaction (LedgerNo, details, amount, LedgerNo_Dr) VALUES (:modalId, :details, :amount, :ledgerNo_Dr)";
+    $stmt = $conn->prepare($sql);
+
+    $stmt->bindParam(':modalId', $ledgerNo);
+    $stmt->bindParam(':details', $details);
+    $stmt->bindParam(':amount', $amount);
+    $stmt->bindParam(':ledgerNo_Dr', $ledgerName);
+    // $stmt->bindParam(':DateTime', $datetime);
+
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return;
+    }
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/accounts/investors");
 });
 
 
