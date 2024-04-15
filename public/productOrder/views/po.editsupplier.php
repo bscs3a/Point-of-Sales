@@ -146,7 +146,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <?php
+                      <?php
                         // Fetch products based on the Supplier_ID
                         $stmt_products = $conn->prepare("SELECT * FROM products WHERE Supplier_ID = :supplierID");
                         $stmt_products->bindParam(':supplierID', $supplierID);
@@ -155,54 +155,58 @@
 
                         // Display products in the table
                         foreach ($products as $product) {
-                          ?>
-                          <tr>
+                        ?>
+                        <tr>
                             <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                              <input type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
-                              <?php
-                              // Display current product image
-                              $imagePath = '../../' . $product['ProductImage'];
-                              echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
-                              ?>
-                            </td>
-                            <td class="px-4 py-4">
-                              <input type="text" name="product_name_<?php echo $product['ProductID']; ?>"
-                                value="<?php echo $product['ProductName']; ?>"
-                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
-                            </td>
-                            <td class="px-4 py-4">
-                              <select name="product_category_<?php echo $product['ProductID']; ?>"
-                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                                <input type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
                                 <?php
-                                // Fetch categories from the Categories table
-                                $stmt_categories = $conn->prepare("SELECT * FROM categories");
-                                $stmt_categories->execute();
-                                $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
+                                // Display current product image
+                                $imagePath = '../../' . $product['ProductImage'];
+                                echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                                ?>
+                            </td>
+                            <td class="px-4 py-4">
+                                <input type="text" name="product_name_<?php echo $product['ProductID']; ?>"
+                                    value="<?php echo $product['ProductName']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                            </td>
+                            <td class="px-4 py-4">
+                                <select name="product_category_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                                    <?php
+                                    // Fetch categories from the Categories table
+                                    $stmt_categories = $conn->prepare("SELECT * FROM categories");
+                                    $stmt_categories->execute();
+                                    $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
 
-                                // Iterate over each category and populate the select dropdown
-                                foreach ($categories as $category) {
-                                  ?>
-                                  <option value="<?php echo $category['Category_Name']; ?>" <?php if ($category['Category_Name'] == $product['Category'])
-                                       echo 'selected'; ?>>
-                                    <?php echo $category['Category_Name']; ?>
-                                  </option>
-                                <?php } ?>
-                              </select>
+                                    // Iterate over each category and populate the select dropdown
+                                    foreach ($categories as $category) {
+                                    ?>
+                                    <option value="<?php echo $category['Category_Name']; ?>"
+                                        <?php if ($category['Category_Name'] == $product['Category']) echo 'selected'; ?>>
+                                        <?php echo $category['Category_Name']; ?>
+                                    </option>
+                                    <?php } ?>
+                                </select>
                             </td>
                             <td class="px-4 py-4">
-                              <input type="text" name="product_price_<?php echo $product['ProductID']; ?>"
-                                value="<?php echo $product['Price']; ?>"
-                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                                <input type="text" name="product_price_<?php echo $product['ProductID']; ?>"
+                                    value="<?php echo $product['Price']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                             </td>
                             <td class="px-4 py-4">
-                              <textarea name="product_description_<?php echo $product['ProductID']; ?>"
-                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
+                                <textarea name="product_description_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
                             </td>
-                          </tr>
+                            <td class="px-4 py-4">
+                            <form action="/master/delete/product" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <input type="hidden" name="product_id" value="<?php echo $product['ProductID']; ?>">
+                                <input type="hidden" name="supplier_id" value="<?php echo $supplierID; ?>">
+                                <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                            </form>
+                        </td>
+                        </tr>
                         <?php } ?>
-
-
-
                       </tbody>
                     </table>
 
