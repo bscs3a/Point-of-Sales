@@ -260,14 +260,14 @@
               <?php
             } else {
               // No data found for the given Batch_ID
-              echo "<tr><td colspan='6'>No data found for Batch ID: $batchId</td></tr>";
+              echo "<tr><td colspan='6'>No data found for Order# $batchId</td></tr>";
             }
           }
           ?>
 
           </table>
           <!-- Feedback area -->
-          <form action="/addfeedback/viewtransaction" method="post" enctype="multipart/form-data">
+          <form action="/master/addfeedback/viewtransaction" method="post" enctype="multipart/form-data">
             <input type="hidden" name="supplierID" value="<?= $data['Supplier_ID'] ?>">
             <!--get the supplier ID in the query -->
             <input type="hidden" name="user" value="<?= $_SESSION['employee'] ?>"> <!--get the employeein th seeiony -->
