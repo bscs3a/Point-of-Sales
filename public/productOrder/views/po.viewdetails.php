@@ -252,8 +252,8 @@
                                     <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                                     <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                                     <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                                    <!-- note: dont delete all of the products if the supplier has run out of items, -->
-                                    instead just cancel the order
+                                    <!-- note: dont delete all of the products if the supplier has run out of items, instead just cancel the order -->
+                                    
                                     <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
                                         <div class="flex flex-col text-sm gap-3">
                                             <a class="font-bold">Items Subtotal:

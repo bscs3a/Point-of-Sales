@@ -848,10 +848,31 @@ Router::post('/edit/editsupplier', function () {
 
     // Redirect back to the page
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/po/suppliers");
+    header("Location: $rootFolder/po/editsupplier/Supplier=$supplierID");
 });
 
+//function to delete the supplier
+Router::post('/delete/supplier', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
 
+    // Retrieve supplier ID from the POST data
+    $supplierID = $_POST['supplier_id'];
+
+    // Prepare and execute the SQL statement to delete the supplier
+    $stmt = $conn->prepare("DELETE FROM suppliers WHERE Supplier_ID = :supplierID");
+    $stmt->bindParam(':supplierID', $supplierID);
+    $stmt->execute();
+
+    // Optionally, you can also delete related products, if needed
+    // $stmt_products = $conn->prepare("DELETE FROM products WHERE Supplier_ID = :supplierID");
+    // $stmt_products->bindParam(':supplierID', $supplierID);
+    // $stmt_products->execute();
+
+    // Redirect back to a specific page after deletion
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/po/suppliers");
+});
 
 
 

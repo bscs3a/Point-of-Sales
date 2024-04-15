@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 15, 2024 at 06:10 PM
+-- Generation Time: Apr 15, 2024 at 07:53 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -147,17 +147,6 @@ CREATE TABLE `products` (
   `ProductWeight` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `products`
---
-
-INSERT INTO `products` (`ProductID`, `Supplier_ID`, `Category_ID`, `ProductImage`, `ProductName`, `Supplier`, `Description`, `Category`, `DeliveryRequired`, `Price`, `Stocks`, `UnitOfMeasurement`, `TaxRate`, `ProductWeight`) VALUES
-(1, 1, 1, 'uploads/hammer.jpg', 'Hammer', 'Mark Shop', 'this is an hammer with a price of 1 peso', 'Hand Tools', NULL, 1.00, NULL, NULL, NULL, NULL),
-(2, 1, 2, 'uploads/cat.jpg', 'Cat', 'Mark Shop', 'Cat is for sale', 'Hand Tools', NULL, 2.00, NULL, NULL, NULL, NULL),
-(3, 1, 1, 'uploads/drill.jpg', 'Drill', 'Mark Shop', 'Drill.', 'Power Tools', NULL, 3.00, NULL, NULL, NULL, NULL),
-(4, 2, 1, 'uploads/drill.jpg', 'Drill', 'Artools', 'Drillers', 'Hand Tools', NULL, 100.00, NULL, NULL, NULL, NULL),
-(5, 2, 1, 'uploads/staple gun.jpg', 'Staple', 'Artools', 'staple gun', 'Hand Tools', NULL, 250.00, NULL, NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -174,14 +163,6 @@ CREATE TABLE `suppliers` (
   `Address` varchar(50) DEFAULT NULL,
   `Estimated_Delivery` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `suppliers`
---
-
-INSERT INTO `suppliers` (`Supplier_ID`, `Supplier_Name`, `Contact_Name`, `Contact_Number`, `Status`, `Email`, `Address`, `Estimated_Delivery`) VALUES
-(1, 'Barabida Omsim', 'Konichiwa', 100200300, 'Single', 'Barabida@gmail.com', 'porac pampanga', '30 - 60 days sheesh'),
-(2, 'Artools', 'Arthur', 11111, 'Active', 'arthur@gmail.com', 'balibago', '5-7');
 
 -- --------------------------------------------------------
 
@@ -301,13 +282,13 @@ ALTER TABLE `order_details`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `Supplier_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Supplier_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `transaction_history`
