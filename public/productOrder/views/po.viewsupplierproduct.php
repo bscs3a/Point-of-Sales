@@ -179,7 +179,7 @@
                       // Debugging statement to print image path
                       $imagePath = '../../' . $row['ProductImage'];
                       echo '<tr>';
-                      echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
+                      echo '<td class="flex flex-col text-center text-sm gap-3 px-6 py-4 font-normal text-gray-900">';
                       echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
                       echo '<div>' . $row['ProductName'] . '</div>';
                       echo '</td>';
