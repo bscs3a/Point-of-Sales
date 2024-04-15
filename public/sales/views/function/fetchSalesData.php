@@ -18,7 +18,9 @@ $sql = "SELECT
         FROM 
             Sales
         JOIN 
-            Customers ON Sales.CustomerID = Customers.CustomerID";
+            Customers ON Sales.CustomerID = Customers.CustomerID
+        ORDER BY 
+            Sales.SaleDate DESC";
 
 // Execute the query
 $stmt = $pdo->query($sql);

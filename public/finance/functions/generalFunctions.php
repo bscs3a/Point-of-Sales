@@ -394,4 +394,4 @@ function getTotalOfGroupV2($groupType, $year = null, $month = null) {
 
     return abs($netAmount);
 }
-?>
+
