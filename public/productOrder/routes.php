@@ -21,6 +21,7 @@ $po = [
     '/po/requestHistory' => $basePath . "requestHistory.php",
     '/po/updateRequestStatus' => $basePath . "updateRequestStatus.php",
     '/po/viewtransaction' => $basePath . "viewtransaction.php",
+    '/po/editsupplier' => $basePath . "editsupplier.php",
     '/po/test' => $basePath . "test.php",
     '/po/test1' => $basePath . "test1.php",
 
@@ -53,6 +54,12 @@ $po = [
         // $_SESSION['id'] = $id;
         $_GET['Supplier_ID'] = $id;
         include $basePath . "addbulk.php";
+    },
+    // for edditing the supplier information + products based on the Supplier_ID in the $GET
+    '/po/editsupplier/Supplier={Supplier_ID}' => function ($id) use ($basePath) {
+        // $_SESSION['id'] = $id;
+        $_GET['Supplier_ID'] = $id;
+        include $basePath . "editsupplier.php";
     },
 
     '/po/test1/pagenumber={page}' => function ($page) use ($basePath) {
@@ -746,6 +753,91 @@ Router::post('/addfeedback/viewtransaction', function () {
     }
 });
 
+
+Router::post('/edit/editsupplier', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    
+    // Update supplier information
+    $supplierID = $_POST['supplierID'];
+    $supplierName = $_POST['suppliername'];
+    $contactName = $_POST['contactname'];
+    $contactNum = $_POST['contactnum'];
+    $email = $_POST['email'];
+    $status = $_POST['status'];
+    $location = $_POST['Address'];
+    $estimatedDelivery = $_POST['estimated-delivery-date'];
+
+    $stmt_supplier = $conn->prepare("UPDATE suppliers SET Supplier_Name = :supplierName, Contact_Name = :contactName, Contact_Number = :contactNum, Email = :email, Status = :status, Address = :location, Estimated_Delivery = :estimatedDelivery WHERE Supplier_ID = :supplierID");
+    $stmt_supplier->bindParam(':supplierID', $supplierID);
+    $stmt_supplier->bindParam(':supplierName', $supplierName);
+    $stmt_supplier->bindParam(':contactName', $contactName);
+    $stmt_supplier->bindParam(':contactNum', $contactNum);
+    $stmt_supplier->bindParam(':email', $email);
+    $stmt_supplier->bindParam(':status', $status);
+    $stmt_supplier->bindParam(':location', $location);
+    $stmt_supplier->bindParam(':estimatedDelivery', $estimatedDelivery);
+    $stmt_supplier->execute();
+
+    // Update product information
+    foreach ($_POST as $key => $value) {
+        if (strpos($key, 'product_name_') !== false) {
+            $productID = substr($key, strlen('product_name_'));
+            $categoryKey = 'product_category_' . $productID;
+            $priceKey = 'product_price_' . $productID;
+            $descriptionKey = 'product_description_' . $productID;
+            
+            // Update product information
+            $productName = $_POST[$key];
+            $category = $_POST[$categoryKey];
+            $price = $_POST[$priceKey];
+            $description = $_POST[$descriptionKey];
+            
+            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Description = :description WHERE ProductID = :productID");
+            $stmt_product->bindParam(':productName', $productName);
+            $stmt_product->bindParam(':category', $category);
+            $stmt_product->bindParam(':price', $price);
+            $stmt_product->bindParam(':description', $description);
+            $stmt_product->bindParam(':productID', $productID);
+            $stmt_product->execute();
+        }
+    }
+
+    // Handle file uploads for product images
+    foreach ($_FILES as $key => $file) {
+        if (strpos($key, 'product_image_') !== false) {
+            $productID = substr($key, strlen('product_image_'));
+            $uploadDir = 'uploads/';
+            $uploadFile = $uploadDir . basename($file['name']);
+            
+            if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+                // Update product image path in the database
+                $stmt_product_image = $conn->prepare("UPDATE products SET ProductImage = :productImage WHERE ProductID = :productID");
+                $stmt_product_image->bindParam(':productImage', $uploadFile);
+                $stmt_product_image->bindParam(':productID', $productID);
+                $stmt_product_image->execute();
+            } else {
+                echo "Failed to upload file.";
+            }
+        }
+    }
+
+    // Audit log for updating supplier and product information
+    $user_id = $_SESSION['employee']; // Assuming you have a user session
+    $action = "Updated the Supplier Information and Products on Supplier: $supplierName";
+    $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+    $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+    $auditStmt = $conn->prepare($auditSql);
+    $auditStmt->bindParam(':user_id', $user_id);
+    $auditStmt->bindParam(':action', $action);
+    $auditStmt->bindParam(':time_out', $time_out);
+    $auditStmt->execute();
+
+    // Redirect back to the page
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/po/suppliers");
+});
 
 
 

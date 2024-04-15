@@ -149,7 +149,9 @@
                 <th class="px-70 py-2 font-semibold"></th>
               </tr>
             </thead>
-
+            <a href='/master/po/suppliers'
+                        class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back
+                        </a>
             <tbody>
             <?php
 function displayProductsBySupplierID($supplierID)
