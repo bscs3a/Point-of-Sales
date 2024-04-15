@@ -1,5 +1,5 @@
 <?php
-
+require_once "public/finance/functions/dashboard/compilation.php";
 
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
@@ -94,6 +94,33 @@ Router::post('/reportGeneration', function (){
     exit;
 });
 
+
+Router::post('/fin/getEquityReport', function (){
+    $year = date('Y');
+    $month = date('m');
+
+    $return = [];
+    $return["owners"] = getAllLedgerAccounts("Capital Accounts");
+    foreach ($return["owners"] as $key => $owner) {
+        $return["owners"][$key]["dividedShare"] = calculateShare($owner["ledgerno"], $year, $month);
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/fin/getBalanceReport', function(){
+    $return = [];
+    $assetValue = getTotalOfGroupV2("Asset");
+    $liabilityValue = getTotalOfAccountTypeV2("Accounts Payable");
+    $liabilityValue += getTotalOfAccountTypeV2("Tax Payable");
+
+    $return["asset"] = $assetValue/($assetValue + $liabilityValue);
+    $return["liability"] = $liabilityValue/($assetValue + $liabilityValue);
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
 
 
 

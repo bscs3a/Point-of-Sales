@@ -41,7 +41,7 @@
     </div>
 </div>
 
-
+<!-- for balance and income report -->
 <div class="mt-10  h-2/4">
     <!-- Start: Header Report -->
     <div class="my-10 flex justify-between">
@@ -98,7 +98,6 @@
                 </div>
 
             </div>
-            <p class="text-gray-600 my-3 text-lg">Total: 0</p>
             <!-- Balance Sheet in Pie Graph -->
             <div class="w-full h-3/4 flex justify-center">
 
@@ -113,18 +112,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-
-
-
         // Get the context of the canvas element we want to select
         var balancePie = document.getElementById('balancePie').getContext('2d');
 
-        var myPieChart = new Chart(balancePie, {
+        var myBalancePieChart = new Chart(balancePie, {
             type: 'pie',
             data: {
-                labels: ['Asstes', 'Liabilities'],
+                labels: ['Assets', 'Liabilities'],
                 datasets: [{
-                    data: [20, 30],
+                    data: [],
                     backgroundColor: ['rgb(255, 165, 0)', 'rgb(255, 205, 86)']
                 }]
             },
@@ -155,11 +151,38 @@
 
         });
 
+        fetch('http://localhost/Finance/fin/getBalanceReport', {
+            method: 'POST',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            updateBalanceChart(myBalancePieChart, data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        //function to update equity Chart
+        function updateBalanceChart(chart, paramData) {
+            let data = [];
 
+            data.push(paramData.asset);
+            data.push(paramData.liability);
+
+            chart.data.datasets[0].data = data;
+            chart.update();
+
+            console.log(data);
+        }
     </script>
 </div>
 
-<!-- Start: Second Section -->
+<!-- Start: Second Section -- for cashflow and equity-->
 <div class=" mt-10">
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -169,15 +192,12 @@
                 <!-- <a href="#" class="text-sm font-sans font-semibold">
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
                 </a> -->
-                <div class="font-bold  border-none ">
-                    <select name="" id="" class="bg-white border-collapse text-xl">
-                        <option value="year" selected>Year</option>
-                        <option value="month">Month</option>
-                    </select>
-                </div>
-
             </div>
-            <p class="text-gray-600 my-3 text-lg">Total: 0</p>
+            <?php 
+                $CAPITAL = "Capital Accounts";
+                $totalCapitalAccount = getTotalOfAccountTypeV2($CAPITAL);
+            ?>
+            <p class="text-gray-600 my-3 text-lg">Total: <?php echo'₱' . number_format($totalCapitalAccount,2) ?></p>
             <!-- Donut Chart for Equity -->
             <div class="flex justify-center p-5 ">
                 <canvas id="equityDonutChart"></canvas>
@@ -206,16 +226,17 @@
     </div>
 
     <script>
+        
 
         // Donut Chart Equity
         var equityDonut = document.getElementById('equityDonutChart').getContext('2d');
 
-        var myChart = new Chart(equityDonut, {
+        var equityChart = new Chart(equityDonut, {
             type: 'doughnut',
             data: {
-                labels: ['Equity1', 'Equity2', 'Equity3'],
+                labels: [], // Initialize with empty array
                 datasets: [{
-                    data: [10, 20, 30], // Replace with your equity data
+                    data: [], // Initialize with empty array
                     backgroundColor: ['rgba(255, 165, 0, 0.5)', 'rgba(255, 165, 0, 0.7)', 'rgba(255, 165, 0, 0.9)'],
                     borderWidth: 2
                 }]
@@ -249,6 +270,38 @@
 
             }
         });
+        //ajax for equityChart
+        fetch('http://localhost/Finance/fin/getEquityReport', {
+            method: 'POST',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateEquityChart(equityChart, data.owners);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        //function to update equity Chart
+        function updateEquityChart(chart, owners) {
+            let labels = [];
+            let data = [];
+
+            for (let key in owners) {
+                if (owners[key].dividedShare !== 0) {
+                    labels.push(owners[key].name);
+                    data.push(owners[key].dividedShare);
+                }
+            }
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+
 
         // Initialize a new Chart.js instance
         var ctx = document.getElementById('salesGrowthChart').getContext('2d');
@@ -265,7 +318,6 @@
                     fill: true,
                     borderColor: 'rgba(255, 165, 0, 1)',
                     borderWidth: 2
-
                 }]
             },
             options: {
