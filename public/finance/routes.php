@@ -23,6 +23,11 @@ $fin = [
     '/fin/ledger/accounts/investors' => $basePath . "ledger.investors.php",
     '/fin/ledger/accounts/payable' => $basePath . "ledger.payable.php",
 
+    //request
+    '/fin/expense' => $basePath . "requestExpense.php",
+    '/fin/request' => $basePath . "requestInventory.php",
+    '/fin/salary' => $basePath . "requestSalary.php",
+
     '/fin/test' => $basePath . "test.php",
 
     '/fin/test/id={id}' => function ($id) use ($basePath) {
