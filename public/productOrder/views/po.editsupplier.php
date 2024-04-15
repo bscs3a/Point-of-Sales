@@ -81,57 +81,58 @@
                 if ($supplier) {
                   ?>
                   <div class="px-10">
-                    <form action="/master/edit/editsupplier" method="POST" enctype="multipart/form-data"
-                      class="grid grid-cols-2 gap-6">
-                      <input type="hidden" name="supplierID" value="<?php echo $supplierID; ?>">
-                      <div>
-                        <!-- Supplier fields -->
-                        <div class="mb-4">
-                          <label for="suppliername" class="block text-black font-semibold mb-2">Supplier Name</label>
-                          <input type="text" id="suppliername" name="suppliername"
-                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                            value="<?php echo $supplier['Supplier_Name']; ?>" required>
+                    <form action="/master/edit/editsupplier" method="POST" enctype="multipart/form-data">
+                      <div class="grid grid-cols-2 gap-6">
+                        <input type="hidden" name="supplierID" value="<?php echo $supplierID; ?>">
+                        <div>
+                          <!-- Supplier fields -->
+                          <div class="mb-4">
+                            <label for="suppliername" class="block text-black font-semibold mb-2">Supplier Name</label>
+                            <input type="text" id="suppliername" name="suppliername"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Supplier_Name']; ?>" required>
+                          </div>
+                          <div class="mb-4">
+                            <label for="contactname" class="block text-black font-semibold mb-2">Contact Name</label>
+                            <input type="text" id="contactname" name="contactname"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Contact_Name']; ?>" required>
+                          </div>
+                          <div class="mb-4">
+                            <label for="contactnum" class="block text-black font-semibold mb-2">Contact Number</label>
+                            <input type="number" id="contactnum" name="contactnum"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Contact_Number']; ?>" required>
+                          </div>
+                          <div class="mb-4">
+                            <label for="email" class="block text-black font-semibold mb-2">Email</label>
+                            <input type="text" id="email" name="email"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Email']; ?>" required>
+                          </div>
                         </div>
-                        <div class="mb-4">
-                          <label for="contactname" class="block text-black font-semibold mb-2">Contact Name</label>
-                          <input type="text" id="contactname" name="contactname"
-                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                            value="<?php echo $supplier['Contact_Name']; ?>" required>
+                        <div>
+                          <div class="mb-4">
+                            <label for="status" class="block text-black font-semibold mb-2">Status</label>
+                            <input type="text" id="status" name="status"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Status']; ?>" required>
+                          </div>
+                          <div class="mb-4">
+                            <label for="location" class="block text-black font-semibold mb-2">Location</label>
+                            <input type="text" id="Address" name="Address"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Address']; ?>" required>
+                          </div>
+                          <div class="mb-4">
+                            <label for="estimated-delivery-date" class="block text-black font-semibold mb-2">Estimated Delivery
+                              Date</label>
+                            <input type="text" id="estimated-delivery-date" name="estimated-delivery-date"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Estimated_Delivery']; ?>" required>
+                          </div>
+                          <!-- ... -->
                         </div>
-                        <div class="mb-4">
-                          <label for="contactnum" class="block text-black font-semibold mb-2">Contact Number</label>
-                          <input type="number" id="contactnum" name="contactnum"
-                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                            value="<?php echo $supplier['Contact_Number']; ?>" required>
-                        </div>
-                        <div class="mb-4">
-                          <label for="email" class="block text-black font-semibold mb-2">Email</label>
-                          <input type="text" id="email" name="email"
-                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                            value="<?php echo $supplier['Email']; ?>" required>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="mb-4">
-                          <label for="status" class="block text-black font-semibold mb-2">Status</label>
-                          <input type="text" id="status" name="status"
-                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                            value="<?php echo $supplier['Status']; ?>" required>
-                        </div>
-                        <div class="mb-4">
-                          <label for="location" class="block text-black font-semibold mb-2">Location</label>
-                          <input type="text" id="Address" name="Address"
-                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                            value="<?php echo $supplier['Address']; ?>" required>
-                        </div>
-                        <div class="mb-4">
-                          <label for="estimated-delivery-date" class="block text-black font-semibold mb-2">Estimated Delivery
-                            Date</label>
-                          <input type="text" id="estimated-delivery-date" name="estimated-delivery-date"
-                            class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                            value="<?php echo $supplier['Estimated_Delivery']; ?>" required>
-                        </div>
-                        <!-- ... -->
                       </div>
                       <div>
                         <!-- Product table -->
