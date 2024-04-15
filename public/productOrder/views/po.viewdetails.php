@@ -231,7 +231,8 @@
                                         <?= $data['Order_Status'] ?>
                                     </td>
                                     <td class="px-6 py-2">
-                                        <form action="/master/delete/viewdetails" method="post">
+                                        <form action="/master/delete/viewdetails" method="post"
+                                            onsubmit="return confirm('Are you sure you want to delete this item?');">
                                             <input type="hidden" name="product_id" value="<?= $data['ProductID'] ?>">
                                             <input type="hidden" name="batch_id" value="<?= $batchId ?>">
                                             <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
@@ -273,7 +274,7 @@
                             <?php
                         } else {
                             // No data found for the given Batch_ID
-                            echo "<tr><td colspan='6'>No data found for Batch ID: $batchId</td></tr>";
+                            echo "<tr><td colspan='6'>No data found for Order #$batchId</td></tr>";
                         }
                     }
                     ?>
