@@ -1,3 +1,7 @@
+<?php 
+require_once "public/finance/functions/requestFolder/requestExpense.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -136,23 +140,43 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 text-center">
+                        <?php
+                        $requestExpense = displayRequestTable();
+                        foreach($requestExpense as $request)
+                        {
+                        ?>
                         <tr>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">item name</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">department name</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">requested amount</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">reason for requesting</td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700">payment method</td>
+                            <td class="whitespace-nowwrap px-4 py-2 text-gray-700"><?php echo $request['payfor_name'];?></td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $request['department'];?></td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $request['amount'];?></td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $request['details'];?></td>
+                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $request['payusing_name'];?></td>
                             <td class="whitespace-nowrap px-4 py-2 text-gray-700">
                                 <!-- Pending Button -->
-                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
+                                <?php
+                                if($request['status'] === 'pending')
+                                {
+                                ?>
+                                
+                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
+                                data-id="<?php echo $request['re_id'];?>"
+                                data-amount="<?php echo $request['amount'];?>"
+                                data-debit="<?php echo $request['payfor'];?>"
+                                data-credit="<?php echo $request['payusing'];?>"
+                                data-description="<?php echo $request['details'];?>"
+                                onclick="openModal(event)">
                                         Pending
                                 </button>
-
-
+                                <?php
+                                }else{
+                                    echo $request['status'];
+                                }
+                                ?>
                             </td>
                         </tr>
-
-
+                        <?php
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -170,16 +194,21 @@
                                                     Accept Expense Request?
                                                 </h4>
                                                 <div class="mt-2">
-                                                    <form method="POST" action="your-action-url">
+                                                    <form method="POST" action="/fin/updateRequestExpense" id="formModal">
                                                         <!-- Your form fields go here -->
+                                                        <input type="hidden" id="inpHiddenId" name="id" value="">
+                                                        <input type="hidden" id="inpHiddenAmount" name="amount" value="">
+                                                        <input type="hidden" id="inpHiddenDebit" name="debit" value="">
+                                                        <input type="hidden" id="inpHiddenCredit" name="credit" value="">
+                                                        <input type="hidden" id="inpHiddenDescription" name="description" value="">
                                                         <div class="mt-5 sm:mt-6">
-                                                            <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm" onclick="closeModal()">
+                                                            <button type="submit" name="decision" value="confirm" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm" onclick="closeModal(event)">
                                                                 Accept
                                                             </button>
-                                                            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal()">
+                                                            <button type="submit" name="decision" value="deny" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal(event)">
                                                                 Decline
                                                             </button>
-                                                            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal()">
+                                                            <button type="button" value="nothing" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal(event)">
                                                                 Cancel
                                                             </button>
                                                         </div>
@@ -191,12 +220,24 @@
                                 </div>
 
                                 <script>
-                                    function openModal() {
+                                    function openModal(event) {
                                         document.getElementById('modal').classList.remove('hidden');
+                                        const button = event.target;
+                                        document.getElementById('inpHiddenId').value = button.getAttribute('data-id');
+                                        document.getElementById('inpHiddenAmount').value = button.getAttribute('data-amount');
+                                        document.getElementById('inpHiddenDebit').value = button.getAttribute('data-debit');
+                                        document.getElementById('inpHiddenCredit').value = button.getAttribute('data-credit');
+                                        document.getElementById('inpHiddenDescription').value = button.getAttribute('data-description');
                                     }
 
-                                    function closeModal() {
+                                    function closeModal(event) {
+                                        event.preventDefault()
                                         document.getElementById('modal').classList.add('hidden');
+                                        let form = document.querySelector('#formModal');
+                                        // Submit the form
+                                        if(event.target.getAttribute('value') === 'confirm' || event.target.getAttribute('value') === 'deny'){
+                                            form.submit();
+                                        }
                                     }
                                 </script>
 

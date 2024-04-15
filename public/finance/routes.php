@@ -1,5 +1,6 @@
 <?php
 require_once "public/finance/functions/dashboard/compilation.php";
+require_once "public/finance/functions/requestFolder/requestExpense.php";
 
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
@@ -125,6 +126,20 @@ Router::post('/fin/getBalanceReport', function(){
 
     header('Content-Type: application/json');
     echo json_encode($return);
+});
+
+Router::post('/fin/updateRequestExpense', function(){
+    $id = $_POST['id'];
+    $decision = $_POST['decision'];
+    updateRequest($id, $decision);
+    if($decision === "confirm"){
+        $amount = $_POST['amount'];
+        $debit = $_POST['debit'];
+        $credit = $_POST['credit'];
+        $description = $_POST['description'];
+        insertLedgerXact($debit,$credit,$amount,$description);
+    }
+    header('/fin/expense');
 });
 
 
