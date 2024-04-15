@@ -63,7 +63,7 @@
         <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
           <div id="main" class="m-3 pt-6">
 
-            <!-- Supplier Edit Form -->
+            <!-- NEW Form -->
             <?php
             // Function to edit supplier information
             function editSupplier($supplierID)
@@ -85,7 +85,6 @@
                       class="grid grid-cols-2 gap-6">
                       <input type="hidden" name="supplierID" value="<?php echo $supplierID; ?>">
                       <div>
-                        <!-- Supplier fields -->
                         <div class="mb-4">
                           <label for="suppliername" class="block text-black font-semibold mb-2">Supplier Name</label>
                           <input type="text" id="suppliername" name="suppliername"
@@ -131,34 +130,34 @@
                             class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                             value="<?php echo $supplier['Estimated_Delivery']; ?>" required>
                         </div>
-                        <!-- ... -->
                       </div>
-                      <div>
-                        <!-- Product table -->
-                        <div class="overflow-x-auto rounded-lg border border-gray-400">
-                          <table class="min-w-full text-center mx-auto bg-white">
-                            <thead class="bg-gray-200 border-b border-gray-400 text-sm">
-                              <tr>
-                                <th class="px-4 py-2 font-semibold">Product Image</th>
-                                <th class="px-4 py-2 font-semibold">Product Name</th>
-                                <th class="px-4 py-2 font-semibold">Category</th>
-                                <th class="px-4 py-2 font-semibold">Price</th>
-                                <th class="px-4 py-2 font-semibold">Description</th>
-                                <th class="px-4 py-2 font-semibold"></th>
-                              </tr>
-                            </thead>
-                            
-                            <tbody>
-                              <?php
-                               // Fetch products based on the Supplier_ID
-                               $stmt_products = $conn->prepare("SELECT * FROM products WHERE Supplier_ID = :supplierID");
-                               $stmt_products->bindParam(':supplierID', $supplierID);
-                               $stmt_products->execute();
-                               $products = $stmt_products->fetchAll(PDO::FETCH_ASSOC); 
-                              foreach ($products as $product) { ?>
-                                <tr>
-                                  <!-- Product fields -->
-                                  <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  </div>
+                  <!-- Table for product -->
+                  <div class="overflow-x-auto rounded-lg border border-gray-400">
+                    <table class="min-w-full text-center mx-auto bg-white">
+                      <thead class="bg-gray-200 border-b border-gray-400 text-sm">
+                        <tr>
+                          <th class="px-4 py-2 font-semibold">Product Image</th>
+                          <th class="px-4 py-2 font-semibold">Product Name</th>
+                          <th class="px-4 py-2 font-semibold">Category</th>
+                          <th class="px-4 py-2 font-semibold">Price</th>
+                          <th class="px-4 py-2 font-semibold">Description</th>
+                          <th class="px-4 py-2 font-semibold"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php
+                        // Fetch products based on the Supplier_ID
+                        $stmt_products = $conn->prepare("SELECT * FROM products WHERE Supplier_ID = :supplierID");
+                        $stmt_products->bindParam(':supplierID', $supplierID);
+                        $stmt_products->execute();
+                        $products = $stmt_products->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Display products in the table
+                        foreach ($products as $product) {
+                        ?>
+                        <tr>
+                            <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
                                 <input type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
                                 <?php
                                 // Display current product image
@@ -199,28 +198,26 @@
                                 <textarea name="product_description_<?php echo $product['ProductID']; ?>"
                                     class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
                             </td>
-                                  <!-- ... -->
-                                  <td class="px-4 py-4">
-                                    <!-- FORM METHOD TO DELETE A PRODUCT -->
-                                    <form action="/master/delete/product" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                                      <input type="hidden" name="product_id" value="<?php echo $product['ProductID']; ?>">
-                                      <input type="hidden" name="supplier_id" value="<?php echo $supplierID; ?>">
-                                      <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
-                                    </form>
-                                  </td>
-                                </tr>
-                              <?php } ?>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <!-- Buttons for navigation -->
-                      <div class="flex flex-row justify-end gap-3 my-3">
-                        <a href='/master/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back
-                        </a>
-                        <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save
-                        </button>
-                      </div>
+                            <td class="px-4 py-4">
+                            <form action="/master/delete/product" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <input type="hidden" name="product_id" value="<?php echo $product['ProductID']; ?>">
+                                <input type="hidden" name="supplier_id" value="<?php echo $supplierID; ?>">
+                                <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                            </form>
+                        </td>
+                        </tr>
+                        <?php } ?>
+                      </tbody>
+                    </table>
+
+
+                    <!-- Buttons for navigation -->
+                    <div class="flex flex-row justify-end gap-3 my-3">
+                      <a href='/master/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back
+                      </a>
+                      <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save
+                      </button>
+                    </div>
                     </form>
                   </div>
                   <?php
@@ -245,8 +242,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+      <script src="./../../src/form.js"></script>
+      <script src="./../../src/route.js"></script>
 </body>
 
 </html>
