@@ -91,7 +91,7 @@ Router::post('/login/user', function () {
             $_SESSION['employee'] = $user['employee'];
 
             // Insert log entry for successful login audit log
-            $user_id = $user['employee']; 
+            $user_id = $user['employee'];
             $action = "Logged In";
             $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
@@ -332,7 +332,7 @@ Router::post('/po/addbulk/', function () {
             }
         }
 
-       // Audit log for adding bulk items on a supplier
+        // Audit log for adding bulk items on a supplier
         $user_id = $_SESSION['employee']; // Assuming you have a user session
 
         // Fetch Supplier_Name based on Supplier_ID
@@ -377,7 +377,7 @@ function getNextBatchID($conn)
 }
 
 Router::post('/placeorder/supplier/', function () {
-    if (!isset($_POST['products']) || !is_array($_POST['products'])) {
+    if (!isset ($_POST['products']) || !is_array($_POST['products'])) {
         echo "No products selected for ordering.";
         return;
     }
@@ -407,7 +407,7 @@ Router::post('/placeorder/supplier/', function () {
         // Loop through each selected product
         foreach ($_POST['products'] as $productID) {
             $quantityField = 'quantity_' . $productID;
-            $quantity = isset($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
+            $quantity = isset ($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
 
             // Ensure quantity is greater than 0 before processing
             if ($quantity > 0) {
@@ -471,7 +471,7 @@ Router::post('/placeorder/supplier/', function () {
             // Redirect the user after successful order placement
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/orderDetail");
-            exit(); // Ensure that script execution stops after redirection
+            exit (); // Ensure that script execution stops after redirection
         } else {
             // Rollback the transaction if no products were ordered
             $conn->rollBack();
@@ -769,7 +769,7 @@ Router::post('/addfeedback/viewtransaction', function () {
 Router::post('/edit/editsupplier', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
-    
+
     // Update supplier information
     $supplierID = $_POST['supplierID'];
     $supplierName = $_POST['suppliername'];
@@ -798,13 +798,13 @@ Router::post('/edit/editsupplier', function () {
             $categoryKey = 'product_category_' . $productID;
             $priceKey = 'product_price_' . $productID;
             $descriptionKey = 'product_description_' . $productID;
-            
+
             // Update product information
             $productName = $_POST[$key];
             $category = $_POST[$categoryKey];
             $price = $_POST[$priceKey];
             $description = $_POST[$descriptionKey];
-            
+
             $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Description = :description WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
             $stmt_product->bindParam(':category', $category);
@@ -821,7 +821,7 @@ Router::post('/edit/editsupplier', function () {
             $productID = substr($key, strlen('product_image_'));
             $uploadDir = 'uploads/';
             $uploadFile = $uploadDir . basename($file['name']);
-            
+
             if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
                 // Update product image path in the database
                 $stmt_product_image = $conn->prepare("UPDATE products SET ProductImage = :productImage WHERE ProductID = :productID");
@@ -1133,6 +1133,41 @@ function updateOrderStatusToCancel()
     }
 }
 
+Router::post('/delete/product', function () {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Get the product ID and supplier ID to delete
+    $productID = $_POST['product_id'];
+    $supplierID = $_POST['supplier_id'];
+
+    // Fetch the supplier name based on the supplier ID
+    $stmt_supplier_name = $conn->prepare("SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID");
+    $stmt_supplier_name->bindParam(':supplierID', $supplierID);
+    $stmt_supplier_name->execute();
+    $supplierName = $stmt_supplier_name->fetchColumn();
+
+    // Prepare and execute the SQL statement to delete the product
+    $stmt_delete_product = $conn->prepare("DELETE FROM products WHERE ProductID = :productID");
+    $stmt_delete_product->bindParam(':productID', $productID);
+    $stmt_delete_product->execute();
+
+    // Audit log for cancelling an order
+    $user_id = $_SESSION['employee']; // Assuming you have a user session
+    $action = "Deleted a Product from Supplier: $supplierName";
+    $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+    $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+    $auditStmt = $conn->prepare($auditSql);
+    $auditStmt->bindParam(':user_id', $user_id);
+    $auditStmt->bindParam(':action', $action);
+    $auditStmt->bindParam(':time_out', $time_out);
+    $auditStmt->execute();
+
+    // Redirect back to the page with the supplier ID
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/po/editsupplier/Supplier=$supplierID");
+});
 
 //function to just fetch the data in the requestHistory
 // function fetchAllRequestsData()
