@@ -113,8 +113,8 @@
                       // Now $row contains the data for each row
                       // You can use $row here
                       // For example:
-                      echo '<a href="/master/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">';
-                      echo '<i class="ri-add-circle-line"></i>';
+                      echo '<a href="/master/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">';
+                      echo '<i class="ri-add-circle-line mr-3"></i>';
                       echo '<span>Add Product</span>';
                       echo '</a>';
                     }
@@ -141,17 +141,16 @@
           <table class="min-w-full text-left mx-auto bg-white">
             <thead class="bg-gray-200 border-b border-gray-400 text-sm">
               <tr>
-                <th class="px-4 py-2 font-semibold">Product Image</th>
+                <th class="px-10 py-2 font-semibold">Product Image</th>
                 <th class="px-10 py-2 font-semibold">Product ID</th>
-                <th class="px-20 py-2 font-semibold">Supplier Name</th>
-                <th class="px-30 py-2 font-semibold">Category</th>
-                <th class="px-40 py-2 font-semibold">Price</th>
-                <th class="px-60 py-2 font-semibold">Description</th>
-                <th class="px-60 py-2 font-semibold">Quantity</th>
-                <th class="px-70 py-2 font-semibold"></th>
+                <th class="px-10 py-2 font-semibold">Supplier Name</th>
+                <th class="px-10 py-2 font-semibold">Category</th>
+                <th class="px-20 py-2 font-semibold">Price</th>
+                <th class="px-10 py-2 font-semibold">Description</th>
+                <th class="px-10 py-2 font-semibold text-center">Quantity</th>
               </tr>
             </thead>
-            <a href='/master/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back
+            <a href='/master/po/suppliers' class="border-2 border-black font-bold py-2.5 px-4 ml-3 my-3 rounded">Back
             </a>
             <tbody>
               <?php
@@ -179,21 +178,21 @@
                       // Debugging statement to print image path
                       $imagePath = '../../' . $row['ProductImage'];
                       echo '<tr>';
-                      echo '<td class="flex flex-col text-center text-sm gap-3 px-6 py-4 font-normal text-gray-900">';
-                      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                      echo '<td class="flex flex-col justify-center items-center text-sm gap-3 px-6 py-4 font-normal text-gray-900">';
+                      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover">';
                       echo '<div>' . $row['ProductName'] . '</div>';
                       echo '</td>';
-                      echo '<td class="px-20 py-4">' . $row['ProductID'] . '</td>';
-                      echo '<td class="px-10 py-4">' . $row['Supplier'] . '</td>';
-                      echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
-                      echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
-                      echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border"></td>';
+                      echo '<td class="px-20 py-4 text-center">' . $row['ProductID'] . '</td>';
+                      echo '<td class="px-10 py-4 text-center">' . $row['Supplier'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['Category'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">Php ' . $row['Price'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
+                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center"></td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
 
-                    echo '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Order</button>';
+                    echo '<button type="submit" class="ml-3 bg-blue-500 hover:bg-blue-700 border-2 border-black text-white font-bold py-2 px-4 my-3 rounded">Order</button>';
                     echo '</form>';
                   } else {
                     echo "No products found for this supplier.";

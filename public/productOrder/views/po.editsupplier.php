@@ -20,9 +20,9 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex flex-col flex-1 overflow-y-auto">
+    <div class="flex flex-col flex-1 overflow-y-auto hide-scrollbar">
       <!-- header -->
-      <div class="flex items-center justify-between h-16 bg-white shadow-md px-4">
+      <div class="sticky top-0 flex items-center justify-between h-16 bg-white shadow-md px-4">
         <div class="flex items-center gap-4">
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
@@ -60,7 +60,7 @@
 
       <!-- New Form -->
       <div class="container mx-auto py-3">
-        <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+        <div class="max-w-6xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
           <div id="main" class="m-3 pt-6">
 
             <!-- Supplier Edit Form -->

@@ -81,9 +81,9 @@
         ?>
 
         <!-- Table --> <!-- either h-screen or h-96 -->
-        <div class="max-w-full h-96 rounded-lg border border-gray-400 overflow-auto overflow-x-auto">
-          <table class="min-w-full text-left bg-white overflow-x-scroll">
-            <thead class="bg-gray-200 border-b border-gray-400">
+        <div class="max-w-full h-96 rounded-lg border border-gray-400 overflow-auto overflow-x-auto hide-scrollbar">
+          <table class="min-w-full text-left bg-white">
+            <thead class=" sticky top-0 bg-gray-200 border-b border-gray-400">
               <tr>
                 <th class="px-4 py-2 font-semibold">Date</th>
                 <th class="px-4 py-2 font-semibold">User</th>

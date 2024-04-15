@@ -180,13 +180,13 @@
                   // Form for Completed status
                   echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2 pt-2" onsubmit="return confirm(\'Are you sure you want to mark this order as complete?\');">';
                   echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
-                  echo '<button type="submit" class="rounded-full border border-green-900 border-b block px-5 py-1 text-sm font-semibold text-green-900 focus:outline-none">Complete</button>';
+                  echo '<button type="submit" class="rounded-full border border-green-900 hover:bg-green-900 border-b block px-4 py-1 text-sm font-semibold text-green-900 hover:text-white focus:outline-none">Complete</button>';
                   echo '</form>';
 
                   // Form for Cancel status
                   echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2" onsubmit="return confirm(\'Are you sure you want to cancel this order?\');">';
                   echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
-                  echo '<button type="submit" class="rounded-full border border-gray-500 border-b block px-5 py-1 text-sm font-semibold text-gray-900 focus:outline-none">Cancel</button>';
+                  echo '<button type="submit" class="rounded-full border border-gray-500 border-b block px-7 py-1 text-sm font-semibold text-gray-900 focus:outline-none">Cancel</button>';
                   echo '</form>';
                   echo '</td>';
 

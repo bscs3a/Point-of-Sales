@@ -85,8 +85,8 @@
             </div>
 
             <div class="flex place-content-end mt-2 m-3">
-              <button route='/po/addsupplier' class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
-                <i class="ri-add-circle-line"></i>
+              <button route='/po/addsupplier' class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">
+                <i class="ri-add-circle-line mr-3"></i>
                 <span>Add Supplier</span>
               </button>
             </div>
@@ -114,12 +114,14 @@
 
                 <div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8 supplierCard"
                   data-supplier_name="<?php echo $row['Supplier_Name']; ?>" data-status="<?php echo $row['Status']; ?>">
-                  <a href="/master/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
-                    class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
                   <div class="flex flex-col gap-2">
-                    <div class="flex flex-row">
+                    <div class="flex flex-row justify-between">
+                      <div>
                       <a class="text-1xl font-semibold">Supplier Name:</a>
                       <a class="ml-3 text-black-500"><?php echo $row['Supplier_Name']; ?></a>
+                      </div>
+                      <a href="/master/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                      class="bg-violet-950 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
                     </div>
                     <div class="flex flex-row">
                       <a class="text-1xl font-semibold">Status:</a>
