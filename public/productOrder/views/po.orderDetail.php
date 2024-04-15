@@ -35,7 +35,7 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -178,13 +178,13 @@
 
                   echo '<td class="px-4 py-6">';
                   // Form for Completed status
-                  echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2 pt-2">';
+                  echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2 pt-2" onsubmit="return confirm(\'Are you sure you want to mark this order as complete?\');">';
                   echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
                   echo '<button type="submit" class="rounded-full border border-green-900 border-b block px-5 py-1 text-sm font-semibold text-green-900 focus:outline-none">Complete</button>';
                   echo '</form>';
 
                   // Form for Cancel status
-                  echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2">';
+                  echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2" onsubmit="return confirm(\'Are you sure you want to cancel this order?\');">';
                   echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
                   echo '<button type="submit" class="rounded-full border border-gray-500 border-b block px-5 py-1 text-sm font-semibold text-gray-900 focus:outline-none">Cancel</button>';
                   echo '</form>';
