@@ -377,13 +377,15 @@ function getNextBatchID($conn)
 }
 
 Router::post('/placeorder/supplier/', function () {
-    if (!isset ($_POST['products']) || !is_array($_POST['products'])) {
+    if (!isset($_POST['products']) || !is_array($_POST['products'])) {
         echo "No products selected for ordering.";
         return;
     }
+
     // Establish database connection
     $db = Database::getInstance();
     $conn = $db->connect();
+
     try {
         // Start a transaction
         $conn->beginTransaction();
@@ -405,7 +407,9 @@ Router::post('/placeorder/supplier/', function () {
         // Loop through each selected product
         foreach ($_POST['products'] as $productID) {
             $quantityField = 'quantity_' . $productID;
-            $quantity = isset ($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
+            $quantity = isset($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
+
+            // Ensure quantity is greater than 0 before processing
             if ($quantity > 0) {
                 // Bind parameters for order details insertion
                 $orderStmt->bindParam(':supplierID', $supplierID);
@@ -428,44 +432,51 @@ Router::post('/placeorder/supplier/', function () {
 
                 // Calculate total amount
                 $totalAmount += $quantity * $productPrice;
+
+                // Audit log for adding bulk items on a supplier
+                $user_id = $_SESSION['employee']; // Assuming you have a user session
+
+                // Fetch Supplier_Name based on Supplier_ID
+                $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
+                $supplierNameStmt = $conn->prepare($supplierNameQuery);
+                $supplierNameStmt->bindParam(':supplierID', $supplierID);
+                $supplierNameStmt->execute();
+                $supplierName = $supplierNameStmt->fetchColumn();
+
+                $action = "Placed an Order for Supplier: $supplierName";
+                $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+                $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+                $auditStmt = $conn->prepare($auditSql);
+                $auditStmt->bindParam(':user_id', $user_id);
+                $auditStmt->bindParam(':action', $action);
+                $auditStmt->bindParam(':time_out', $time_out);
+                $auditStmt->execute();
             }
         }
 
-        // Bind parameters for batch order insertion
-        $batchOrderStmt->bindParam(':supplierID', $supplierID);
-        $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
-        $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
+        // If total quantity is greater than 0, proceed with batch order insertion
+        if ($totalQuantity > 0) {
+            // Bind parameters for batch order insertion
+            $batchOrderStmt->bindParam(':supplierID', $supplierID);
+            $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
+            $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
 
-        // Execute the statement for batch order insertion
-        $batchOrderStmt->execute();
+            // Execute the statement for batch order insertion
+            $batchOrderStmt->execute();
 
-        // Audit log for adding bulk items on a supplier
-        $user_id = $_SESSION['employee']; // Assuming you have a user session
+            // Commit the transaction
+            $conn->commit();
 
-        // Fetch Supplier_Name based on Supplier_ID
-        $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
-        $supplierNameStmt = $conn->prepare($supplierNameQuery);
-        $supplierNameStmt->bindParam(':supplierID', $supplierID);
-        $supplierNameStmt->execute();
-        $supplierName = $supplierNameStmt->fetchColumn();
-
-        $action = "Placed an Order for Supplier: $supplierName";
-        $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
-
-        $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-        $auditStmt = $conn->prepare($auditSql);
-        $auditStmt->bindParam(':user_id', $user_id);
-        $auditStmt->bindParam(':action', $action);
-        $auditStmt->bindParam(':time_out', $time_out);
-        $auditStmt->execute();
-
-        // Commit the transaction
-        $conn->commit();
-
-        // Redirect the user after successful order placement
-        $rootFolder = dirname($_SERVER['PHP_SELF']);
-        header("Location: $rootFolder/po/orderDetail");
-        exit (); // Ensure that script execution stops after redirection
+            // Redirect the user after successful order placement
+            $rootFolder = dirname($_SERVER['PHP_SELF']);
+            header("Location: $rootFolder/po/orderDetail");
+            exit(); // Ensure that script execution stops after redirection
+        } else {
+            // Rollback the transaction if no products were ordered
+            $conn->rollBack();
+            echo "No products were ordered.";
+        }
     } catch (PDOException $e) {
         // Rollback the transaction on error
         $conn->rollBack();
@@ -477,6 +488,7 @@ Router::post('/placeorder/supplier/', function () {
 });
 
 
+//function to delete view details
 Router::post('/delete/viewdetails', function () {
     // Check if the delete request was submitted
     if (isset ($_POST['product_id']) && isset ($_POST['batch_id'])) {

@@ -33,19 +33,21 @@
         <!-- dropdown -->
         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-          <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-            <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
-          </div>
+          <form id="logout-form" action="/logout/user" method="POST">
+            <div x-show="dropdownOpen"
+              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
+              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -109,11 +111,11 @@
               while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <!-- Card 1 -->
-                
+
                 <div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8 supplierCard"
                   data-supplier_name="<?php echo $row['Supplier_Name']; ?>" data-status="<?php echo $row['Status']; ?>">
                   <a href="/master/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
-                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
+                    class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
                   <div class="flex flex-col gap-2">
                     <div class="flex flex-row">
                       <a class="text-1xl font-semibold">Supplier Name:</a>
@@ -129,7 +131,8 @@
                     <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
                       class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
                     <a href="/master/po/viewsupplierproduct/Supplier=<?php echo $row['Supplier_ID']; ?>"
-                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Product Lists/Order</a>
+                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Product
+                      Lists/Order</a>
                   </div>
                 </div>
                 <?php

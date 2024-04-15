@@ -33,19 +33,21 @@
         <!-- dropdown -->
         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-          <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-            <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
-          </div>
+          <form id="logout-form" action="/logout/user" method="POST">
+            <div x-show="dropdownOpen"
+              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
+              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -66,71 +68,72 @@
             <!-- table -->
 
             <?php
-            function displaySupplierDetails($supplierID) {
+            function displaySupplierDetails($supplierID)
+            {
               // Establish database connection
               $db = Database::getInstance();
               $conn = $db->connect();
-          
+
               try {
-                  // Prepare SQL statement to retrieve supplier details
-                  $sql = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
-                  $stmt = $conn->prepare($sql);
-                  $stmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
-                  $stmt->execute();
-                  
-                  // Fetch supplier details
-                  $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
-          
-                  if ($supplier) {
-                      // Display supplier details
-                      echo '<div class="flex justify-between mb-5">';
-                      echo '<a class="text-3xl font-bold">' . $supplier['Supplier_Name'] . '</a>';
-                      echo '<a class="text-xl font-bold">#' . $supplier['Supplier_ID'] . '</a>';
-                      echo '</div>';
-                      echo '<div class="grid grid-cols-2 gap-6">';
-                      echo '<div>';
-                      echo '<div class="mb-2">';
-                      echo '<a class="font-bold mr-3">Contact Name:</a><a>' . $supplier['Contact_Name'] . '</a>';
-                      echo '</div>';
-                      echo '<div class="mb-2">';
-                      echo '<a class="font-bold mr-3">Contact Number:</a><a>' . $supplier['Contact_Number'] . '</a>';
-                      echo '</div>';
-                      echo '<div class="mb-2">';
-                      echo '<a class="font-bold mr-3">Email:</a><a>' . $supplier['Email'] . '</a>';
-                      echo '</div>';
-                      echo '</div>';
-                      echo '<div>';
-                      echo '<div class="mb-2">';
-                      echo '<a class="font-bold mr-3">Status:</a><a>' . $supplier['Status'] . '</a>';
-                      echo '</div>';
-                      echo '<div class="mb-2">';
-                      echo '<a class="font-bold mr-3">Location:</a><a>' . $supplier['Address'] . '</a>';
-                      echo '</div>';
-                      echo '<div class="mb-2">';
-                      echo '<a class="font-bold mr-3">Estimated Delivery:</a><a>' . $supplier['Estimated_Delivery'] . '</a>';
-                      echo '</div>';
-                      echo '</div>';
-                      echo '</div>';
-                  } else {
-                      // Supplier not found
-                      echo "Supplier not found.";
-                  }
+                // Prepare SQL statement to retrieve supplier details
+                $sql = "SELECT * FROM suppliers WHERE Supplier_ID = :supplierID";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+                $stmt->execute();
+
+                // Fetch supplier details
+                $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($supplier) {
+                  // Display supplier details
+                  echo '<div class="flex justify-between mb-5">';
+                  echo '<a class="text-3xl font-bold">' . $supplier['Supplier_Name'] . '</a>';
+                  echo '<a class="text-xl font-bold">#' . $supplier['Supplier_ID'] . '</a>';
+                  echo '</div>';
+                  echo '<div class="grid grid-cols-2 gap-6">';
+                  echo '<div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Contact Name:</a><a>' . $supplier['Contact_Name'] . '</a>';
+                  echo '</div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Contact Number:</a><a>' . $supplier['Contact_Number'] . '</a>';
+                  echo '</div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Email:</a><a>' . $supplier['Email'] . '</a>';
+                  echo '</div>';
+                  echo '</div>';
+                  echo '<div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Status:</a><a>' . $supplier['Status'] . '</a>';
+                  echo '</div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Location:</a><a>' . $supplier['Address'] . '</a>';
+                  echo '</div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Estimated Delivery:</a><a>' . $supplier['Estimated_Delivery'] . '</a>';
+                  echo '</div>';
+                  echo '</div>';
+                  echo '</div>';
+                } else {
+                  // Supplier not found
+                  echo "Supplier not found.";
+                }
               } catch (PDOException $e) {
-                  // Handle PDO exceptions
-                  echo "Error: " . $e->getMessage();
+                // Handle PDO exceptions
+                echo "Error: " . $e->getMessage();
               } finally {
-                  // Close connection
-                  $conn = null;
+                // Close connection
+                $conn = null;
               }
-          }
-          
-          // Check if Supplier_ID is set in the $_GET superglobal
-          if (isset($_GET['Supplier_ID'])) {
+            }
+
+            // Check if Supplier_ID is set in the $_GET superglobal
+            if (isset($_GET['Supplier_ID'])) {
               // Call the function to display supplier details
               $supplierID = $_GET['Supplier_ID'];
               displaySupplierDetails($supplierID);
-          }
-          
+            }
+
             ?>
 
             <!-- reviews and feedback area -->
@@ -138,49 +141,49 @@
               <div class="w-full h-auto mx-auto bg-white border border-gray-400 rounded-lg shadow-md overflow-hidden">
                 <div class="font-bold py-4 pl-8 text-xl border-b border-gray-400">Feedbacks</div>
 
-               <!-- Item Container -->
-              <div class="flex flex-col gap-3 p-4">
+                <!-- Item Container -->
+                <div class="flex flex-col gap-3 p-4">
 
-                <?php
-                require_once 'dbconn.php';
-                // Fetch feedbacks based on the Supplier_ID from the URL parameter
-                $supplierID = $_GET['Supplier_ID']; // Assuming 'supplierID' is the key in the URL parameter
-                $query = "SELECT * FROM feedbacks WHERE supplier_id = :supplierID";
-                $stmt = $conn->prepare($query);
-                $stmt->bindParam(':supplierID', $supplierID);
-                $stmt->execute();
-                $feedbacks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                  <?php
+                  require_once 'dbconn.php';
+                  // Fetch feedbacks based on the Supplier_ID from the URL parameter
+                  $supplierID = $_GET['Supplier_ID']; // Assuming 'supplierID' is the key in the URL parameter
+                  $query = "SELECT * FROM feedbacks WHERE supplier_id = :supplierID";
+                  $stmt = $conn->prepare($query);
+                  $stmt->bindParam(':supplierID', $supplierID);
+                  $stmt->execute();
+                  $feedbacks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                // Check if feedbacks exist
-                if ($feedbacks) {
-                  // Iterate through each feedback and display it
-                  foreach ($feedbacks as $feedback) {
-                ?>
-                    <div class="flex flex-col gap-1 p-4 border-b border-gray-300">
-                      <!-- Profile and Rating -->
-                      <div class="flex justify justify-between">
-                        <div class="font-semibold text-lg">
-                          <?= $feedback['user'] ?>
+                  // Check if feedbacks exist
+                  if ($feedbacks) {
+                    // Iterate through each feedback and display it
+                    foreach ($feedbacks as $feedback) {
+                      ?>
+                      <div class="flex flex-col gap-1 p-4 border-b border-gray-300">
+                        <!-- Profile and Rating -->
+                        <div class="flex justify justify-between">
+                          <div class="font-semibold text-lg">
+                            <?= $feedback['user'] ?>
+                          </div>
                         </div>
-                      </div>
-                      <div class="font-medium">Order #
-                        <?= $feedback['batch_ID'] ?>
-                      </div>
-                      <div class="font-medium">
-                        <?= $feedback['reviews'] ?>
-                      </div>
+                        <div class="font-medium">Order #
+                          <?= $feedback['batch_ID'] ?>
+                        </div>
+                        <div class="font-medium">
+                          <?= $feedback['reviews'] ?>
+                        </div>
 
-                      <div class="font-normal text-sm"><?= $feedback['date'] ?></div>
-                    </div>
-                <?php
+                        <div class="font-normal text-sm"><?= $feedback['date'] ?></div>
+                      </div>
+                      <?php
+                    }
+                  } else {
+                    // No feedbacks found
+                    echo "<div>No feedbacks available</div>";
                   }
-                } else {
-                  // No feedbacks found
-                  echo "<div>No feedbacks available</div>";
-                }
-                ?>
-              </div>
-                
+                  ?>
+                </div>
+
               </div>
             </div>
 

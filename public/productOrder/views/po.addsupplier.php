@@ -33,20 +33,23 @@
         <!-- dropdown -->
         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-          <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-            <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
-          </div>
+          <form id="logout-form" action="/logout/user" method="POST">
+            <div x-show="dropdownOpen"
+              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
+              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
+            </div>
+          </form>
         </div>
+
       </div>
 
       <script>
@@ -63,46 +66,53 @@
 
             <!-- NEW Form -->
             <div class="px-10">
-              <form class="grid grid-cols-2 gap-6" id="productForm" action="/insert/addsupplier/" method="post"
+              <form class="grid grid-cols-2 gap-6" id="productForm" action="/master/insert/addsupplier/" method="post"
                 enctype="multipart/form-data">
 
                 <div>
                   <div class="mb-4">
                     <label for="productid" class="block text-black font-semibold mb-2">Supplier Name</label>
                     <input type="text" id="suppliername" name="suppliername"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
                   </div>
                   <div class="mb-4">
                     <label for="contactname" class="block text-black font-semibold mb-2">Contact Name</label>
                     <input type="text" id="contactname" name="contactname"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
                   </div>
                   <div class="mb-4">
                     <label for="contactnum" class="block text-black font-semibold mb-2">Contact Number</label>
                     <input type="number" id="contactnum" name="contactnum"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
                   </div>
                 </div>
                 <div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Status</label>
                     <input type="text" id="status" name="status"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Email</label>
                     <input type="text" id="email" name="email"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Address</label>
                     <input type="text" id="address" name="address"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Estimated_Delivery</label>
                     <input type="text" id="delivery" name="delivery"
-                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
                   </div>
                 </div>
             </div>

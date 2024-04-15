@@ -33,19 +33,21 @@
         <!-- dropdown -->
         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-          <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-            <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
-          </div>
+          <form id="logout-form" action="/logout/user" method="POST">
+            <div x-show="dropdownOpen"
+              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
+              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -144,59 +146,60 @@
                         </tr>
                       </thead>
                       <tbody>
-                      <?php
-// Fetch products based on the Supplier_ID
-$stmt_products = $conn->prepare("SELECT * FROM products WHERE Supplier_ID = :supplierID");
-$stmt_products->bindParam(':supplierID', $supplierID);
-$stmt_products->execute();
-$products = $stmt_products->fetchAll(PDO::FETCH_ASSOC);
+                        <?php
+                        // Fetch products based on the Supplier_ID
+                        $stmt_products = $conn->prepare("SELECT * FROM products WHERE Supplier_ID = :supplierID");
+                        $stmt_products->bindParam(':supplierID', $supplierID);
+                        $stmt_products->execute();
+                        $products = $stmt_products->fetchAll(PDO::FETCH_ASSOC);
 
-// Display products in the table
-foreach ($products as $product) {
-?>
-  <tr>
-    <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
-      <input type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
-      <?php
-      // Display current product image
-      $imagePath = '../../' . $product['ProductImage'];
-      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
-      ?>
-    </td>
-    <td class="px-4 py-4">
-      <input type="text" name="product_name_<?php echo $product['ProductID']; ?>"
-        value="<?php echo $product['ProductName']; ?>"
-        class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
-    </td>
-    <td class="px-4 py-4">
-      <select name="product_category_<?php echo $product['ProductID']; ?>"
-        class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
-        <?php
-        // Fetch categories from the Categories table
-        $stmt_categories = $conn->prepare("SELECT * FROM categories");
-        $stmt_categories->execute();
-        $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Iterate over each category and populate the select dropdown
-        foreach ($categories as $category) {
-        ?>
-          <option value="<?php echo $category['Category_Name']; ?>" <?php if ($category['Category_Name'] == $product['Category']) echo 'selected'; ?>>
-            <?php echo $category['Category_Name']; ?>
-          </option>
-        <?php } ?>
-      </select>
-    </td>
-    <td class="px-4 py-4">
-      <input type="text" name="product_price_<?php echo $product['ProductID']; ?>"
-        value="<?php echo $product['Price']; ?>"
-        class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
-    </td>
-    <td class="px-4 py-4">
-      <textarea name="product_description_<?php echo $product['ProductID']; ?>"
-        class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
-    </td>
-  </tr>
-<?php } ?>
+                        // Display products in the table
+                        foreach ($products as $product) {
+                          ?>
+                          <tr>
+                            <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                              <input type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
+                              <?php
+                              // Display current product image
+                              $imagePath = '../../' . $product['ProductImage'];
+                              echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                              ?>
+                            </td>
+                            <td class="px-4 py-4">
+                              <input type="text" name="product_name_<?php echo $product['ProductID']; ?>"
+                                value="<?php echo $product['ProductName']; ?>"
+                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                            </td>
+                            <td class="px-4 py-4">
+                              <select name="product_category_<?php echo $product['ProductID']; ?>"
+                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                                <?php
+                                // Fetch categories from the Categories table
+                                $stmt_categories = $conn->prepare("SELECT * FROM categories");
+                                $stmt_categories->execute();
+                                $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
+
+                                // Iterate over each category and populate the select dropdown
+                                foreach ($categories as $category) {
+                                  ?>
+                                  <option value="<?php echo $category['Category_Name']; ?>" <?php if ($category['Category_Name'] == $product['Category'])
+                                       echo 'selected'; ?>>
+                                    <?php echo $category['Category_Name']; ?>
+                                  </option>
+                                <?php } ?>
+                              </select>
+                            </td>
+                            <td class="px-4 py-4">
+                              <input type="text" name="product_price_<?php echo $product['ProductID']; ?>"
+                                value="<?php echo $product['Price']; ?>"
+                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                            </td>
+                            <td class="px-4 py-4">
+                              <textarea name="product_description_<?php echo $product['ProductID']; ?>"
+                                class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
+                            </td>
+                          </tr>
+                        <?php } ?>
 
 
 
