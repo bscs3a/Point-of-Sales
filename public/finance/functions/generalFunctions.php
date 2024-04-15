@@ -394,4 +394,23 @@ function getTotalOfGroupV2($groupType, $year = null, $month = null) {
 
     return abs($netAmount);
 }
+
+
+function getLedgerTransactions($limit = null){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $sql = "SELECT *, cr.name AS cr_name, dr.name AS dr_name FROM LedgerTransaction lt
+    JOIN Ledger cr ON lt.ledgerNo = cr.ledgerNo
+    JOIN Ledger dr ON lt.ledgerNo_Dr = dr.ledgerNo
+    ORDER BY lt.datetime DESC";
+    if (is_numeric($limit)) {
+        $sql .= " LIMIT " . (int)$limit;
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result; 
+}
 ?>

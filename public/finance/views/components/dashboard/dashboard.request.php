@@ -186,16 +186,21 @@
             <table class="table-fixed my-5 w-full text-center border-spacing-y-4" id="general_ledger">
                 <thead class="text-xl font-semibold">
                     <td>Date</td>
-                    <td>Cash</td>
+                    <td>Amount</td>
                     <td>Debit</td>
                     <td>Credit</td>
                 </thead>
-                <tr class="text-md font-medium">
-                    <td>March 4, 2024</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>
+                <tbody>                
+                <?php $transaction = getLedgerTransactions(10); ?>                
+                <?php foreach ($transaction as $trans){ ?>
+                    <tr class="text-md font-medium">
+                        <td><?php echo $trans['DateTime']?></td>
+                        <td><?php echo $trans['amount']?></td>
+                        <td><?php echo $trans['dr_name']?></td>
+                        <td><?php echo $trans['cr_name']?></td>
+                    </tr>
+                <?php } ?>
+                </tbody>
             </table>
         </div>
 
@@ -205,21 +210,6 @@
                 <p> <i class="ri-add-line"> </i> New Transaction</p>
             </button>
         </div>
-
-        <script>
-            let general_ledger = document.getElementById('general_ledger');
-
-            for (let index = 0; index < 9; index++) {
-                general_ledger.innerHTML += `
-                            <tr class="text-md font-medium">
-                                <td>March 4, 2024</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            `;
-            }
-        </script>
     </div>
     <!-- End: Salary Request -->
 
