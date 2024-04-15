@@ -170,7 +170,7 @@
 
                   // Check if there are any rows or results
                   if ($statement->rowCount() > 0) {
-                    echo '<form method="post" action="/placeorder/supplier/">';
+                    echo '<form method="post" action="/master/placeorder/supplier/">';
 
                     // Add hidden input for Supplier_ID
                     echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
@@ -189,7 +189,6 @@
                       echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
                       echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
                       echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border"></td>';
-                      echo '<td class="px-4 py-4">Edit</td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
