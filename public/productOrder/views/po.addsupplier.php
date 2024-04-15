@@ -66,7 +66,7 @@
 
             <!-- NEW Form -->
             <div class="px-10">
-              <form class="grid grid-cols-2 gap-6" id="productForm" action="/insert/addsupplier/" method="post"
+              <form class="grid grid-cols-2 gap-6" id="productForm" action="/master/insert/addsupplier/" method="post"
                 enctype="multipart/form-data">
 
                 <div>

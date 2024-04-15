@@ -79,7 +79,7 @@
               </tr>
             </thead>
 
-            <form method="post" action="/po/addbulk/" enctype="multipart/form-data">
+            <form method="post" action="/master/po/addbulk/" enctype="multipart/form-data">
               <input type="hidden" name="supplierID" value="<?php echo $_GET['Supplier_ID']; ?>">
 
               <!-- Table structure for product details -->
