@@ -134,8 +134,7 @@
             </a>
             <a class="text-lg">To Receive</a>
           </div>
-
-
+          
           <?php
           // Include your database connection file
           require_once 'dbconn.php';
@@ -171,6 +170,8 @@
             <a class="text-lg">Cancelled</a>
           </div>
 
+          
+
 
         </div>
 
@@ -181,8 +182,8 @@
               <tr>
                 <th class="px-4 py-2 font-semibold">Order #</th>
                 <th class="px-4 py-2 font-semibold">Supplier Name</th>
-                <th class="px-4 py-2 font-semibold">Order Date & Time</th>
                 <th class="px-4 py-2 font-semibold">Date Received</th>
+                <th class="px-4 py-2 font-semibold">Time Received</th>
                 <th class="px-4 py-2 font-semibold">Status</th>
                 <th class="px-4 py-2 font-semibold"></th>
               </tr>
@@ -209,8 +210,13 @@
                   echo '<tr>';
                   echo '<td class="px-4 py-4">' . $transaction['Batch_ID'] . '</td>';
                   echo '<td class="px-4 py-4">' . $transaction['Supplier_Name'] . '</td>';
+                  if ($transaction['Order_Status'] == 'Cancelled') {
+                  echo '<td class="px-4 py-4">n/a</td>';
+                  echo '<td class="px-4 py-4">n/a</td>';
+                  } else {
                   echo '<td class="px-4 py-4">' . $transaction['Date_Delivered'] . '</td>';
                   echo '<td class="px-4 py-4">' . $transaction['Time_Delivered'] . '</td>';
+                  }
                   echo '<td class="px-4 py-4">' . $transaction['Order_Status'] . '</td>';
                   // for VIEW order
                   echo '<td class="px-4 py-4">';
