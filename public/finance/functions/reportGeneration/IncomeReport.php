@@ -169,15 +169,23 @@ function generateIncomeReport($year, $month) {
         return strcmp($b['grouptype'], $a['grouptype']);
     });
 
-    $html = "<ul>\n";
+    $html = "<section>";
     foreach ($grouptype_data as $group) {
         if ($group['grouptype'] != $income && $group['grouptype'] != $expense) {
             continue;
         }
-        $html .= "<li>\n<h1>{$group['description']}</h1>\n<ul>\n";
+        $html .= "<table>";
+        $html .= "<thead>";
+        $html .= "<tr>";
+        $html .= "<th colspan='2' class='text-left'>{$group['description']}</th>";
+        $html .= "</tr>";
+        $html .= "</thead>";
+        $html .= "<tbody>";
         foreach ($accounttype_data as $account) {
             if ($account['grouptype'] == $group['grouptype']) {
-                $html .= "<li>\n{$account['Description']}\n<ul>\n";
+                $html .= "<tr class='table-classifier'>";
+                $html .= "<td class='classifier'>{$account['Description']}</td>";
+                $html .= "</tr>";
                 foreach ($ledger_data as $ledger) {
                     if ($ledger['AccountType'] == $account['AccountType']) {
                         $balance = abs(getAccountBalanceInRetainedAccount($ledger['ledgerno'], $year, $month));
@@ -186,26 +194,43 @@ function generateIncomeReport($year, $month) {
                             continue;
                         }
                         $balance = abs($balance);
-                        $html .= "<li>\n<span>{$ledger['name']}</span>&emsp;<span>{$balance}</span>\n</li>\n";
+                        $html .= "<tr class='table-content'>";
+                        $html .= "<td class='content'>{$ledger['name']}</td>";
+                        $html .= "<td class='content-amount'>{$balance}</td>";
+                        $html .= "</tr>";
                     }
                 }
-                $html .= "</ul>\n</li>\n";
             }
         }
+        $html .= "</tbody>";
+
+        //result of group
         $total = abs(getGroupInRetainedAccount($group['grouptype'], $year, $month));
         $resultText = $group['grouptype'] == "IC" ? "Gross Profit" : "Total Expense";
-        $html .= "</ul>\n<span>{$resultText}</span>&emsp;<span>{$total}</span>\n</li>\n";
+        $html .= "<tfoot>";
+        $html .= "<tr>";
+        $html .= "<td>{$resultText}</td>";
+        $html .= "<td>{$total}</td>";
+        $html .= "</tr>";
+        $html .= "</tfoot>";
+        $html .= "</table>";
     }
+
+    $html .= "</section>";
+    // net sales or loss section
     $netSalesOrLoss = calculateNetSalesOrLoss($year, $month);
     $textSalesOrLoss = $netSalesOrLoss > 0 ? "Net Sales" : "Net Loss";
     $netSalesOrLoss = abs($netSalesOrLoss);
-    $html .= "
-    <li>
-        <span>{$textSalesOrLoss}</span>&emsp;<span>{$netSalesOrLoss}</span>
-    <li>";
-
-    $html .= "</ul>";
-
+    $html .= "<section>";
+    $html .= "<table>";
+    $html .= "<tfoot>";
+    $html .= "<tr>";
+    $html .= "<td>{$textSalesOrLoss}</td>";
+    $html .= "<td>{$netSalesOrLoss}</td>";
+    $html .= "</tr>";
+    $html .= "</tfoot>";
+    $html .= "</table>";
+    $html .= "</section>";
     return $html;
 }
 ?>
