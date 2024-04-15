@@ -54,17 +54,59 @@ function insertShare($accountNumber, $year, $month){
     insertLedgerXact($debitLedger, $creditLedger, $amount, "Dividing Earnings or Loss", $year, $month);
 }
 
+function insertAllShares($year, $month){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    // get the all of the ledger(code) that has a group type of IC or EP
+    $CAPITAL = getAccountCode("Capital Accounts");
+    $sql = "SELECT l.ledgerno 
+        FROM Ledger l 
+        INNER JOIN AccountType a ON l.AccountType = a.AccountType 
+        WHERE a.accounttype = :capital";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':capital', $CAPITAL);
+    $stmt->execute();
+    $ledgers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($ledgers as $ledger) {
+        // close the accounts by transfering it through retained earnings/loss
+        insertShare($ledger['ledgerno'], $year, $month);
+    }
+
+    //declare owner (the purpose of code below is to put the rest of the earnings or loss to the first owner)
+    $OWNER_LEDGER = getLedgerCode("A account");
+    //for getting the past month
+    $pastYear = $year;
+    $pastMonth = $month - 1;
+    if($month == 1){
+        $pastYear = $year - 1;
+        $pastMonth = 12;
+    }
+    $addedSales =  getTotalOfAccountTypeV2($CAPITAL, $year,$month) - getTotalOfAccountTypeV2($CAPITAL,$pastYear,$pastMonth) - getWholeInvestment($year,$month) - getWholeWithdrawals($year,$month);
+    $amount = calculateNetSalesOrLoss($year, $month) - $addedSales;
+    if($amount != 0){
+        if($amount < 0){
+            $debit = $OWNER_LEDGER;
+            $credit = getLedgerCode("Retained Earnings/Loss");
+        }else{
+            $debit = getLedgerCode("Retained Earnings/Loss");
+            $credit = $OWNER_LEDGER;
+        }
+        insertLedgerXact($debit, $credit,$amount, "putting the rest at the owner", $year, $month);
+    }
+
+}
 
 function generateOEReport($year, $month){
     $db = Database::getInstance();
     $conn = $db->connect();
-
-    $condition = getAccountCode("Capital Accounts");
-    $OWNER_LEDGER = getLedgerCode("A account");
+    insertAllShares($year, $month);
+    
+    $CAPITAL = getAccountCode("Capital Accounts");
     $stmt = $conn->prepare('SELECT * FROM ledger l 
     INNER JOIN accounttype at ON at.accounttype = l.accounttype 
     WHERE l.accounttype = :condition ');
-    $stmt->bindParam(':condition', $condition);
+    $stmt->bindParam(':condition', $CAPITAL);
     $stmt->execute();
     
     $ledger_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -82,42 +124,29 @@ function generateOEReport($year, $month){
     }
     
     foreach ($ledger_data as $ledger) {
-        if(!checkShareIfAdded($ledger["ledgerno"], $year, $month)){
-            insertShare($ledger["ledgerno"], $year, $month);
-        }
         if(getAccountBalanceV2($ledger['ledgerno'], true, $year, $month) == 0){
             continue;
         }
+        $accountSharing = getAccountBalanceInRetainedAccount($ledger['ledgerno'], $year, $month) * -1;
         $html .= "<tr>";
         $html .= "<td>".$ledger["name"]."</td>"; //name
         $html .= "<td>".abs(getAccountBalanceV2($ledger["ledgerno"], true, $pastYear, $pastMonth))."</td>"; //account balance last month
         $html .= "<td>".getInvestment($ledger['ledgerno'], $year, $month)."</td>"; // additional investment
-        $html .= "<td>".divideTheGainLoss($ledger['ledgerno'], $year, $month)."</td>"; // net income/loss divided
+        $html .= "<td>".$accountSharing."</td>"; // net income/loss divided
         $html .= "<td>".getWithdrawals($ledger["ledgerno"], $year, $month)."</td>"; //withdrawals
         $html .= "<td>".abs(getAccountBalanceV2($ledger["ledgerno"], true, $year, $month))."</td>"; // get the current total
         $html .= "</tr>";
     }
-    $addedSales =  getTotalOfAccountTypeV2($condition, $year,$month) - getTotalOfAccountTypeV2($condition,$pastYear,$pastMonth) - getWholeInvestment($year,$month) - getWholeWithdrawals($year,$month);
-    $amount = calculateNetSalesOrLoss($year, $month) - $addedSales;
-    if($amount != 0){
-        if($amount < 0){
-            $debit = $OWNER_LEDGER;
-            $credit = getLedgerCode("Retained Earnings/Loss");
-        }else{
-            $debit = getLedgerCode("Retained Earnings/Loss");
-            $credit = $OWNER_LEDGER;
-        }
-        insertLedgerXact($debit, $credit,$amount, "putting the rest at the owner", $year, $month);
-    }
+    
     $html .= "</tbody>";
     $html .= "<tfoot>";
     $html .= "<tr>";
-    $html .= "<td>Total Equity</td>"; //place holder for name
-    $html .= "<td>".getTotalOfAccountTypeV2($condition,$pastYear,$pastMonth)."</td>"; //total investment last month
+    $html .= "<td>Total</td>"; //place holder for name
+    $html .= "<td>".getTotalOfAccountTypeV2($CAPITAL,$pastYear,$pastMonth)."</td>"; //total investment last month
     $html .= "<td>".getWholeInvestment($year,$month)."</td>"; // total additional investment this month
     $html .= "<td>".calculateNetSalesOrLoss($year, $month)."</td>";// total net income/loss this month
     $html .= "<td>".getWholeWithdrawals($year,$month)."</td>"; // total withdrawals this month
-    $html .= "<td>".getTotalOfAccountTypeV2($condition,$year,$month)."</td>"; // ending investment this month
+    $html .= "<td>".getTotalOfAccountTypeV2($CAPITAL,$year,$month)."</td>"; // ending investment this month
     $html .= "</tr>";
     $html .= "</tfoot>";
     
