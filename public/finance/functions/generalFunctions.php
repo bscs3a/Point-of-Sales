@@ -403,6 +403,7 @@ function getTotalOfGroupV2($groupType, $year = null, $month = null) {
     return abs($netAmount);
 }
 
+
 //get all ledger transaction with limit
 function getLedgerTransactions($limit = null){  
     $db = Database::getInstance();

@@ -43,10 +43,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                    <div>
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -55,20 +82,23 @@
 
         <!-- End: Header -->
 
-        <div class="flex flex-col items-start justify-center min-h-screen w-full max-w-4xl mx-auto p-4">
+        <div id="receipt" class="flex flex-col items-start justify-center min-h-screen w-full max-w-4xl mx-auto p-4">
             <div class="w-full bg-white rounded-lg overflow-hidden shadow-lg p-4">
-                <div class="p-2 pl-6 text-green-800 text-xl">
-                    <i class="ri-cash-line text-2xl"></i> <span class="font-regular text-green-800">AMOUNT</span>
-                </div>
-                <div class="p-2 pl-6 text-6xl font-semibold flex flex-row items-center border-b pb-4">
-                    <span>₱<?php echo number_format($sale['TotalAmount'], 2); ?></span>
-                    <!-- <div>
+                <div class="bg-green-900 text-white">
+                    <div class="p-2 pl-6 text-xl">
+                        <i class="ri-cash-line text-2xl"></i> <span class="font-regular">AMOUNT</span>
+                    </div>
+                    <div class="p-2 pl-6 text-6xl font-semibold flex flex-row items-center border-b pb-4 ">
+                        <span>₱<?php echo number_format($sale['TotalAmount'], 2); ?></span>
+                        <!-- <div>
                         <div class="bg-gray-200 flex justify-center p-2 px-4 rounded-full ml-4 shadow-md border-gray-200 border">
                             <div class="bg-green-800 size-6 rounded-full mr-2"></div>
                             <span class="text-xl font-medium">Order Delivered</span>
                         </div>
                     </div> -->
+                    </div>
                 </div>
+
 
 
                 <div class="p-6 rounded flex flex-row text-lg font-medium">
@@ -129,13 +159,36 @@
 
                         <div class="flex flex-col gap-4 font-semibold ">
                             <div class="bg-gray-200 rounded-full p-2 text-center font-bold">Heavy</div>
-                            <span class="p-2"><?php echo $deliveryOrder['DeliveryAddress']; ?></span>
+                            <span class="p-2"><?php echo $deliveryOrder['StreetBarangayAddress'] . ', ' . $deliveryOrder['Municipality'] . ', ' . $deliveryOrder['Province']; ?></span>
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryDate']; ?></span>
-                            <span class="p-2"><?php echo $deliveryOrder['DeliveryStatus']; ?></span>
+                            <div class="flex justify-center items-center">
+                                <span class="p-2 bg-gray-200 px-4 rounded-full font-bold flex flex-row items-center">
+                                    <div changeColor class="size-4 rounded-full mr-2"></div>
+                                    <?php echo $deliveryOrder['DeliveryStatus']; ?>
+                                </span>
+                            </div>
                             <span class="p-2"><?php echo $deliveryOrder['ReceivedDate']; ?></span>
                         </div>
                     </div>
                 <?php } ?>
+
+
+                <!-- COLOR CHANGER for delivery status-->
+                <script>
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                        const changeColor = document.querySelector('[changeColor]');
+                        if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Delivered') {
+                            changeColor.classList.remove('bg-yellow-500');
+                            changeColor.classList.add('bg-green-500');
+                        } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'Pending') {
+                            changeColor.classList.remove('bg-green-500');
+                            changeColor.classList.add('bg-yellow-500');
+                        } else if ('<?= $deliveryOrder['DeliveryStatus'] ?>' == 'In Transit') {
+                            changeColor.classList.remove('bg-yellow-500');
+                            changeColor.classList.add('bg-orange-300');
+                        }
+                    });
+                </script>
 
                 <?php if ($sale['PaymentMode'] == 'Card') { ?>
                     <div class="p-6 pb-2 pt-2 rounded flex flex-row text-lg border-b">
@@ -162,12 +215,12 @@
                 <div class="flex justify-center">
                     <div class="grid grid-cols-3 gap-4 mx-auto">
                         <?php foreach ($items as $item) : ?>
-                            <div class="w-52 h-70 p-6 flex flex-col items-center border rounded-lg border-solid border-gray-300 shadow-lg text-center" data-open-modal data-product='<?= json_encode($item) ?>'>
-                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4">
-                                    <!-- SVG icon -->
+                            <div class="w-52 h-70 p-6 flex flex-col items-center border rounded-lg border-solid border-gray-300 shadow-lg text-center cursor-pointer" data-open-modal data-product='<?= json_encode($item) ?>'>
+                                <div class="size-24 rounded-full shadow-md bg-yellow-200 mb-4 flex items-center justify-center">
+                                    <img src="../../<?= $item['ProductImage']; ?>" alt="<?php echo $item['ProductName']; ?>" class="object-contain">
                                 </div>
                                 <div class="font-bold text-lg text-gray-700"><?php echo $item['ProductName']; ?></div>
-                                <div class="font-normal text-sm text-gray-500"><?php echo $item['Category']; ?></div>
+                                <div class="font-normal text-sm text-gray-500"><?php echo $item['Category_Name']; ?></div>
                                 <div class="mt-6 text-lg font-semibold text-gray-700">&#8369;<?php echo number_format($item['UnitPrice'] * $item['Quantity'] * (1 + $item['TaxRate']), 2); ?></div>
                                 <div class="text-gray-500 text-sm">Quantity: <?php echo $item['Quantity']; ?></div>
                             </div>
@@ -187,12 +240,15 @@
                     <div class="relative p-4">
                         <div class="relative bg-white">
                             <div class="flex justify-center">
-                                <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4"></div>
+                                <div class="size-64 rounded-full shadow-lg bg-yellow-200 mb-4 flex items-center justify-center">
+                                    <img id="modal-product-image" src="" alt="Product Image" class="object-contain">
+                                </div>
                             </div>
                             <div class="text-justify">
                                 <div id="modal-product-category" class="text-justify font-semibold text-gray-800"></div>
                             </div>
                             <div class="flex justify-between pt-4">
+                                <div id="modal-product-id" class="text-lg font-semibold hidden"></div>
                                 <h3 id="modal-product-name" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
                                 <h3 id="modal-product-price" class="mb-5 text-2xl font-semibold text-gray-800 dark:text-gray-800"></h3>
                             </div>
@@ -208,6 +264,44 @@
                             <div class="flex justify-between">
                                 <h3 id="modal-product-total" class="pt-3 text-xl text-gray-500 font-medium"></h3>
                             </div>
+
+                            <!-- Return Order Button -->
+                            <div class="flex justify-center pt-6">
+                                <?php
+                                $sql = "SELECT sd.SaleDetailID, sd.ProductID 
+                                FROM SaleDetails sd 
+                                JOIN Products p ON sd.ProductID = p.ProductID 
+                                WHERE sd.SaleID = :sale_id";
+                                $stmt = $pdo->prepare($sql);
+                                $stmt->bindParam(":sale_id", $sale['SaleID']);
+                                $stmt->execute();
+                                $saleDetail = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $SaleDetailId = $saleDetail['SaleDetailID'];
+                                $productId = $saleDetail['ProductID']; // Ensure this fetches the correct product ID
+                                ?>
+                                <button id="returnProductButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                    Return Product
+                                </button>
+
+                                <script>
+                                    // Get the button element
+                                    const button = document.querySelector('#returnProductButton');
+
+                                    // Add click event listener to the button
+                                    button.addEventListener('click', () => {
+                                        // Get the sale ID, sale detail ID, and product ID
+                                        const saleId = <?php echo json_encode($sale['SaleID']); ?>;
+                                        const saleDetailId = <?php echo json_encode($SaleDetailId); ?>;
+                                        const productId = <?php echo json_encode($productId); ?>;
+
+                                        // Construct the route
+                                        const route = `/master/sls/ReturnProduct/sale=${saleId}/saledetails=${saleDetailId}/product=${selectedProduct.id}`;
+
+                                        // Redirect to the route
+                                        window.location.href = route;
+                                    });
+                                </script>
+                            </div>
                         </div>
                     </div>
                 </dialog>
@@ -217,6 +311,8 @@
                     const closeButtons = document.querySelector('[data-close-modal]');
                     const modal = document.querySelector('[data-modal]');
                     const modalProductName = document.getElementById('modal-product-name');
+                    const modalProductId = document.getElementById('modal-product-id');
+                    const modalProductImage = document.getElementById('modal-product-image');
                     const modalProductPrice = document.getElementById('modal-product-price');
                     const modalProductDescription = document.getElementById('modal-product-description');
                     const modalProductCategory = document.getElementById('modal-product-category');
@@ -229,15 +325,19 @@
                             selectedProduct = {
                                 id: product.ProductID,
                                 name: product.ProductName,
+                                image: product.ProductImage,
                                 price: Number(product.Price),
                                 stocks: product.Stocks,
                                 priceWithTax: Number(product.Price) * (1 + Number(product.TaxRate)),
                                 TaxRate: Number(product.TaxRate),
                                 deliveryRequired: product.DeliveryRequired
                             };
+                            // modalProductImage.src = `../../uploads/${product.Image}`;
+                            modalProductImage.src = `../../` + selectedProduct.image;
+                            modalProductId.textContent = selectedProduct.id;
                             modalProductName.textContent = selectedProduct.name;
                             modalProductPrice.textContent = '₱' + (selectedProduct.price * (1 + selectedProduct.TaxRate)).toFixed(2);
-                            modalProductCategory.textContent = product.Category;
+                            modalProductCategory.textContent = product.Category_Name;
                             modalProductDescription.textContent = product.Description;
                             modalProductQuantity.textContent = 'Quantity: ' + product.Quantity;
                             modalProductTotal.textContent = 'Total: ₱' + (selectedProduct.price * product.Quantity * (1 + selectedProduct.TaxRate)).toFixed(2);
@@ -281,6 +381,37 @@
     </main>
     <script src="./../../src/form.js"></script>
     <script src="./../../src/route.js"></script>
+
+    <script>
+        function attachPrintButtonEventListener() {
+            document.querySelector('.print-button').addEventListener('click', printReceipt);
+        }
+
+        function printReceipt() {
+            var receipt = document.getElementById('receipt').innerHTML;
+            var originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = receipt;
+
+            window.onbeforeprint = function() {
+                document.querySelector('.print-button').style.display = 'none';
+            };
+
+            window.onafterprint = function() {
+                document.querySelector('.print-button').style.display = 'block';
+            };
+
+            window.print();
+
+            document.body.innerHTML = originalContent;
+
+            // Reattach the event listener after the original content is restored
+            attachPrintButtonEventListener();
+        }
+
+        // Attach the event listener when the page loads
+        attachPrintButtonEventListener();
+    </script>
 </body>
 
 </html>
