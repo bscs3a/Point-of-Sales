@@ -1,5 +1,5 @@
 <?php
-require_once "public\\finance\\functions\generalFunctions.php";
+require_once "public\\finance\\functions\\reportGeneration\\OwnersEquityReport.php";
 
 function generateTrialBalance($year, $month) {
     $db = Database::getInstance();

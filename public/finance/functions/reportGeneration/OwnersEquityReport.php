@@ -137,8 +137,8 @@ function generateOEReport($year, $month){
         $html .= "<td>".$ledger["name"]."</td>"; //name
         $html .= "<td>".abs(getAccountBalanceV2($ledger["ledgerno"], true, $pastYear, $pastMonth))."</td>"; //account balance last month
         $html .= "<td>".getInvestment($ledger['ledgerno'], $year, $month)."</td>"; // additional investment
-        $html .= "<td>".$accountSharing."</td>"; // net income/loss divided
         $html .= "<td>".getWithdrawals($ledger["ledgerno"], $year, $month)."</td>"; //withdrawals
+        $html .= "<td>".$accountSharing."</td>"; // net income/loss divided
         $html .= "<td>".abs(getAccountBalanceV2($ledger["ledgerno"], true, $year, $month))."</td>"; // get the current total
         $html .= "</tr>";
     }
@@ -149,8 +149,8 @@ function generateOEReport($year, $month){
     $html .= "<td>Total</td>"; //place holder for name
     $html .= "<td>".getTotalOfAccountTypeV2($CAPITAL,$pastYear,$pastMonth)."</td>"; //total investment last month
     $html .= "<td>".getWholeInvestment($year,$month)."</td>"; // total additional investment this month
-    $html .= "<td>".calculateNetSalesOrLoss($year, $month)."</td>";// total net income/loss this month
     $html .= "<td>".getWholeWithdrawals($year,$month)."</td>"; // total withdrawals this month
+    $html .= "<td>".calculateNetSalesOrLoss($year, $month)."</td>";// total net income/loss this month
     $html .= "<td>".getTotalOfAccountTypeV2($CAPITAL,$year,$month)."</td>"; // ending investment this month
     $html .= "</tr>";
     $html .= "</tfoot>";

@@ -201,11 +201,12 @@ require_once "public/finance/functions/requestFolder/requestExpense.php";
                                                         <input type="hidden" id="inpHiddenDebit" name="debit" value="">
                                                         <input type="hidden" id="inpHiddenCredit" name="credit" value="">
                                                         <input type="hidden" id="inpHiddenDescription" name="description" value="">
+                                                        <input type="hidden" id="inpHiddenDecision" name = "decision" value="">
                                                         <div class="mt-5 sm:mt-6">
-                                                            <button type="submit" name="decision" value="confirm" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm" onclick="closeModal(event)">
+                                                            <button type="submit" value="confirm" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm" onclick="closeModal(event)">
                                                                 Accept
                                                             </button>
-                                                            <button type="submit" name="decision" value="deny" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal(event)">
+                                                            <button type="submit" value="deny" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal(event)">
                                                                 Decline
                                                             </button>
                                                             <button type="button" value="nothing" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm" onclick="closeModal(event)">
@@ -235,7 +236,9 @@ require_once "public/finance/functions/requestFolder/requestExpense.php";
                                         document.getElementById('modal').classList.add('hidden');
                                         let form = document.querySelector('#formModal');
                                         // Submit the form
-                                        if(event.target.getAttribute('value') === 'confirm' || event.target.getAttribute('value') === 'deny'){
+                                        let value = event.target.getAttribute('value');
+                                        document.getElementById('inpHiddenDecision').value = value;
+                                        if( value === 'confirm' || value === 'deny'){
                                             form.submit();
                                         }
                                     }
@@ -296,6 +299,7 @@ require_once "public/finance/functions/requestFolder/requestExpense.php";
     <!-- Start: Sidebar -->
     <!-- End: Dashboard -->
     <script  src="./../src/route.js"></script>
+    <script  src="./../src/form.js"></script>
 </body>
 
 </html>

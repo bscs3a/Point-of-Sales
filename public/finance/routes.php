@@ -1,5 +1,5 @@
 <?php
-require_once "public/finance/functions/dashboard/compilation.php";
+require_once "public/finance/functions/reportGeneration/TrialBalance.php";
 require_once "public/finance/functions/requestFolder/requestExpense.php";
 
 $_SESSION['user'] = 'admin';
@@ -139,7 +139,8 @@ Router::post('/fin/updateRequestExpense', function(){
         $description = $_POST['description'];
         insertLedgerXact($debit,$credit,$amount,$description);
     }
-    header('/fin/expense');
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/expense");
 });
 
 

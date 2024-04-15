@@ -36,7 +36,7 @@ function closeAccount($ledgerCode, $amount, $year, $month){
         $debitLedger = $ledgerCode;
         $creditLedger = $retainedCode;
     }
-
+    $amount = abs($amount);
     insertLedgerXact($debitLedger, $creditLedger, $amount, "closing of account", $year, $month);
 }
 
@@ -45,10 +45,10 @@ function closeAllAccounts($year, $month) {
     $db = Database::getInstance();
     $conn = $db->connect();
     // get the all of the ledger(code) that has a group type of IC or EP
-    $sql = "SELECT l.ledgerno 
+    $sql = "SELECT l.ledgerno, l.name
         FROM Ledger l 
         INNER JOIN AccountType a ON l.AccountType = a.AccountType 
-        WHERE a.grouptype IN ('ic', 'ep')";
+        WHERE a.grouptype IN ('IC', 'EP')";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();

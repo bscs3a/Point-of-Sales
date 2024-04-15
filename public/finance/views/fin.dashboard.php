@@ -2,7 +2,7 @@
 define('YEAR', date('Y'));
 define('MONTH', date('m'));
 
-require_once "public/finance/functions/dashboard/compilation.php";
+require_once "public/finance/functions/reportGeneration/TrialBalance.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">

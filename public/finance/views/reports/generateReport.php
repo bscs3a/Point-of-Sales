@@ -2,7 +2,10 @@
 require_once './vendor/autoload.php';
 
 use Dompdf\Dompdf;
-define("DOMPDF_ENABLE_REMOTE", false);
+use Dompdf\Options;
+$options = new Options();
+$options->set('isRemoteEnabled', true);
+
 
 $fileNeeded = $_SESSION['postdata']['file'];
 if($fileNeeded === null){
@@ -30,7 +33,7 @@ else if($fileNeeded === "TrialBalance"){
 $html = ob_get_clean();
 
 // Instantiate Dompdf class
-$dompdf = new Dompdf();
+$dompdf = new Dompdf($options);
 
 // Load HTML content
 $dompdf->loadHtml($html);

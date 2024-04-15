@@ -44,7 +44,7 @@ function updateRequest($id, $decision){
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    $sql = "UPDATE requestexpense SET status = ? WHERE id = ?";
+    $sql = "UPDATE requestexpense SET status = ? WHERE re_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$decision, $id]);
 
@@ -66,7 +66,7 @@ function checkRequestId($id){
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    $sql = "SELECT * FROM requestexpense WHERE id = ?";
+    $sql = "SELECT * FROM requestexpense WHERE re_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$id]);
     $result = $stmt->fetchAll();
