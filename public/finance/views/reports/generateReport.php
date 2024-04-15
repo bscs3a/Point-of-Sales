@@ -2,6 +2,7 @@
 require_once './vendor/autoload.php';
 
 use Dompdf\Dompdf;
+define("DOMPDF_ENABLE_REMOTE", false);
 
 $fileNeeded = $_SESSION['postdata']['file'];
 if($fileNeeded === null){
