@@ -34,17 +34,19 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-          <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-            <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
-          </div>
+          <form id="logout-form" action="/logout/user" method="POST">
+            <div x-show="dropdownOpen"
+              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
+              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -266,9 +268,10 @@
           </table>
           <!-- Feedback area -->
           <form action="/addfeedback/viewtransaction" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="supplierID" value="<?= $data['Supplier_ID'] ?>"> <!--get the supplier ID in the query -->
-          <input type="hidden" name="user" value="<?= $_SESSION['employee'] ?>"> <!--get the employeein th seeiony -->
-          <input type="hidden" name="batchID" value="<?= $_GET['id'] ?>"> <!--get the batchID in the $GET -->
+            <input type="hidden" name="supplierID" value="<?= $data['Supplier_ID'] ?>">
+            <!--get the supplier ID in the query -->
+            <input type="hidden" name="user" value="<?= $_SESSION['employee'] ?>"> <!--get the employeein th seeiony -->
+            <input type="hidden" name="batchID" value="<?= $_GET['id'] ?>"> <!--get the batchID in the $GET -->
             <h2 class="font-bold text-lg pb-2">Feedback</h2>
             <?php
             // Check if the Feedback column in transaction_history is "done"

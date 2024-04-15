@@ -34,19 +34,21 @@
         <!-- dropdown -->
         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-50 rounded-md bg-white p-2 focus:outline-none">
+            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#">David, Marc</a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-          <div x-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-            <a href="#" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</a>
-          </div>
+          <form id="logout-form" action="/logout/user" method="POST">
+            <div x-show="dropdownOpen"
+              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
+              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -149,70 +151,69 @@
                 <th class="px-70 py-2 font-semibold"></th>
               </tr>
             </thead>
-            <a href='/master/po/suppliers'
-                        class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back
-                        </a>
+            <a href='/master/po/suppliers' class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back
+            </a>
             <tbody>
-            <?php
-function displayProductsBySupplierID($supplierID)
-{
-    try {
-        require_once 'dbconn.php';
-        // Query to retrieve products based on Supplier_ID
-        $query = "SELECT p.*, s.Supplier_Name 
+              <?php
+              function displayProductsBySupplierID($supplierID)
+              {
+                try {
+                  require_once 'dbconn.php';
+                  // Query to retrieve products based on Supplier_ID
+                  $query = "SELECT p.*, s.Supplier_Name 
                   FROM products p 
                   INNER JOIN suppliers s ON p.Supplier_ID = s.Supplier_ID
                   WHERE p.Supplier_ID = :supplierID";
-        $statement = $conn->prepare($query);
-        $statement->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
-        $statement->execute();
+                  $statement = $conn->prepare($query);
+                  $statement->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+                  $statement->execute();
 
-        // Check if there are any rows or results
-        if ($statement->rowCount() > 0) {
-            echo '<form method="post" action="/placeorder/supplier/">';
+                  // Check if there are any rows or results
+                  if ($statement->rowCount() > 0) {
+                    echo '<form method="post" action="/placeorder/supplier/">';
 
-            // Add hidden input for Supplier_ID
-            echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
+                    // Add hidden input for Supplier_ID
+                    echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
 
-            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                // Debugging statement to print image path
-                $imagePath = '../../' . $row['ProductImage'];
-                echo '<tr>';
-                echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
-                echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
-                echo '<div>' . $row['ProductName'] . '</div>';
-                echo '</td>';
-                echo '<td class="px-20 py-4">' . $row['ProductID'] . '</td>';
-                echo '<td class="px-10 py-4">' . $row['Supplier'] . '</td>';
-                echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
-                echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
-                echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
-                echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border"></td>';
-                echo '<td class="px-4 py-4">Edit</td>';
-                echo '</tr>';
-                echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
-            }
+                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                      // Debugging statement to print image path
+                      $imagePath = '../../' . $row['ProductImage'];
+                      echo '<tr>';
+                      echo '<td class="flex gap-3 px-6 py-4 font-normal text-gray-900">';
+                      echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                      echo '<div>' . $row['ProductName'] . '</div>';
+                      echo '</td>';
+                      echo '<td class="px-20 py-4">' . $row['ProductID'] . '</td>';
+                      echo '<td class="px-10 py-4">' . $row['Supplier'] . '</td>';
+                      echo '<td class="px-4 py-4">' . $row['Category'] . '</td>';
+                      echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
+                      echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
+                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border"></td>';
+                      echo '<td class="px-4 py-4">Edit</td>';
+                      echo '</tr>';
+                      echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
+                    }
 
-            echo '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Order</button>';
-            echo '</form>';
-        } else {
-            echo "No products found for this supplier.";
-        }
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
-    // Close the database connection
-    $conn = null;
-}
+                    echo '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Order</button>';
+                    echo '</form>';
+                  } else {
+                    echo "No products found for this supplier.";
+                  }
+                } catch (PDOException $e) {
+                  echo "Connection failed: " . $e->getMessage();
+                }
+                // Close the database connection
+                $conn = null;
+              }
 
-// Check if Supplier_ID is provided via GET method
-if (isset($_GET['Supplier_ID'])) {
-    $supplierID = $_GET['Supplier_ID'];
-    displayProductsBySupplierID($supplierID);
-} else {
-    echo "Supplier ID not provided.";
-}
-?>
+              // Check if Supplier_ID is provided via GET method
+              if (isset($_GET['Supplier_ID'])) {
+                $supplierID = $_GET['Supplier_ID'];
+                displayProductsBySupplierID($supplierID);
+              } else {
+                echo "Supplier ID not provided.";
+              }
+              ?>
 
             </tbody>
           </table>
