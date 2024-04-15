@@ -145,12 +145,12 @@
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
                                         Pending
                                 </button>
-                                
-                                
+
+
                             </td>
                         </tr>
 
-                       
+
                     </tbody>
                 </table>
             </div>
@@ -187,12 +187,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <script>
                                     function openModal() {
                                         document.getElementById('modal').classList.remove('hidden');
                                     }
-                                
+
                                     function closeModal() {
                                         document.getElementById('modal').classList.add('hidden');
                                     }

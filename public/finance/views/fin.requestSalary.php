@@ -124,7 +124,7 @@
             <!-- Table -->
             <div class="overflow-x-auto rounded-lg border border-gray-400">
                 <table class="min-w-full divide-y-2 divide-gray-400 bg-white text-sm">
-                  
+
                     <thead class="ltr:text-left rtl:text-right bg-gray-200">
                         <tr>
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Picture</th>
@@ -148,12 +148,12 @@
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
                                         Pending
                                 </button>
-                                
-                                
+
+
                             </td>
                         </tr>
 
-                       
+
                     </tbody>
                 </table>
             </div>
@@ -190,12 +190,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <script>
                                     function openModal() {
                                         document.getElementById('modal').classList.remove('hidden');
                                     }
-                                
+
                                     function closeModal() {
                                         document.getElementById('modal').classList.add('hidden');
                                     }

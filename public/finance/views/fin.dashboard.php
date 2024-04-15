@@ -1,3 +1,9 @@
+<?php 
+define('YEAR', date('Y'));
+define('MONTH', date('m'));
+
+require_once "public/finance/functions/reportGeneration/TrialBalance.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,6 +18,26 @@
 <body>
     <!-- Start: Sidebar -->
     <?php include "components/sidebar.php" ?>
+    <?php
+    // require_once './../functions/auditLog.php';
+    // echo __DIR__ . './../functions/auditLog.php';
+    // addAccountantAuditLog('Log in'); 
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        if (isset($_SESSION['employee_name'])) {
+
+            $db = Database::getInstance();
+            $pdo = $db->connect();
+
+            $logAction = "Log in";
+
+            $sql = "INSERT INTO tbl_fin_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
+            $stmt->bindParam(":log_action", $logAction);
+            $stmt->execute();
+        }
+    }
+    ?>
     <!-- End: Sidebar -->
     <!-- Start: Dashboard -->
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main font-sans">
@@ -46,7 +72,7 @@
                         <a class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm hover:bg-gray-50 focus:outline-none hover:cursor-pointer"
                             id="options-menu" aria-haspopup="true" aria-expanded="true">
                             <div class="text-black font-medium mr-4 ">
-                                <?= $_SESSION['fullname']; ?>
+                                <?= $_SESSION['employee_name']; ?>
                             </div>
                             <i class="ri-arrow-down-s-line"></i>
                         </a>
@@ -121,16 +147,17 @@
                                 <div class="flex justify-between mb-4">
                                     <div>
                                         <div class="flex items-center mb-1">
-                                            <div class="text-4xl font-semibold text-[#F8B721]">
+                                            <p class="text-4xl sm:text-md font-semibold text-[#F8B721]">
                                                 <?php
-                                                $amount = 2000;
-                                                echo number_format($amount, 2);
+                                                $income = getGroupCode('Income');
+                                                $incomeAmount = getTotalOfGroupV2($income);
+                                                echo '₱'.number_format($incomeAmount, 2);
                                                 ?>
-                                            </div>
+                                            </p>
                                         </div>
                                         <div class="text-sm font-medium text-gray-400">Total Sales</div>
                                     </div>
-                                    <div>
+                                    <div class="sm:block hidden">
                                         <img src="../public/finance/img/Profit.png" alt="Profit.png"
                                             class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] py-2 px-2 rounded-full">
                                     </div>
@@ -144,8 +171,9 @@
                                         <div class="flex items-center mb-1">
                                             <div class="text-4xl font-semibold text-[#F8B721]">
                                                 <?php
-                                                $amount = 10000;
-                                                echo '₱' . number_format($amount, 2);
+                                                $expense = getGroupCode('Expenses');
+                                                $expenseAmount = getTotalOfGroupV2($expense);
+                                                echo '₱' . number_format($expenseAmount, 2);
                                                 ?>
                                             </div>
                                         </div>
@@ -153,7 +181,7 @@
                                     </div>
                                     <div>
                                         <img src="../public/finance/img/RequestMoney.png" alt="request-money.png"
-                                            class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] max-w-full h-auto py-2 px-1 rounded-full sm:hidden">
+                                            class="bg-radial-gradient from-[#FFEB95] to-[#FECE01] max-w-full h-auto py-2 px-1 rounded-full">
                                     </div>
                                 </div>
                             </div>
@@ -165,13 +193,10 @@
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-3xl font-bold">Total Balance</h1>
-                            <p class="mt-5 text-3xl font-medium">0</p>
+                            <p class="mt-5 text-3xl font-medium"><?php echo '₱' . number_format($incomeAmount-$expenseAmount, 2);?></p>
                             <p class="mt-5 text-md font-bold">Summary</p>
                         </div>
                     </div>
-
-
-
                 </div>
                 <!-- End: Top Left-Side Section -->
             </div>
@@ -181,6 +206,8 @@
             <?php include "components/dashboard/dashboard.request.php" ?>
             <!-- End: Request Section -->
 
+
+            
             <!-- Start: Report Section -->
             <?php include "components/dashboard/dashboard.reports.php" ?>
             <!-- End: Report Section -->
@@ -189,6 +216,7 @@
     </main>
     <!-- End: Dashboard -->
     <script src="./../src/route.js"></script>
+    <script  src="./../src/form.js"></script>
 </body>
 
 </html>

@@ -46,10 +46,37 @@
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
+
+                <div class="relative inline-block text-left">
+                    <div>
+                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                            <div class="text-black font-medium mr-4 ">
+                                <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
+                            </div>
+                            <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div class="py-1" role="none">
+                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                <i class="ri-logout-box-line"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('options-menu').addEventListener('click', function() {
+                        var dropdownMenu = document.getElementById('dropdown-menu');
+                        if (dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                </script>
             </ul>
 
             <!-- End: Profile -->
@@ -75,11 +102,12 @@
                                 <!-- Cart item rows -->
                                 <template x-for="(item, index) in cart" :key="index">
                                     <li class="py-4 flex justify-between items-center">
-                                        <div class="flex">
-                                            <img class="h-10 w-10 mr-6" :src="" :alt="item.name">
-                                            <span x-text="item.quantity + ' x ' + item.name"></span>
-                                        </div>
-                                        <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
+                                        <div class="flex items-center">
+                                            <div class="size-12 rounded-full shadow-lg bg-yellow-200 flex items-center justify-center">
+                                                <img class="object-contain" :src="'../../' + item.image" :alt="item.name">
+                                            </div>
+                                            <span class="ml-2" x-text="item.quantity + ' x ' + item.name"></span>
+                                            <span x-text="'₱' + (item.priceWithTax * item.quantity).toFixed(2)"></span>
                                     </li>
                                 </template>
 
@@ -137,11 +165,46 @@
                             </div>
 
                             <div id="sale-details">
-                                <label for="address" class="block mb-2">Delivery Address:</label>
-                                <input type="text" id="deliveryAddress" name="deliveryAddress" class="w-full p-2 border border-gray-300 rounded mb-4">
+                                <label for="province" class="block mb-2">Province:</label>
+                                <select id="province" name="province" class="w-full p-2 border border-gray-300 rounded mb-4" required>
+                                    <!-- Replace with your actual data -->
+                                    <option value="">Select Province</option>
+                                    <option value="Pampanga">Pampanga</option>
+                                </select>
+
+                                <label for="municipality" class="block mb-2">Municipality:</label>
+                                <select id="municipality" name="municipality" class="w-full p-2 border border-gray-300 rounded mb-4" required>
+                                    <option value="">Select Municipality</option>
+                                    <option value="Angeles">Angeles</option>
+                                    <option value="San Fernando">San Fernando</option>
+                                    <option value="Mabalacat">Mabalacat</option>
+                                    <option value="Apalit">Apalit</option>
+                                    <option value="Arayat">Arayat</option>
+                                    <option value="Bacolor">Bacolor</option>
+                                    <option value="Candaba">Candaba</option>
+                                    <option value="Floridablanca">Floridablanca</option>
+                                    <option value="Guagua">Guagua</option>
+                                    <option value="Macabebe">Macabebe</option>
+                                    <option value="Magalang">Magalang</option>
+                                    <option value="Masantol">Masantol</option>
+                                    <option value="Mexico">Mexico</option>
+                                    <option value="Minalin">Minalin</option>
+                                    <option value="Porac">Porac</option>
+                                    <option value="San Luis">San Luis</option>
+                                    <option value="San Simon">San Simon</option>
+                                    <option value="Santa Ana">Santa Ana</option>
+                                    <option value="Santa Rita">Santa Rita</option>
+                                    <option value="Santo Tomas">Santo Tomas</option>
+                                    <option value="Sasmuan">Sasmuan</option>
+                                    <!-- Add more municipalities in Pampanga as needed -->
+                                </select>
+
+
+                                <label for="barangayStreet" class="block mb-2">Street and Barangay:</label>
+                                <input type="text" id="barangayStreet" name="streetBarangayAddress" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter Barangay and Street" required>
 
                                 <label for="deliveryDate" class="block mb-2">Delivery Date:</label>
-                                <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>">
+                                <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>" required>
                             </div>
 
                             <!-- Mode of payment -->

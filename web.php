@@ -24,6 +24,9 @@ $basePath = '/finance'; // change me according to your root folder name
 $path = str_replace($basePath, '', $path);
 
 
+$basePath = '/Finance'; // change me according to your root folder name
+$path = str_replace($basePath, '', $path);
+
 foreach ($routes as $route => $action) {
     if (strpos($route, '{') !== false) {
         // This is a dynamic route

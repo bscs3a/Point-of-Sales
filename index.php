@@ -9,6 +9,8 @@ require_once './router.php';
 // routes
 require_once './web.php';
 
-header("Location: /master/");
+
+// header("Location: /Finance/");
+
 
 
