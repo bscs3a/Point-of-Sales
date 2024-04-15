@@ -58,7 +58,7 @@
       </script>
 
       <div class="container mx-auto py-8 px-5">
-        <div class="max-w-5xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+        <div class="max-w-6xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
           <?php
           // Include your database connection file
           include 'dbconn.php';
@@ -153,7 +153,7 @@
                           <th class="px-6 py-2 font-semibold">Category</th>
                           <th class="px-6 py-2 font-semibold">Price</th>
                           <th class="px-6 py-2 font-semibold">Quantity</th>
-                          <th class="px-6 py-2 font-semibold">Status</th>
+                          <th class="px-20 py-2 text-center font-semibold">Status</th>
                           <th class="px-6 py-2 font-semibold"></th>
                         </tr>
                       </thead>
@@ -201,7 +201,7 @@
               foreach ($productData as $data) {
                 ?>
                 <tr>
-                  <td class="px-6 py-2 flex items-center justify-center">
+                  <td class="px-6 py-2 flex flex-col items-center justify-center">
                     <?php
                     // Display product image or placeholder
                     echo '<img src="../../' . $data['ProductImage'] . '" alt="Product Image" class="w-16 h-16 object-cover mr-4">'; ?>
@@ -239,15 +239,15 @@
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                  <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
+                  <th scope="col" class="px-0 py-4 ml-3 font-medium text-gray-900">
                     <div class="flex flex-col text-sm gap-3">
-                      <a class="font-bold">Items Subtotal:
-                        <div class="font-medium">
+                      <a class="flex flex-row font-bold">Items Subtotal:
+                        <div class="ml-3 font-medium">
                           <?= $data['Items_Subtotal'] ?>
                         </div>
                       </a>
-                      <a class="font-bold">Total Amount:
-                        <div class="font-medium"> Php
+                      <a class="flex flex-row font-bold">Total Amount:
+                        <div class="ml-5 font-medium"> Php
                           <?= $data['Total_Amount'] ?>
 
                         </div>
@@ -267,7 +267,7 @@
 
           </table>
           <!-- Feedback area -->
-          <form action="/master/addfeedback/viewtransaction" method="post" enctype="multipart/form-data">
+          <form action="/master/addfeedback/viewtransaction" method="post" enctype="multipart/form-data" class="px-8">
             <input type="hidden" name="supplierID" value="<?= $data['Supplier_ID'] ?>">
             <!--get the supplier ID in the query -->
             <input type="hidden" name="user" value="<?= $_SESSION['employee'] ?>"> <!--get the employeein th seeiony -->
@@ -292,7 +292,7 @@
             }
             ?>
             <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-              <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+              <div class="px-2 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                 <?php if ($feedbackStatus): ?>
                   <!-- Display existing feedback in a read-only textarea -->
                   <textarea id="reviews" name="reviews" rows="4"
