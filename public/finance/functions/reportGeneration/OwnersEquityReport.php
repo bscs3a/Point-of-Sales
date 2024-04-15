@@ -32,7 +32,12 @@ function divideTheGainLoss($accountNumber, $year, $month){
 function insertShare($accountNumber, $year, $month){
     $retained = getLedgerCode("Retained Earnings/Loss");
     // if retained is 0 for the month, that means its already been processed
-    if(getAccountBalanceV2($retained, true, $year, $month) == 0){
+    if(abs(getAccountBalance($retained, true, $year, $month)) <= 0){
+        return;
+    }
+    //check account if its 0
+    if(abs(getAccountBalanceV2($accountNumber, true, $year,$month)) <= 0)
+    {
         return;
     }
 
@@ -59,7 +64,7 @@ function insertAllShares($year, $month){
     $conn = $db->connect();
     // get the all of the ledger(code) that has a group type of IC or EP
     $CAPITAL = getAccountCode("Capital Accounts");
-    $sql = "SELECT l.ledgerno 
+    $sql = "SELECT *
         FROM Ledger l 
         INNER JOIN AccountType a ON l.AccountType = a.AccountType 
         WHERE a.accounttype = :capital";
@@ -84,7 +89,7 @@ function insertAllShares($year, $month){
     }
     $addedSales =  getTotalOfAccountTypeV2($CAPITAL, $year,$month) - getTotalOfAccountTypeV2($CAPITAL,$pastYear,$pastMonth) - getWholeInvestment($year,$month) - getWholeWithdrawals($year,$month);
     $amount = calculateNetSalesOrLoss($year, $month) - $addedSales;
-    if($amount != 0){
+    if($amount != 0 && calculateNetSalesOrLoss($year, $month) != 0){
         if($amount < 0){
             $debit = $OWNER_LEDGER;
             $credit = getLedgerCode("Retained Earnings/Loss");

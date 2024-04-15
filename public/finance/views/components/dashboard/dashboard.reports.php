@@ -1,3 +1,4 @@
+
 <div id="report_generation_modal" class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
     role="dialog" aria-modal="true">
     <div class=" pt-4 px-4 pb-20 text-center sm::block sm:p-0 bg-white rounded shadow-lg ">
@@ -194,6 +195,23 @@
                 </a> -->
             </div>
             <?php 
+                //equity report sharings
+                //year
+                $curr_year = date('Y');
+                $prev_year = $curr_year - 1;
+                
+                //month
+                $curr_month = date('m');
+                
+                
+                $num_months = 12;
+                for ($i=1; $i <= $num_months ; $i++) { 
+                    insertAllShares($prev_year, $i);
+                    if($curr_month > $i){
+                        insertAllShares($curr_year, $i);
+                    }
+                }
+
                 $CAPITAL = "Capital Accounts";
                 $totalCapitalAccount = getTotalOfAccountTypeV2($CAPITAL);
             ?>
