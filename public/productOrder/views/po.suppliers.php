@@ -109,8 +109,11 @@
               while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <!-- Card 1 -->
+                
                 <div class="bg-white border border-gray-300 rounded-lg drop-shadow-lg p-8 supplierCard"
                   data-supplier_name="<?php echo $row['Supplier_Name']; ?>" data-status="<?php echo $row['Status']; ?>">
+                  <a href="/master/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                      class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
                   <div class="flex flex-col gap-2">
                     <div class="flex flex-row">
                       <a class="text-1xl font-semibold">Supplier Name:</a>
@@ -122,6 +125,7 @@
                     </div>
                   </div>
                   <div class="flex justify-between items-center pt-3">
+
                     <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
                       class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
                     <a href="/master/po/viewsupplierproduct/Supplier=<?php echo $row['Supplier_ID']; ?>"

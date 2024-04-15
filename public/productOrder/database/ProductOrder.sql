@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2024 at 06:57 PM
+-- Generation Time: Apr 15, 2024 at 03:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`account_ID`, `username`, `password`, `employee`) VALUES
-(1, 'marc', 'admin123', 'David,Marc');
+(1, 'marc', 'admin123', 'David, Marc');
 
 -- --------------------------------------------------------
 
@@ -51,7 +51,7 @@ INSERT INTO `accounts` (`account_ID`, `username`, `password`, `employee`) VALUES
 
 CREATE TABLE `audit_log` (
   `audit_ID` int(11) NOT NULL,
-  `account_ID` int(11) NOT NULL,
+  `user` varchar(35) NOT NULL,
   `date` date NOT NULL DEFAULT current_timestamp(),
   `time_in` time NOT NULL DEFAULT current_timestamp(),
   `time_out` time NOT NULL DEFAULT current_timestamp(),
@@ -62,14 +62,52 @@ CREATE TABLE `audit_log` (
 -- Dumping data for table `audit_log`
 --
 
-INSERT INTO `audit_log` (`audit_ID`, `account_ID`, `date`, `time_in`, `time_out`, `action`) VALUES
-(31, 1, '2024-04-11', '22:24:26', '00:00:00', 'Logged In'),
-(32, 1, '2024-04-11', '22:24:26', '22:26:50', 'Logged Out'),
-(33, 1, '2024-04-11', '22:29:19', '00:00:00', 'Logged In'),
-(34, 1, '2024-04-11', '22:29:19', '22:29:26', 'Logged Out'),
-(35, 1, '2024-04-11', '22:29:38', '00:00:00', 'Logged In'),
-(36, 1, '2024-04-11', '22:29:38', '22:59:46', 'Logged Out'),
-(37, 1, '2024-04-11', '23:00:00', '00:00:00', 'Logged In');
+INSERT INTO `audit_log` (`audit_ID`, `user`, `date`, `time_in`, `time_out`, `action`) VALUES
+(1, 'David, Marc', '2024-04-15', '01:46:23', '00:00:00', 'Logged In'),
+(2, 'David, Marc', '2024-04-15', '01:48:08', '00:00:00', 'Added Supplier: Mark Shop'),
+(3, 'David, Marc', '2024-04-15', '01:48:55', '00:00:00', 'Placed an Order for Supplier: Mark Shop'),
+(4, 'David, Marc', '2024-04-15', '01:49:33', '00:00:00', 'Deleted Product ID: 2 from Order #1'),
+(5, 'David, Marc', '2024-04-15', '01:49:48', '00:00:00', 'Completed Order #1'),
+(6, 'David, Marc', '2024-04-15', '01:50:39', '00:00:00', 'Added feedback a for Order #1'),
+(7, 'David, Marc', '2024-04-15', '01:51:38', '00:00:00', 'Placed an Order for Supplier: Mark Shop'),
+(8, 'David, Marc', '2024-04-15', '01:51:57', '00:00:00', 'Cancelled Order #2'),
+(9, 'David, Marc', '2024-04-15', '01:52:32', '00:00:00', 'Added feedback a for Order #2'),
+(10, 'David, Marc', '2024-04-15', '01:52:32', '01:58:28', 'Logged Out'),
+(11, 'David, Marc', '2024-04-15', '01:58:43', '00:00:00', 'Logged In'),
+(12, 'David, Marc', '2024-04-15', '02:00:38', '00:00:00', 'Added Supplier: Artools'),
+(13, 'David, Marc', '2024-04-15', '02:02:07', '00:00:00', 'Placed an Order for Supplier: Artools'),
+(14, 'David, Marc', '2024-04-15', '02:03:33', '00:00:00', 'Deleted Product ID: 5 from Order #3'),
+(15, 'David, Marc', '2024-04-15', '02:03:45', '00:00:00', 'Completed Order #3'),
+(16, 'David, Marc', '2024-04-15', '02:04:38', '00:00:00', 'Added feedback a for Order #3'),
+(17, 'David, Marc', '2024-04-15', '02:04:38', '02:05:39', 'Logged Out'),
+(18, 'David, Marc', '2024-04-15', '02:05:42', '00:00:00', 'Logged In'),
+(19, 'David, Marc', '2024-04-15', '02:05:42', '02:05:59', 'Logged Out'),
+(20, 'David, Marc', '2024-04-15', '21:36:28', '00:00:00', 'Logged In');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `batch_orders`
+--
+
+CREATE TABLE `batch_orders` (
+  `Batch_ID` int(11) NOT NULL,
+  `Supplier_ID` int(11) NOT NULL,
+  `Time_Ordered` time NOT NULL DEFAULT current_timestamp(),
+  `Date_Ordered` date NOT NULL DEFAULT current_timestamp(),
+  `Items_Subtotal` int(11) NOT NULL,
+  `Total_Amount` int(11) NOT NULL,
+  `Order_Status` varchar(35) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `batch_orders`
+--
+
+INSERT INTO `batch_orders` (`Batch_ID`, `Supplier_ID`, `Time_Ordered`, `Date_Ordered`, `Items_Subtotal`, `Total_Amount`, `Order_Status`) VALUES
+(1, 1, '01:48:55', '2024-04-15', 11, 2003, 'Completed'),
+(2, 1, '01:51:38', '2024-04-15', 100, 100, 'Cancelled'),
+(3, 2, '02:02:07', '2024-04-15', 5, 500, 'Completed');
 
 -- --------------------------------------------------------
 
@@ -87,10 +125,32 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`Category_ID`, `Category_Name`) VALUES
-(1, 'Bang'),
-(2, 'Bing'),
-(3, 'Boom'),
-(4, 'Hand Tools');
+(1, 'Hand Tools'),
+(2, 'Power Tools');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feedbacks`
+--
+
+CREATE TABLE `feedbacks` (
+  `feedback_ID` int(11) NOT NULL,
+  `supplier_ID` int(11) NOT NULL,
+  `batch_ID` int(11) NOT NULL,
+  `user` varchar(35) NOT NULL,
+  `reviews` varchar(150) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `feedbacks`
+--
+
+INSERT INTO `feedbacks` (`feedback_ID`, `supplier_ID`, `batch_ID`, `user`, `reviews`, `date`) VALUES
+(1, 1, 1, 'David, Marc', 'the cat is nice and the staple is big', '2024-04-15'),
+(2, 1, 2, 'David, Marc', 'out of money', '2024-04-15'),
+(3, 2, 3, 'David, Marc', 'the drill is nice', '2024-04-15');
 
 -- --------------------------------------------------------
 
@@ -101,22 +161,22 @@ INSERT INTO `categories` (`Category_ID`, `Category_Name`) VALUES
 CREATE TABLE `order_details` (
   `Order_ID` int(11) NOT NULL,
   `Product_ID` int(11) NOT NULL,
-  `Request_ID` int(11) NOT NULL,
   `Supplier_ID` int(11) NOT NULL,
-  `Category_ID` int(11) NOT NULL,
-  `Date_Ordered` date DEFAULT current_timestamp(),
-  `Time_Ordered` time DEFAULT current_timestamp(),
-  `Order_Status` varchar(50) DEFAULT NULL
+  `Batch_ID` int(11) NOT NULL,
+  `Product_Quantity` int(11) DEFAULT NULL,
+  `Time_Ordered` time NOT NULL DEFAULT current_timestamp(),
+  `Date_Ordered` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `order_details`
 --
 
-INSERT INTO `order_details` (`Order_ID`, `Product_ID`, `Request_ID`, `Supplier_ID`, `Category_ID`, `Date_Ordered`, `Time_Ordered`, `Order_Status`) VALUES
-(1, 2, 1, 1, 4, '2024-04-11', '12:39:38', 'Completed'),
-(2, 4, 2, 2, 4, '2024-04-11', '12:41:37', 'Completed'),
-(3, 4, 3, 2, 4, '2024-04-12', '00:19:41', 'to receive');
+INSERT INTO `order_details` (`Order_ID`, `Product_ID`, `Supplier_ID`, `Batch_ID`, `Product_Quantity`, `Time_Ordered`, `Date_Ordered`) VALUES
+(1, 1, 1, 1, 10, '01:48:55', '2024-04-15'),
+(3, 3, 1, 1, 1, '01:48:55', '2024-04-15'),
+(4, 2, 1, 2, 100, '01:51:38', '2024-04-15'),
+(5, 4, 2, 3, 5, '02:02:07', '2024-04-15');
 
 -- --------------------------------------------------------
 
@@ -146,37 +206,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`ProductID`, `Supplier_ID`, `Category_ID`, `ProductImage`, `ProductName`, `Supplier`, `Description`, `Category`, `DeliveryRequired`, `Price`, `Stocks`, `UnitOfMeasurement`, `TaxRate`, `ProductWeight`) VALUES
-(1, 1, 4, 'uploads/hammer.jpg', 'Hammer', 'Edgward Tools', 'A hammer is a tool, most often a hand tool, consisting of a weighted \"head\" fixed to a long handle that is swung to deliver an impact to a small area of an object.', 'Hand Tools', NULL, 250.00, NULL, NULL, NULL, 18.00),
-(2, 1, 4, 'uploads/pliers.jpg', 'Pliers', 'Edgward Tools', 'Pliers are a hand tool used to hold objects firmly, possibly developed from tongs used to handle hot metal in Bronze Age Europe.', 'Hand Tools', NULL, 120.00, NULL, NULL, NULL, 8.00),
-(3, 2, 3, 'uploads/staple gun.jpg', 'Staple Gun', 'Markiplier Dept', 'A staple gun or powered stapler is a hand-held machine used to drive heavy metal staples into wood, plastic, or masonry.', 'Boom', NULL, 420.00, NULL, NULL, NULL, 12.00),
-(4, 2, 4, 'uploads/1.jpg', 'WaterMellon', 'Markiplier Dept', 'Watermellon', 'Hand Tools', NULL, 200.00, NULL, NULL, NULL, 18.00),
-(5, 2, 4, 'uploads/drill.jpg', 'Drill', 'Markiplier Dept', 'A drill is a tool used for making round holes or driving fasteners.', 'Hand Tools', NULL, 450.00, NULL, NULL, NULL, 2.00);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `requests`
---
-
-CREATE TABLE `requests` (
-  `Request_ID` int(11) NOT NULL,
-  `Product_ID` int(11) NOT NULL,
-  `Supplier_ID` int(11) NOT NULL,
-  `Product_Quantity` int(11) DEFAULT NULL,
-  `Product_Total_Price` int(11) DEFAULT NULL,
-  `Items_Subtotal` int(11) DEFAULT NULL,
-  `Total_Amount` int(11) DEFAULT NULL,
-  `request_Status` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `requests`
---
-
-INSERT INTO `requests` (`Request_ID`, `Product_ID`, `Supplier_ID`, `Product_Quantity`, `Product_Total_Price`, `Items_Subtotal`, `Total_Amount`, `request_Status`) VALUES
-(1, 2, 1, 1, 120, NULL, NULL, 'accepted'),
-(2, 4, 2, 100, 20000, NULL, NULL, 'accepted'),
-(3, 4, 2, 1, 200, NULL, NULL, 'accepted');
+(1, 1, 1, 'uploads/cat.jpg', 'cat', 'Mark Shop', 'cat', 'Hand Tools', NULL, 200.00, NULL, NULL, NULL, NULL),
+(2, 1, 2, 'uploads/pliers.jpg', 'priers', 'Mark Shop', 'pliers', 'Power Tools', NULL, 1.00, NULL, NULL, NULL, NULL),
+(3, 1, 1, 'uploads/staple gun.jpg', 'staple', 'Mark Shop', 'staple', 'Hand Tools', NULL, 3.00, NULL, NULL, NULL, NULL),
+(4, 2, 1, 'uploads/drill.jpg', 'Drill', 'Artools', 'Drillers', 'Hand Tools', NULL, 100.00, NULL, NULL, NULL, NULL),
+(5, 2, 1, 'uploads/staple gun.jpg', 'Staple', 'Artools', 'staple gun', 'Hand Tools', NULL, 250.00, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -186,21 +220,22 @@ INSERT INTO `requests` (`Request_ID`, `Product_ID`, `Supplier_ID`, `Product_Quan
 
 CREATE TABLE `suppliers` (
   `Supplier_ID` int(11) NOT NULL,
-  `Category_ID` int(11) NOT NULL,
-  `Transcation_ID` int(11) NOT NULL,
   `Supplier_Name` varchar(50) DEFAULT NULL,
-  `Location` varchar(50) DEFAULT NULL,
+  `Contact_Name` varchar(35) NOT NULL,
   `Contact_Number` int(20) DEFAULT NULL,
-  `Status` varchar(25) NOT NULL
+  `Status` varchar(25) NOT NULL,
+  `Email` varchar(35) NOT NULL,
+  `Address` varchar(50) DEFAULT NULL,
+  `Estimated_Delivery` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `suppliers`
 --
 
-INSERT INTO `suppliers` (`Supplier_ID`, `Category_ID`, `Transcation_ID`, `Supplier_Name`, `Location`, `Contact_Number`, `Status`) VALUES
-(1, 0, 0, 'Edgward Tools', 'xd', 23, 'Active'),
-(2, 0, 0, 'Markiplier Dept', 'xd', 123, 'Active');
+INSERT INTO `suppliers` (`Supplier_ID`, `Supplier_Name`, `Contact_Name`, `Contact_Number`, `Status`, `Email`, `Address`, `Estimated_Delivery`) VALUES
+(1, 'Mark Shop', 'Marc', 8500, 'Active', 'Marc@gmail.com', 'porac', '3-5 days'),
+(2, 'Artools', 'Arthur', 11111, 'Active', 'arthur@gmail.com', 'balibago', '5-7');
 
 -- --------------------------------------------------------
 
@@ -210,13 +245,11 @@ INSERT INTO `suppliers` (`Supplier_ID`, `Category_ID`, `Transcation_ID`, `Suppli
 
 CREATE TABLE `transaction_history` (
   `Transaction_ID` int(11) NOT NULL,
-  `Order_ID` int(11) NOT NULL,
-  `Request_ID` int(11) NOT NULL,
+  `Batch_ID` int(11) NOT NULL,
   `Supplier_ID` int(11) NOT NULL,
   `Date_Delivered` date DEFAULT current_timestamp(),
   `Time_Delivered` time DEFAULT current_timestamp(),
   `Order_Status` varchar(50) DEFAULT NULL,
-  `Rating` int(11) DEFAULT NULL,
   `Feedback` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -224,9 +257,10 @@ CREATE TABLE `transaction_history` (
 -- Dumping data for table `transaction_history`
 --
 
-INSERT INTO `transaction_history` (`Transaction_ID`, `Order_ID`, `Request_ID`, `Supplier_ID`, `Date_Delivered`, `Time_Delivered`, `Order_Status`, `Rating`, `Feedback`) VALUES
-(1, 1, 1, 1, '2024-04-11', '12:40:36', 'Completed', NULL, NULL),
-(2, 2, 2, 2, '2024-04-11', '12:41:43', 'Completed', NULL, NULL);
+INSERT INTO `transaction_history` (`Transaction_ID`, `Batch_ID`, `Supplier_ID`, `Date_Delivered`, `Time_Delivered`, `Order_Status`, `Feedback`) VALUES
+(1, 1, 1, '2024-04-15', '01:49:48', 'Completed', 'Done'),
+(2, 2, 1, '2024-04-15', '01:51:57', 'Cancelled', 'Done'),
+(3, 3, 2, '2024-04-15', '02:03:45', 'Completed', 'Done');
 
 --
 -- Indexes for dumped tables
@@ -245,10 +279,22 @@ ALTER TABLE `audit_log`
   ADD PRIMARY KEY (`audit_ID`);
 
 --
+-- Indexes for table `batch_orders`
+--
+ALTER TABLE `batch_orders`
+  ADD PRIMARY KEY (`Batch_ID`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`Category_ID`);
+
+--
+-- Indexes for table `feedbacks`
+--
+ALTER TABLE `feedbacks`
+  ADD PRIMARY KEY (`feedback_ID`);
 
 --
 -- Indexes for table `order_details`
@@ -261,12 +307,6 @@ ALTER TABLE `order_details`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`ProductID`);
-
---
--- Indexes for table `requests`
---
-ALTER TABLE `requests`
-  ADD PRIMARY KEY (`Request_ID`);
 
 --
 -- Indexes for table `suppliers`
@@ -294,7 +334,13 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `audit_log`
 --
 ALTER TABLE `audit_log`
-  MODIFY `audit_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `audit_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `batch_orders`
+--
+ALTER TABLE `batch_orders`
+  MODIFY `Batch_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -303,22 +349,22 @@ ALTER TABLE `categories`
   MODIFY `Category_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `feedbacks`
+--
+ALTER TABLE `feedbacks`
+  MODIFY `feedback_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `Order_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Order_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
   MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `requests`
---
-ALTER TABLE `requests`
-  MODIFY `Request_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
@@ -330,7 +376,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `transaction_history`
 --
 ALTER TABLE `transaction_history`
-  MODIFY `Transaction_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Transaction_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
