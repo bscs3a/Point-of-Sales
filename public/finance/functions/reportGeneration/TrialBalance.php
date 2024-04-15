@@ -17,18 +17,26 @@ function generateTrialBalance($year, $month) {
         return strcmp($a['grouptype'], $b['grouptype']);
     });
 
-    $html = "<ul>\n";
+    $html = "<section>\n";
     foreach ($grouptype_data as $group) {
         if ($group['grouptype'] != $asset && $group['grouptype'] != $LiabilityAndOE) {
             continue;
         }
-        $html .= "<li>\n<h1>{$group['description']}</h1>\n<ul>\n";
+        $html .= "<table>";
+        $html .= "<thead>";
+        $html .= "<tr>";
+        $html .= "<th colspan='2' class='text-left'>{$group['description']}</th>";
+        $html .= "</tr>";
+        $html .= "</thead>";
+        $html .= "<tbody>";
         foreach ($accounttype_data as $account) {
             if ($account['AccountType'] == $retained) {
                 continue;
             }
             if ($account['grouptype'] == $group['grouptype']) {
-                $html .= "<li>\n{$account['Description']}\n<ul>\n";
+                $html .= "<tr class='table-classifier'>";
+                $html .= "<td class='classifier'>{$account['Description']}</td>";
+                $html .= "</tr>";
                 foreach ($ledger_data as $ledger) {
                     if ($ledger['AccountType'] == $account['AccountType']) {
                         $balance = abs(getAccountBalanceV2($ledger['ledgerno'],true, $year, $month));
@@ -36,17 +44,29 @@ function generateTrialBalance($year, $month) {
                         if($balance == 0){
                             continue;
                         }
-                        $html .= "<li>\n<span>{$ledger['name']}</span>&emsp;<span>{$balance}</span>\n</li>\n";
+                        $balance = abs($balance);
+                        $html .= "<tr class='table-content'>";
+                        $html .= "<td class='content'>{$ledger['name']}</td>";
+                        $html .= "<td class='content-amount'>{$balance}</td>";
+                        $html .= "</tr>";
                     }
                 }
-                $html .= "</ul>\n</li>\n";
             }
         }
+        $html .= "</tbody>";
+
+        //result of group
         $total = abs(getTotalOfGroupV2($group['grouptype'], $year, $month));
         $resultText = $group['grouptype'] == $asset ? "Asset" : "Liabilities and Owner's Equity";
-        $html .= "</ul>\n<span>{$resultText}</span>&emsp;<span>{$total}</span>\n</li>\n";
+        $html .= "<tfoot>";
+        $html .= "<tr>";
+        $html .= "<td>{$resultText}</td>";
+        $html .= "<td>{$total}</td>";
+        $html .= "</tr>";
+        $html .= "</tfoot>";
+        $html .= "</table>";
     }
-    $html .= "</ul>";
+    $html .= "</section>";
     return $html;
 }
 

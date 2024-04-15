@@ -24,19 +24,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trial Balance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="reports.css">
 </head>
 <body>
     <header>
-        <div>
-            <span>Balance Sheet</span>
-            <span>
-                <?php echo "$monthName $year"?>    
-            </span>
-        </div>
-        <!-- <img src="..\..\img\logo_reports.png" alt=""> -->
+        <table>
+            <tr>
+                <td class="header2">Income Statement</td>
+                <td rowspan="2" class="text-right width-auto-wrap">
+                    <!-- <img src="<?php echo $_SERVER["DOCUMENT_ROOT"].'/public/finance/img/logo_reports.png';?>"/> -->
+                    <img src="../../img/logo_reports.png" alt="">
+                </td>
+                <td class="header1 text-right width-auto-wrap">BSCS 3A</td>
+            </tr>
+            <tr>
+                <td class ="headerPartner"><?php echo "For the month end: $monthName $year" ?></td>
+                <td class="headerPartner text-right width-auto-wrap">Hardware Management Store</td>
+            </tr>
+        </table>
     </header>
-    <section>
-        <?php echo generateTrialBalance($year,$month)?>
-    </section>
+    <?php echo generateTrialBalance($year,$month)?>
 </body>
 </html>

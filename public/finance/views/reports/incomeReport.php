@@ -29,11 +29,6 @@ if ($today < $lastDayOfMonth) {
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Russo+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="reports.css">
 </head>
-<style>
-    table,tr,td{
-        border: thin solid black;
-    }
-</style>
 
 <body>
     <header>
