@@ -100,7 +100,7 @@
           {
             try {
               // Query to count the number of ordered items
-              $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'to receive'";
+              $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'to receive'";
               $statement = $conn->prepare($query);
               $statement->execute();
               
@@ -129,68 +129,68 @@
                 <table class="min-w-full text-left mx-auto bg-white px-6">
                     <thead class="bg-gray-200 border-b border-gray-400 text-xs">
                         <tr>
-                            <th class="px-4 py-2 font-semibold">Supplier ID</th>
+                            <th class="px-4 py-2 font-semibold">Order #</th>
                             <th class="px-4 py-2 font-semibold">Supplier Name</th>
                             <th class="px-4 py-2 font-semibold">Date Order</th>
                             <th class="px-4 py-2 font-semibold">Time</th>
                             <th class="px-4 py-2 font-semibold">Location</th>
                             <th class="px-4 py-2 font-semibold">Estimated Delivery</th>
-                            <th class="px-4 py-2 font-semibold">Status</th>
+                            <th class="px-4 py-2 font-semibold">Actions</th>
                             <th class="px-4 py-2 font-semibold"></th>
+                            <th class="px-4 py-2 font-semibold"></th>
+
                         </tr>
                     </thead>
 
-<?php
- function displayPendingOrders()
- {
-     try {
-         require_once 'dbconn.php'; // Include your database connection file
-         $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
- 
-         // Query to retrieve order IDs with status "pending"
-         $query = "SELECT od.Order_ID, od.Supplier_ID, s.Supplier_Name, od.Date_Ordered, od.Time_Ordered
-                             FROM order_details od
-                             JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
-                             WHERE od.Order_Status = 'to receive'
-                             GROUP BY od.Order_ID"; // Group by Order_ID to show each unique order
- 
-         $statement = $conn->prepare($query);
-         $statement->execute();
- 
-         // Fetch all rows as associative array
-         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
- 
-         // Loop through each row and display data in HTML table format
-         foreach ($rows as $row) {
-             echo '<tbody>';
-             echo '<tr>';
-             echo '<td class="px-4 py-7">' . $row['Order_ID'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';
-             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>'; // SAMPLE ONLY PA REVISE NALANG
-             echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>'; // SAMPLE ONLY PA REVISE NALANG
+                    <?php
+function displayPendingOrders()
+{
+    try {
+        // require_once 'dbconn.php'; // Include your database connection file
+        $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
+
+        $query = "SELECT bo.*, s.Supplier_Name, s.Address, s.Estimated_Delivery
+        FROM batch_orders bo
+        JOIN suppliers s ON bo.Supplier_ID = s.Supplier_ID
+        WHERE bo.Order_Status = 'to receive';";
+
+        $statement = $conn->prepare($query);
+        $statement->execute();
+
+        // Fetch all rows as associative array
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        // Loop through each row and display data in HTML table format
+        foreach ($rows as $row) {
+              echo '<tbody>';
+              echo '<tr>';
+              echo '<td class="px-4 py-7">' . $row['Batch_ID'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';
+              echo '<td class="px-4 py-7">' . $row['Address'] . '</td>'; 
+              echo '<td class="px-4 py-7">' . $row['Estimated_Delivery'] . '</td>'; 
            
              echo '<td class="px-4 py-6">';
              // Form for Completed status
              echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2 pt-2">';
-             echo '<input type="hidden" name="Order_ID" value="' . $row['Order_ID'] . '">';
+             echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
              echo '<button type="submit" class="rounded-full border border-green-900 border-b block px-5 py-1 text-sm font-semibold text-green-900 focus:outline-none">Complete</button>';
              echo '</form>';
              
              // Form for Cancel status
              echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2">';
-             echo '<input type="hidden" name="Order_ID" value="' . $row['Order_ID'] . '">';
+             echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
              echo '<button type="submit" class="rounded-full border border-gray-500 border-b block px-5 py-1 text-sm font-semibold text-gray-900 focus:outline-none">Cancel</button>';
              echo '</form>';
              echo '</td>';
 
-             //for VIEW order
-             echo '<td class="px-4 py-4"">';
-             echo '<a href="/master/po/viewdetails/Order=' . $row['Order_ID'] . '">View</a>';
-             echo '</td>';
-             echo '</tr>';
-             echo '</tbody>';
+            // for VIEW order
+            echo '<td class="px-4 py-4">';
+            echo '<a href="/master/po/viewdetails/Batch=' . $row['Batch_ID'] . '">View</a>';
+            echo '</td>';
+            echo '</tr>';
+            echo '</tbody>';
          }
      } catch (PDOException $e) {
          echo "Connection failed: " . $e->getMessage();

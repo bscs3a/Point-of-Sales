@@ -107,7 +107,7 @@
           {
             try {
               // Query to count the number of ordered items
-              $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'to receive'";
+              $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'to receive'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
@@ -143,7 +143,7 @@
         {
           try {
             // Query to count the number of unique suppliers
-            $query = "SELECT COUNT(DISTINCT Order_ID) AS OrderCount FROM order_details WHERE Order_Status = 'Canceled'";
+            $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'Cancelled'";
             $statement = $conn->prepare($query);
             $statement->execute();
 
@@ -177,7 +177,7 @@
         <table class="min-w-full text-left mx-auto bg-white">
           <thead class="bg-gray-200 border-b border-gray-400 text-sm">
             <tr>
-              <th class="px-4 py-2 font-semibold">Supplier ID</th>
+              <th class="px-4 py-2 font-semibold">Order #</th>
               <th class="px-4 py-2 font-semibold">Supplier Name</th>
               <th class="px-4 py-2 font-semibold">Order Date & Time</th>
               <th class="px-4 py-2 font-semibold">Date Received</th>
@@ -193,9 +193,10 @@
               $db = Database::getInstance();
               $conn = $db->connect();
               // Query to retrieve data from transaction_history table
-              $query = "SELECT th.Transaction_ID, s.Supplier_Name, th.Date_Delivered, th.Time_Delivered, th.Order_Status
-                  FROM transaction_history th
-                  JOIN suppliers s ON th.Supplier_ID = s.Supplier_ID"; // Assuming Product_ID links to the products table
+              $query = "SELECT th.Transaction_ID, s.Supplier_Name, th.Date_Delivered, th.Time_Delivered, th.Order_Status, th.Batch_ID
+              FROM transaction_history th
+              JOIN suppliers s ON th.Supplier_ID = s.Supplier_ID
+              ORDER BY th.Batch_ID ASC";
               $statement = $conn->prepare($query);
               $statement->execute();
               $transactions = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -204,12 +205,15 @@
               foreach ($transactions as $transaction) {
                 echo '<tbody>';
                 echo '<tr>';
-                echo '<td class="px-4 py-4">' . $transaction['Transaction_ID'] . '</td>';
+                echo '<td class="px-4 py-4">' . $transaction['Batch_ID'] . '</td>';
                 echo '<td class="px-4 py-4">' . $transaction['Supplier_Name'] . '</td>';
                 echo '<td class="px-4 py-4">' . $transaction['Date_Delivered'] . '</td>';
                 echo '<td class="px-4 py-4">' . $transaction['Time_Delivered'] . '</td>';
                 echo '<td class="px-4 py-4">' . $transaction['Order_Status'] . '</td>';
-                echo '<td class="px-4 py-4">view</td>';
+               // for VIEW order
+                echo '<td class="px-4 py-4">';
+                echo '<a href="/master/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
+                echo '</td>';
                 echo '</tr>';
                 echo '</tbody>';
               }

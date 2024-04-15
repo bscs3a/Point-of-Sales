@@ -137,7 +137,7 @@
                   echo '<td class="px-4 py-4">' . $row['ProductWeight'] . ' kg</td>';
                   echo '<td class="px-4 py-4">Php ' . $row['Price'] . '</td>';
                   echo '<td class="px-4 py-4">' . $row['Description'] . '</td>';
-                  echo '<td class="px-4 py-4">Edit</td>';
+                  echo '<td class="px-4 py-4">View(currently not functioning)</td>';
                   echo '</tr>';
 
                 }

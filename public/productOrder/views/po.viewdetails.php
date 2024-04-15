@@ -59,237 +59,223 @@
       <div class="container mx-auto py-8 px-5">
         <div class="max-w-5xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
 
-          <?php
-          // Include your database connection file
-          include 'dbconn.php';
+        <?php
+// Include your database connection file
+include 'dbconn.php';
 
-          // Check if the ID parameter is set in the URL
-          if (isset($_GET['id'])) {
-            // Get the ID from the URL parameter
-            $id = $_GET['id'];
+// Check if the ID parameter is set in the URL
+if (isset($_GET['id'])) {
+    // Get the ID from the URL parameter
+    $id = $_GET['id'];
 
-            // Prepare and execute a SQL query to fetch data based on the ID
-            $stmt = $conn->prepare("
-        SELECT od.*, s.Supplier_Name, s.Status, s.Address
-        FROM order_details od
-        JOIN suppliers s ON od.Supplier_ID = s.Supplier_ID
-        WHERE od.Order_ID = :id
+    // Prepare and execute a SQL query to fetch data based on the ID
+    $stmt = $conn->prepare("
+        SELECT b.*, s.Supplier_Name, s.Status, s.Address, s.Contact_Name, s.Contact_Number, s.Estimated_Delivery
+        FROM batch_orders b
+        JOIN suppliers s ON b.Supplier_ID = s.Supplier_ID
+        WHERE b.Batch_ID = :id
     ");
-            $stmt->execute(['id' => $id]);
-            // Fetch the data
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->execute(['id' => $id]);
+    // Fetch the data
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Check if data was found
-            if ($data) {
-              // Display the data
-              ?>
-              <div class="p-10">
-                <div class="flex item-center justify-between px-10">
-                  <ul class="text-gray-900">
-                    <li class="flex py-2">
-                      <span class="font-bold w-40">Supplier ID:</span>
-                      <span class="font-medium text-gray-900">
-                        <?= $data['Supplier_ID'] ?>
-                      </span>
-                    </li>
-                    <li class="flex py-2">
-                      <span class="font-bold w-40">Supplier Name:</span>
-                      <span class="font-medium text-gray-900">
-                        <?= $data['Supplier_Name'] ?>
-                      </span>
-                    </li>
-                  </ul>
-                  <ul class=" text-gray-900 ">
-                    <li class="flex py-2">
-                      <span class="font-bold w-20">Status:</span>
-                      <span class="font-medium text-green-900">
-                        <?= $data['Status'] ?>
-                      </span>
-                    </li>
-                    <li class="flex py-2">
-                      <span class="font-bold w-24">Address:</span>
-                      <span class="font-medium text-gray-900">
-                        <?= $data['Address'] ?>
-                      </span>
-                    </li>
-                  </ul>
-       
-                <div class="flex justify-between pb-3">
-                  <div class="font-bold text-3xl">
+    // Check if data was found
+    if ($data) {
+        // Initialize variables for subtotal and total amount
+        $subtotal = 0;
+        $totalAmount = 0;
+
+        // Display the data
+        ?>
+        <div class="p-10">
+            <div class="flex justify-between pb-3">
+                <div class="font-bold text-3xl">
                     <?= $data['Supplier_Name'] ?>
-                  </div>
-                  <div class="font-bold text-xl">
-                    <?= $data['Supplier_ID'] ?>
-                  </div>
                 </div>
-                
-                <!-- Supplier Information -->
-                  <div class="flex item-center gap-60 px-4">
-                    <ul class="text-gray-900">
-                      <li class="flex py-1">
+                <div class="font-bold text-xl">
+                    #<?= $data['Supplier_ID'] ?>
+                </div>
+            </div>
+
+            <!-- Supplier Information -->
+            <div class="flex item-center gap-60 px-4">
+                <ul class="text-gray-900">
+                    <li class="flex py-1">
                         <span class="font-semibold w-40">Contact Name:</span>
                         <span class="font-medium text-gray-900">
-                          
+                            <?= $data['Contact_Name'] ?>
                         </span>
-                      </li>
-                      <li class="flex">
+                    </li>
+                    <li class="flex">
                         <span class="font-semibold w-40">Order Date:</span>
-                        <span class="font-medium text-gray-900"> 
-                
+                        <span class="font-medium text-gray-900">
+                            <?= $data['Date_Ordered'] ?>
                         </span>
-                      </li>
-                      <li class="flex py-1">
+                    </li>
+                    <li class="flex py-1">
                         <span class="font-semibold w-40">Order Time:</span>
-                        <span class="font-medium text-gray-900"> 
-                
+                        <span class="font-medium text-gray-900">
+                            <?= $data['Time_Ordered'] ?>
                         </span>
-                      </li>
-                    </ul>
+                    </li>
+                </ul>
 
-                    <ul class=" text-gray-900 ">
-                      <li class="flex py-1">
+                <ul class=" text-gray-900 ">
+                    <li class="flex py-1">
                         <span class="font-semibold w-24">Location:</span>
                         <span class="font-medium text-gray-900">
-                          <?= $data['Location'] ?>
+                            <?= $data['Address'] ?>
                         </span>
-                      </li>
-                      <li class="flex">
-                        <span class="font-semibold w-32">Estimate Delivery:</span>
+                    </li>
+                    <li class="flex">
+                        <span class="font-semibold w-40">Estimate Delivery:</span>
                         <span class="font-medium text-gray-900">
-                          
+                            <?= $data['Estimated_Delivery'] ?>
                         </span>
-                      </li>
-                      <li class="flex py-1">
+                    </li>
+                    <li class="flex py-1">
                         <span class="font-semibold w-20">Status:</span>
                         <span class="font-medium text-green-900">
-                          <?= $data['Status'] ?>
+                            <?= $data['Status'] ?>
                         </span>
-                      </li>
-                    </ul>
-                  </div>
+                    </li>
+                </ul>
+            </div>
 
-              <!-- Table for products -->
-                <div class="py-4">
-                  <div class="overflow-x-auto overflow-auto rounded-lg border border-gray-400">
+            <!-- Table for products -->
+            <div class="py-4">
+                <div class="overflow-x-auto overflow-auto rounded-lg border border-gray-400">
                     <table class="min-w-full text-left mx-auto bg-white">
-                      <thead class="bg-gray-200 border-b border-gray-400 text-xs">
-                        <tr>
-                          <th class="px-6 py-2 font-semibold">ProductName</th>
-                          <th class="px-6 py-2 font-semibold">ProductID</th>
-                          <th class="px-6 py-2 font-semibold">Category</th>
-                          <th class="px-6 py-2 font-semibold">Price</th>
-                          <th class="px-6 py-2 font-semibold">Weight</th>
-                          <th class="px-6 py-2 font-semibold">Status</th>
-                          <th class="px-6 py-2 font-semibold"></th>
-                        </tr>
-                      </thead>
+                        <thead class="bg-gray-200 border-b border-gray-400 text-xs">
+                            <tr>
+                                <th class="px-6 py-2 font-semibold">ProductName</th>
+                                <th class="px-6 py-2 font-semibold">ProductID</th>
+                                <th class="px-6 py-2 font-semibold">Category</th>
+                                <th class="px-6 py-2 font-semibold">Price</th>
+                                <th class="px-6 py-2 font-semibold">Quantity</th>
+                                <th class="px-6 py-2 font-semibold">Status</th>
+                                <th class="px-6 py-2 font-semibold"></th>
+                            </tr>
+                        </thead>
 
-                      <?php
-                      // Call the function to display request data for the specific order
-                      displayRequestData($id, $conn);
-            } else {
-              echo "No data found for Supplier ID: $id";
-            }
-          } else {
-            echo "ID parameter is missing.";
-          }
-          // Function to fetch and display data from the requests table based on Order_ID
-          
-          function displayRequestData($orderId, $conn)
-          {
-            // Prepare and execute SQL query to fetch data from requests and products table based on Order_ID
-            $stmt = $conn->prepare("
-        SELECT r.*, p.ProductImage, p.ProductName, p.ProductID, p.Category, p.Price, p.ProductWeight, od.Order_Status
-        FROM requests r
-        JOIN products p ON r.Product_ID = p.ProductID
-        JOIN order_details od ON r.Request_ID = od.Request_ID
-        WHERE od.Order_ID = :orderId
-    ");
-            $stmt->execute(['orderId' => $orderId]);
-
-            // Fetch data
-            $requestData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            // Check if data was found
-            if ($requestData) {
-              // Initialize variables for subtotal and total amount
-              $subtotal = 0;
-              $totalAmount = 0;
-
-              // Display the fetched data
-              foreach ($requestData as $data) {
-                ?>
-                        <tr>
-                          <td class="px-6 py-2 flex items-center justify-center">
-                            <?php
-                            // <!-- Display product image or placeholder -->
-                            echo '<img src="../../' . $data['ProductImage'] . '" alt="Product Image" class="w-16 h-16 object-cover mr-4">'; ?>
-                            <div>
-                              <?= $data['ProductName'] ?>
-                            </div> <!-- Display product name -->
-                          </td>
-                          <td class="px-6 py-2">
-                            <?= $data['ProductID'] ?>
-                          </td> <!-- Display product ID -->
-                          <td class="px-6 py-2">
-                            <?= $data['Category'] ?>
-                          </td> <!-- Display category -->
-                          <td class="px-6 py-2">
-                            <?= $data['Price'] ?>
-                          </td> <!-- Display price -->
-                          <td class="px-6 py-2">
-                            <?= $data['ProductWeight'] ?>
-                          </td> <!-- Display weight -->
-                          <td class="px-6 py-2">
-                            <?= $data['Order_Status'] ?>
-                          </td> <!-- Display status -->
-                          <td class="px-6 py-2">
-                            <button type="submit" class="rounded-full border border-gray-900 border-b block px-5 py-1 text-sm font-semibold text-red-900 focus:outline-none">Delete</button>
-                          </td> <!-- Display delete -->
-                        </tr>
                         <?php
-                        // Calculate subtotal and total amount
-                        $subtotal += $data['Product_Quantity'];
-                        $totalAmount += $data['Product_Total_Price'];
-              }
+                        // Call the function to display product data for the specific order
+                        displayProductData($id, $conn);
+                        ?>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-              // Display items subtotal and total amount
-              ?>
-                      <tfoot class="text-left bg-gray-200">
-                        <tr class="border-b border-y-gray-300">
-                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                          <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
-                            <div class="flex flex-col text-sm gap-3">
-                              <a class="font-bold">Items Subtotal:
-                                <div class="font-medium">
-                                  <?= $subtotal ?>
-                                </div>
-                              </a>
-                              <a class="font-bold">Total Amount: 
-                                <div class="font-medium"> Php
-                                  <?= $totalAmount ?>
-                                </div>
-                              </a>
+        <?php
+    } else {
+        echo "No data found for Supplier ID: $id";
+    }
+} else {
+    echo "ID parameter is missing.";
+}
+
+// Function to fetch and display product data based on Batch_ID
+function displayProductData($batchId, $conn)
+{
+    // Prepare and execute SQL query to fetch data
+    $stmt = $conn->prepare("
+        SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity
+        FROM batch_orders bo
+        JOIN order_details od ON bo.Batch_ID = od.Batch_ID
+        JOIN products p ON od.Product_ID = p.ProductID
+        WHERE od.Batch_ID = :batchId
+    ");
+    $stmt->execute(['batchId' => $batchId]);
+
+    // Fetch data
+    $productData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Initialize variables for subtotal and total amount
+    $subtotal = 0;
+    $totalAmount = 0;
+
+    // Check if data was found
+    if ($productData) {
+        // Display the fetched data
+        foreach ($productData as $data) {
+            ?>
+            <tr>
+                <td class="px-6 py-2 flex items-center justify-center">
+                    <?php
+                    // Display product image or placeholder
+                    echo '<img src="../../' . $data['ProductImage'] . '" alt="Product Image" class="w-16 h-16 object-cover mr-4">'; ?>
+                    <div>
+                        <?= $data['ProductName'] ?>
+                    </div> <!-- Display product name -->
+                </td>
+                <td class="px-6 py-2">
+                    <?= $data['ProductID'] ?>
+                </td> <!-- Display product ID -->
+                <td class="px-6 py-2">
+                    <?= $data['Category'] ?>
+                </td> <!-- Display category -->
+                <td class="px-6 py-2">
+                    <?= $data['Price'] ?>
+                </td> <!-- Display price -->
+                <td class="px-6 py-2">
+                    <?= $data['Product_Quantity'] ?>
+                </td> <!-- Display status -->
+                <td class="px-6 py-2">
+                    <?= $data['Order_Status'] ?>
+                </td> 
+                <td class="px-6 py-2">
+                    <form action="/master/delete/viewdetails" method="post">
+                        <input type="hidden" name="product_id" value="<?= $data['ProductID'] ?>">
+                        <input type="hidden" name="batch_id" value="<?= $batchId ?>">
+                        <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <?php
+          
+        }
+
+        // Display items subtotal and total amount
+        ?>
+        <tfoot class="text-left bg-gray-200">
+            <tr class="border-b border-y-gray-300">
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+                <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
+                    <div class="flex flex-col text-sm gap-3">
+                        <a class="font-bold">Items Subtotal:
+                            <div class="font-medium">
+                            <?= $data['Items_Subtotal'] ?>
+
                             </div>
-                          </th>
-                          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-                        </tr>
-                      </tfoot>
+                        </a>
+                        <a class="font-bold">Total Amount:
+                            <div class="font-medium"> Php
+                            <?= $data['Total_Amount'] ?>
 
-                      <?php
-            } else {
-              // No data found for the given Order_ID
-              echo "<tr><td colspan='6'>No data found for Order ID: $orderId</td></tr>";
-            }
-          } ?>
+                            </div>
+                        </a>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+            </tr>
+        </tfoot>
+        <?php
+    } else {
+        // No data found for the given Batch_ID
+        echo "<tr><td colspan='6'>No data found for Batch ID: $batchId</td></tr>";
+    }
+}
+?>
+
                 </table>
               </div>
 
-                </div>
+            </div>
 
             <div class="flex justify-end">
               <button route='/po/orderDetail'
