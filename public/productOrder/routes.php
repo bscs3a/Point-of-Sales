@@ -824,7 +824,7 @@ Router::post('/edit/editsupplier', function () {
 
     // Audit log for updating supplier and product information
     $user_id = $_SESSION['employee']; // Assuming you have a user session
-    $action = "Updated the Supplier Information and Products on Supplier #$supplierID";
+    $action = "Updated the Supplier Information and Products on Supplier: $supplierName";
     $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
     $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
