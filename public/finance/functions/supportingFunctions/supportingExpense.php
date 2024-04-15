@@ -1,6 +1,6 @@
 <?php
-require_once '../../../../src/dbconn.php';
-require_once '../generalFunctions.php';
+require_once 'src/dbconn.php';
+require_once 'public/finance/functions/generalFunctions.php';
 
 // check department
 function checkDepartment($department){

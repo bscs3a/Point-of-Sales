@@ -1,85 +1,35 @@
 <?php
-
-
-$db = Database::getInstance();
-$pdo = $db->connect();
-
-
+//income report
+//year
 $curr_year = date('Y');
 $prev_year = $curr_year - 1;
-// $curr_year = '2023';
-$start_curr_year = $curr_year."-01-01";
-$end_curr_year = $curr_year."-12-31";
-$sql = "SELECT  * FROM IncomeStatement WHERE created_at BETWEEN :start_curr_year AND :end_curr_year ORDER BY created_at";
 
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':start_curr_year', $start_curr_year);
-$stmt->bindParam(':end_curr_year', $end_curr_year);
-$stmt->execute();
+//month
+$curr_month = date('m');
+$prev_month = $curr_month - 1;
 
 
-$monthlyData = array();
-$netSales = "0";
-
-if ($stmt->rowCount() > 0) {
-    $i = 0;
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $month = date('m', strtotime($row['created_at']));
-        $monthlyData[$month] = $row['NetIncome'];
-        // $monthlyData[$i] = $row;
-        // $i += 1;
+$num_months = 12;
+$monthlyData = [];
+$prevMonthlyData = [];
+for ($i=1; $i <= $num_months ; $i++) { 
+    closeAllAccounts($prev_year, $i);
+    if($curr_month > $i){
+        closeAllAccounts($curr_year, $i);
     }
-
-    // $stmt->fetch(PDO::FETCH_ASSOC);
-
-}
-
-$start_prev_year = $prev_year."-01-01";
-$end_prev_year = $prev_year."-12-31";
-$sql = "SELECT  * FROM IncomeStatement WHERE created_at BETWEEN :start_prev_year AND :end_prev_year ORDER BY created_at";
-
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':start_prev_year', $start_prev_year);
-$stmt->bindParam(':end_prev_year', $end_prev_year);
-$stmt->execute();
-
-
-$prevMonthlyData = array();
-$prevNetSales = "0";
-
-if ($stmt->rowCount() > 0) {
-    $i = 0;
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $month = date('m', strtotime($row['created_at']));
-        $prevMonthlyData[$month] = $row['NetIncome'];
-        // $monthlyData[$i] = $row;
-        // $i += 1;
-    }
-
-    // $stmt->fetch(PDO::FETCH_ASSOC);
-
+    array_push($monthlyData, calculateNetSalesOrLoss($curr_year, $i));
+    array_push($prevMonthlyData, calculateNetSalesOrLoss($prev_year, $i));
 }
 
 $netIncome = implode(', ', $monthlyData);
 $prevNetIncome = implode(',', $prevMonthlyData);
 
-$sql = "SELECT SUM(NetIncome) AS NetSales FROM IncomeStatement WHERE created_at BETWEEN :start_curr_year AND :end_curr_year ORDER BY created_at";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':start_curr_year', $start_curr_year);
-$stmt->bindParam(':end_curr_year', $end_curr_year);
-$stmt->execute();
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-$netSales = $row['NetSales'];
 
-$sql = "SELECT SUM(NetIncome) AS PrevNetSales FROM IncomeStatement WHERE created_at BETWEEN :start_prev_year AND :end_prev_year ORDER BY created_at";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':start_prev_year', $start_prev_year);
-$stmt->bindParam(':end_prev_year', $end_prev_year);
-$stmt->execute();
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-$prevNetSales = $row['PrevNetSales'];
-
-
+if($prev_month == 0){
+    $prev_month = 12;
+}
+$netSales = calculateNetSalesOrLoss($curr_year, $curr_month);
+$prevNetSales = calculateNetSalesOrLoss($curr_year, $prev_month);
 
 ?>
 

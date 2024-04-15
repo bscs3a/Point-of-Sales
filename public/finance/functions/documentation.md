@@ -54,3 +54,18 @@ datetime can be autofilled.
 
 the final parameters of this function, $year and $month, are there to get the last second possible for a given month/year.
 it is only used for reportGeneration advance functions right now, so thread carefully
+
+
+Special Notes:
+V1 - indicated by name(no name extension)
+```
+V1 is filtering a date
+example: you can have data on december, november, october.
+callFunction(november) = return all data IN NOVEMBER ONLY
+```
+V2 - indicated by name
+```
+V2 is filtering UPTO a date
+example: you can have data on december, november, october.
+callFunction(november) = return all data IN OCTOBER -> UNTIL NOVEMBER
+```

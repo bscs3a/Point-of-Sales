@@ -17,7 +17,6 @@ if ($today < $lastDayOfMonth) {
 
     $year = intval($year);
     $month = intval($month);
-    echo $month;
 ?>
 
 <!DOCTYPE html>
@@ -27,65 +26,106 @@ if ($today < $lastDayOfMonth) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income Report</title>
-    <style>
-        ul {
-            list-style-type: none;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="<?php echo $_SERVER["DOCUMENT_ROOT"].'/public\finance\views\reports\reports.css';?>"/>
 </head>
+<style>
+    *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Monsterrat", sans-serif;
+}
+body{
+    padding: 1.5rem;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
 
+.text-right{
+    text-align: right;
+}
+
+.width-auto-wrap{
+    white-space: nowrap;
+    width: 1%;
+}
+
+.header1{
+    font-size: 3rem;
+    font-family: "Russo One", sans-serif;
+}
+
+.header2{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.headerPartner{
+    font-size: 0.75rem;
+    color: #8D8B8B;
+}
+
+section > table tr > td{
+    padding: 1rem;
+}
+
+thead > tr {
+    border-radius: 10px; 
+    overflow: hidden;
+    background-color: #FFD168;
+    box-shadow: 0 4px 1px #00000040;
+}
+
+thead > tr > th{
+    text-align: left;
+    padding: 1rem;
+    border-radius: 10px; 
+    font-weight: 600;
+}
+
+.content{
+    text-indent: 2rem;
+}
+
+.content-amount{
+    text-align: right;
+}
+
+tfoot{
+    color: #262261;
+    font-weight: bold;
+}
+</style>
 
 <body>
     <header>
-        <div>
-            <span style="font-weight: bold; font-size: 2em;">Income Statement</span>
-            <br>
-            <span style="font-weight: bold; opacity: 0.5; font-size: 1.17em;">
-                <?php echo "$monthName $year" ?>
-            </span>
-            <span>
-                <table style="width: 100%; border-spacing: 0;">
-                    <tr style="background-color: #FFEEA5; ">
-                        <th>Assets</th>
-                        <th>(Dr) Amount</th>
-                    </tr>
-                    <tr>
-                        <td>Fixed Assets</td>
-                        <td style="text-align: right;">0</td>
-                    </tr>
-                    <tr>
-                        <td>Current Assets</td>
-                        <td style="text-align: right;">Dr 0</td>
-                    </tr>
-                    <tr>
-                        <td>Investments</td>
-                        <td style="text-align: right;">0</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: bold;">Total Assets</td>
-                        <td style="text-align: right; font-weight: bold;">0</td>
-                    </tr>
-                </table>
-            </span>
-
-        </div>
-        <div>
-
-        </div>
-        <!-- <img src="..\..\img\logo_reports.png" alt=""> -->
+        <table>
+            <tr>
+                <td class="header2">Income Statement</td>
+                <td rowspan="2" class="text-right width-auto-wrap">
+                    <?php 
+                        $image = file_get_contents('public/finance/img/logo_reports.png');
+                        $image = base64_encode($image);
+                    ?>
+                    <img src="data:image;base64,<?= $image?>"/>
+                </td>
+                <td class="header1 text-right width-auto-wrap">BSCS 3A</td>
+            </tr>
+            <tr>
+                <td class ="headerPartner"><?php echo "For the month end: $monthName $year" ?></td>
+                <td class="headerPartner text-right width-auto-wrap">Hardware Management Store</td>
+            </tr>
+        </table>
     </header>
     <?php
         echo generateIncomeReport($year, $month);
-    ?>
-
-
+    ?> 
 </body>
 
 </html>

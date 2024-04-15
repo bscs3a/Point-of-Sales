@@ -1,3 +1,9 @@
+<?php 
+define('YEAR', date('Y'));
+define('MONTH', date('m'));
+
+require_once "public/finance/functions/reportGeneration/TrialBalance.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -143,8 +149,9 @@
                                         <div class="flex items-center mb-1">
                                             <p class="text-4xl sm:text-md font-semibold text-[#F8B721]">
                                                 <?php
-                                                $amount = 2000;
-                                                echo number_format($amount, 2);
+                                                $income = getGroupCode('Income');
+                                                $incomeAmount = getTotalOfGroupV2($income);
+                                                echo '₱'.number_format($incomeAmount, 2);
                                                 ?>
                                             </p>
                                         </div>
@@ -164,8 +171,9 @@
                                         <div class="flex items-center mb-1">
                                             <div class="text-4xl font-semibold text-[#F8B721]">
                                                 <?php
-                                                $amount = 1000;
-                                                echo '₱' . number_format($amount, 2);
+                                                $expense = getGroupCode('Expenses');
+                                                $expenseAmount = getTotalOfGroupV2($expense);
+                                                echo '₱' . number_format($expenseAmount, 2);
                                                 ?>
                                             </div>
                                         </div>
@@ -185,13 +193,10 @@
                     <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-3xl font-bold">Total Balance</h1>
-                            <p class="mt-5 text-3xl font-medium">0</p>
+                            <p class="mt-5 text-3xl font-medium"><?php echo '₱' . number_format($incomeAmount-$expenseAmount, 2);?></p>
                             <p class="mt-5 text-md font-bold">Summary</p>
                         </div>
                     </div>
-
-
-
                 </div>
                 <!-- End: Top Left-Side Section -->
             </div>

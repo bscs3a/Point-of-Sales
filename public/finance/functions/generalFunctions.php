@@ -194,7 +194,7 @@ function getAccountCode($accountType){
     return $accountCode;
 
 }
-
+//insert into ledger transaction
 function insertLedgerXact($debitLedger, $creditLedger, $amount, $details = null, $year = null, $month = null){
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -303,19 +303,19 @@ function getTotalOfAccountTypeV2($accountType, $year = null, $month = null) {
         throw new Exception("Account not found in accounttype table.");
     }
     
-    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
-        $date = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-31 23:59:59';
-    } else {
-        $date = date('Y-m-d');
-    }
-    
     $sql = "SELECT lt.* FROM LedgerTransaction lt
             JOIN Ledger l ON lt.ledgerNo = l.ledgerNo
             JOIN AccountType at ON l.accountType = at.accountType
-            WHERE at.accountType = :accountType AND lt.datetime <= :date";
+            WHERE at.accountType = :accountType";
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+        $sql .= " AND YEAR(lt.datetime) <= :year AND MONTH(lt.datetime) <= :month";
+    }
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':accountType', $accountType);
-    $stmt->bindParam(':date', $date);
+    if ($year !== null && $month !== null) {
+        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+    }
     $stmt->execute();
     
     $netAmount = 0;
@@ -325,12 +325,18 @@ function getTotalOfAccountTypeV2($accountType, $year = null, $month = null) {
     }
     
     $sql = "SELECT lt.* FROM LedgerTransaction lt
-            JOIN Ledger l ON lt.ledgerNo_dr = l.ledgerNo
-            JOIN AccountType at ON l.accountType = at.accountType
-            WHERE at.accountType = :accountType AND lt.datetime <= :date";
+    JOIN Ledger l ON lt.ledgerNo_dr = l.ledgerNo
+    JOIN AccountType at ON l.accountType = at.accountType
+    WHERE at.accountType = :accountType";
+    if (is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12) {
+    $sql .= " AND YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month";
+    }
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':accountType', $accountType);
-    $stmt->bindParam(':date', $date);
+    if ($year !== null && $month !== null) {
+    $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+    $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+    }
     $stmt->execute();
     
     while ($row = $stmt->fetch()) {
@@ -339,6 +345,8 @@ function getTotalOfAccountTypeV2($accountType, $year = null, $month = null) {
     
     return abs($netAmount);
 }
+
+//get account type balance upto a date
 function getTotalOfGroupV2($groupType, $year = null, $month = null) {
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -346,7 +354,7 @@ function getTotalOfGroupV2($groupType, $year = null, $month = null) {
     $groupType = getGroupCode($groupType);
 
     if ($groupType === false) {
-        throw new Exception("Account not found in grouptype table.");
+        throw new Exception("Group not found in grouptype table.");
     }
 
     $date = null;
@@ -395,3 +403,89 @@ function getTotalOfGroupV2($groupType, $year = null, $month = null) {
     return abs($netAmount);
 }
 
+
+//get all ledger transaction with limit
+function getLedgerTransactions($limit = null){  
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $sql = "SELECT *, cr.name AS cr_name, dr.name AS dr_name FROM LedgerTransaction lt
+    JOIN Ledger cr ON lt.ledgerNo = cr.ledgerNo
+    JOIN Ledger dr ON lt.ledgerNo_Dr = dr.ledgerNo
+    ORDER BY lt.datetime DESC";
+    if (is_numeric($limit)) {
+        $sql .= " LIMIT " . (int)$limit;
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result; 
+}
+
+//get all ledger accounts
+function getAllLedgerAccounts($accountType = null){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    if($accountType !== null)
+    {
+        $accountType = getAccountCode($accountType);
+        if ($accountType === false) {
+            throw new Exception("Account not found in accountype table.");
+        }
+    }
+    if($accountType === null){
+        $sql = "SELECT * FROM Ledger";
+        $stmt = $conn->prepare($sql);
+    }else{
+        $sql = "SELECT * FROM Ledger WHERE accountType = :accountType";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':accountType', $accountType);
+    }
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+//get all account type
+function getAllAccountTypes($groupType = null){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    if($groupType !== null)
+    {
+        $groupType = getGroupCode($groupType);
+        if ($groupType === false) {
+            throw new Exception("Account not found in grouptype table.");
+        }
+    }
+
+    
+    if($groupType === null){
+        $sql = "SELECT * FROM AccountType";
+        $stmt = $conn->prepare($sql);
+    }else{
+        $sql = "SELECT * FROM AccountType WHERE grouptype = :grouptype";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':grouptype', $groupType);
+    }
+    
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+
+//get all group type
+function getAllGroupTypes(){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $sql = "SELECT * FROM GroupType";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}
+?>

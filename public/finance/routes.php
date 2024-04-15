@@ -1,8 +1,9 @@
 <?php
 
+require_once "public/finance/functions/reportGeneration/TrialBalance.php";
+require_once "public/finance/functions/requestFolder/requestExpense.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
-
 
 
 $_SESSION['user'] = 'admin';
@@ -204,6 +205,48 @@ Router::post('/inveees', function () {
 });
 
 
+
+Router::post('/fin/getEquityReport', function (){
+    $year = date('Y');
+    $month = date('m');
+
+    $return = [];
+    $return["owners"] = getAllLedgerAccounts("Capital Accounts");
+    foreach ($return["owners"] as $key => $owner) {
+        $return["owners"][$key]["dividedShare"] = calculateShare($owner["ledgerno"], $year, $month);
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/fin/getBalanceReport', function(){
+    $return = [];
+    $assetValue = getTotalOfGroupV2("Asset");
+    $liabilityValue = getTotalOfAccountTypeV2("Accounts Payable");
+    $liabilityValue += getTotalOfAccountTypeV2("Tax Payable");
+
+    $return["asset"] = $assetValue/($assetValue + $liabilityValue);
+    $return["liability"] = $liabilityValue/($assetValue + $liabilityValue);
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/fin/updateRequestExpense', function(){
+    $id = $_POST['id'];
+    $decision = $_POST['decision'];
+    updateRequest($id, $decision);
+    if($decision === "confirm"){
+        $amount = $_POST['amount'];
+        $debit = $_POST['debit'];
+        $credit = $_POST['credit'];
+        $description = $_POST['description'];
+        insertLedgerXact($debit,$credit,$amount,$description);
+    }
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/expense");
+});
 
 
 

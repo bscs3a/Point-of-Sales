@@ -46,6 +46,34 @@
             </ul>
         </li>
 
+        <li class="mb-1">
+            <button
+                class="toggle-request flex items-center py-2 px-4 w-full text-white hover:bg-slate-400 hover:text-black rounded-xl">
+                <i class="ri-shake-hands-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Request</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </button>
+            <ul id="request" class="ml-8 hidden">
+                <li>
+                    <a route='/fin/expense' class="flex items-center py-2 px-4 text-white hover:text-black">
+                        <span class="text-sm font-medium">Expenses</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+                <li>
+                    <a route='/fin/request' class="flex items-center py-2 px-4 text-white hover:text-black">
+                        <span class="text-sm font-medium">Inventory</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+                <li>
+                    <a route='/fin/salary' class="flex items-center py-2 px-4 text-white hover:text-black">
+                        <span class="text-sm font-medium">Salary</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <!-- Audit Log -->
         <li class="mb-1 hover:bg-slate-400 rounded-xl">
             <a route="/fin/logs" class="flex items-center py-2 px-4 text-white hover:text-black">
@@ -65,6 +93,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.toggle-ledger').addEventListener('click', function () {
             document.getElementById('ledger').classList.toggle('hidden');
+            document.getElementById('request').classList.add('hidden');
+            // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+        });
+        document.querySelector('.toggle-request').addEventListener('click', function () {
+            document.getElementById('ledger').classList.add('hidden');
+            document.getElementById('request').classList.toggle('hidden');
             // document.getElementById('reports-button').classList.toggle('bg-slate-400');
         });
     });
