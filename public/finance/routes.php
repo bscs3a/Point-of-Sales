@@ -32,6 +32,14 @@ $fin = [
     '/fin/request' => $basePath . "requestInventory.php",
     '/fin/salary' => $basePath . "requestSalary.php",
 
+    //funds
+    '/fin/funds/HR' => $basePath . "funds.HR.php",
+    '/fin/funds/PO' => $basePath . "funds.PO.php",
+    '/fin/funds/Sales' => $basePath . "funds.sales.php",
+    '/fin/funds/Inventory' => $basePath . "funds.inventory.php",
+    '/fin/funds/Delivery' => $basePath . "funds.delivery.php",
+    '/fin/funds/Finance' => $basePath . "funds.finance.php",
+
     '/fin/test' => $basePath . "test.php",
 
     '/fin/test/id={id}' => function ($id) use ($basePath) {

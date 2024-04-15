@@ -25,6 +25,7 @@
                     document.getElementById('reports').classList.toggle('hidden');
                     document.getElementById('ledger').classList.add('hidden');
                     document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.add('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
 
                 });
@@ -33,6 +34,7 @@
                     document.getElementById('ledger').classList.toggle('hidden');
                     document.getElementById('reports').classList.add('hidden');
                     document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.add('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
                 });
 
@@ -40,6 +42,15 @@
                     document.getElementById('ledger').classList.add('hidden');
                     document.getElementById('reports').classList.add('hidden');
                     document.getElementById('request').classList.toggle('hidden');
+                    document.getElementById('funds').classList.add('hidden');
+                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+                });
+
+                document.querySelector('.toggle-funds').addEventListener('click', function () {
+                    document.getElementById('ledger').classList.add('hidden');
+                    document.getElementById('reports').classList.add('hidden');
+                    document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.toggle('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
                 });
             });
@@ -114,7 +125,6 @@
             </ul>
         </li>
 
-
         <li class="mb-1">
             <button
                 class="toggle-request flex items-center py-2 px-4 w-full text-white hover:bg-slate-400 hover:text-black rounded-xl">
@@ -147,6 +157,23 @@
             </ul>
         </li>
 
+        <li class="mb-1">
+            <button
+                class="toggle-funds flex items-center py-2 px-4 w-full text-white hover:bg-slate-400 hover:text-black rounded-xl">
+                <i class="ri-wallet-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Funds</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </button>
+            <ul id="funds" class="ml-8 hidden">
+                <li>
+                    <a route='/fin/funds/HR' class="flex items-center py-2 px-4 text-white hover:text-black">
+
+                        <span class="text-sm font-medium">Expenses</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
         <li class="mb-1 hover:bg-slate-400 rounded-xl">
             <a route="/fin/charts" class="flex items-center py-2 px-4 text-white hover:text-black">
