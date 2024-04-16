@@ -198,6 +198,174 @@
             </section>
             <!-- End: Sales Summary -->
 
+                <!-- Dropdown Bar -->
+                <div class="flex justify-end w-full mr-40 z-10">
+                    <div class="relative">
+                        <button class="bg-gray-200 hover:bg-gray-400 transition-colors text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center" onclick="toggleDropdown()">
+                            <span class="mr-1">Select Summary of Sales by:</span>
+                        </button>
+                        <ul id="dropdownMenu" class="absolute justify-end  w-full shadow-lg font-medium hidden text-gray-700 pt-1">
+                        <li><a id="SelectAll" class=" bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer active:bg-green-800 active:text-white" onclick="showAll()">Show All</a></li>
+                            <li><a id="SelectDaily" class=" bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer active:bg-green-800 active:text-white" onclick="showDailySales()">Daily Sales</a></li>
+                            <li><a id="SelectMonthly" class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer active:bg-green-800 active:text-white" onclick="showMonthlySales()">Monthly Sales</a></li>
+                            <li><a id="SelectYearly" class=" bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap cursor-pointer active:bg-green-800 active:text-white" onclick="showYearlySales()">Yearly</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <script>
+                    
+                    function initializeSelectAll() {
+                        var selectAll = document.getElementById("SelectAll");
+                        selectAll.classList.add("bg-green-800");
+                        selectAll.classList.add("text-white");
+                        selectAll.classList.remove("hover:bg-gray-400");
+                    }
+
+                    window.addEventListener("load", initializeSelectAll);
+
+                    function toggleDropdown() {
+                        var dropdownMenu = document.getElementById("dropdownMenu");
+                        if (dropdownMenu.classList.contains("hidden")) {
+                            dropdownMenu.classList.remove("hidden");
+                        } else {
+                            dropdownMenu.classList.add("hidden");
+                        }
+                    }
+                    
+                    document.addEventListener("click", function(event) {
+                        var dropdownMenu = document.getElementById("dropdownMenu");
+                        if (!event.target.closest("#dropdownMenu") && !event.target.closest(".bg-gray-200")) {
+                            dropdownMenu.classList.add("hidden");
+                        }
+                    });
+
+                    function showDailySales() {
+                        var dailySales = document.getElementById("daily-sales");
+                        var monthlySales = document.getElementById("monthly-sales");
+                        var yearlySales = document.getElementById("yearly-sales");
+                        var previousTargetSales = document.getElementById("previous-target-sales");
+
+                        var SelectDaily = document.getElementById("SelectDaily");
+                        var SelectMonthly = document.getElementById("SelectMonthly");
+                        var SelectYearly = document.getElementById("SelectYearly");
+
+
+                        dailySales.style.display = "block";
+                        monthlySales.style.display = "none";
+                        yearlySales.style.display = "none";
+                        previousTargetSales.style.display = "none";
+
+                        SelectDaily.classList.add("bg-green-800");
+                        SelectDaily.classList.add("text-white");
+                        SelectDaily.classList.remove("hover:bg-gray-400");
+
+                        SelectMonthly.classList.remove("bg-green-800");
+                        SelectMonthly.classList.remove("text-white");
+                        SelectMonthly.classList.add("hover:bg-gray-400");
+
+                        SelectYearly.classList.remove("bg-green-800");
+                        SelectYearly.classList.remove("text-white");
+                        SelectYearly.classList.add("hover:bg-gray-400");
+
+                        SelectAll.classList.remove("bg-green-800");
+                        SelectAll.classList.remove("text-white");
+                        SelectAll.classList.add("hover:bg-gray-400");
+
+                    }
+
+                    function showMonthlySales() {
+                        var dailySales = document.getElementById("daily-sales");
+                        var monthlySales = document.getElementById("monthly-sales");
+                        var yearlySales = document.getElementById("yearly-sales");
+                        var previousTargetSales = document.getElementById("previous-target-sales");
+
+                        dailySales.style.display = "none";
+                        monthlySales.style.display = "block";
+                        yearlySales.style.display = "none";
+                        previousTargetSales.style.display = "none";
+
+                        SelectDaily.classList.remove("bg-green-800");
+                        SelectDaily.classList.remove("text-white");
+                        SelectDaily.classList.add("hover:bg-gray-400");
+
+                        SelectMonthly.classList.add("bg-green-800");
+                        SelectMonthly.classList.add("text-white");
+                        SelectMonthly.classList.remove("hover:bg-gray-400");
+
+                        SelectYearly.classList.remove("bg-green-800");
+                        SelectYearly.classList.remove("text-white");
+                        SelectYearly.classList.add("hover:bg-gray-400");
+                
+                        SelectAll.classList.remove("bg-green-800");
+                        SelectAll.classList.remove("text-white");
+                        SelectAll.classList.add("hover:bg-gray-400");
+
+
+                    }
+
+                    function showYearlySales() {
+                        var dailySales = document.getElementById("daily-sales");
+                        var monthlySales = document.getElementById("monthly-sales");
+                        var yearlySales = document.getElementById("yearly-sales");
+                        var previousTargetSales = document.getElementById("previous-target-sales");
+
+                        dailySales.style.display = "none";
+                        monthlySales.style.display = "none";
+                        yearlySales.style.display = "block";
+                        previousTargetSales.style.display = "none";
+
+
+                        SelectDaily.classList.remove("bg-green-800");
+                        SelectDaily.classList.remove("text-white");
+                        SelectDaily.classList.add("hover:bg-gray-400");
+
+                        SelectMonthly.classList.remove("bg-green-800");
+                        SelectMonthly.classList.remove("text-white");
+                        SelectMonthly.classList.add("hover:bg-gray-400");
+
+                        SelectYearly.classList.add("bg-green-800");
+                        SelectYearly.classList.add("text-white");
+                        SelectYearly.classList.remove("hover:bg-gray-400");
+
+                        SelectAll.classList.remove("bg-green-800");
+                        SelectAll.classList.remove("text-white");
+                        SelectAll.classList.add("hover:bg-gray-400");
+                    }
+
+                    function showAll(){
+                        var dailySales = document.getElementById("daily-sales");
+                        var monthlySales = document.getElementById("monthly-sales");
+                        var yearlySales = document.getElementById("yearly-sales");
+                        var previousTargetSales = document.getElementById("previous-target-sales");
+
+                        dailySales.style.display = "block";
+                        monthlySales.style.display = "block";
+                        yearlySales.style.display = "block";
+                        previousTargetSales.style.display = "block";
+
+                        SelectDaily.classList.remove("bg-green-800");
+                        SelectDaily.classList.remove("text-white");
+                        SelectDaily.classList.add("hover:bg-gray-400");
+
+                        SelectMonthly.classList.remove("bg-green-800");
+                        SelectMonthly.classList.remove("text-white");
+                        SelectMonthly.classList.add("hover:bg-gray-400");
+
+                        SelectYearly.classList.remove("bg-green-800");
+                        SelectYearly.classList.remove("text-white");
+                        SelectYearly.classList.add("hover:bg-gray-400");
+
+                        SelectAll.classList.add("bg-green-800");
+                        SelectAll.classList.add("text-white");
+                        SelectAll.classList.remove("hover:bg-gray-400");
+
+                    }
+                </script>
+
+                </script>
+
+
             <!-- Start: Daily Sales Table -->
             <section id="daily-sales" class="w-full px-20 py-10 justify-center">
                 <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 border">
