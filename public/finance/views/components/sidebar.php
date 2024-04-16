@@ -18,7 +18,87 @@
             </a>
         </li>
 
-        
+        <!-- button dropdown -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelector('.toggle-reports').addEventListener('click', function () {
+                    document.getElementById('reports').classList.toggle('hidden');
+                    document.getElementById('ledger').classList.add('hidden');
+                    document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.add('hidden');
+                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+
+                });
+
+                document.querySelector('.toggle-ledger').addEventListener('click', function () {
+                    document.getElementById('ledger').classList.toggle('hidden');
+                    document.getElementById('reports').classList.add('hidden');
+                    document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.add('hidden');
+                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+                });
+
+                document.querySelector('.toggle-request').addEventListener('click', function () {
+                    document.getElementById('ledger').classList.add('hidden');
+                    document.getElementById('reports').classList.add('hidden');
+                    document.getElementById('request').classList.toggle('hidden');
+                    document.getElementById('funds').classList.add('hidden');
+                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+                });
+
+                document.querySelector('.toggle-funds').addEventListener('click', function () {
+                    document.getElementById('ledger').classList.add('hidden');
+                    document.getElementById('reports').classList.add('hidden');
+                    document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.toggle('hidden');
+                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+                });
+            });
+        </script>
+
+
+        <li class="mb-1  rounded-xl">
+            <button id="reports-button"
+                class="toggle-reports flex items-center py-2 px-4 w-full text-white hover:text-black  hover:bg-slate-400 rounded-xl">
+                <i class="ri-file-edit-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Reports</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </button>
+            <ul id="reports" class="ml-8 hidden">
+                <li>
+                    <a route='/fin/reportIncome' class="flex items-center py-2 px-4 text-white hover:text-black">
+
+                        <span class="text-sm font-medium">Income</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+                <li>
+                    <a route="/fin/reportCash" class="flex items-center py-2 px-4 text-white hover:text-black">
+
+                        <span class="text-sm font-medium">Cash Flow</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+
+                <li>
+                    <a route="/fin/reportEquity" class="flex items-center py-2 px-4 text-white hover:text-black">
+
+                        <span class="text-sm font-medium">Equity</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+
+                <li>
+                    <a route="/fin/reportBalance" class="flex items-center py-2 px-4 text-white hover:text-black">
+
+                        <span class="text-sm font-medium">Balance Sheet</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+
+
+            </ul>
+        </li>
 
         <li class="mb-1">
             <button
@@ -74,6 +154,25 @@
                 </li>
             </ul>
         </li>
+
+        <li class="mb-1">
+            <button
+                class="toggle-funds flex items-center py-2 px-4 w-full text-white hover:bg-slate-400 hover:text-black rounded-xl">
+                <i class="ri-wallet-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Funds</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </button>
+            <ul id="funds" class="ml-8 hidden">
+                <li>
+                    <a route='/fin/funds/HR' class="flex items-center py-2 px-4 text-white hover:text-black">
+
+                        <span class="text-sm font-medium">Expenses</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <!-- Audit Log -->
         <li class="mb-1 hover:bg-slate-400 rounded-xl">
             <a route="/fin/logs" class="flex items-center py-2 px-4 text-white hover:text-black">
