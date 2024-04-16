@@ -663,8 +663,16 @@ video {
   position: fixed;
 }
 
+.\!absolute{
+  position: absolute !important;
+}
+
 .absolute{
   position: absolute;
+}
+
+.\!relative{
+  position: relative !important;
 }
 
 .relative{
@@ -698,6 +706,10 @@ video {
 
 .end-1{
   inset-inline-end: 0.25rem;
+}
+
+.end-2{
+  inset-inline-end: 0.5rem;
 }
 
 .left-0{
@@ -810,6 +822,10 @@ video {
 
 .clear-none{
   clear: none;
+}
+
+.m-1{
+  margin: 0.25rem;
 }
 
 .m-2{
@@ -1155,6 +1171,10 @@ video {
   display: inline-flex;
 }
 
+.\!table{
+  display: table !important;
+}
+
 .table{
   display: table;
 }
@@ -1197,6 +1217,10 @@ video {
 
 .flow-root{
   display: flow-root;
+}
+
+.\!grid{
+  display: grid !important;
 }
 
 .grid{
@@ -3315,6 +3339,10 @@ video {
   padding: 2.5rem;
 }
 
+.p-14{
+  padding: 3.5rem;
+}
+
 .p-16{
   padding: 4rem;
 }
@@ -3752,6 +3780,11 @@ video {
 
 .normal-nums{
   font-variant-numeric: normal;
+}
+
+.\!ordinal{
+  --tw-ordinal: ordinal !important;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction) !important;
 }
 
 .ordinal{
@@ -4437,6 +4470,10 @@ video {
 
 .hide-scrollbar::-webkit-scrollbar{
   display: none;
+}
+
+.\!\[a-zA-Z\:_\]{
+  a-z-a--z:  !important;
 }
 
 @media (min-width: 640px){
