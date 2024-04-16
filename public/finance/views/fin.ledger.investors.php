@@ -204,14 +204,15 @@
                                 <p>Total: <?= $results['total_amount'] ?></p>
                             </div>
                             <div class="p-10">
+                            <button id="openLoanModal<?= $id ?>"
+                                    class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
+                                    Invest
+                                </button>   
                                 <button id="openPayModal<?= $id ?>"
                                     class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                    Pay Loan
+                                    Withdraw
                                 </button>
-                                <button id="openLoanModal<?= $id ?>"
-                                    class="bg-sidebar hover:bg-blue-900 text-white text-sm/none font-bold py-2 px-4 rounded-md border border-gray-900">
-                                    Add Loan
-                                </button>
+                                
                             </div>
                         </div>
                         <div id="payModal<?= $id ?>"

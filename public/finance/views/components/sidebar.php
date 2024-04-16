@@ -21,18 +21,18 @@
         <!-- button dropdown -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                document.querySelector('.toggle-reports').addEventListener('click', function () {
-                    document.getElementById('reports').classList.toggle('hidden');
-                    document.getElementById('ledger').classList.add('hidden');
-                    document.getElementById('request').classList.add('hidden');
-                    document.getElementById('funds').classList.add('hidden');
-                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+                // document.querySelector('.toggle-reports').addEventListener('click', function () {
+                //     // document.getElementById('reports').classList.toggle('hidden');
+                //     document.getElementById('ledger').classList.add('hidden');
+                //     document.getElementById('request').classList.add('hidden');
+                //     document.getElementById('funds').classList.add('hidden');
+                //     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
 
-                });
+                // });
 
                 document.querySelector('.toggle-ledger').addEventListener('click', function () {
                     document.getElementById('ledger').classList.toggle('hidden');
-                    document.getElementById('reports').classList.add('hidden');
+                    // document.getElementById('reports').classList.add('hidden');
                     document.getElementById('request').classList.add('hidden');
                     document.getElementById('funds').classList.add('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
@@ -40,7 +40,7 @@
 
                 document.querySelector('.toggle-request').addEventListener('click', function () {
                     document.getElementById('ledger').classList.add('hidden');
-                    document.getElementById('reports').classList.add('hidden');
+                    // document.getElementById('reports').classList.add('hidden');
                     document.getElementById('request').classList.toggle('hidden');
                     document.getElementById('funds').classList.add('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
@@ -48,7 +48,7 @@
 
                 document.querySelector('.toggle-funds').addEventListener('click', function () {
                     document.getElementById('ledger').classList.add('hidden');
-                    document.getElementById('reports').classList.add('hidden');
+                    // document.getElementById('reports').classList.add('hidden');
                     document.getElementById('request').classList.add('hidden');
                     document.getElementById('funds').classList.toggle('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
@@ -57,7 +57,7 @@
         </script>
 
 
-        <li class="mb-1  rounded-xl">
+        <!-- <li class="mb-1  rounded-xl">
             <button id="reports-button"
                 class="toggle-reports flex items-center py-2 px-4 w-full text-white hover:text-black  hover:bg-slate-400 rounded-xl">
                 <i class="ri-file-edit-fill mr-3 text-lg"></i>
@@ -98,7 +98,7 @@
 
 
             </ul>
-        </li>
+        </li> -->
 
         <li class="mb-1">
             <button
@@ -189,17 +189,17 @@
 
 <!-- button dropdown -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('.toggle-ledger').addEventListener('click', function () {
-            document.getElementById('ledger').classList.toggle('hidden');
-            document.getElementById('request').classList.add('hidden');
-            // document.getElementById('reports-button').classList.toggle('bg-slate-400');
-        });
-        document.querySelector('.toggle-request').addEventListener('click', function () {
-            document.getElementById('ledger').classList.add('hidden');
-            document.getElementById('request').classList.toggle('hidden');
-            // document.getElementById('reports-button').classList.toggle('bg-slate-400');
-        });
-    });
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     document.querySelector('.toggle-ledger').addEventListener('click', function () {
+    //         document.getElementById('ledger').classList.toggle('hidden');
+    //         document.getElementById('request').classList.add('hidden');
+    //         // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+    //     });
+    //     document.querySelector('.toggle-request').addEventListener('click', function () {
+    //         document.getElementById('ledger').classList.add('hidden');
+    //         document.getElementById('request').classList.toggle('hidden');
+    //         // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+    //     });
+    // });
 </script>
 <!-- End: Sidebar -->

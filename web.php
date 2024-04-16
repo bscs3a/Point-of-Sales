@@ -18,12 +18,6 @@ Router::setRoutes($routes);
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-
-
-$basePath = '/finance'; // change me according to your root folder name
-$path = str_replace($basePath, '', $path);
-
-
 $basePath = '/Finance'; // change me according to your root folder name
 $path = str_replace($basePath, '', $path);
 
