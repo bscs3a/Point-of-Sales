@@ -119,16 +119,16 @@
                                         <span x-text="'₱' + (cart.reduce((total, item) => total + item.price * item.quantity, 0)).toFixed(2)"></span>
                                     </li>
                                     <li class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between">
-                                        <span x-text="'Discount:'"></span>
-                                        <span x-text="'₱' + (cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0)).toFixed(2)"></span>
+                                        <span x-text="'Tax:'"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * item.TaxRate, 0)).toFixed(2)"></span>
                                     </li>
                                     <li id="shipping-fee-toggle" class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between" x-show="salePreference === 'delivery'">
                                         <span x-text="'Shipping Fee:'"></span>
                                         <span x-text="'₱' + (salePreference.value === 'delivery' ? parseFloat(localStorage.getItem('shippingFee') || '0') : 0).toFixed(2)"></span>
                                     </li>
                                     <li class="py-2 pb-4 text-gray-500 font-medium border-b mb-4 flex justify-between">
-                                        <span x-text="'Tax:'"></span>
-                                        <span x-text="'₱' + (cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.9 : item.price) * item.quantity * item.TaxRate, 0)).toFixed(2)"></span>
+                                        <span x-text="'Discount:'"></span>
+                                        <span x-text="'₱' + (cart.reduce((total, item) => total + (item.quantity >= 50 ? item.price * 0.1 * item.quantity : 0), 0)).toFixed(2)"></span>
                                     </li>
                                     <li class="py-4 font-semibold text-green-800 flex justify-between">
                                         <span x-text="'Total:'"></span>

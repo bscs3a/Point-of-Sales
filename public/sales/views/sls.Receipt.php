@@ -153,16 +153,16 @@
                                     <span>Taxes</span>
                                     <span>₱<?= number_format($tax, 2) ?></span>
                                 </div>
-                                <div id="discount" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">
-                                    <span>Discount</span>
-                                    <span>₱<?= number_format($discount, 2) ?></span>
-                                </div>
                                 <?php if ($sale_preferences === 'Delivery') : ?>
                                     <div id="shippingFee" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">
                                         <span>Shipping Fee</span>
                                         <span>₱<?= number_format($shippingFee, 2) ?></span>
                                     </div>
                                 <?php endif; ?>
+                                <div id="discount" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">
+                                    <span>Discount</span>
+                                    <span>₱<?= number_format($discount, 2) ?></span>
+                                </div>
                                 <div id="total" class="flex justify-between font-semibold border-b text-xl pb-2 text-gray-400 mt-4">
                                     <span>Total</span>
                                     <span class="text-green-800 font-semibold">₱<?= $total_price ?></span>
