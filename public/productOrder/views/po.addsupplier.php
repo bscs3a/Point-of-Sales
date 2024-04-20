@@ -61,7 +61,7 @@
 
       <!-- New Form -->
       <div class="container mx-auto py-3">
-        <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+        <div class="max-w-6xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
           <div id="main" class="m-3 pt-6">
 
             <!-- NEW Form -->
