@@ -40,7 +40,7 @@ Router::post('/statusupdateview', function () {
     if ($status == 'Delivered') {
         $receivedDate = date('Y-m-d');
     }
-
+    
     // Fetch the TruckID associated with the DeliveryOrderID
     $stmt = $conn->prepare("SELECT TruckID FROM deliveryorders WHERE DeliveryOrderID = :orderId");
     $stmt->bindParam(':orderId', $orderId);
