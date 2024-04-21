@@ -24,21 +24,34 @@ if ($conn === null) {
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $order = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // To Get the details of the delivery order from other tables
+ 
     $stmt = $conn->prepare("
-        SELECT deliveryorders.*, customers.FirstName, customers.LastName, customers.Phone, Sales.CustomerID, Sales.TotalAmount, products.Price, products.ProductName
-        FROM deliveryorders 
-        JOIN saledetails ON deliveryorders.SaleID = saledetails.SaleID 
-        JOIN Sales ON deliveryorders.SaleID = Sales.SaleID
-        JOIN customers ON Sales.CustomerID = customers.CustomerID
-        JOIN products ON saledetails.ProductID = products.ProductID 
-        WHERE deliveryorders.DeliveryOrderID = :id
-        ");
+        SELECT 
+            deliveryorders.*, 
+            sales.PaymentMode, 
+            sales.ShippingFee,
+            sales.TotalAmount as SalesTotalAmount, 
+            products.*, 
+            customers.*, 
+            saledetails.TotalAmount as SaleDetailsTotalAmount, 
+            saledetails.*
+        FROM 
+            deliveryorders 
+        INNER JOIN 
+            sales ON deliveryorders.SaleID = sales.SaleID 
+        INNER JOIN 
+            products ON deliveryorders.ProductID = products.ProductID 
+        INNER JOIN 
+            customers ON sales.CustomerID = customers.CustomerID
+        INNER JOIN 
+            saledetails ON sales.SaleID = saledetails.SaleID AND products.ProductID = saledetails.ProductID
+        WHERE 
+            DeliveryOrderID = :id
+    ");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $order = $stmt->fetch(PDO::FETCH_ASSOC);
-
+   
 ?>
 <!doctype html>
 <html>
@@ -100,7 +113,7 @@ if ($conn === null) {
                 </div>
                 <div>
 
-                    <table class="w-full" style="background-color: white;">
+                <table class="w-full" style="background-color: white;">
                         <tbody class="text-sm">
                             <tr>
                                 <td class="border font-bold px-4 py-2" style="width: 30%;">Current Status</td>
@@ -109,6 +122,10 @@ if ($conn === null) {
                             <tr>
                                 <td class="border font-bold px-4 py-2" style="width: 30%;">Sale ID</td>
                                 <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['SaleID']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Order ID</td>
+                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['DeliveryOrderID']; ?></td>
                             </tr>
                             <tr>
                                 <td class="border font-bold px-4 py-2" style="width: 30%;">Customer ID</td>
@@ -139,7 +156,7 @@ if ($conn === null) {
                                 <td class="border px-4 py-2" style="width: 70%;">#<?php echo $order['ProductID']; ?></td>
                             </tr>
                             <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Product ID</td>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Product Name</td>
                                 <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['ProductName']; ?></td>
                             </tr>
                             <tr>
@@ -147,12 +164,32 @@ if ($conn === null) {
                                 <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Quantity']; ?></td>
                             </tr>
                             <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Price</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Price']; ?></td>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Payment Mode</td>
+                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['PaymentMode']; ?></td>
                             </tr>
                             <tr>
-                                <td class="border font-bold px-4 py-2" style="width: 30%;">Total</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['TotalAmount']; ?></td>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Unit Price</td>
+                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['UnitPrice']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Subtotal</td>
+                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['Subtotal']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Shipping fee</td>
+                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['ShippingFee']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Tax</td>
+                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['Tax']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Total Product Price</td>
+                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['SaleDetailsTotalAmount']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="border font-bold px-4 py-2" style="width: 30%;">Total Order Price</td>
+                                <td class="border px-4 py-2" style="width: 70%;">₱<?php echo $order['SalesTotalAmount']; ?></td>
                             </tr>
                         </tbody>
                     </table>

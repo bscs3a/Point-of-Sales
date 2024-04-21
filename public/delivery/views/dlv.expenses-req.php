@@ -80,12 +80,6 @@
                 </select><br>
                 </div>
 
-                <!-- Proof of Invoice -->
-                <label class="block text-lg font-bold mb-2">Proof Of Invoice:</label>
-                <div class="px-4">
-                <input class="bg-gray-200 w-full text-base px-2 py-2 rounded-lg mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" type="file">
-                </div>
-
                 <!-- Include SweetAlert2 library -->
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 

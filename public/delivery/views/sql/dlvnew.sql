@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS DeliveryOrders (
     StreetBarangayAddress VARCHAR(255),
     DeliveryDate DATE,
     ReceivedDate DATE,  
-    DeliveryStatus ENUM('Pending', 'In Transit', 'Delivered', 'Not Delivered') DEFAULT 'Pending',
+    DeliveryStatus ENUM('Pending', 'In Transit', 'Delivered', 'Failed to Deliver') DEFAULT 'Pending',
     TruckID INT,
     FOREIGN KEY (SaleID) REFERENCES Sales(SaleID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
@@ -263,7 +263,10 @@ INSERT INTO EmployeeTrucks (EmployeeID, TruckID) VALUES
     INSERT INTO attendance (attendance_date, clock_in, clock_out, employees_id) VALUES
     (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 1),
     (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 2),
-    (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 3);
+    (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 3),
+    (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 16),
+    (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 17),
+    (CURDATE(), NOW(), CONCAT(CURDATE(), ' 20:30:00'), 18);
 
     -- To update delivery orders to 'Pending' status and clear the TruckID and ReceivedDate
     UPDATE deliveryorders
