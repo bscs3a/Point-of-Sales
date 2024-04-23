@@ -174,10 +174,12 @@ Router::post('/insert/addsupplier/', function () {
         $email = $_POST["email"];
         $address = $_POST["address"];
         $delivery = $_POST["delivery"];
+        $shippingfee = $_POST["shippingfee"];
+        $workingdays = $_POST["workingday"];
 
         // Prepare SQL statement for inserting supplier data
-        $supplierSql = "INSERT INTO suppliers (Supplier_Name, Contact_Name, Contact_Number, Status, Email, Address, Estimated_Delivery) 
-                        VALUES (:suppliername, :contactname, :contactnum, :status, :email, :address, :delivery)";
+        $supplierSql = "INSERT INTO suppliers (Supplier_Name, Contact_Name, Contact_Number, Status, Email, Address, Estimated_Delivery, Shipping_fee, Working_days) 
+                        VALUES (:suppliername, :contactname, :contactnum, :status, :email, :address, :delivery, :shippingfee, :workingdays)";
         $supplierStmt = $conn->prepare($supplierSql);
         $supplierStmt->bindParam(':suppliername', $suppliername);
         $supplierStmt->bindParam(':contactname', $contactname);
@@ -186,6 +188,8 @@ Router::post('/insert/addsupplier/', function () {
         $supplierStmt->bindParam(':email', $email);
         $supplierStmt->bindParam(':address', $address);
         $supplierStmt->bindParam(':delivery', $delivery);
+        $supplierStmt->bindParam(':shippingfee', $shippingfee);
+        $supplierStmt->bindParam(':workingdays', $workingdays);
 
         // Execute the supplier SQL statement
         $supplierStmt->execute();
