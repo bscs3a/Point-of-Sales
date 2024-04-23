@@ -101,6 +101,9 @@
                   echo '<div class="mb-2">';
                   echo '<a class="font-bold mr-3">Email:</a><a>' . $supplier['Email'] . '</a>';
                   echo '</div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Shipping Fee:</a><a>' . '</a>'; //for shipping fee
+                  echo '</div>';
                   echo '</div>';
                   echo '<div>';
                   echo '<div class="mb-2">';
@@ -111,6 +114,9 @@
                   echo '</div>';
                   echo '<div class="mb-2">';
                   echo '<a class="font-bold mr-3">Estimated Delivery:</a><a>' . $supplier['Estimated_Delivery'] . '</a>';
+                  echo '</div>';
+                  echo '<div class="mb-2">';
+                  echo '<a class="font-bold mr-3">Working Days:</a><a>' . '</a>'; //for Working Days
                   echo '</div>';
                   echo '</div>';
                   echo '</div>';

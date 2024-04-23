@@ -118,25 +118,37 @@
                         <?= $data['Time_Ordered'] ?>
                       </span>
                     </li>
+                    <li class="flex py-1">
+                      <span class="font-semibold w-40">Shipping Fee:</span>
+                      <span class="font-medium text-gray-900">
+                        <!-- <?= $data['Time_Ordered'] ?> for shipping fee -->
+                      </span>
+                    </li>
                   </ul>
 
                   <ul class=" text-gray-900 ">
                     <li class="flex py-1">
-                      <span class="font-semibold w-24">Location:</span>
+                      <span class="font-semibold w-44">Location:</span>
                       <span class="font-medium text-gray-900">
                         <?= $data['Address'] ?>
                       </span>
                     </li>
                     <li class="flex">
-                      <span class="font-semibold w-40">Estimate Delivery:</span>
+                      <span class="font-semibold w-44">Estimate Delivery:</span>
                       <span class="font-medium text-gray-900">
                         <?= $data['Estimated_Delivery'] ?>
                       </span>
                     </li>
                     <li class="flex py-1">
-                      <span class="font-semibold w-20">Status:</span>
+                      <span class="font-semibold w-44">Status:</span>
                       <span class="font-medium text-green-900">
                         <?= $data['Status'] ?>
+                      </span>
+                    </li>
+                    <li class="flex py-1">
+                      <span class="font-semibold w-44">Working Days:</span>
+                      <span class="font-medium text-gray-900">
+                        <!-- <?= $data['Time_Ordered'] ?> for wotking days -->
                       </span>
                     </li>
                   </ul>
