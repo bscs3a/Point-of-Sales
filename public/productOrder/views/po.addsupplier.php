@@ -61,7 +61,7 @@
 
       <!-- New Form -->
       <div class="container mx-auto py-3">
-        <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+        <div class="max-w-6xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
           <div id="main" class="m-3 pt-6">
 
             <!-- NEW Form -->
@@ -88,6 +88,12 @@
                       class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                       required>
                   </div>
+                  <div class="mb-4">
+                    <label for="location" class="block text-black font-semibold mb-2">Estimated Delivery Date</label>
+                    <input type="text" id="delivery" name="delivery"
+                      class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                      required>
+                  </div>
                 </div>
                 <div>
                   <div class="mb-4">
@@ -109,12 +115,20 @@
                       required>
                   </div>
                   <div class="mb-4">
-                    <label for="location" class="block text-black font-semibold mb-2">Estimated_Delivery</label>
-                    <input type="text" id="delivery" name="delivery"
+                    <label for="location" class="block text-black font-semibold mb-2">Shipping Fee</label>
+                    <input type="text" id="shippingfee" name="shippingfee"
                       class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                       required>
                   </div>
                 </div>
+              </form>
+
+              <div class="flex flex-col justify-center items-center mb-3">
+                <label for="location" class="block text-black font-semibold mb-2">Working Days (Monday - Sunday)</label>
+                <input type="text" id="workingday" name="workingday"
+                  class="border border-gray-400 p-2 w-3/4 text-center rounded-lg focus:outline-none focus:border-blue-400"
+                  required>
+              </div>
             </div>
 
 
