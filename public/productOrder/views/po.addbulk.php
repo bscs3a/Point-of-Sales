@@ -75,7 +75,6 @@
                 <th class="px-4 py-2 font-semibold">Product Name</th>
                 <th class="px-4 py-2 font-semibold">Category</th>
                 <th class="px-4 py-2 font-semibold">Price</th>
-                <th class="px-4 py-2 font-semibold">Availability</th>
                 <th class="px-4 py-2 font-semibold">Description</th>
               </tr>
             </thead>
@@ -100,12 +99,6 @@
                   </td>
                   <td><input type="number" name="price1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="avail1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
-                  </td>
                   <td><input type="text" name="description1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                 </tr>
@@ -123,12 +116,6 @@
                     </select>
                   </td>
                   <td><input type="number" name="price2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                  </td>
-                  <td>
-                    <select name="avail2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
                   </td>
                   <td><input type="text" name="description2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
@@ -148,12 +135,6 @@
                   </td>
                   <td><input type="number" name="price3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="avail3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
-                  </td>
                   <td><input type="text" name="description3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                 </tr>
@@ -171,12 +152,6 @@
                     </select>
                   </td>
                   <td><input type="number" name="price4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                  </td>
-                  <td>
-                    <select name="avail4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
                   </td>
                   <td><input type="text" name="description4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
@@ -196,12 +171,6 @@
                   </td>
                   <td><input type="number" name="price5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="avail5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
-                  </td>
                   <td><input type="text" name="description5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                 </tr>
@@ -219,12 +188,6 @@
                     </select>
                   </td>
                   <td><input type="number" name="price6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                  </td>
-                  <td>
-                    <select name="avail6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
                   </td>
                   <td><input type="text" name="description6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
@@ -244,12 +207,6 @@
                   </td>
                   <td><input type="number" name="price7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="avail7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
-                  </td>
                   <td><input type="text" name="description7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                 </tr>
@@ -267,12 +224,6 @@
                     </select>
                   </td>
                   <td><input type="number" name="price8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                  </td>
-                  <td>
-                    <select name="avail8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
                   </td>
                   <td><input type="text" name="description8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
@@ -292,12 +243,6 @@
                   </td>
                   <td><input type="number" name="price9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="avail9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
-                  </td>
                   <td><input type="text" name="description9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                 </tr>
@@ -315,12 +260,6 @@
                     </select>
                   </td>
                   <td><input type="number" name="price10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                  </td>
-                  <td>
-                    <select name="avail10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
                   </td>
                   <td><input type="text" name="description10"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
@@ -340,12 +279,6 @@
                   </td>
                   <td><input type="number" name="price11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="avail11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
-                  </td>
                   <td><input type="text" name="description11"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                 </tr>
@@ -364,12 +297,6 @@
                   </td>
                   <td><input type="number" name="price12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="avail12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
-                  </td>
                   <td><input type="text" name="description12"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                 </tr>
@@ -387,12 +314,6 @@
                     </select>
                   </td>
                   <td><input type="number" name="price13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                  </td>
-                  <td>
-                    <select name="avail13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Available</option>
-                      <option value="Power Tools">Not Available</option>
-                    </select>
                   </td>
                   <td><input type="text" name="description13"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>

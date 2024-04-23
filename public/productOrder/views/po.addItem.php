@@ -61,7 +61,7 @@
       <form action="/po/addItem" method="POST" enctype="multipart/form-data">
         <!-- New Form for add product -->
         <div class="container mx-auto py-10 px-5">
-          <div class="max-w-6xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+          <div class="max-w-4xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-6 px-6 pt-4">
               <!-- Upload image -->
