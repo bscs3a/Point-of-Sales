@@ -476,21 +476,32 @@
                           placeholder="Username"
                         />
                     </div>
-                    <!-- TAX INFO -->
-                    <div class="mr-2">
-                        <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="incometax">
-                          Password
-                        </label>
-                        <input
-                          class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                          name="password"
-                          id="password"
-                          type="password"
-                          value="<?php echo $employees['password']; ?>"
-                          placeholder="Password"
-                        />
-                        <input type="checkbox" id="togglePassword"> Show Password
-                    </div>
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="incometax">
+                Password
+              </label>
+              <input
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="password"
+                id="password"
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+            <div class="mr-2">
+              <label class="block mb-2 mt-0 text-sm font-bold text-gray-700" for="incometax">
+                Confirm Password
+              </label>
+              <input
+                class="w-64 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                name="confirmPassword"
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+              />
+              <div class="text-sm mt-2 ml-32">
+              <input type="checkbox" id="togglePassword"> Show Password
+              </div>
                   </div>
                 </div>
               </div>
