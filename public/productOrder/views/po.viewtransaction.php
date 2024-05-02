@@ -70,7 +70,7 @@
 
             // Prepare and execute a SQL query to fetch data based on the ID
             $stmt = $conn->prepare("
-        SELECT b.*, s.Supplier_Name, s.Status, s.Address, s.Contact_Name, s.Contact_Number, s.Estimated_Delivery
+        SELECT b.*, s.Supplier_Name, s.Status, s.Address, s.Contact_Name, s.Contact_Number, s.Estimated_Delivery, s.Shipping_fee, s.Working_days
         FROM batch_orders b
         JOIN suppliers s ON b.Supplier_ID = s.Supplier_ID
         WHERE b.Batch_ID = :id
@@ -121,7 +121,7 @@
                     <li class="flex py-1">
                       <span class="font-semibold w-40">Shipping Fee:</span>
                       <span class="font-medium text-gray-900">
-                        <!-- <?= $data['Time_Ordered'] ?> for shipping fee -->
+                       <?= $data['Shipping_fee'] ?> 
                       </span>
                     </li>
                   </ul>
@@ -148,7 +148,7 @@
                     <li class="flex py-1">
                       <span class="font-semibold w-44">Working Days:</span>
                       <span class="font-medium text-gray-900">
-                        <!-- <?= $data['Time_Ordered'] ?> for wotking days -->
+                        <?= $data['Working_days'] ?> 
                       </span>
                     </li>
                   </ul>

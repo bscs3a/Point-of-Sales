@@ -35,7 +35,7 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -120,15 +120,17 @@
                       class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                       required>
                   </div>
+                  <div class="flex flex-col justify-center items-center mb-3">
+                  <label for="location" class="block text-black font-semibold mb-2">Working Days (Monday -
+                    Sunday)</label>
+                  <input type="text" id="workingday" name="workingday"
+                    class="border border-gray-400 p-2 w-3/4 text-center rounded-lg focus:outline-none focus:border-blue-400"
+                    required>
                 </div>
-              </form>
+                </div>
 
-              <div class="flex flex-col justify-center items-center mb-3">
-                <label for="location" class="block text-black font-semibold mb-2">Working Days (Monday - Sunday)</label>
-                <input type="text" id="workingday" name="workingday"
-                  class="border border-gray-400 p-2 w-3/4 text-center rounded-lg focus:outline-none focus:border-blue-400"
-                  required>
-              </div>
+               
+
             </div>
 
 
