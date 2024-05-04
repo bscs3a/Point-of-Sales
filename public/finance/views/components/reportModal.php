@@ -23,6 +23,7 @@
             <option value="Income">Income Report</option>
             <option value="OwnerEquity">Owners' Equity</option>
             <option value="TrialBalance">Trial Balance</option>
+            <option value="CashFlow">Cash Flow</option>
         </select>
         <label for="monthYear" class = "font-medium m-1">
             Date
