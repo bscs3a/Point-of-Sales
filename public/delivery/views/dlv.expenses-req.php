@@ -57,9 +57,8 @@
                 <select class="bg-gray-200 w-full text-md p-1 rounded-lg mb-4" required>
                     <option value="" selected disabled>Select...</option>
                     <option value="cash">Cash</option>
-                    <option value="creditCard">Credit Card</option>
-                    <option value="debitCard">Debit Card</option>
                     <option value="bankTransfer">Bank Transfer</option>
+                    <option value="creditCard">Credit/Debit Card</option>
                 </select>
                 </div>
 
