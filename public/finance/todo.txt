@@ -1,6 +1,6 @@
 Todo:
 1. update charts on the dashboard
-2. login
+2. login(kausapin ang hr)
 3. audit log
 4. pondo/request
 5. special insert sa ibang group
