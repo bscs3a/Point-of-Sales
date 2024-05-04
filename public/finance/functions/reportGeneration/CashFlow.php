@@ -170,11 +170,75 @@ function generateCashFlowReport($year, $month){
 function generateCashFlowOperations($year, $month){
     $incomeCode = getGroupCode("Income");
     $expenseCode = getGroupCode("Expenses");
+    
+    
+    $html = "<table>";
+    $html .= "<thead>";
+    $html .= "<tr>";
+    $html .= "<th colspan='2' class='text-left'>Cash Flow from Operations</th>";
+    $html .= "</tr>";
+    $html .= "</thead>";
+    $html .= "<tbody>";
+
     //net earnings from cash
     $netEarnings = abs(getGroupTypeBalanceBasedOnCash($incomeCode, $year, $month)) - abs(getGroupTypeBalanceBasedOnCash($expenseCode, $year, $month));
-    //additions
+    $html .= "<tr class='table-content'>";
+    $html .= "<td class='content'>Net Earnings</td>";
+    $html .= "<td class='content-amount'>".$netEarnings."</td>";
+    $html .= "</tr>";
+
+    //get all accounts balance except fixed assets
+    $allLedgerAccounts = getAllLedgerAccounts();
+    $fixedAssetsAccounts = getAllLedgerAccounts(getAccountCode("Fixed assets"));
+    $fixedAssetsAccounts = array_column($fixedAssetsAccounts, 'ledgerno');
+    $allLedgerAccounts = array_filter($allLedgerAccounts, function($ledger) use ($fixedAssetsAccounts){
+        return !in_array($ledger['ledgerno'], $fixedAssetsAccounts);
+    });
+    foreach ($allLedgerAccounts as $ledger) {
+        $balance = getAccountBalanceBasedOnCash($ledger['ledgerno'], $year, $month);
+        $ledger["balance"] = $balance;
+    }
+    $positiveAccounts = array_filter($allLedgerAccounts, function($ledger) {
+        return $ledger['balance'] > 0;
+    });
     
+    $negativeAccounts = array_filter($allLedgerAccounts, function($ledger) {
+        return $ledger['balance'] < 0;
+    });
+
+    //additions
+    $html .= "<tr class='table-content'>";
+    $html .= "<td colspan='2' class='content text-left'>Additions</td>";
+    $html .= "</tr>";
+    foreach ($positiveAccounts as $ledger) {
+        $html .= "<tr class='table-content'>";
+        $html .= "<td class='content'>".$ledger['name']."</td>";
+        $html .= "<td class='content-amount'>".$ledger['balance']."</td>";
+        $html .= "</tr>";
+    }
+
     //subtractions
+    $html .= "<tr class='table-content'>";
+    $html .= "<td colspan='2' class='content text-left'>Additions</td>";
+    $html .= "</tr>";
+    foreach ($negativeAccounts as $ledger) {
+        $html .= "<tr class='table-content'>";
+        $html .= "<td class='content'>".$ledger['name']."</td>";
+        $html .= "<td class='content-amount'>(".abs($ledger['balance']).")</td>";
+        $html .= "</tr>";
+    }
+
+    $html .= "</tbody>";
+
+    // total section
+    $total = getAccountBalance("Cash on Hand", $year, $month) + getAccountBalance("Cash on Bank", $year, $month) - getAccountTypeBalanceBasedOnCash(getAccountCode("Fixed assets"), $year, $month);
+    $html .= "<tfoot>";
+    $html .= "<tr>";
+    $html .= "<td>Net Total Cash from Operations</td>";
+    $html .= "<td>".$total."</td>";
+    $html .= "</tr>";
+    $html .= "</tfoot>";
+    $html .= "</table>";
 
     return $html;
 }   
