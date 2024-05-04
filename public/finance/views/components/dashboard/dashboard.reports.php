@@ -21,6 +21,7 @@
                 <option value="Income">Income Report</option>
                 <option value="OwnerEquity">Owners' Equity</option>
                 <option value="TrialBalance">Trial Balance</option>
+                <option value="CashFlow">Cash Flow</option>
             </select>
             <label for="monthYear" class="font-medium m-1">
                 Date
@@ -238,14 +239,12 @@
             <div>
 
                 <!-- Create a canvas element -->
-                <canvas id="salesGrowthChart"></canvas>
+                <canvas id="cashFlowChart"></canvas>
             </div>
         </div>
     </div>
 
     <script>
-        
-
         // Donut Chart Equity
         var equityDonut = document.getElementById('equityDonutChart').getContext('2d');
 
@@ -255,7 +254,7 @@
                 labels: [], // Initialize with empty array
                 datasets: [{
                     data: [], // Initialize with empty array
-                    backgroundColor: ['rgba(255, 165, 0, 0.5)', 'rgba(255, 165, 0, 0.7)', 'rgba(255, 165, 0, 0.9)'],
+                    backgroundColor: [],
                     borderWidth: 2
                 }]
             },
@@ -308,30 +307,42 @@
         function updateEquityChart(chart, owners) {
             let labels = [];
             let data = [];
-
+            let colors = [];
             for (let key in owners) {
                 if (owners[key].dividedShare !== 0) {
                     labels.push(owners[key].name);
                     data.push(owners[key].dividedShare);
+                    colors.push(generateRandomColor());
                 }
             }
             chart.data.labels = labels;
             chart.data.datasets[0].data = data;
+            chart.data.datasets[0].backgroundColor = colors;
             chart.update();
+        }
+
+        // generate random color
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
 
         // Initialize a new Chart.js instance
-        var ctx = document.getElementById('salesGrowthChart').getContext('2d');
+        var cashFlowCanvas = document.getElementById('cashFlowChart').getContext('2d');
 
         // Configure the chart
-        var myChart = new Chart(ctx, {
+        var cashFlowChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: [],
                 datasets: [{
-                    label: 'Sales Growth',
-                    data: [12, 19, 3, 5, 2, 3, 7], // Replace with your data
+                    label: 'Cash Flow',
+                    data: [], // Replace with your data
                     backgroundColor: 'rgba(255, 165, 0, 0.4)',
                     fill: true,
                     borderColor: 'rgba(255, 165, 0, 1)',
@@ -349,9 +360,44 @@
                         display: false
                     }
                 }
-
             }
         });
+        //ajax for equityChart
+        fetch('http://localhost/Finance/fin/getCashFlowReport', {
+            method: 'POST',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateCashFlowChart(cashFlowChart, data.balances);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        //function to update equity Chart
+        function updateCashFlowChart(chart, balances) {
+            let labels = [];
+            let data = [];
+            for (let key in balances) {
+                if (balances[key].amount !== 0) {
+                    labels.push(getMonthName(key));
+                    data.push(balances[key]);
+                }
+            }
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+
+        function getMonthName(monthNumber) {
+            monthNumber = monthNumber - 1; // 0-based index
+            var date = new Date(2000, monthNumber); // year doesn't matter
+            return date.toLocaleString('default', { month: 'long' });
+        }
     </script>
 
 </div>

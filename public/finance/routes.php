@@ -255,6 +255,23 @@ Router::post('/fin/updateRequestExpense', function(){
     header("Location: $rootFolder/fin/expense");
 });
 
+Router::post('/fin/getCashFlowReport', function(){
+    $return = [];
+    
+    $year = $_POST['year'];
+    $currentYear = date('Y');
+    $month = 12;
+    if($year >= $currentYear){
+        $year = $currentYear;
+        $month = date('m');
+    }
+    for($i = 1; $i <= $month; $i++){
+        $return[$i] = getAccountBalance("Cash on Hand",true,$year, $i) + getAccountBalance("Cash on Bank",true,$year,$i);
+    }
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
 
 
 

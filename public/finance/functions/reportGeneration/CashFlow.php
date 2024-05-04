@@ -231,7 +231,7 @@ function generateCashFlowOperations($year, $month){
     $html .= "</tbody>";
 
     // total section
-    $total = getAccountBalance("Cash on Hand", $year, $month) + getAccountBalance("Cash on Bank", $year, $month) - getAccountTypeBalanceBasedOnCash(getAccountCode("Fixed assets"), $year, $month);
+    $total = getAccountBalance("Cash on Hand",true, $year, $month) + getAccountBalance("Cash on Bank",true, $year, $month) - getAccountTypeBalanceBasedOnCash(getAccountCode("Fixed assets"), $year, $month);
     $html .= "<tfoot>";
     $html .= "<tr>";
     $html .= "<td>Net Total Cash from Operations</td>";
@@ -289,7 +289,7 @@ function generateEndingCashFlow($year, $month){
         throw new Exception("Year and month are wrong");
     }
     $monthName = getMonthName($month);
-    $total = getAccountBalance("Cash on Hand", $year, $month) + getAccountBalance("Cash on Bank", $year, $month);
+    $total = getAccountBalance("Cash on Hand",true, $year, $month) + getAccountBalance("Cash on Bank",true, $year, $month);
     $html = "<section>";
     $html .= "<table>";
     $html .= "<tfoot>";
