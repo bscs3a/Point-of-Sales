@@ -13,9 +13,14 @@ require_once "public/finance/functions/reportGeneration/TrialBalance.php";
     <title>Dashboard</title>
     <link href="./../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
+    <!-- for calendar, cant render if not here -->
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
     <!-- Start: Sidebar -->
     <?php include "components/sidebar.php" ?>
     <?php
@@ -122,7 +127,7 @@ require_once "public/finance/functions/reportGeneration/TrialBalance.php";
                         <div class="flex justify-between mb-5">
                             <div>
 
-                                <h1 class="font-sans font-bold  text-5xl">Hello, Sample User!</h1>
+                                <h1 class="font-sans font-bold  text-5xl">Hello, <?= $_SESSION['employee_name']; ?>!</h1>
                                 <p class=" w-3/4 text wrap mt-3 font-sans text-md text-gray-400 ">Welcome back! Ready to
                                     gear
                                     up for another productive day?</p>
@@ -217,6 +222,7 @@ require_once "public/finance/functions/reportGeneration/TrialBalance.php";
     <!-- End: Dashboard -->
     <script src="./../src/route.js"></script>
     <script  src="./../src/form.js"></script>
+    
 </body>
 
 </html>

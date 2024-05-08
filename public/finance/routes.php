@@ -258,8 +258,12 @@ Router::post('/fin/updateRequestExpense', function(){
 Router::post('/fin/getCashFlowReport', function(){
     $return = [];
     
-    $year = $_POST['year'];
     $currentYear = date('Y');
+    if (isset($_POST['year'])) {
+        $year = $_POST['year'];
+    } else {
+        $year = $currentYear;
+    }
     $month = 12;
     if($year >= $currentYear){
         $year = $currentYear;

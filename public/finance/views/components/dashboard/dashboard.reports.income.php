@@ -40,12 +40,12 @@ $prevNetSales = calculateNetSalesOrLoss($curr_year, $prev_month);
         <!-- <a href="#" class="text-sm font-sans font-semibold">
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
                 </a> -->
-        <!-- <div class="font-bold  border-none ">
-            <select name="yearly_income" id="" class="bg-white border-collapse text-xl">
-                <option value="year" selected>Year</option>
-                <option value="previous_year">Last Year</option>
-            </select>
-        </div> -->
+        <div class="font-bold  border-none ">
+            <input type="text" class = "yearpicker" name="" id="">
+        <script>
+            $(".yearpicker").yearpicker()
+        </script>
+        </div>
 
     </div>
     <?php 

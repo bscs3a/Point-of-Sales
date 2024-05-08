@@ -17,7 +17,7 @@
             <select name="file" id="report"
                 class="m-1 bg-gray-50 border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required>
-                <option selected>Choose a report</option>
+                <option selected value = "">Choose a report</option>
                 <option value="Income">Income Report</option>
                 <option value="OwnerEquity">Owners' Equity</option>
                 <option value="TrialBalance">Trial Balance</option>
@@ -26,8 +26,9 @@
             <label for="monthYear" class="font-medium m-1">
                 Date
             </label>
-            <input type="month" id="monthYear" name="monthYear"
-                class="m-1 border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" required>
+            <input type="month" id="monthYearIncome" name="monthYear"
+                class="m-1 border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" 
+                min="2020-01" max="2023-12" required>
 
             <br>
             <div class="m-1 gap-3 flex justify-end">
@@ -40,6 +41,26 @@
                 </button>
             </div>
         </form>
+        <script>
+            // Get the current date
+            now = new Date();
+
+            // Get the current year and month
+            let year = now.getFullYear();
+            let month = now.getMonth(); // getMonth() is zero-based
+
+            // Subtract one from the month to get the last month
+            if (month === 0) {
+                month = 12;
+                year--;
+            }
+
+            // Pad the month with a leading zero, if necessary
+            if (month < 10) month = '0' + month;
+
+            // Set the max attribute of the monthYear input field
+            document.getElementById('monthYear').max = year + '-' + month;
+        </script>
     </div>
 </div>
 
@@ -93,10 +114,7 @@
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
                 </a> -->
                 <div class="font-bold  border-none ">
-                    <select name="" id="" class="bg-white border-collapse text-xl">
-                        <option value="year" selected>Year</option>
-                        <option value="month">Month</option>
-                    </select>
+                    <input id='calendarBalance' />
                 </div>
 
             </div>
@@ -107,8 +125,21 @@
             </div>
         </div>
     </div>
+    <!-- for calendar js -->
+    <script>
+        // Enable the year and month picker
+        // Get the first and last day of the past month
+        let now = new Date();
+        let lastDayOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
+        let lastDay = lastDayOfLastMonth.toISOString().split('T')[0];
 
+        jSuites.calendar(document.getElementById('calendarBalance'), {
+            type: 'year-month-picker',
+            format: 'MMM-YYYY',
+            validRange: [ '2024-02-01', lastDay]
+        });
+    </script>
 
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -163,7 +194,6 @@
             return response.json();
         })
         .then(data => {
-            console.log(data);
             updateBalanceChart(myBalancePieChart, data);
         })
         .catch((error) => {
@@ -178,8 +208,6 @@
 
             chart.data.datasets[0].data = data;
             chart.update();
-
-            console.log(data);
         }
     </script>
 </div>
@@ -222,7 +250,7 @@
                 <canvas id="equityDonutChart"></canvas>
             </div>
         </div>
-        <div class="col-span-2 px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
+        <div class="col-span-2 px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg min-h-15">
             <div class="flex justify-between">
 
                 <h2 class=" font-sans  font-bold text-xl">Cash Flow</h2>
@@ -237,7 +265,6 @@
                 </div>
             </div>
             <div>
-
                 <!-- Create a canvas element -->
                 <canvas id="cashFlowChart"></canvas>
             </div>
@@ -322,7 +349,7 @@
         }
 
         // generate random color
-        function getRandomColor() {
+        function generateRandomColor () {
             var letters = '0123456789ABCDEF';
             var color = '#';
             for (var i = 0; i < 6; i++) {
@@ -336,7 +363,7 @@
         var cashFlowCanvas = document.getElementById('cashFlowChart').getContext('2d');
 
         // Configure the chart
-        var cashFlowChart = new Chart(ctx, {
+        var cashFlowChart = new Chart(cashFlowCanvas, {
             type: 'line',
             data: {
                 labels: [],
@@ -373,7 +400,8 @@
             return response.json();
         })
         .then(data => {
-            updateCashFlowChart(cashFlowChart, data.balances);
+            console.log("what" . data);
+            updateCashFlowChart(cashFlowChart, data);
         })
         .catch((error) => {
             console.error('Error:', error);
