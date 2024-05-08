@@ -9,7 +9,7 @@ function getAccountBalanceBasedOnCash($ledgerNo, $year, $month){
     if(!$cashInBank || !$cashOnHand || !$ledgerNo){
         throw new Exception("Ledgers accounts not found");
     }
-    if(is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12){
+    if(!is_numeric($year) && !is_numeric($month) && $month < 1 && $month > 12){
         throw new Exception("Year and month are wrong");
     }
 
@@ -30,7 +30,7 @@ function getAccountBalanceBasedOnCash($ledgerNo, $year, $month){
         END)) 
     as balance
     FROM ledgertransaction
-    WHERE YEAR(date) = :year AND MONTH(date) = :month AND (ledgerNo = :ledgerNo OR ledgerNo_dr = :ledgerNo)";
+    WHERE YEAR(datetime) = :year AND MONTH(datetime) = :month AND (ledgerNo = :ledgerNo OR ledgerNo_dr = :ledgerNo)";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([
@@ -52,7 +52,7 @@ function getAccountTypeBalanceBasedOnCash($accounttype, $year, $month){
     if(!$cashInBank || !$cashOnHand || !$accounttype){
         throw new Exception("Ledgers accounts not found");
     }
-    if(is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12){
+    if(!is_numeric($year) && !is_numeric($month) && $month < 1 && $month > 12){
         throw new Exception("Year and month are wrong");
     }
 
@@ -62,20 +62,20 @@ function getAccountTypeBalanceBasedOnCash($accounttype, $year, $month){
     $sql = "SELECT 
     (SUM(
         CASE 
-            WHEN LedgerNo_Dr = :cashOnHand OR LedgerNo_Dr = :cashInBank THEN amount 
+            WHEN lt.LedgerNo_Dr = :cashOnHand OR lt.LedgerNo_Dr = :cashInBank THEN amount 
             ELSE 0 
         END) 
     -
     SUM(
         CASE 
-            WHEN LedgerNo = :cashOnHand OR LedgerNo = :cashInBank THEN amount 
+            WHEN lt.LedgerNo = :cashOnHand OR lt.LedgerNo = :cashInBank THEN amount 
             ELSE 0 
         END)) 
     as balance
     FROM ledgertransaction as lt
     JOIN ledger as cr ON lt.LedgerNo = cr.LedgerNo
-    JOIN ledger as dr ON lt.LedgerNo_Dr = dr.LedgerNo_Dr
-    WHERE YEAR(lt.date) = :year AND MONTH(lt.date) = :month AND (dr.accounttype = :accounttype OR cr.accounttype = :accounttype)";
+    JOIN ledger as dr ON lt.LedgerNo_Dr = dr.LedgerNo
+    WHERE YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month AND (dr.accounttype = :accounttype OR cr.accounttype = :accounttype)";
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         'cashOnHand' => $cashOnHand,
@@ -95,7 +95,7 @@ function getGroupTypeBalanceBasedOnCash($grouptype, $year, $month){
     if(!$cashInBank || !$cashOnHand || !$grouptype){
         throw new Exception("Ledgers accounts not found");
     }
-    if(is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12){
+    if(!is_numeric($year) && !is_numeric($month) && $month < 1 && $month > 12){
         throw new Exception("Year and month are wrong");
     }
 
@@ -105,22 +105,22 @@ function getGroupTypeBalanceBasedOnCash($grouptype, $year, $month){
     $sql = "SELECT 
     (SUM(
         CASE 
-            WHEN LedgerNo_Dr = :cashOnHand OR LedgerNo_Dr = :cashInBank THEN amount 
+            WHEN lt.LedgerNo_Dr = :cashOnHand OR lt.LedgerNo_Dr = :cashInBank THEN amount 
             ELSE 0 
         END) 
     -
     SUM(
         CASE 
-            WHEN LedgerNo = :cashOnHand OR LedgerNo = :cashInBank THEN amount 
+            WHEN lt.LedgerNo = :cashOnHand OR lt.LedgerNo = :cashInBank THEN amount 
             ELSE 0 
         END)) 
     as balance
     FROM ledgertransaction as lt
     JOIN ledger as cr ON lt.LedgerNo = cr.LedgerNo
-    JOIN ledger as dr ON lt.LedgerNo_Dr = dr.LedgerNo_Dr
-    JOIN accounttype as cr_at ON cr.accounttype = at.accounttype
-    JOIN accounttype as dr_at ON dr.accounttype = at.accounttype
-    WHERE YEAR(lt.date) = :year AND MONTH(lt.date) = :month AND (cr_at.grouptype = :grouptype OR dr_at.grouptype = :grouptype)";
+    JOIN ledger as dr ON lt.LedgerNo_Dr = dr.LedgerNo
+    JOIN accounttype as cr_at ON cr.accounttype = cr_at.accounttype
+    JOIN accounttype as dr_at ON dr.accounttype = dr_at.accounttype
+    WHERE YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month AND (cr_at.grouptype = :grouptype OR dr_at.grouptype = :grouptype)";
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         'cashOnHand' => $cashOnHand,
@@ -137,8 +137,8 @@ function getGroupTypeBalanceBasedOnCash($grouptype, $year, $month){
 // cash from operations, cash flow from investing
 function generateCashFlowReport($year, $month){
     
-    $assets = getGroupCode("Assets");
-    $liabilitiesAndOE = getGroupCode("Liability and Owner's Equity");
+    $assets = getGroupCode("Asset");
+    $liabilitiesAndOE = getGroupCode("liabilities and owner's equity");
     $income = getGroupCode("Income");
     $expense = getGroupCode("Expenses");
 
@@ -189,14 +189,30 @@ function generateCashFlowOperations($year, $month){
 
     //get all accounts balance except fixed assets
     $allLedgerAccounts = getAllLedgerAccounts();
-    $fixedAssetsAccounts = getAllLedgerAccounts(getAccountCode("Fixed assets"));
-    $fixedAssetsAccounts = array_column($fixedAssetsAccounts, 'ledgerno');
-    $allLedgerAccounts = array_filter($allLedgerAccounts, function($ledger) use ($fixedAssetsAccounts){
-        return !in_array($ledger['ledgerno'], $fixedAssetsAccounts);
+    $notIncludedAccounts = getAllLedgerAccounts(getAccountCode("Fixed assets"));
+
+    $incomeAccountsType = getAllAccountTypes("Income");
+    foreach ($incomeAccountsType as $account) {
+        $notIncludedAccounts = array_merge(getAllLedgerAccounts($account['AccountType']), $notIncludedAccounts);
+    }
+    $expenseAccountsType = getAllAccountTypes("Expenses");
+    foreach ($expenseAccountsType as $account) {
+        $notIncludedAccounts = array_merge(getAllLedgerAccounts($account['AccountType']), $notIncludedAccounts);
+    }
+
+    $notIncludedAccounts = array_column($notIncludedAccounts, 'ledgerno');
+
+    $cashOnHand = getLedgerCode("Cash on hand");
+    $cashOnBank = getLedgerCode("Cash on bank");
+
+    array_push($notIncludedAccounts, $cashOnHand, $cashOnBank);
+
+    $allLedgerAccounts = array_filter($allLedgerAccounts, function($ledger) use ($notIncludedAccounts){
+        return !in_array($ledger['ledgerno'], $notIncludedAccounts);
     });
-    foreach ($allLedgerAccounts as $ledger) {
+    foreach ($allLedgerAccounts as $key => $ledger) {
         $balance = getAccountBalanceBasedOnCash($ledger['ledgerno'], $year, $month);
-        $ledger["balance"] = $balance;
+        $allLedgerAccounts[$key]["balance"] = $balance;
     }
     $positiveAccounts = array_filter($allLedgerAccounts, function($ledger) {
         return $ledger['balance'] > 0;
@@ -219,7 +235,7 @@ function generateCashFlowOperations($year, $month){
 
     //subtractions
     $html .= "<tr class='table-content'>";
-    $html .= "<td colspan='2' class='content text-left'>Additions</td>";
+    $html .= "<td colspan='2' class='content text-left'>Subtractions</td>";
     $html .= "</tr>";
     foreach ($negativeAccounts as $ledger) {
         $html .= "<tr class='table-content'>";
@@ -231,7 +247,7 @@ function generateCashFlowOperations($year, $month){
     $html .= "</tbody>";
 
     // total section
-    $total = getAccountBalance("Cash on Hand",true, $year, $month) + getAccountBalance("Cash on Bank",true, $year, $month) - getAccountTypeBalanceBasedOnCash(getAccountCode("Fixed assets"), $year, $month);
+    $total = 0 + getAccountBalance("Cash on Hand",true, $year, $month) + getAccountBalance("Cash on Bank",true, $year, $month) - getAccountTypeBalanceBasedOnCash(getAccountCode("Fixed assets"), $year, $month);
     $html .= "<tfoot>";
     $html .= "<tr>";
     $html .= "<td>Net Total Cash from Operations</td>";
@@ -270,7 +286,7 @@ function generateCashFlowInvesting($year, $month){
     $html .= "</tbody>";
 
     // total section
-    $total = getAccountTypeBalanceBasedOnCash($fixedAssetsCode, $year, $month);
+    $total = 0 + getAccountTypeBalanceBasedOnCash($fixedAssetsCode, $year, $month);
     $html .= "<tfoot>";
     $html .= "<tr>";
     $html .= "<td>Net Total Cash from Investing</td>";
@@ -285,7 +301,7 @@ function generateCashFlowInvesting($year, $month){
 
 //generate end result
 function generateEndingCashFlow($year, $month){
-    if(is_numeric($year) && is_numeric($month) && $month >= 1 && $month <= 12){
+    if(!is_numeric($year) && !is_numeric($month) && $month < 1 && $month > 12){
         throw new Exception("Year and month are wrong");
     }
     $monthName = getMonthName($month);

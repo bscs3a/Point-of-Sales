@@ -59,7 +59,7 @@
             if (month < 10) month = '0' + month;
 
             // Set the max attribute of the monthYear input field
-            document.getElementById('monthYear').max = year + '-' + month;
+            document.getElementById('monthYearIncome').max = year + '-' + month;
         </script>
     </div>
 </div>

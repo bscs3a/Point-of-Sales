@@ -172,13 +172,7 @@
             <div>
                 <h1 class="font-sans text-xl font-bold">
                     General Ledger
-                    <i class="ri-arrow-down-wide-line mx-3"></i>
                 </h1>
-            </div>
-            <div>
-                <a href="#" class="text-sm font-sans font-semibold">
-                    <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a>
             </div>
         </div>
         <!-- End: Header -->
