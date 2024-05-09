@@ -186,12 +186,12 @@
                     {
                         // Prepare and execute SQL query to fetch data
                         $stmt = $conn->prepare("
-        SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity
-        FROM batch_orders bo
-        JOIN order_details od ON bo.Batch_ID = od.Batch_ID
-        JOIN products p ON od.Product_ID = p.ProductID
-        WHERE od.Batch_ID = :batchId
-    ");
+                            SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity
+                            FROM batch_orders bo
+                            JOIN order_details od ON bo.Batch_ID = od.Batch_ID
+                            JOIN products p ON od.Product_ID = p.ProductID
+                            WHERE od.Batch_ID = :batchId
+                        ");
                         $stmt->execute(['batchId' => $batchId]);
 
                         // Fetch data
