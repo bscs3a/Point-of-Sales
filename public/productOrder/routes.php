@@ -387,7 +387,7 @@ function getNextBatchID($conn)
 }
 
 Router::post('/placeorder/supplier/', function () {
-    if (!isset ($_POST['products']) || !is_array($_POST['products'])) {
+    if (!isset($_POST['products']) || !is_array($_POST['products'])) {
         echo "No products selected for ordering.";
         return;
     }
@@ -414,13 +414,29 @@ Router::post('/placeorder/supplier/', function () {
         $totalQuantity = 0;
         $totalAmount = 0;
 
-        // Loop through each selected product
+        // Flag to track availability status of products
+        $allProductsAvailable = true;
+
         foreach ($_POST['products'] as $productID) {
             $quantityField = 'quantity_' . $productID;
-            $quantity = isset ($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
+            $quantity = isset($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
 
             // Ensure quantity is greater than 0 before processing
             if ($quantity > 0) {
+                // Check product availability
+                $availabilityQuery = "SELECT Availability FROM products WHERE ProductID = :productID";
+                $availabilityStmt = $conn->prepare($availabilityQuery);
+                $availabilityStmt->bindParam(':productID', $productID, PDO::PARAM_INT);
+                $availabilityStmt->execute();
+                $availability = $availabilityStmt->fetchColumn();
+
+                // If product is not available, set flag to false and halt order processing
+                if ($availability === 'Not Available') {
+                    $allProductsAvailable = false;
+                    echo "Product with ID $productID is not available and cannot be ordered.<br>";
+                    break; // Stop processing further products
+                }
+
                 // Bind parameters for order details insertion
                 $orderStmt->bindParam(':supplierID', $supplierID);
                 $orderStmt->bindParam(':productID', $productID);
@@ -465,27 +481,32 @@ Router::post('/placeorder/supplier/', function () {
             }
         }
 
-        // If total quantity is greater than 0, proceed with batch order insertion
-        if ($totalQuantity > 0) {
-            // Bind parameters for batch order insertion
-            $batchOrderStmt->bindParam(':supplierID', $supplierID);
-            $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
-            $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
-
-            // Execute the statement for batch order insertion
-            $batchOrderStmt->execute();
-
-            // Commit the transaction
-            $conn->commit();
-
-            // Redirect the user after successful order placement
-            $rootFolder = dirname($_SERVER['PHP_SELF']);
-            header("Location: $rootFolder/po/orderDetail");
-            exit (); // Ensure that script execution stops after redirection
+        // If any product is not available, halt the order processing
+        if (!$allProductsAvailable) {
+            echo "Order cannot be processed because one or more products are not available.<br>";
         } else {
-            // Rollback the transaction if no products were ordered
-            $conn->rollBack();
-            echo "No products were ordered.";
+            // If total quantity is greater than 0, proceed with batch order insertion
+            if ($totalQuantity > 0) {
+                // Bind parameters for batch order insertion
+                $batchOrderStmt->bindParam(':supplierID', $supplierID);
+                $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
+                $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
+
+                // Execute the statement for batch order insertion
+                $batchOrderStmt->execute();
+
+                // Commit the transaction
+                $conn->commit();
+
+                // Redirect the user after successful order placement
+                $rootFolder = dirname($_SERVER['PHP_SELF']);
+                header("Location: $rootFolder/po/orderDetail");
+                exit (); // Ensure that script execution stops after redirection
+            } else {
+                // Rollback the transaction if no products were ordered
+                $conn->rollBack();
+                echo "No products were ordered.";
+            }
         }
     } catch (PDOException $e) {
         // Rollback the transaction on error
@@ -496,6 +517,7 @@ Router::post('/placeorder/supplier/', function () {
         $conn = null;
     }
 });
+
 
 
 //function to delete view details
@@ -809,6 +831,7 @@ Router::post('/edit/editsupplier', function () {
             $priceKey = 'product_price_' . $productID;
             $retailpriceKey = 'retail_price_' . $productID;
             $descriptionKey = 'product_description_' . $productID;
+            $availabilityKey = 'availability_' . $productID;
 
             // Update product information
             $productName = $_POST[$key];
@@ -816,13 +839,15 @@ Router::post('/edit/editsupplier', function () {
             $price = $_POST[$priceKey];
             $retailprice = $_POST[$retailpriceKey];
             $description = $_POST[$descriptionKey];
+            $availability = $_POST[$availabilityKey];
 
-            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Retail_Price =:retailprice, Description = :description WHERE ProductID = :productID");
+            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Retail_Price =:retailprice, Description = :description, Availability = :availability WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
             $stmt_product->bindParam(':category', $category);
             $stmt_product->bindParam(':price', $price);
             $stmt_product->bindParam(':retailprice', $retailprice);
             $stmt_product->bindParam(':description', $description);
+            $stmt_product->bindParam(':availability', $availability);
             $stmt_product->bindParam(':productID', $productID);
             $stmt_product->execute();
         }
