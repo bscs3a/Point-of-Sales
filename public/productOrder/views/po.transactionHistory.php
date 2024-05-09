@@ -30,12 +30,12 @@
           <label class="text-black font-medium">Transaction History / View</label>
         </div>
 
-        <!-- dropdown -->
-        <div x-data="{ dropdownOpen: false }" class="relative my-32">
+         <!-- dropdown -->
+         <div x-data="{ dropdownOpen: false }" class="relative my-32">
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -49,6 +49,7 @@
             </div>
           </form>
         </div>
+
       </div>
 
       <script>
@@ -240,6 +241,8 @@
 
           </table>
         </div>
+  <script src="./../src/route.js"></script>
+  <script src="./../src/form.js"></script>
 </body>
 
 </html>
