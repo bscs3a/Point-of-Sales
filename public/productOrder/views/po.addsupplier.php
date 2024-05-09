@@ -144,6 +144,7 @@
                     <th class="px-4 py-2 font-semibold">Product Price</th>
                     <th class="px-4 py-2 font-semibold">Retail Price</th>
                     <!-- <th class="px-4 py-2 font-semibold">Quantity</th> -->
+                    <th class="px-4 py-2 font-semibold">Availability</th>
                     <th class="px-4 py-2 font-semibold">Description</th>
                   </tr>
                 </thead>
@@ -166,6 +167,12 @@
                     </td>
                     <td><input type="number" name="retailprice1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td>
+                    <select name="avail1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description1"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   </tr>
@@ -186,6 +193,12 @@
                     </td>
                     <td><input type="number" name="retailprice2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td>
+                    <select name="avail2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description2"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   </tr>
@@ -207,6 +220,12 @@
                     </td>
                     <td><input type="number" name="retailprice3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td>
+                    <select name="avail3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description3"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   </tr>
@@ -227,6 +246,12 @@
                     </td>
                     <td><input type="number" name="retailprice4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td>
+                    <select name="avail4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description4"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   </tr>
@@ -247,6 +272,12 @@
                     </td>
                     <td><input type="number" name="retailprice5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td>
+                    <select name="avail5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description5"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   </tr>

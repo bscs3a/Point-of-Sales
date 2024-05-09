@@ -203,6 +203,7 @@ Router::post('/insert/addsupplier/', function () {
             $categoryName = $_POST["category$i"];
             $price = $_POST["price$i"];
             $retailprice = $_POST["retailprice$i"];
+            $availability = $_POST["avail$i"];
             $description = $_POST["description$i"];
 
             // Handle file upload for each row
@@ -216,8 +217,8 @@ Router::post('/insert/addsupplier/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Category, ProductImage, Supplier) 
-                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :retailprice, :categoryName, :productImage, :suppliername)";
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Availability, Category, ProductImage, Supplier) 
+                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, :suppliername)";
                     $productStmt = $conn->prepare($productSql);
 
                     // Retrieve the category_id based on the category name
@@ -240,6 +241,7 @@ Router::post('/insert/addsupplier/', function () {
                     $productStmt->bindParam(':description', $description);
                     $productStmt->bindParam(':price', $price);
                     $productStmt->bindParam(':retailprice', $retailprice);
+                    $productStmt->bindParam(':availability', $availability);
                     $productStmt->bindParam(':categoryName', $categoryName);
                     $productStmt->bindParam(':productImage', $uploadPath);
                     $productStmt->bindParam(':suppliername', $suppliername);
