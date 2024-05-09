@@ -143,7 +143,8 @@
                                 <th class="px-4 py-2 font-semibold">Product Image</th>
                                 <th class="px-4 py-2 font-semibold">Product Name</th>
                                 <th class="px-4 py-2 font-semibold">Category</th>
-                                <th class="px-4 py-2 font-semibold">Price</th>
+                                <th class="px-4 py-2 font-semibold">Product Price</th>
+                                <th class="px-4 py-2 font-semibold">Retail Price</th>
                                 <th class="px-4 py-2 font-semibold">Description</th>
                                 <th class="px-4 py-2 font-semibold"></th>
                               </tr>
@@ -194,6 +195,11 @@
                             <td class="px-4 py-4">
                                 <input type="text" name="product_price_<?php echo $product['ProductID']; ?>"
                                     value="<?php echo $product['Price']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
+                            </td>
+                            <td class="px-4 py-4">
+                                <input type="text" name="retail_price_<?php echo $product['ProductID']; ?>"
+                                    value="<?php echo $product['Retail_Price']; ?>"
                                     class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                             </td>
                             <td class="px-4 py-4">

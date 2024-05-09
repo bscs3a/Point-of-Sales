@@ -202,6 +202,7 @@ Router::post('/insert/addsupplier/', function () {
             $productName = $_POST["productName$i"];
             $categoryName = $_POST["category$i"];
             $price = $_POST["price$i"];
+            $retailprice = $_POST["retailprice$i"];
             $description = $_POST["description$i"];
 
             // Handle file upload for each row
@@ -215,8 +216,8 @@ Router::post('/insert/addsupplier/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
-                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :categoryName, :productImage, :suppliername)";
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Category, ProductImage, Supplier) 
+                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :retailprice, :categoryName, :productImage, :suppliername)";
                     $productStmt = $conn->prepare($productSql);
 
                     // Retrieve the category_id based on the category name
@@ -238,6 +239,7 @@ Router::post('/insert/addsupplier/', function () {
                     $productStmt->bindParam(':productName', $productName);
                     $productStmt->bindParam(':description', $description);
                     $productStmt->bindParam(':price', $price);
+                    $productStmt->bindParam(':retailprice', $retailprice);
                     $productStmt->bindParam(':categoryName', $categoryName);
                     $productStmt->bindParam(':productImage', $uploadPath);
                     $productStmt->bindParam(':suppliername', $suppliername);
@@ -296,6 +298,8 @@ Router::post('/po/addbulk/', function () {
             $productName = $_POST["productName$i"];
             $categoryName = $_POST["category$i"];
             $price = $_POST["price$i"];
+            $retailprice = $_POST["retailprice$i"];
+            $availability = $_POST["avail$i"];
             $description = $_POST["description$i"];
 
             // Handle file upload for each row
@@ -309,8 +313,8 @@ Router::post('/po/addbulk/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
-                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :categoryName, :productImage, s.Supplier_Name 
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Availability, Category, ProductImage, Supplier) 
+                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, s.Supplier_Name 
                                 FROM suppliers s 
                                 INNER JOIN categories c ON c.category_name = :categoryName 
                                 WHERE s.Supplier_ID = :supplierID";
@@ -322,6 +326,8 @@ Router::post('/po/addbulk/', function () {
                     $productStmt->bindParam(':productName', $productName);
                     $productStmt->bindParam(':description', $description);
                     $productStmt->bindParam(':price', $price);
+                    $productStmt->bindParam(':retailprice', $retailprice);
+                    $productStmt->bindParam(':availability', $availability);
                     $productStmt->bindParam(':productImage', $uploadPath);
 
                     // Execute the product SQL statement
@@ -801,18 +807,21 @@ Router::post('/edit/editsupplier', function () {
             $productID = substr($key, strlen('product_name_'));
             $categoryKey = 'product_category_' . $productID;
             $priceKey = 'product_price_' . $productID;
+            $retailpriceKey = 'retail_price_' . $productID;
             $descriptionKey = 'product_description_' . $productID;
 
             // Update product information
             $productName = $_POST[$key];
             $category = $_POST[$categoryKey];
             $price = $_POST[$priceKey];
+            $retailprice = $_POST[$retailpriceKey];
             $description = $_POST[$descriptionKey];
 
-            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Description = :description WHERE ProductID = :productID");
+            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Retail_Price =:retailprice, Description = :description WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
             $stmt_product->bindParam(':category', $category);
             $stmt_product->bindParam(':price', $price);
+            $stmt_product->bindParam(':retailprice', $retailprice);
             $stmt_product->bindParam(':description', $description);
             $stmt_product->bindParam(':productID', $productID);
             $stmt_product->execute();
