@@ -248,7 +248,8 @@ function insertLedgerXact($debitLedger, $creditLedger, $amount, $details = null,
 
     try {
         if ($stmt->execute()) {
-            return true;
+            $lastInsertedId = $conn->lastInsertId();
+            return $lastInsertedId;
         } else {
             throw new Exception("Transaction failed.");
         }
