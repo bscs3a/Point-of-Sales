@@ -4,3 +4,4 @@ Todo:
 3. audit log
 4. pondo/request
 5. special insert sa ibang group
+6. Check purchases in income report
