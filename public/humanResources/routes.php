@@ -862,3 +862,77 @@ Router::post('/delete', function () {
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/hr/employees");
 });
+
+
+Router::post('/login', function(){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $stmt = $conn->prepare("SELECT * FROM account_info WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+        // Password is correct
+        $_SESSION['user']['account_id'] = $user['id'];
+        $_SESSION['user']['username'] = $user['username'];
+        $_SESSION['user']['role'] = $user['role'];
+        $_SESSION['user']['employee_id'] = $user['employees_id'];
+        //insert into session
+        $sql = "INSERT INTO session (account_info_id, logout_time) VALUES (:id, NULL)";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $user['id']);
+        $stmt->execute();
+
+        $_SESSION['user']['session_id'] = $conn->lastInsertId();
+
+        //redirects to the right page
+        if ($user['role'] == 'Product Order') {
+            header("Location: /hr/employees");
+            exit();
+        } 
+        if ($user['role'] == 'Human Resources') {
+            header("Location: /hr/employees");
+            exit();
+        } 
+        if ($user['role'] == 'Point of Sales') {
+            header("Location: /hr/employees");
+            exit();
+        } 
+        if ($user['role'] == 'Inventory') {
+            header("Location: /hr/employees");
+            exit();
+        } 
+        if ($user['role'] == 'Finance') {
+            header("Location: /hr/employees");
+            exit();
+        } 
+        if ($user['role'] == 'Delivery') {
+            header("Location: /hr/employees");
+            exit();
+        } 
+    } else {
+        header("Location: /?error=1");
+    }
+});
+
+Router::post('/logout', function(){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $sql = "UPDATE session SET logout_time = NOW() WHERE id = :id";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $_SESSION['user']['session_id']);
+    $stmt->execute();
+
+    session_destroy();
+    header("Location: /");
+    exit();
+});
