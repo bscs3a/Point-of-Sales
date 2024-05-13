@@ -894,7 +894,7 @@ Router::post('/login', function(){
 
         //redirects to the right page
         if ($user['role'] == 'Product Order') {
-            header("Location: /hr/employees");
+            header("Location: /po/dashboard");
             exit();
         } 
         if ($user['role'] == 'Human Resources') {
@@ -902,23 +902,24 @@ Router::post('/login', function(){
             exit();
         } 
         if ($user['role'] == 'Point of Sales') {
-            header("Location: /hr/employees");
+            header("Location: /sls/Dashboard");
             exit();
         } 
         if ($user['role'] == 'Inventory') {
-            header("Location: /hr/employees");
+            header("Location: /inv/main");
             exit();
         } 
         if ($user['role'] == 'Finance') {
-            header("Location: /hr/employees");
+            header("Location: /fin/dashboard");
             exit();
         } 
         if ($user['role'] == 'Delivery') {
-            header("Location: /hr/employees");
+            header("Location: /dlv/dashboard");
             exit();
         } 
     } else {
         header("Location: /?error=1");
+        exit();
     }
 });
 
