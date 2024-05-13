@@ -2,11 +2,12 @@
 
 require_once 'src/dbconn.php';
 
-function passwordReset($account_id){
+function passwordReset($account_id, $password = null){
     $db = Database::getInstance();
     $conn = $db->connect();
-
-    $password = generatePassowrd();
+    if($password === null){
+        $password = generatePassowrd();
+    }
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $conn->prepare("UPDATE account_info SET password = :password WHERE account_id = :id");
