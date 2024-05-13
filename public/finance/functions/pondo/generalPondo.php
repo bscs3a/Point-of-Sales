@@ -101,52 +101,50 @@
     }
 
     // pass savings if you want to return all departments
-    function getAllTransactions($department, $year = null, $month = null){
+    function getAllTransactions($department, $page = 1, $itemsPerPage = 10, $year = null, $month = null){
         if (!acceptableDepartment($department)){
             throw new Exception("Department does not exist");
         }
-
+    
         if(($year === null) XOR ($month === null)){
             throw new Exception("Please provide both year and month");
         }
-
+    
         $db = Database::getInstance();
         $conn = $db->connect();
-        
+    
+        // Calculate the offset
+        $offset = ($page - 1) * $itemsPerPage;
+    
         if ($department == 'Savings') {
+            $sql = "SELECT ft.id as id, l.name as details, lt.amount as amount, e.department as department, lt.datetime as datetime FROM funds_transaction as ft
+            JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
+            JOIN employees as e ON ft.employee_id = e.id
+            JOIN ledger as l ON lt.LedgerNo_Dr = l.LedgerNo";
             if (is_numeric($year) && is_numeric($month) && $month > 0 && $month < 13) {
-                $sql = "SELECT * FROM funds_transaction as ft
-                JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
-                JOIN employees as e ON ft.employee_id = e.id
-                WHERE YEAR(lt.datetime) = ? AND MONTH(lt.datetime) = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute([$year, $month]);
+                $sql .= " WHERE YEAR(lt.datetime) = ? AND MONTH(lt.datetime) = ?";
+                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
+                $stmt->execute([$year, $month, $itemsPerPage, $offset]);
             } else {
-                $sql = "SELECT * FROM funds_transaction as ft
-                JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
-                JOIN employees as e ON ft.employee_id = e.id";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
+                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
+                $stmt->execute([$itemsPerPage, $offset]);
             }
         } else {
+            $sql = "SELECT ft.id as id, l.name as details, lt.amount as amount, e.department as department, lt.datetime as datetime FROM funds_transaction as ft
+            JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
+            JOIN employees as e ON ft.employee_id = e.id
+            JOIN ledger as l ON lt.LedgerNo_Dr = l.LedgerNo WHERE e.department = ?";
             if (is_numeric($year) && is_numeric($month) && $month > 0 && $month < 13) {
-                $sql = "SELECT * FROM funds_transaction as ft
-                JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
-                JOIN employees as e ON ft.employee_id = e.id
-                WHERE e.department = ? AND YEAR(lt.datetime) = ? AND MONTH(lt.datetime) = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute([$department, $year, $month]);
+                $sql .= " AND YEAR(lt.datetime) = ? AND MONTH(lt.datetime) = ?";
+                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
+                $stmt->execute([$department, $year, $month, $itemsPerPage, $offset]);
             } else {
-                $sql = "SELECT * FROM funds_transaction as ft
-                JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
-                JOIN employees as e ON ft.employee_id = e.id
-                WHERE e.department = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute([$department]);
+                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
+                $stmt->execute([$department, $itemsPerPage, $offset]);
             }
         }
-        
-        $result = $stmt->fetchAll();
-        return $result;
+    
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
     }
 ?>
