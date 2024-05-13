@@ -120,7 +120,8 @@ $department = $_SESSION['user']['role'];
             <!-- Next & Previous -->
             <?php if ($page > 1): ?>
                 <li>
-                    <a route="/fin/ledger/page=<?= $page - 1 ?>"
+                    <!-- CHANGE THE ROUTE -->
+                    <a route="/fin/funds/Finance=<?= $page - 1 ?>"
                         class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                         <span class="sr-only">Prev Page</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -139,7 +140,7 @@ $department = $_SESSION['user']['role'];
                 for ($i = $start; $i <= $end; $i++): 
             ?>
                 <li>
-                    <a route="/fin/ledger/page=<?= $i ?>"
+                    <a route="/fin/funds/Finance=<?= $i ?>"
                         class="block size-8 rounded border <?= $i == $page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-100 bg-white text-gray-900' ?> text-center leading-8">
                         <?= $i ?>
                     </a>
@@ -148,7 +149,7 @@ $department = $_SESSION['user']['role'];
 
             <?php if ($page < $totalPages): ?>
                 <li>
-                    <a route="/fin/ledger/page=<?= $page + 1 ?>"
+                    <a route="/fin/funds/Finance=<?= $page + 1 ?>"
                         class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                         <span class="sr-only">Next Page</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -161,6 +162,7 @@ $department = $_SESSION['user']['role'];
             <?php endif; ?>
         </ol>
     </main>
+
 
     <script  src="./../src/route.js"></script>
     <script  src="./../src/form.js"></script>
