@@ -70,7 +70,8 @@ function creationOfAccount($employee_id){
     }catch(PDOException $e){
         echo $e->getMessage();
     }
-    return $conn->lastInsertId();
+    
+    return [$username, $password];
 }
 
 function generatePassowrd(){
