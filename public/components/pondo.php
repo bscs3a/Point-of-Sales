@@ -2,7 +2,18 @@
 <?php require_once __DIR__ . "/finance/functions/pondo/insertPondo.php"?>
 
 <?php 
+$db = Database::getInstance();
+$conn = $db->connect();
+$stmt = $conn->prepare("SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id WHERE department = :department");
+$stmt->execute();
+$totalRecords = $stmt->fetchColumn();
+
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+$displayPerPage = 10;
+$totalPages = ceil( $totalRecords / $displayPerPage) ;
+
 $department = $_SESSION['user']['role'];
+$remainingPondo = getRemainingPondo($department)
 ?>
 
 <!DOCTYPE html>
@@ -49,71 +60,197 @@ $department = $_SESSION['user']['role'];
             <!-- End: Profile -->
 
         </div>
-
+        
         <!-- End: Header -->
-            <div class=" mb-6">
-                <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
-                        <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Given Allowance</h1>
-                            <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department);?></p>
-                        </div>
+
+         <div class="w-full px-6 py-3 bg-white">
+
+            <div class="justify-between items-start">
+                <!-- Button -->
+                <div class="flex justify-end">
+                    <div class="items-start mb-2">
+                        <button id="openModal"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
+                            <i class="ri-add-box-line"></i>
+                            New Transactions
+                        </button>
                     </div>
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
-                        <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Total Expenses</h1>
-                            <p class="mt-5 text-4xl font-medium"><?php echo getExpensesPondo($department);?></p>
+                </div>
+
+
+                <!-- Modal -->
+                <div id="myModal"
+                    class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                    <div class="bg-white rounded shadow-lg w-1/3">
+                        <div class="border-b pl-3 pr-3 pt-3 flex">
+                            <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
+                            <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
+                                <i class="ri-close-line"></i>
+                            </button> -->
                         </div>
-                    </div>
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
-                        <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Remaining Funds</h1>
-                            <p class="mt-5 text-4xl font-medium"><?php echo getRemainingPondo($department);?></p>
+                        <!-- form -->
+                        <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
+                        <div class="p-5">
+                            <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
+                            <form action="/pondo/transaction" method="POST">
+                                <div class="mb-4 relative">
+                                    <label for="date" class="block text-xs font-medium text-gray-900"> Date </label>
+                                    <input type="text" id="date" name="date" required readonly
+                                        class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md  sm:text-sm" />
+                                    <i
+                                        class="ri-calendar-fill absolute left-2 top-6 transform -translate-y-0.5 h-6 w-6 text-gray-400"></i>
+                                </div>
+
+                                <script>
+                                    var today = new Date();
+                                    var dd = String(today.getDate()).padStart(2, '0');
+                                    var monthNames = ["January", "February", "March", "April", "May", "June",
+                                        "July", "August", "September", "October", "November", "December"];
+                                    var mm = monthNames[today.getMonth()]; //January is 0!
+                                    var yyyy = today.getFullYear();
+
+                                    today = mm + ' ' + dd + ', ' + yyyy;
+                                    document.getElementById('date').value = today;
+                                </script>
+                                <div class="mb-4 relative">
+                                    <label for="employee_id" class="block text-xs font-medium text-gray-900">
+                                        EmployeeID
+                                    </label>
+                                    <input type="text" id="employee_id" name="employee_id" required readonly
+                                        class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" value = "<?php echo $_SESSION['user']['employee_id']?>"/>
+                                </div>
+                                <div class="mb-4 relative">
+                                    <label for="amount" class="block text-xs font-medium text-gray-900"> Amount
+                                    </label>
+                                    <input type="text" id="amount" name="amount" placeholder="0.00" required
+                                        class="mt-1 py-1 px-7 w-full rounded-md border border-gray-400 shadow-md sm:text-sm"
+                                        onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
+                                        oninput="validateInput(this, <?php echo $remainingPondo?>)" />
+
+                                    <script>
+                                    function validateInput(input, limit) {
+                                        var value = parseFloat(input.value);
+                                        if (isNaN(value) || value <= limit) {
+                                            input.setCustomValidity('Please enter a number greater than ' + limit);
+                                        } else {
+                                            input.setCustomValidity('');
+                                        }
+                                    }
+                                    </script>
+                                    <span
+                                        class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <div class="mb-4 relative p-1">
+                                        <label for="payFor" class="block text-xs font-medium text-gray-900"> Pay For: </label>
+                                        <select id="payFor" name="payFor" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
+                                            <option value="" selected>...</option>
+                                            <?php
+                                                $validDebit = validDebit();
+                                                foreach($validDebit as $row){
+                                                    echo "<option value='".$row['ledgerno']."'>".$row['name']."</option>";
+                                                }
+                                            ?>
+                                        </select>
+                                        <label for="payUsing" class="block text-xs font-medium text-gray-900"> Pay Using: </label>
+                                        <select id="payUsing" name="payUsing" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
+                                            <option value="" selected>...</option>
+                                            <?php 
+                                            $validCredit = validCredit();
+                                            foreach($validCredit as $row){
+                                                echo "<option value='".$row['ledgerno']."'>".$row['name']."</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end items-start mb-2">
+                                    <button id="cancelModal" type="button"
+                                        class="border border-gray-700 bg-gray-200 hover:bg-gray-100 text-gray-800 text-sm font-bold py-1 px-5 rounded-md ml-4 ">Cancel</button>
+                                    <button type="submit"
+                                        class="border border-gray-700 bg-amber-400 hover:bg-amber-300 text-gray-800 text-sm font-bold py-1 px-7 rounded-md ml-4 ">Save</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+
+                <!-- JavaScript -->
+
+                <script>
+                    function closeModalAndClearInputs() {
+                        document.getElementById('myModal').classList.add('hidden');
+                        ['description', 'credit', 'debit', 'amount'].forEach(id => document.getElementById(id).value = '');
+                    }
+
+                    document.getElementById('openModal').addEventListener('click', function () {
+                        document.getElementById('myModal').classList.remove('hidden');
+                    });
+                    //'closeModal',
+                    ['cancelModal'].forEach(id => {
+                        document.getElementById(id).addEventListener('click', function (event) {
+                            event.stopPropagation();
+                            closeModalAndClearInputs();
+                        });
+                    });
+                </script>
             </div>
-
-            <!-- Table -->
-            <div class="overflow-x-auto rounded-lg border border-gray-400">
-                <table class="min-w-full divide-y-2 divide-gray-400 bg-white text-sm">
-                  
-                    <thead class="ltr:text-left rtl:text-right bg-gray-200">
-                        <tr>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">ID</th>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Details</th>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Amount</th>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Department</th>
-                            <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Date</th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="divide-y divide-gray-200 text-center">
-                        <?php 
-                        $db = Database::getInstance();
-                        $conn = $db->connect();
-                        $stmt = $conn->prepare("SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id WHERE department = :department");
-                        $stmt->execute();
-                        $totalRecords = $stmt->fetchColumn();
-
-                        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
-                        $displayPerPage = 10;
-                        $totalPages = ceil( $totalRecords / $displayPerPage) ;
-
-                        $pondoTable = getAllTransactions($department,$page, $displayPerPage);
-                        foreach($pondoTable as $row){
-                        ?>
-                        <tr>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['id'];?></td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['details']?></td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo "₱". number_format($row['amount'], 2)?></td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['department']?></td>
-                            <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['datetime']?></td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+        </div>
+        <div class=" mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
+                <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
+                    <div class="mx-5 my-5 py-3 px-3 text-white">
+                        <h1 class="text-3xl font-bold">Given Allowance</h1>
+                        <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department);?></p>
+                    </div>
+                </div>
+                <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
+                    <div class="mx-5 my-5 py-3 px-3 text-white">
+                        <h1 class="text-3xl font-bold">Total Expenses</h1>
+                        <p class="mt-5 text-4xl font-medium"><?php echo getExpensesPondo($department);?></p>
+                    </div>
+                </div>
+                <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
+                    <div class="mx-5 my-5 py-3 px-3 text-white">
+                        <h1 class="text-3xl font-bold">Remaining Funds</h1>
+                        <p class="mt-5 text-4xl font-medium"><?php echo $remainingPondo;?></p>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto rounded-lg border border-gray-400">
+            <table class="min-w-full divide-y-2 divide-gray-400 bg-white text-sm">
+                
+                <thead class="ltr:text-left rtl:text-right bg-gray-200">
+                    <tr>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">ID</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Details</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Amount</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Department</th>
+                        <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Date</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-200 text-center">
+                    <?php 
+                    
+
+                    $pondoTable = getAllTransactions($department,$page, $displayPerPage);
+                    foreach($pondoTable as $row){
+                    ?>
+                    <tr>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['id'];?></td>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['details']?></td>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo "₱". number_format($row['amount'], 2)?></td>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['department']?></td>
+                        <td class="whitespace-nowrap px-4 py-2 text-gray-700"><?php echo $row['datetime']?></td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
 
         <ol class="flex justify-end mr-8 gap-1 text-xs font-medium">
@@ -162,6 +299,8 @@ $department = $_SESSION['user']['role'];
             <?php endif; ?>
         </ol>
     </main>
+    
+    <!-- for inserting expense -->
 
 
     <script  src="./../src/route.js"></script>

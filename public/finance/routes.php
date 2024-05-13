@@ -4,7 +4,7 @@ require_once "public/finance/functions/reportGeneration/TrialBalance.php";
 require_once "public/finance/functions/requestFolder/requestExpense.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
-
+require_once "public/finance/functions/pondo/insertPondo.php";
 
 $_SESSION['user'] = 'admin';
 $_SESSION['role'] = 'admin';
@@ -277,5 +277,10 @@ Router::post('/fin/getCashFlowReport', function(){
 });
 
 
-
+Router::post('/pondo/transaction' , function(){
+    $debitLedger = $_POST['payFor'];
+    $creditLedger = $_POST['payUsing'];
+    $amount = $_POST['amount'];
+    addTransactionPondo($debitLedger, $creditLedger, $amount);
+});
 
