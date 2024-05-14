@@ -84,7 +84,7 @@
         $result = $stmt->fetch();
         $total = $result['balance'];
 
-        return $total + 0;
+        return $total * -1;
     }
 
     function getRemainingPondo($department){

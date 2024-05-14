@@ -168,8 +168,8 @@ $remainingPondo = getRemainingPondo($department)
                                         <script>
                                         function validateInput(input, limit) {
                                             var value = parseFloat(input.value);
-                                            if (isNaN(value) || value <= limit) {
-                                                input.setCustomValidity('Please enter a number greater than ' + limit);
+                                            if (isNaN(value) || value > limit) {
+                                                input.setCustomValidity('Please enter a number not greater than ' + limit);
                                             } else {
                                                 input.setCustomValidity('');
                                             }

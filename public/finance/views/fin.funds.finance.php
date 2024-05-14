@@ -1,10 +1,10 @@
-<?php require_once __DIR__ . "/finance/functions/pondo/generalPondo.php"?>
-<?php require_once __DIR__ . "/finance/functions/pondo/insertPondo.php"?>
 
 <?php 
+$department = $_SESSION['user']['role'];
 $db = Database::getInstance();
 $conn = $db->connect();
 $stmt = $conn->prepare("SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id WHERE department = :department");
+$stmt->bindParam(':department', $department);
 $stmt->execute();
 $totalRecords = $stmt->fetchColumn();
 
@@ -12,7 +12,6 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $displayPerPage = 10;
 $totalPages = ceil( $totalRecords / $displayPerPage) ;
 
-$department = $_SESSION['user']['role'];
 $remainingPondo = getRemainingPondo($department)
 ?>
 <!DOCTYPE html>
@@ -28,7 +27,7 @@ $remainingPondo = getRemainingPondo($department)
 
 <body>
 
-    <?php require_once __DIR__ . "/finance/views/components/sidebar.php" ?>
+    <?php require_once "components/sidebar.php" ?>
 
     <!-- Start: Dashboard -->
 
@@ -93,10 +92,11 @@ $remainingPondo = getRemainingPondo($department)
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Delivery
                                 </a>
-                                <a route='/fin/funds/Finance'
+                                <a route='/fin/funds/finance'
                                     class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
-                                    aria-current="page">
-                                    Finance
+                                    aria-current="page"
+                                    >
+                                   Finance
                                 </a>
 
 
@@ -129,7 +129,6 @@ $remainingPondo = getRemainingPondo($department)
                                 <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
                             </div>
                             <!-- form -->
-                            <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                             <div class="p-5">
                                 <form action="/pondo/transaction" method="POST">
                                     <div class="mb-4 relative">
@@ -169,8 +168,8 @@ $remainingPondo = getRemainingPondo($department)
                                         <script>
                                         function validateInput(input, limit) {
                                             var value = parseFloat(input.value);
-                                            if (isNaN(value) || value <= limit) {
-                                                input.setCustomValidity('Please enter a number greater than ' + limit);
+                                            if (isNaN(value) || value > limit) {
+                                                input.setCustomValidity('Please enter a number not greater than ' + limit);
                                             } else {
                                                 input.setCustomValidity('');
                                             }
@@ -180,7 +179,7 @@ $remainingPondo = getRemainingPondo($department)
                                             class="absolute left-2 top-6 transform -translate-y-0.5 text-gray-400">&#8369;</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <div class="mb-4 relative p-1">
+                                        <div class="mb-4 relative p-1 grow">
                                             <label for="payFor" class="block text-xs font-medium text-gray-900"> Pay For: </label>
                                             <select id="payFor" name="payFor" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
                                                 <option value="" selected>...</option>
@@ -191,6 +190,8 @@ $remainingPondo = getRemainingPondo($department)
                                                     }
                                                 ?>
                                             </select>
+                                        </div>
+                                        <div class="mb-4 relative p-1 grow">
                                             <label for="payUsing" class="block text-xs font-medium text-gray-900"> Pay Using: </label>
                                             <select id="payUsing" name="payUsing" required class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm">
                                                 <option value="" selected>...</option>
@@ -240,21 +241,21 @@ $remainingPondo = getRemainingPondo($department)
             <!-- allowance info -->
             <div class=" mb-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
+                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Given Allowance</h1>
+                            <h1 class="text-2xl font-bold">Given Allowance This Month</h1>
                             <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department);?></p>
                         </div>
                     </div>
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
+                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Total Expenses</h1>
+                            <h1 class="text-2xl font-bold">Total Expenses This Month</h1>
                             <p class="mt-5 text-4xl font-medium"><?php echo getExpensesPondo($department);?></p>
                         </div>
                     </div>
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
+                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
-                            <h1 class="text-3xl font-bold">Remaining Funds</h1>
+                            <h1 class="text-2xl font-bold">Remaining Funds This Month</h1>
                             <p class="mt-5 text-4xl font-medium"><?php echo $remainingPondo;?></p>
                         </div>
                     </div>
@@ -277,8 +278,6 @@ $remainingPondo = getRemainingPondo($department)
 
                     <tbody class="divide-y divide-gray-200 text-center">
                         <?php 
-                        
-
                         $pondoTable = getAllTransactions($department,$page, $displayPerPage);
                         foreach($pondoTable as $row){
                         ?>
@@ -295,7 +294,7 @@ $remainingPondo = getRemainingPondo($department)
             </div>
 
             <!-- pages -->
-            <ol class="flex justify-end mr-8 gap-1 text-xs font-medium">
+            <ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
                 <!-- Next & Previous -->
                 <?php if ($page > 1): ?>
                     <li>
@@ -344,7 +343,8 @@ $remainingPondo = getRemainingPondo($department)
 
             
     </main>
-    <script  src="./../../src/route.js"></script>
+    <script src="./../../src/route.js"></script>
+    <script src="./../../src/form.js"></script>
     <!-- Start: Sidebar -->
     <!-- End: Dashboard -->
 </body>
