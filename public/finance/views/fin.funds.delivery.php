@@ -1,5 +1,3 @@
-<?php require_once "public/finance/functions/pondo/generalPondo.php"?>
-<?php require_once "public/finance/functions/pondo/insertPondo.php"?>
 
 <?php 
 $department ="Delivery";
@@ -96,7 +94,7 @@ $remainingPondo = getRemainingPondo($department)
                                     >
                                     Delivery
                                 </a>
-                                <a route='/fin/funds/Finance'
+                                <a route='/fin/funds/finance'
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Finance
                                 </a>
@@ -131,7 +129,6 @@ $remainingPondo = getRemainingPondo($department)
                                 <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
                             </div>
                             <!-- form -->
-                            <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                             <div class="p-5">
                                 <form action="/pondo/transaction" method="POST">
                                     <div class="mb-4 relative">
@@ -281,8 +278,6 @@ $remainingPondo = getRemainingPondo($department)
 
                     <tbody class="divide-y divide-gray-200 text-center">
                         <?php 
-                        
-
                         $pondoTable = getAllTransactions($department,$page, $displayPerPage);
                         foreach($pondoTable as $row){
                         ?>
@@ -348,8 +343,8 @@ $remainingPondo = getRemainingPondo($department)
 
             
     </main>
-    <script src="./../src/route.js"></script>
-    <script src="./../src/form.js"></script>
+    <script src="./../../src/route.js"></script>
+    <script src="./../../src/form.js"></script>
     <!-- Start: Sidebar -->
     <!-- End: Dashboard -->
 </body>
