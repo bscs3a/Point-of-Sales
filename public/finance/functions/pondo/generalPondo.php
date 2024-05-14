@@ -1,6 +1,6 @@
 <?php 
 
-    require_once 'public/finance/functions/supportingFunctions/supportingPondo.php';
+    require_once 'public\finance\functions\supportingFunctions\supportingExpense.php';
     require_once 'public/finance/functions/generalFunctions.php';
     
 
@@ -84,7 +84,7 @@
         $result = $stmt->fetch();
         $total = $result['balance'];
 
-        return $total;
+        return $total + 0;
     }
 
     function getRemainingPondo($department){
@@ -116,33 +116,41 @@
         // Calculate the offset
         $offset = ($page - 1) * $itemsPerPage;
     
+        // Base SQL query
+        $baseSql = "SELECT ft.id as id, l.name as details, lt.amount as amount, e.department as department, lt.datetime as datetime 
+                    FROM funds_transaction as ft
+                    JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
+                    JOIN employees as e ON ft.employee_id = e.id
+                    JOIN ledger as l ON lt.LedgerNo_Dr = l.LedgerNo";
+    
         if ($department == 'Savings') {
-            $sql = "SELECT ft.id as id, l.name as details, lt.amount as amount, e.department as department, lt.datetime as datetime FROM funds_transaction as ft
-            JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
-            JOIN employees as e ON ft.employee_id = e.id
-            JOIN ledger as l ON lt.LedgerNo_Dr = l.LedgerNo";
+            $sql = $baseSql;
             if (is_numeric($year) && is_numeric($month) && $month > 0 && $month < 13) {
-                $sql .= " WHERE YEAR(lt.datetime) = ? AND MONTH(lt.datetime) = ?";
-                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
-                $stmt->execute([$year, $month, $itemsPerPage, $offset]);
-            } else {
-                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
-                $stmt->execute([$itemsPerPage, $offset]);
+                $sql .= " WHERE YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month";
             }
         } else {
-            $sql = "SELECT ft.id as id, l.name as details, lt.amount as amount, e.department as department, lt.datetime as datetime FROM funds_transaction as ft
-            JOIN ledgertransaction as lt ON ft.lt_id = lt.LedgerXactID
-            JOIN employees as e ON ft.employee_id = e.id
-            JOIN ledger as l ON lt.LedgerNo_Dr = l.LedgerNo WHERE e.department = ?";
+            $sql = $baseSql . " WHERE e.department = :department";
             if (is_numeric($year) && is_numeric($month) && $month > 0 && $month < 13) {
-                $sql .= " AND YEAR(lt.datetime) = ? AND MONTH(lt.datetime) = ?";
-                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
-                $stmt->execute([$department, $year, $month, $itemsPerPage, $offset]);
-            } else {
-                $stmt = $conn->prepare($sql . " ORDER BY lt.datetime DESC LIMIT ? OFFSET ?");
-                $stmt->execute([$department, $itemsPerPage, $offset]);
+                $sql .= " AND YEAR(lt.datetime) = :year AND MONTH(lt.datetime) = :month";
             }
         }
+    
+        $sql .= " ORDER BY lt.datetime DESC LIMIT :itemsPerPage OFFSET :offset";
+    
+        $stmt = $conn->prepare($sql);
+    
+        // Bind values
+        if ($department != 'Savings') {
+            $stmt->bindValue(':department', $department, PDO::PARAM_STR);
+        }
+        if (is_numeric($year) && is_numeric($month) && $month > 0 && $month < 13) {
+            $stmt->bindValue(':year', $year, PDO::PARAM_INT);
+            $stmt->bindValue(':month', $month, PDO::PARAM_INT);
+        }
+        $stmt->bindValue(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    
+        $stmt->execute();
     
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
