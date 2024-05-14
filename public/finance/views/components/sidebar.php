@@ -5,7 +5,7 @@
     <div route='/' class="flex items-center pb-4">
         <img src="https://placehold.co/50x50" alt="" class="w-10 h-10 rounded object-cover">
 
-        <span  class="cursor-pointer text-4xl font-russo text-white ml-3">BSCS 3A</span>
+        <span class="cursor-pointer text-4xl font-russo text-white ml-3">BSCS 3A</span>
     </div>
 
     <ul class="mt-3">
@@ -21,32 +21,43 @@
         <!-- button dropdown -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                document.querySelector('.toggle-reports').addEventListener('click', function () {
-                    document.getElementById('reports').classList.toggle('hidden');
-                    document.getElementById('ledger').classList.add('hidden');
-                    document.getElementById('request').classList.add('hidden');
-                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+                // document.querySelector('.toggle-reports').addEventListener('click', function () {
+                //     // document.getElementById('reports').classList.toggle('hidden');
+                //     document.getElementById('ledger').classList.add('hidden');
+                //     document.getElementById('request').classList.add('hidden');
+                //     document.getElementById('funds').classList.add('hidden');
+                //     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
 
-                });
+                // });
 
                 document.querySelector('.toggle-ledger').addEventListener('click', function () {
                     document.getElementById('ledger').classList.toggle('hidden');
-                    document.getElementById('reports').classList.add('hidden');
+                    // document.getElementById('reports').classList.add('hidden');
                     document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.add('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
                 });
 
                 document.querySelector('.toggle-request').addEventListener('click', function () {
                     document.getElementById('ledger').classList.add('hidden');
-                    document.getElementById('reports').classList.add('hidden');
+                    // document.getElementById('reports').classList.add('hidden');
                     document.getElementById('request').classList.toggle('hidden');
+                    document.getElementById('funds').classList.add('hidden');
+                    // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+                });
+
+                document.querySelector('.toggle-funds').addEventListener('click', function () {
+                    document.getElementById('ledger').classList.add('hidden');
+                    // document.getElementById('reports').classList.add('hidden');
+                    document.getElementById('request').classList.add('hidden');
+                    document.getElementById('funds').classList.toggle('hidden');
                     // document.getElementById('reports-button').classList.toggle('bg-slate-400');
                 });
             });
         </script>
 
 
-        <li class="mb-1  rounded-xl">
+        <!-- <li class="mb-1  rounded-xl">
             <button id="reports-button"
                 class="toggle-reports flex items-center py-2 px-4 w-full text-white hover:text-black  hover:bg-slate-400 rounded-xl">
                 <i class="ri-file-edit-fill mr-3 text-lg"></i>
@@ -87,7 +98,7 @@
 
 
             </ul>
-        </li>
+        </li> -->
 
         <li class="mb-1">
             <button
@@ -98,14 +109,15 @@
             </button>
             <ul id="ledger" class="ml-8 hidden">
                 <li>
-                    <a route='/fin/ledger' class="flex items-center py-2 px-4 text-white hover:text-black">
+                    <a route='/fin/ledger/page=1' class="flex items-center py-2 px-4 text-white hover:text-black">
 
                         <span class="text-sm font-medium">General</span>
                         <i class="ri-arrow-right-s-line ml-auto"></i>
                     </a>
                 </li>
                 <li>
-                    <a route='/fin/ledger/accounts/investors' class="flex items-center py-2 px-4 text-white hover:text-black">
+                    <a route='/fin/ledger/accounts/investors'
+                        class="flex items-center py-2 px-4 text-white hover:text-black">
 
                         <span class="text-sm font-medium">Account</span>
                         <i class="ri-arrow-right-s-line ml-auto"></i>
@@ -113,7 +125,6 @@
                 </li>
             </ul>
         </li>
-
 
         <li class="mb-1">
             <button
@@ -124,15 +135,19 @@
             </button>
             <ul id="request" class="ml-8 hidden">
                 <li>
+                    <a route='/fin/expense' class="flex items-center py-2 px-4 text-white hover:text-black">
+                        <span class="text-sm font-medium">Expenses</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+                <li>
                     <a route='/fin/request' class="flex items-center py-2 px-4 text-white hover:text-black">
-
                         <span class="text-sm font-medium">Inventory</span>
                         <i class="ri-arrow-right-s-line ml-auto"></i>
                     </a>
                 </li>
                 <li>
                     <a route='/fin/salary' class="flex items-center py-2 px-4 text-white hover:text-black">
-
                         <span class="text-sm font-medium">Salary</span>
                         <i class="ri-arrow-right-s-line ml-auto"></i>
                     </a>
@@ -140,18 +155,51 @@
             </ul>
         </li>
 
+        <li class="mb-1">
+            <button
+                class="toggle-funds flex items-center py-2 px-4 w-full text-white hover:bg-slate-400 hover:text-black rounded-xl">
+                <i class="ri-wallet-fill mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Funds</span>
+                <i class="ri-arrow-down-s-line ml-auto"></i>
+            </button>
+            <ul id="funds" class="ml-8 hidden">
+                <li>
+                    <a route='/fin/funds/HR' class="flex items-center py-2 px-4 text-white hover:text-black">
 
+                        <span class="text-sm font-medium">Expenses</span>
+                        <i class="ri-arrow-right-s-line ml-auto"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Audit Log -->
         <li class="mb-1 hover:bg-slate-400 rounded-xl">
-            <a route="/fin/charts" class="flex items-center py-2 px-4 text-white hover:text-black">
-                <i class="ri-line-chart-line mr-3 text-lg"></i>
-                <span class="text-sm font-medium">Charts</span>
+            <a route="/fin/logs" class="flex items-center py-2 px-4 text-white hover:text-black">
+                <i class="ri-speed-up-line mr-3 text-lg"></i>
+                <span class="text-sm font-medium">Audit Logs</span>
                 <i class="ri-arrow-down-s-line ml-auto"></i>
             </a>
         </li>
 
 
-
 </div>
 
 <div class="fixed top-0 left-0 w-full h-full z-40 md:hidden sidebar-overlay"></div>
+
+<!-- button dropdown -->
+<script>
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     document.querySelector('.toggle-ledger').addEventListener('click', function () {
+    //         document.getElementById('ledger').classList.toggle('hidden');
+    //         document.getElementById('request').classList.add('hidden');
+    //         // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+    //     });
+    //     document.querySelector('.toggle-request').addEventListener('click', function () {
+    //         document.getElementById('ledger').classList.add('hidden');
+    //         document.getElementById('request').classList.toggle('hidden');
+    //         // document.getElementById('reports-button').classList.toggle('bg-slate-400');
+    //     });
+    // });
+</script>
 <!-- End: Sidebar -->

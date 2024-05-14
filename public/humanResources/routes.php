@@ -1060,5 +1060,6 @@ Router::post('/remove/schedule', function () {
     $stmt->execute();
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/hr/schedule");
+    header("Location: $rootFolder/hr/employees");
 });
+
