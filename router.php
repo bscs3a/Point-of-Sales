@@ -32,8 +32,8 @@ class Router
         }
 
         $validRoutes = self::$validRoutes;
-
         if (array_key_exists($currentUri, $validRoutes)) {
+            
             require_once $validRoutes[$currentUri];
         } else {
             // Check for dynamic routes
@@ -48,9 +48,9 @@ class Router
             }
 
             // The route is not valid
-            require_once __DIR__ . "/src/error.php";
+            // require_once __DIR__ . "/src/error.php";
+            self::redirect(isset($_SESSION['user']) ? $_SESSION['user']['role'] : 'Default');
         }
-
         exit();
     }
 
@@ -72,6 +72,39 @@ class Router
 
         if ($currentMethod === 'POST' && $currentUri === $path) {
             call_user_func($callback);
+            exit();
+        }
+    }
+
+    private static function redirect($user){
+        $_SESSION['pageNotFound'] = true;
+        $base_url = 'Master'; // Define your base URL here
+        if ($user == 'Product Order') {
+            header("Location: /$base_url/po/dashboard");
+            exit();
+        } 
+        if ($user == 'Human Resources') {
+            header("Location: /$base_url/hr/dashboard");
+            exit();
+        } 
+        if ($user== 'Point of Sales') {
+            header("Location: /$base_url/sls/Dashboard");
+            exit();
+        } 
+        if ($user== 'Inventory') {
+            header("Location: /$base_url/inv/main");
+            exit();
+        } 
+        if ($user == 'Finance') {
+            header("Location: /$base_url/fin/dashboard");
+            exit();
+        } 
+        if ($user== 'Delivery') {
+            header("Location: /$base_url/dlv/dashboard");
+            exit();
+        } 
+        if($user == 'Default'){
+            header("Location: /$base_url/");
             exit();
         }
     }

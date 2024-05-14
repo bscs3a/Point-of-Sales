@@ -1,6 +1,6 @@
 
 <?php 
-$department ="Delivery";
+$department = $_SESSION['user']['role'];
 $db = Database::getInstance();
 $conn = $db->connect();
 $stmt = $conn->prepare("SELECT COUNT(*) FROM funds_transaction as ft JOIN employees as e ON ft.employee_id = e.id WHERE department = :department");
@@ -27,7 +27,7 @@ $remainingPondo = getRemainingPondo($department)
 
 <body>
 
-    <?php require_once "components/sidebar.php" ?>
+    <!-- INCLUDE A SIDEBAR -->
 
     <!-- Start: Dashboard -->
 
@@ -63,48 +63,6 @@ $remainingPondo = getRemainingPondo($department)
 
         
         <div class="w-full p-6 bg-white">
-            <!-- department choice header -->
-            <div class="justify-between items-start mb-4">
-                <!-- Tabs -->
-                <div class="mb-4">
-
-
-                    <div class="hidden sm:block">
-                        <div class="border-b border-gray-200">
-                            <nav class="-mb-px flex gap-6" aria-label="Tabs">
-                                <a route='/fin/funds/HR'
-                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                    Human Resources
-                                </a>
-                                <a route='/fin/funds/PO'
-                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                    Product Order
-                                </a>
-                                <a route='/fin/funds/Sales'
-                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                    Sales
-                                </a>
-                                <a route='/fin/funds/Inventory'
-                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                    Inventory
-                                </a>
-                                <a route='/fin/funds/Delivery'
-                                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
-                                    aria-current="page"
-                                    >
-                                    Delivery
-                                </a>
-                                <a route='/fin/funds/finance'
-                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                                    Finance
-                                </a>
-
-
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- for adding transaction -->
             <div class="w-full px-6 py-3 bg-white">
@@ -261,7 +219,10 @@ $remainingPondo = getRemainingPondo($department)
                     </div>
                 </div>
             </div>
-
+            <?php 
+                    $pondoTable = getAllTransactions($department,$page, $displayPerPage);
+                    echo "hello";
+                    ?>
             <!-- Table -->
             <div class="overflow-x-auto rounded-lg border border-gray-400">
                 <table class="min-w-full divide-y-2 divide-gray-400 bg-white text-sm">
@@ -275,10 +236,10 @@ $remainingPondo = getRemainingPondo($department)
                             <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Date</th>
                         </tr>
                     </thead>
-
+                    
                     <tbody class="divide-y divide-gray-200 text-center">
                         <?php 
-                        $pondoTable = getAllTransactions($department,$page, $displayPerPage);
+                        
                         foreach($pondoTable as $row){
                         ?>
                         <tr>
@@ -292,36 +253,14 @@ $remainingPondo = getRemainingPondo($department)
                     </tbody>
                 </table>
             </div>
-
+            <!-- CHANGE THE LINKS -->
             <!-- pages -->
-            <?php 
-            $link = "";
-            switch ($department) {
-                case 'Delivery':
-                    $link = "/fin/funds/Delivery=";
-                    break;
-                case 'Finance':
-                    $link = "/fin/funds/finance=";
-                    break;
-                case 'Point of Sales':
-                    $link = "/fin/funds/Sales=";
-                    break;
-                case 'Product Order':
-                    $link = "/fin/funds/PO=";
-                    break;
-                case 'Inventory':
-                    $link = "/fin/funds/Inventory=";
-                    break;
-                case 'Human Resources':
-                    $link = "/fin/funds/HR=";
-                    break;
-            } ?>
             <ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
                 <!-- Next & Previous -->
                 <?php if ($page > 1): ?>
                     <li>
                         <!-- CHANGE THE ROUTE -->
-                        <a route="<?php echo $link . $page - 1 ?>"
+                        <a route="/fin/funds/finance=<?= $page - 1 ?>"
                             class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                             <span class="sr-only">Prev Page</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -340,7 +279,7 @@ $remainingPondo = getRemainingPondo($department)
                     for ($i = $start; $i <= $end; $i++): 
                 ?>
                     <li>
-                        <a route="<?php echo $link . $i ?>"
+                        <a route="/fin/funds/finance=<?= $i ?>"
                             class="block size-8 rounded border <?= $i == $page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-100 bg-white text-gray-900' ?> text-center leading-8">
                             <?= $i ?>
                         </a>
@@ -349,7 +288,7 @@ $remainingPondo = getRemainingPondo($department)
 
                 <?php if ($page < $totalPages): ?>
                     <li>
-                        <a route="<?php echo $link . $page + 1 ?>"
+                        <a route="/fin/funds/finance=<?= $page + 1 ?>"
                             class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                             <span class="sr-only">Next Page</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">

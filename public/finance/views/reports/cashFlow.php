@@ -1,11 +1,11 @@
 <?php 
-    // require_once 'public/finance/functions/reportGeneration/OwnersEquityReport.php';
+    require_once 'public\finance\functions\reportGeneration\CashFlow.php';
     $today = new DateTime();
     $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
-    if ($today < $lastDayOfMonth) {
-        $today->modify('-1 month');
-    }
+if ($today < $lastDayOfMonth) {
+    $today->modify('-1 month');
+}
 
     $year = $today->format('Y');
     $month = $today->format('n');
@@ -13,6 +13,7 @@
         $year = $_SESSION['postdata']['year'];
         $month =$_SESSION['postdata']['month'];
     }
+
     $year = intval($year);
     $month = intval($month);
     $monthName = date('F', mktime(0, 0, 0, $month, 10));
@@ -20,17 +21,16 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner/s' Equity Report</title>
+    <title>Income Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Russo+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="ownerReport.css">
+    <link href="<?php echo $_SERVER["DOCUMENT_ROOT"].'/public\finance\views\reports\reports.css';?>"/>
 </head>
 <style>
-    
-
-*{
+    *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -75,8 +75,7 @@ section > table tr > td{
     padding: 1rem;
 }
 
-thead{
-   
+thead > tr {
     border-radius: 10px; 
     overflow: hidden;
     background-color: #FFD168;
@@ -84,24 +83,31 @@ thead{
 }
 
 thead > tr > th{
-    text-align: center;
+    text-align: left;
     padding: 1rem;
     border-radius: 10px; 
     font-weight: 600;
 }
-tbody > tr > td, tfoot > tr > td{
-    text-align: center;
+
+.content{
+    text-indent: 2rem;
 }
+
+.content-amount{
+    text-align: right;
+}
+
 tfoot{
     color: #262261;
     font-weight: bold;
 }
 </style>
+
 <body>
     <header>
         <table>
             <tr>
-                <td class="header2">Owner's Equity Report</td>
+                <td class="header2">Cash Flow</td>
                 <td rowspan="2" class="text-right width-auto-wrap">
                     <?php 
                         $image = file_get_contents('public/finance/img/logo_reports.png');
@@ -117,24 +123,9 @@ tfoot{
             </tr>
         </table>
     </header>
-    <section>
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Owner's Account
-                    </th>
-                    <th>
-                        Investment Last Month
-                    </th>
-                    <th>Additional Investment</th>
-                    <th>Withdrawals</th>
-                    <th>Net Income/Loss</th>
-                    <th>Total Investment this Month</th>
-                </tr>    
-            </thead>
-            <?php echo generateOEReport($year, $month);?>
-        </table>
-    </section>
+    <?php
+        echo generateCashFlowReport($year, $month);
+    ?> 
 </body>
+
 </html>

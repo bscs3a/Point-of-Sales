@@ -17,16 +17,18 @@
             <select name="file" id="report"
                 class="m-1 bg-gray-50 border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 required>
-                <option selected>Choose a report</option>
+                <option selected value = "">Choose a report</option>
                 <option value="Income">Income Report</option>
                 <option value="OwnerEquity">Owners' Equity</option>
                 <option value="TrialBalance">Trial Balance</option>
+                <option value="CashFlow">Cash Flow</option>
             </select>
             <label for="monthYear" class="font-medium m-1">
                 Date
             </label>
-            <input type="month" id="monthYear" name="monthYear"
-                class="m-1 border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" required>
+            <input type="month" id="monthYearIncome" name="monthYear"
+                class="m-1 border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" 
+                min="2020-01" max="2023-12" required>
 
             <br>
             <div class="m-1 gap-3 flex justify-end">
@@ -39,6 +41,26 @@
                 </button>
             </div>
         </form>
+        <script>
+            // Get the current date
+            now = new Date();
+
+            // Get the current year and month
+            let year = now.getFullYear();
+            let month = now.getMonth(); // getMonth() is zero-based
+
+            // Subtract one from the month to get the last month
+            if (month === 0) {
+                month = 12;
+                year--;
+            }
+
+            // Pad the month with a leading zero, if necessary
+            if (month < 10) month = '0' + month;
+
+            // Set the max attribute of the monthYear input field
+            document.getElementById('monthYearIncome').max = year + '-' + month;
+        </script>
     </div>
 </div>
 
@@ -92,10 +114,7 @@
                     <i class="ri-more-line text-3xl text-[#F8B721]"></i>
                 </a> -->
                 <div class="font-bold  border-none ">
-                    <select name="" id="" class="bg-white border-collapse text-xl">
-                        <option value="year" selected>Year</option>
-                        <option value="month">Month</option>
-                    </select>
+                    <input id='calendarBalance' />
                 </div>
 
             </div>
@@ -106,8 +125,21 @@
             </div>
         </div>
     </div>
+    <!-- for calendar js -->
+    <script>
+        // Enable the year and month picker
+        // Get the first and last day of the past month
+        let now = new Date();
+        let lastDayOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
+        let lastDay = lastDayOfLastMonth.toISOString().split('T')[0];
 
+        jSuites.calendar(document.getElementById('calendarBalance'), {
+            type: 'year-month-picker',
+            format: 'MMM-YYYY',
+            validRange: [ '2024-02-01', lastDay]
+        });
+    </script>
 
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -152,7 +184,7 @@
 
         });
 
-        fetch('http://localhost/Finance/fin/getBalanceReport', {
+        fetch('http://localhost/Master/fin/getBalanceReport', {
             method: 'POST',
         })
         .then(response => {
@@ -162,7 +194,6 @@
             return response.json();
         })
         .then(data => {
-            console.log(data);
             updateBalanceChart(myBalancePieChart, data);
         })
         .catch((error) => {
@@ -177,8 +208,6 @@
 
             chart.data.datasets[0].data = data;
             chart.update();
-
-            console.log(data);
         }
     </script>
 </div>
@@ -221,7 +250,7 @@
                 <canvas id="equityDonutChart"></canvas>
             </div>
         </div>
-        <div class="col-span-2 px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
+        <div class="col-span-2 px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg min-h-15">
             <div class="flex justify-between">
 
                 <h2 class=" font-sans  font-bold text-xl">Cash Flow</h2>
@@ -236,16 +265,13 @@
                 </div>
             </div>
             <div>
-
                 <!-- Create a canvas element -->
-                <canvas id="salesGrowthChart"></canvas>
+                <canvas id="cashFlowChart"></canvas>
             </div>
         </div>
     </div>
 
     <script>
-        
-
         // Donut Chart Equity
         var equityDonut = document.getElementById('equityDonutChart').getContext('2d');
 
@@ -255,7 +281,7 @@
                 labels: [], // Initialize with empty array
                 datasets: [{
                     data: [], // Initialize with empty array
-                    backgroundColor: ['rgba(255, 165, 0, 0.5)', 'rgba(255, 165, 0, 0.7)', 'rgba(255, 165, 0, 0.9)'],
+                    backgroundColor: [],
                     borderWidth: 2
                 }]
             },
@@ -289,7 +315,7 @@
             }
         });
         //ajax for equityChart
-        fetch('http://localhost/Finance/fin/getEquityReport', {
+        fetch('http://localhost/Master/fin/getEquityReport', {
             method: 'POST',
         })
         .then(response => {
@@ -308,30 +334,42 @@
         function updateEquityChart(chart, owners) {
             let labels = [];
             let data = [];
-
+            let colors = [];
             for (let key in owners) {
                 if (owners[key].dividedShare !== 0) {
                     labels.push(owners[key].name);
                     data.push(owners[key].dividedShare);
+                    colors.push(generateRandomColor());
                 }
             }
             chart.data.labels = labels;
             chart.data.datasets[0].data = data;
+            chart.data.datasets[0].backgroundColor = colors;
             chart.update();
+        }
+
+        // generate random color
+        function generateRandomColor () {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
 
         // Initialize a new Chart.js instance
-        var ctx = document.getElementById('salesGrowthChart').getContext('2d');
+        var cashFlowCanvas = document.getElementById('cashFlowChart').getContext('2d');
 
         // Configure the chart
-        var myChart = new Chart(ctx, {
+        var cashFlowChart = new Chart(cashFlowCanvas, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: [],
                 datasets: [{
-                    label: 'Sales Growth',
-                    data: [12, 19, 3, 5, 2, 3, 7], // Replace with your data
+                    label: 'Cash Flow',
+                    data: [], // Replace with your data
                     backgroundColor: 'rgba(255, 165, 0, 0.4)',
                     fill: true,
                     borderColor: 'rgba(255, 165, 0, 1)',
@@ -349,9 +387,45 @@
                         display: false
                     }
                 }
-
             }
         });
+        //ajax for equityChart
+        fetch('http://localhost/Master/fin/getCashFlowReport', {
+            method: 'POST',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("what" . data);
+            updateCashFlowChart(cashFlowChart, data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        //function to update equity Chart
+        function updateCashFlowChart(chart, balances) {
+            let labels = [];
+            let data = [];
+            for (let key in balances) {
+                if (balances[key].amount !== 0) {
+                    labels.push(getMonthName(key));
+                    data.push(balances[key]);
+                }
+            }
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+
+        function getMonthName(monthNumber) {
+            monthNumber = monthNumber - 1; // 0-based index
+            var date = new Date(2000, monthNumber); // year doesn't matter
+            return date.toLocaleString('default', { month: 'long' });
+        }
     </script>
 
 </div>

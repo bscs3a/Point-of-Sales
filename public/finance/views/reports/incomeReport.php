@@ -9,7 +9,6 @@ if ($today < $lastDayOfMonth) {
 
     $year = $today->format('Y');
     $month = $today->format('n');
-    $monthName = $today->format('F');
     if (isset($_SESSION['postdata']['year']) && isset($_SESSION['postdata']['month'])){
         $year = $_SESSION['postdata']['year'];
         $month =$_SESSION['postdata']['month'];
@@ -17,6 +16,7 @@ if ($today < $lastDayOfMonth) {
 
     $year = intval($year);
     $month = intval($month);
+    $monthName = date('F', mktime(0, 0, 0, $month, 10));
 ?>
 
 <!DOCTYPE html>

@@ -1,6 +1,6 @@
 <?php 
 
-include_once "C:/xampp/htdocs/Finance/src/dbconn.php";
+include_once "C:/xampp/htdocs/Master/src/dbconn.php";
  $modalId = $_POST['LedgerNo'];
  $details = $_POST['details'];
  $amount = $_POST['amount'];

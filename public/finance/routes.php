@@ -1,14 +1,15 @@
 <?php
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
-require_once "public/finance/functions/requestFolder/requestExpense.php";
+require_once "public/finance/functions/pondo/requestExpense.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
 
+require_once "public/finance/functions/pondo/generalPondo.php";
+require_once "public/finance/functions/pondo/insertPondo.php";
 
-$_SESSION['user'] = 'admin';
-$_SESSION['role'] = 'admin';
-$_SESSION['employee_name'] = "Tagle, Aries";
+
+
 
 $path = './public/finance/views';
 
@@ -40,7 +41,7 @@ $fin = [
     '/fin/funds/Sales' => $basePath . "funds.sales.php",
     '/fin/funds/Inventory' => $basePath . "funds.inventory.php",
     '/fin/funds/Delivery' => $basePath . "funds.delivery.php",
-    '/fin/funds/Finance' => $basePath . "funds.finance.php",
+    '/fin/funds/finance' => $basePath . "funds.finance.php",
 
     '/fin/test' => $basePath . "test.php",
 
@@ -109,7 +110,7 @@ Router::post('/test', function () {
 Router::post('/reportGeneration', function () {
     $_SESSION['postdata'] = $_POST;
     list ($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
-    header('Location: Finance/fin/report');
+    header('Location: Master/fin/report');
     exit;
 });
 
@@ -255,6 +256,35 @@ Router::post('/fin/updateRequestExpense', function(){
     header("Location: $rootFolder/fin/expense");
 });
 
+Router::post('/fin/getCashFlowReport', function(){
+    $return = [];
+    
+    $currentYear = date('Y');
+    if (isset($_POST['year'])) {
+        $year = $_POST['year'];
+    } else {
+        $year = $currentYear;
+    }
+    $month = 12;
+    if($year >= $currentYear){
+        $year = $currentYear;
+        $month = date('m');
+    }
+    for($i = 1; $i <= $month; $i++){
+        $return[$i] = getAccountBalance("Cash on Hand",true,$year, $i) + getAccountBalance("Cash on Bank",true,$year,$i);
+    }
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
 
 
 
+Router::post("/pondo/transaction", function () {
+    // echo "nandito kaba";
+    $debitLedger = $_POST['payFor'];
+    $creditLedger = $_POST['payUsing'];
+    $amount = $_POST['amount'];
+    addTransactionPondo($debitLedger, $creditLedger, $amount);
+
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+});

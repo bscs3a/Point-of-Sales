@@ -28,6 +28,9 @@ else if($fileNeeded === "OwnerEquity"){
 else if($fileNeeded === "TrialBalance"){
     require_once 'TrialBalance.php';
 }
+else if($fileNeeded === "CashFlow"){
+    require_once 'cashFlow.php';
+}
 
 // Get the output of the script
 $html = ob_get_clean();
