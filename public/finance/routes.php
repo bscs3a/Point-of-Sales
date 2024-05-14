@@ -110,7 +110,7 @@ Router::post('/test', function () {
 Router::post('/reportGeneration', function () {
     $_SESSION['postdata'] = $_POST;
     list ($_SESSION['postdata']['year'], $_SESSION['postdata']['month']) = explode("-", $_SESSION['postdata']['monthYear']);
-    header('Location: Finance/fin/report');
+    header('Location: Master/fin/report');
     exit;
 });
 
