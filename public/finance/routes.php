@@ -4,7 +4,11 @@ require_once "public/finance/functions/reportGeneration/TrialBalance.php";
 require_once "public/finance/functions/pondo/requestExpense.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
+
+require_once "public/finance/functions/pondo/generalPondo.php";
 require_once "public/finance/functions/pondo/insertPondo.php";
+
+
 
 
 $path = './public/finance/views';
@@ -37,7 +41,7 @@ $fin = [
     '/fin/funds/Sales' => $basePath . "funds.sales.php",
     '/fin/funds/Inventory' => $basePath . "funds.inventory.php",
     '/fin/funds/Delivery' => $basePath . "funds.delivery.php",
-    '/fin/funds/Finance' => $basePath . "funds.finance.php",
+    '/fin/funds/finance' => $basePath . "funds.finance.php",
 
     '/fin/test' => $basePath . "test.php",
 
@@ -274,10 +278,13 @@ Router::post('/fin/getCashFlowReport', function(){
 });
 
 
-Router::post('/pondo/transaction' , function(){
+
+Router::post("/pondo/transaction", function () {
+    // echo "nandito kaba";
     $debitLedger = $_POST['payFor'];
     $creditLedger = $_POST['payUsing'];
     $amount = $_POST['amount'];
     addTransactionPondo($debitLedger, $creditLedger, $amount);
-});
 
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+});

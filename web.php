@@ -12,7 +12,21 @@ $default = [
     '/404' => "./src/error.php",
 ];
 
-$routes = array_merge($sls, $fin, $inv, $dlv, $hr, $po, $default);
+$role = isset($_SESSION['user']) ? $_SESSION['user']['role'] : 'Default';
+
+
+$keywords = [
+    'Product Order' => $po,
+    'Human Resources' => $hr,
+    'Point of Sales' => $sls,
+    'Inventory' => $inv,
+    'Finance' => $fin,
+    'Delivery' => $dlv,
+    'Default' => $default
+];
+
+// assign only array based on array, asd
+$routes = $keywords[$role];
 
 Router::setRoutes($routes);
 
@@ -21,28 +35,6 @@ $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $basePath = '/Finance'; // change me according to your root folder name
 $path = str_replace($basePath, '', $path);
 
-// for login guarding
-// Get the user's role from the session
-$role = isset($_SESSION['user']) ? $_SESSION['user']['role'] : null;
-
-// Define the URLs for each role
-$keywords = [
-    'Product Order' => ['url' => '/po/', 'default' => '/po/dashboard'],
-    'Human Resources' => ['url' => '/hr/', 'default' => '/hr/dashboard'],
-    'Point of Sales' => ['url' => '/sls/', 'default' => '/sls/Dashboard'],
-    'Inventory' => ['url' => '/inv/', 'default' => '/inv/main'],
-    'Finance' => ['url' => '/fin/', 'default' => '/fin/dashboard'],
-    'Delivery' => ['url' => '/dlv/', 'default' => '/dlv/dashboard'],
-];
-
-if ($role === null || !isset($keywords[$role]) ) {
-    $path = '';
-} else {
-    if (strpos($currentUri, $keywords[$role]['url']) === false) {
-        $path = $keywords[$role]['default'];
-    }
-}
-// end guard login
 
 foreach ($routes as $route => $action) {
     if (strpos($route, '{') !== false) {
