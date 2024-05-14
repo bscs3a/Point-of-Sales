@@ -56,14 +56,16 @@ $remainingPondo = getRemainingPondo($department)
 
             <!-- Start: Profile -->
 
-            <?php require_once __DIR__ . "/logout/logout.php"?>
+            <?php require_once __DIR__ . "/components/logout/logout.php"?>
             <!-- End: Profile -->
 
         </div>
         
-        <!-- End: Header -->
 
-         <div class="w-full px-6 py-3 bg-white">
+
+        <!-- End: Header -->
+        <!-- for adding transaction -->
+        <div class="w-full px-6 py-3 bg-white">
 
             <div class="justify-between items-start">
                 <!-- Button -->
@@ -84,14 +86,10 @@ $remainingPondo = getRemainingPondo($department)
                     <div class="bg-white rounded shadow-lg w-1/3">
                         <div class="border-b pl-3 pr-3 pt-3 flex">
                             <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
-                            <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
-                                <i class="ri-close-line"></i>
-                            </button> -->
                         </div>
                         <!-- form -->
                         <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                         <div class="p-5">
-                            <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
                             <form action="/pondo/transaction" method="POST">
                                 <div class="mb-4 relative">
                                     <label for="date" class="block text-xs font-medium text-gray-900"> Date </label>
@@ -197,6 +195,7 @@ $remainingPondo = getRemainingPondo($department)
                 </script>
             </div>
         </div>
+        <!-- allowance info -->
         <div class=" mb-6">
             <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
                 <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl drop-shadow-md">
