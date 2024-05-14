@@ -917,6 +917,6 @@ Router::post('/login', function(){
 
 Router::post('/logout', function(){
     session_destroy();
-    header("Location: /");
+    header("Location: /Finance/");
     exit();
 });
