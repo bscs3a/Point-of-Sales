@@ -1,14 +1,11 @@
 <?php
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
-require_once "public/finance/functions/requestFolder/requestExpense.php";
+require_once "public/finance/functions/pondo/requestExpense.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
 require_once "public/finance/functions/pondo/insertPondo.php";
 
-$_SESSION['user'] = 'admin';
-$_SESSION['role'] = 'admin';
-$_SESSION['employee_name'] = "Tagle, Aries";
 
 $path = './public/finance/views';
 

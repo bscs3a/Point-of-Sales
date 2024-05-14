@@ -1,10 +1,7 @@
+
+
 <?php
-// for testing purposes
-// run function in the command line using
-// php -r "require 'public\finance\functions\functionTesting.php';"  
-// php -r "require 'public\finance\views\test.php';'
-
-require_once 'generalFunctions.php';
-
-echo getTotalOfAccountType("Sales");
+$password = "123"; // replace with your password
+$hashed_password = password_hash($password, PASSWORD_BCRYPT);
+echo $hashed_password;
 
