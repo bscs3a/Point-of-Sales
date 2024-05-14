@@ -294,12 +294,34 @@ $remainingPondo = getRemainingPondo($department)
             </div>
 
             <!-- pages -->
+            <?php 
+            $link = "";
+            switch ($department) {
+                case 'Delivery':
+                    $link = "/fin/funds/Delivery=";
+                    break;
+                case 'Finance':
+                    $link = "/fin/funds/finance=";
+                    break;
+                case 'Point of Sales':
+                    $link = "/fin/funds/Sales=";
+                    break;
+                case 'Product Order':
+                    $link = "/fin/funds/PO=";
+                    break;
+                case 'Inventory':
+                    $link = "/fin/funds/Inventory=";
+                    break;
+                case 'Human Resources':
+                    $link = "/fin/funds/HR=";
+                    break;
+            } ?>
             <ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
                 <!-- Next & Previous -->
                 <?php if ($page > 1): ?>
                     <li>
                         <!-- CHANGE THE ROUTE -->
-                        <a route="/fin/funds/Finance=<?= $page - 1 ?>"
+                        <a route="<?php echo $link . $page - 1 ?>"
                             class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                             <span class="sr-only">Prev Page</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -318,7 +340,7 @@ $remainingPondo = getRemainingPondo($department)
                     for ($i = $start; $i <= $end; $i++): 
                 ?>
                     <li>
-                        <a route="/fin/funds/Finance=<?= $i ?>"
+                        <a route="<?php echo $link . $i ?>"
                             class="block size-8 rounded border <?= $i == $page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-100 bg-white text-gray-900' ?> text-center leading-8">
                             <?= $i ?>
                         </a>
@@ -327,7 +349,7 @@ $remainingPondo = getRemainingPondo($department)
 
                 <?php if ($page < $totalPages): ?>
                     <li>
-                        <a route="/fin/funds/Finance=<?= $page + 1 ?>"
+                        <a route="<?php echo $link . $page + 1 ?>"
                             class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
                             <span class="sr-only">Next Page</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
