@@ -1,4 +1,6 @@
-<?php 
+<?php
+// might be delete all
+
 require_once 'public/finance/functions/supportingFunctions/supportingPondo.php';
 require_once 'public/finance/functions/generalFunctions.php';
 function generalAvailableToSelect(){
