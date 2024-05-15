@@ -1,16 +1,15 @@
 <?php 
 
-    require_once 'public\finance\functions\supportingFunctions\supportingExpense.php';
-    require_once 'public/finance/functions/generalFunctions.php';
     
+    require_once 'public/finance/functions/generalFunctions.php';
 
 
     function pondoForEveryone($department){
         if (!acceptableDepartment($department)){
             throw new Exception("Department does not exist");
         }
-        $year = date('Y', strtotime('"first day of last month"'));
-        $month = date('m', strtotime('"first day of last month"'));
+        $year = date('Y', strtotime('first day of last month'));
+        $month = date('m', strtotime('first day of last month'));
 
         $cashOnHand = getAccountBalanceV2('Cash on hand',true, $year, $month);
         $cashOnBank = getAccountBalanceV2('Cash on bank',true, $year, $month);
@@ -57,6 +56,7 @@
             'Cash on hand' => $cashOnHand * 0.1,
             'Cash on bank' => $cashOnBank * 0.1
         ];
+        
 
         switch ($department) {
             case 'Product Order':
@@ -119,7 +119,7 @@
         $result = $stmt->fetch();
         $total = $result['balance'];
 
-        return $total * -1;
+        return $total == 0 ? 0 : $total * -1;
     }
 
     function getRemainingPondo($department, $cashAccount){

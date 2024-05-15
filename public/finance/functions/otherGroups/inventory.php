@@ -23,6 +23,10 @@ function recordStolen($amount){
 
 // recounting every end of mon th
 function recountInventory($amount){
+    if ($amount <= 0){
+        throw new Exception("Amount must be a number or greater than 0");
+    }
+
     $costOfGoodsSold = getLedgerCode('Cost of Goods Sold');
     $inventory = getLedgerCode('Inventory');
 
@@ -33,6 +37,12 @@ function recountInventory($amount){
     }
 
     return insertLedgerXact($costOfGoodsSold,$inventory, $amount, "Recount Inventory");
+}
+
+// ONLY USE IF YOU WANT THE GENERAL VALUE OF INVENTORY - ASK PO IF NOT
+function getFinanceInventoryValue(){
+    $inventory = getLedgerCode('Inventory');
+    return getAccountBalanceV2($inventory);
 }
 
 

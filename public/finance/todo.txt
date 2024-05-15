@@ -1,10 +1,9 @@
 Todo:
-7. check payable
+7. check payable(add salary tax payable, and withholding tax payable to pondo of hr)
 8. Check Everything
 
 
 1. update charts on the dashboard -- very last to do
-3. audit log -- remove; for changes sa database nalang to
 
 
 Done:
@@ -12,3 +11,4 @@ Done:
 2. login(kausapin ang hr) -- needs help bruce
 6. Check purchases in income report(this is just inventory -- depending on the system)
 5. special insert sa ibang group
+3. audit log -- remove; for changes sa database nalang to

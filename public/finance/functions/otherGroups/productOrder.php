@@ -6,10 +6,13 @@ function recordBuyingInventory($amount){
     $inventory = getLedgerCode('Inventory');
     $department = "Product Order";
 
+    if ($amount <= 0) {
+        throw new Exception("Amount is less than or equal to 0");
+    }
     
 
-    $cashOnHand = getLedgerCode('Cash on Hand');
-    $cashOnBank = getLedgerCode('Cash on Bank');
+    $cashOnHand = 'Cash on hand';
+    $cashOnBank = 'Cash on bank';
 
 
     $handValue = getRemainingPondo($department, $cashOnHand);
@@ -27,13 +30,12 @@ function recordBuyingInventory($amount){
     //gets the value to insert
     $insertHand = $amount * $handPercentage;
     $insertBank = $amount * $bankPercentage;
-
     // fraction error handling
-    if($insertHand + $insertBank != $total){
+    if($insertHand + $insertBank != $amount){
         if($handValue > $bankValue){
-            $insertHand += $total - ($insertHand + $insertBank);
+            $insertHand += $amount - ($insertHand + $insertBank);
         }else{
-            $insertBank += $total - ($insertHand + $insertBank);
+            $insertBank += $amount - ($insertHand + $insertBank);
         }
     }
 
@@ -49,8 +51,8 @@ function getRemainingProductOrderPondo(){
 
     $department = "Product Order";
 
-    $cashOnHand = getLedgerCode('Cash on Hand');
-    $cashOnBank = getLedgerCode('Cash on Bank');
+    $cashOnHand = 'Cash on hand';
+    $cashOnBank = 'Cash on bank';
 
     $handValue = getRemainingPondo($department, $cashOnHand);
     $bankValue = getRemainingPondo($department, $cashOnBank);

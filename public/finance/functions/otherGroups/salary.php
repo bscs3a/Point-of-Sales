@@ -12,13 +12,15 @@ function inputSalary($monthlySalary, $withHoldingTax){
         throw new Exception("Total Salary is less than 0");
     }
     $hrRemainingPondo = getRemainingHRPondo();
-    if($hrRemainingPondo < $totalSalary){
+    if($hrRemainingPondo > $totalSalary){
         addSalaryPondoHR($SALARY, $totalSalary);
     }
     else{
         insertLedgerXact($SALARY, $SALARY_PAYABLE, $totalSalary);
     }
-    insertLedgerXact($SALARY, $WITHHOLDING_TAX_PAYABLE, $withHoldingTax);
+    if($withHoldingTax > 0){
+        insertLedgerXact($SALARY, $WITHHOLDING_TAX_PAYABLE, $withHoldingTax);
+    }
     return;
 }
 
@@ -26,8 +28,8 @@ function getRemainingHRPondo(){
 
     $department = "Human Resources";
 
-    $cashOnHand = getLedgerCode('Cash on Hand');
-    $cashOnBank = getLedgerCode('Cash on Bank');
+    $cashOnHand = 'Cash on hand';
+    $cashOnBank = 'Cash on bank';
 
     $handValue = getRemainingPondo($department, $cashOnHand);
     $bankValue = getRemainingPondo($department, $cashOnBank);
@@ -38,8 +40,8 @@ function getRemainingHRPondo(){
 function addSalaryPondoHR($account, $amount){
     $department = "Human Resources";
 
-    $cashOnHand = getLedgerCode('Cash on Hand');
-    $cashOnBank = getLedgerCode('Cash on Bank');
+    $cashOnHand = 'Cash on hand';
+    $cashOnBank = 'Cash on bank';
 
 
     $handValue = getRemainingPondo($department, $cashOnHand);
@@ -59,11 +61,11 @@ function addSalaryPondoHR($account, $amount){
     $insertBank = $amount * $bankPercentage;
 
     // fraction error handling
-    if($insertHand + $insertBank != $total){
+    if($insertHand + $insertBank != $amount){
         if($handValue > $bankValue){
-            $insertHand += $total - ($insertHand + $insertBank);
+            $insertHand += $amount - ($insertHand + $insertBank);
         }else{
-            $insertBank += $total - ($insertHand + $insertBank);
+            $insertBank += $amount - ($insertHand + $insertBank);
         }
     }
 

@@ -9,10 +9,10 @@ require_once "public/finance/functions/generalFunctions.php";
 // discount is the amount of discount given,
 function insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $discount = 0){
     if ($salesAmount <= 0 || $taxAmount <= 0){
-        throw new Exception("Amount must be greater than 0");
+        throw new Exception("Amount(tax or sales) must be greater than 0");
     }
     if($salesPaymentMethod !== "Cash on hand" && $salesPaymentMethod !== "Cash on bank" ){
-        throw new Exception("Payment method for sales is wrong");
+        throw new Exception("Payment must be cash on hand or cash on bank");
     }
     if($discount < 0){
         throw new Exception("Discount cannot be negative");
@@ -42,10 +42,14 @@ function insertSalesReturn($amount, $paymentMethod){
     if ($amount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
-    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank"){
-        throw new Exception("Payment method cannot be null");
+    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank" ){
+        throw new Exception("Payment must be cash on hand or cash on bank");
     }
-    $SALES_RETURN = "Returns";
+    if($amount > getBalanceCashAccount($paymentMethod)){
+        throw new Exception("Amount to be returned is greater than the remaining balance of the account");
+    }
+
+    $SALES_RETURN = getLedgerCode("Returns");
     $details = "Sales return";
     insertLedgerXact($SALES_RETURN, $paymentMethod, $amount, $details);
 }
@@ -57,11 +61,18 @@ function insertSalesAllowance($amount, $paymentMethod){
     if ($amount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
-    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank"){
-        throw new Exception("Payment method cannot be null");
+    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank" ){
+        throw new Exception("Payment must be cash on hand or cash on bank");
     }
-    $SALES_ALLOWANCE = "Allowance";
+    if($amount > getBalanceCashAccount($paymentMethod)){
+        throw new Exception("Amount to be returned is greater than the remaining balance of the account");
+    }
+    $SALES_ALLOWANCE = getLedgerCode("Allowance");
     $details = "Sales allowance";
     insertLedgerXact($SALES_ALLOWANCE, $paymentMethod, $amount, $details);
+}
+
+function getBalanceCashAccount($paymentMethod){
+    return getAccountBalanceV2($paymentMethod);
 }
 ?>
