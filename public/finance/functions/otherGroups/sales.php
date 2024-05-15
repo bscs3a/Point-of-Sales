@@ -1,31 +1,31 @@
 <?php
-require_once "../generalFunctions.php";
-require_once "../supportingFunctions/tax.php";
+require_once "public/finance/functions/generalFunctions.php";
 
 
-// parameters is SalesAmount(without tax and without discount)
+
+// parameters is SalesAmount(WITH TAX AND DISCOUNT)
 // taxAmount 
 // salesPaymentMethod(what is being used for salesPayment) -- options are "Cash on hand" "Cash on bank"
-// taxPaymentMethod is usually with Tax Payable, can be change to your discretion, but dont if possible
 // discount is the amount of discount given,
-function insertSalesLedger($salesAmount,$taxAmount, $salesPaymentMethod, $taxPaymentMethod = "Tax Payable", $discount = 0){
+function insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $discount = 0){
     if ($salesAmount <= 0 || $taxAmount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
     if($salesPaymentMethod === "Cash on hand" || $salesPaymentMethod === "Cash on bank" ){
         throw new Exception("Payment method for sales is wrong");
     }
-    if($taxPaymentMethod === "Cash on hand" || $taxPaymentMethod === "Cash on bank" || $taxPaymentMethod === "Tax Payable"){
-        throw new Exception("Payment method for tax is wrong");
-    }
     if($discount < 0){
         throw new Exception("Discount cannot be negative");
     }
-    $SALES =  "Sales";
-    $salesDetails = "made a sale";
-    $taxDetails = "VAT";
-    insertLedgerXact($salesPaymentMethod, $SALES, $salesAmount, $salesDetails);
-    insertTax($taxPaymentMethod, $taxAmount, $taxDetails);
+
+    $SALES =  getLedgerCode("Sales");
+    $salesDetails = "made a sale with tax";
+    $VALUE_ADDED_TAX = getLedgerCode("Value Added Tax Payable");
+
+    $remainingSalesAmount = $salesAmount - $taxAmount;
+
+    insertLedgerXact($salesPaymentMethod, $SALES, $remainingSalesAmount, $salesDetails);
+    insertLedgerXact($salesPaymentMethod, $VALUE_ADDED_TAX, $taxAmount, $salesDetails);
 
     //for discount
     if ($discount > 0){
