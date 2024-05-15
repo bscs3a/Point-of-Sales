@@ -45,7 +45,7 @@ function recordBuyingInventory($amount){
 }
 
 // only use when you want to get your remaining pondo
-function getProductOrderPondo(){
+function getRemainingProductOrderPondo(){
 
     $department = "Product Order";
 

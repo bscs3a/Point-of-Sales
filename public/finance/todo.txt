@@ -1,9 +1,12 @@
 Todo:
-2. login(kausapin ang hr) -- needs help bruce
-4. pondo/request --- needs checking
 5. special insert sa ibang group
+7. check payable
 
-
-6. Check purchases in income report
 1. update charts on the dashboard -- very last to do
 3. audit log -- remove; for changes sa database nalang to
+
+
+Done:
+4. pondo/request --- needs checking
+2. login(kausapin ang hr) -- needs help bruce
+6. Check purchases in income report(this is just inventory -- depending on the system)
