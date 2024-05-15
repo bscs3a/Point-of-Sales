@@ -1,5 +1,7 @@
 Todo:
 7. check payable
+8. Check Everything
+
 
 1. update charts on the dashboard -- very last to do
 3. audit log -- remove; for changes sa database nalang to
