@@ -5,37 +5,16 @@ require_once "otherGroups\salary.php";
 require_once "otherGroups\sales.php";
 session_start();
 session_destroy();
-$_SESSION['user']['role'] = "Human Resources";
-$_SESSION['user']['employee_id'] = 1;
+$department = "Human Resources";
 
 
-$amount = 0;
-$payment_method = "Cash on bank";
-$salesAmount = 0;
-$taxAmount = 0;
-$salesPaymentMethod = $payment_method;
-$discount = 0;
+$totalExpenses = getExpensesPondo($department, 'Cash on hand') + getExpensesPondo($department, 'Cash on bank');
 
+$cashOnHand = getRemainingPondo($department, "Cash on hand");
+$cashOnBank = getRemainingPondo($department, "Cash on bank");
+$remainingPondo = $cashOnHand + $cashOnBank;
 
-$monthlySalary = 0;
-$withHoldingTax = 0;
-
-// // inventory
-// echo recordStolen($amount);
-// echo recountInventory($amount);
-
-
-// // sales
-// echo getBalanceCashAccount($payment_method);
-// echo insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $discount);
-// echo insertSalesAllowance($amount, $payment_method);
-// echo insertSalesReturn($amount, $payment_method);
-
-// //product order
-// echo recordBuyingInventory($amount);
-// echo getRemainingProductOrderPondo();
-
-
-// //salary
-// echo getRemainingHRPondo();
-// echo inputSalary($monthlySalary, $withHoldingTax);
+echo $totalExpenses;
+echo $remainingPondo;
+echo $cashOnHand;
+echo $cashOnBank;
