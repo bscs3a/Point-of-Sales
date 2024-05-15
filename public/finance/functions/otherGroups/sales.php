@@ -11,7 +11,7 @@ function insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $disco
     if ($salesAmount <= 0 || $taxAmount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
-    if($salesPaymentMethod === "Cash on hand" || $salesPaymentMethod === "Cash on bank" ){
+    if($salesPaymentMethod !== "Cash on hand" && $salesPaymentMethod !== "Cash on bank" ){
         throw new Exception("Payment method for sales is wrong");
     }
     if($discount < 0){
@@ -42,7 +42,7 @@ function insertSalesReturn($amount, $paymentMethod){
     if ($amount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
-    if($paymentMethod === "Cash on hand" || $paymentMethod === "Cash on bank"){
+    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank"){
         throw new Exception("Payment method cannot be null");
     }
     $SALES_RETURN = "Returns";
@@ -57,7 +57,7 @@ function insertSalesAllowance($amount, $paymentMethod){
     if ($amount <= 0){
         throw new Exception("Amount must be greater than 0");
     }
-    if($paymentMethod === "Cash on hand" || $paymentMethod === "Cash on bank"){
+    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank"){
         throw new Exception("Payment method cannot be null");
     }
     $SALES_ALLOWANCE = "Allowance";
