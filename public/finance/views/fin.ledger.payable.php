@@ -39,13 +39,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-                <div class="text-black font-medium">Sample User</div>
-                <li class="dropdown ml-3">
-                    <i class="ri-arrow-down-s-line"></i>
-                </li>
-            </ul>
-
+            <?php require_once "components/logout/logout.php"?>
             <!-- End: Profile -->
 
         </div>
@@ -230,7 +224,7 @@
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                                    <form action="/addToLoan" method="POST">
+                                    <form action="/payLoan" method="POST">
                                         <div class="mb-4 relative">
                                             Total: <?= $results['total_amount'] ?>
 
@@ -294,7 +288,7 @@
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                                    <form action="/addToLoan" method="POST">
+                                    <form action="/payLoan" method="POST">
                                         <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
                                         <div class="mb-4 relative">
                                             <label for="description" class="block text-xs font-medium text-gray-900">

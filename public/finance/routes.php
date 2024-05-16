@@ -129,44 +129,26 @@ Router::post('/addInvestor', function () {
 
 //does not seem to work or execute at all idk why
 
-Router::post('/addToLoan', function () {
+Router::post('/payLoan', function () {
    
     
     // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
     $details = isset($_POST['description']) ? $_POST['description'] : null;
     $amount = intval($_POST['amount']);
-    $ledgerNo = ($_POST['ledgerNo']);
-    $ledgerNo_Dr = ($_POST['ledgerName']);
+    $binabayaran = ($_POST['ledgerNo']);
+    $pambayad = ($_POST['ledgerName']);
     // $datetime = $datetime->format('Y-m-d H:i:s');
 
-    // borrowAsset($ledgerNo, $ledgerNo_Dr, $amount);
-  
-  
-    $db = Database::getInstance();
-    $conn = $db->connect();
+    $SALARY_PAYABLE = getLedgerCode("Salary Payable");
+    $WITHHOLDING_TAX_PAYABLE = getLedgerCode("Withholding Tax Payable");
 
-    
-    $sql = "SELECT ledgerno FROM ledger WHERE ledgerno = ? OR name = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$ledgerNo_Dr, $ledgerNo_Dr]);
-    $ledgerName = $stmt->fetchColumn();
-
-    $sql = "INSERT INTO ledgertransaction (LedgerNo, details, amount, LedgerNo_Dr) VALUES (:modalId, :details, :amount, :ledgerNo_Dr)";
-    $stmt = $conn->prepare($sql);
-
-    $stmt->bindParam(':modalId', $ledgerNo);
-    $stmt->bindParam(':details', $details);
-    $stmt->bindParam(':amount', $amount);
-    $stmt->bindParam(':ledgerNo_Dr', $ledgerName);
-    // $stmt->bindParam(':DateTime', $datetime);
-
-    try {
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        return;
+    if($binabayaran == $SALARY_PAYABLE || $binabayaran == $WITHHOLDING_TAX_PAYABLE){
+        addTransactionPondo($binabayaran, $pambayad, $amount);
     }
-
+    else {
+        insertLedgerXact($binabayaran, $pambayad, $amount, $details);
+    }
+  
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/accounts/payable");
 });
@@ -177,37 +159,11 @@ Router::post('/inveees', function () {
     // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
     $details = isset($_POST['description']) ? $_POST['description'] : null;
     $amount = intval($_POST['amount']);
-    $ledgerNo = ($_POST['ledgerNo']);
-    $ledgerNo_Dr = ($_POST['ledgerName']);
-    // $datetime = $datetime->format('Y-m-d H:i:s');
-
-    // borrowAsset($ledgerNo, $ledgerNo_Dr, $amount);
-  
-  
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
+    $nanguutang = ($_POST['ledgerNo']);
+    $gamit = ($_POST['ledgerName']);
     
-    $sql = "SELECT ledgerno FROM ledger WHERE ledgerno = ? OR name = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$ledgerNo_Dr, $ledgerNo_Dr]);
-    $ledgerName = $stmt->fetchColumn();
-
-    $sql = "INSERT INTO ledgertransaction (LedgerNo, details, amount, LedgerNo_Dr) VALUES (:modalId, :details, :amount, :ledgerNo_Dr)";
-    $stmt = $conn->prepare($sql);
-
-    $stmt->bindParam(':modalId', $ledgerNo);
-    $stmt->bindParam(':details', $details);
-    $stmt->bindParam(':amount', $amount);
-    $stmt->bindParam(':ledgerNo_Dr', $ledgerName);
-    // $stmt->bindParam(':DateTime', $datetime);
-
-    try {
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        return;
-    }
+    // dr = gamit
+    insertLedgerXact($gamit, $nanguutang, $amount, $details);
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/accounts/investors");
