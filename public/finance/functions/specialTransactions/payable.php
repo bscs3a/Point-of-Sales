@@ -1,54 +1,6 @@
 <?php
 require_once "public/finance/functions/generalFunctions.php";
-
-function getAllInvestors()
-{
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
-    $AP = getAccountCode("Capital Accounts");
-    $sql = "SELECT * FROM ledger WHERE accounttype = :AP";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':AP', $AP);
-    $stmt->execute();
-    $ledgers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $results = [];
-    foreach ($ledgers as $ledger) {
-        $ledgerNo = $ledger['ledgerno'];
-        $name = $ledger['name'];
-
-        $query1 = "SELECT SUM(lt.amount) as total_amount 
-                  FROM ledgertransaction lt 
-                  JOIN ledger l ON lt.LedgerNo_Dr = l.ledgerno 
-                  WHERE lt.LedgerNo = :LedgerNo AND l.AccountType != 2";
-
-        $query2 = "SELECT SUM(lt.amount) as total_amount 
-                  FROM ledgertransaction lt 
-                  JOIN ledger l ON lt.LedgerNo_Dr = l.ledgerno 
-                  WHERE lt.LedgerNo = :LedgerNo AND l.AccountType = 2";
-
-        $stmt1 = $conn->prepare($query1);
-        $stmt1->bindParam(':LedgerNo', $ledgerNo);
-        $stmt1->execute();
-        $result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-
-        $stmt2 = $conn->prepare($query2);
-        $stmt2->bindParam(':LedgerNo', $ledgerNo);
-        $stmt2->execute();
-        $result2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-
-        $total_amount = $result1['total_amount'] - $result2['total_amount'];
-
-        $results[] = [
-            'ledgerno' => $ledgerNo,
-            'name' => $name,
-            'total_amount' => $total_amount
-        ];
-    }
-
-    return $results;
-}
+require_once "public/finance/pondo/insertPondo.php";
 
 function getAllPayable()
 {
@@ -68,36 +20,12 @@ function getAllPayable()
     foreach ($ledgers as $ledger) {
         $ledgerNo = $ledger['ledgerno'];
         $name = $ledger['name'];
-
-        $query1 = "SELECT SUM(lt.amount) as total_amount 
-                  FROM ledgertransaction lt 
-                  JOIN ledger l ON lt.LedgerNo_Dr = l.ledgerno 
-                  WHERE lt.LedgerNo = :LedgerNo AND l.AccountType != 2";
-
-        $query2 = "SELECT SUM(lt.amount) as total_amount 
-                  FROM ledgertransaction lt 
-                  JOIN ledger l ON lt.LedgerNo_Dr = l.ledgerno 
-                  WHERE lt.LedgerNo = :LedgerNo AND l.AccountType = 2";
-
-        $stmt1 = $conn->prepare($query1);
-        $stmt1->bindParam(':LedgerNo', $ledgerNo);
-        $stmt1->execute();
-        $result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-
-        $stmt2 = $conn->prepare($query2);
-        $stmt2->bindParam(':LedgerNo', $ledgerNo);
-        $stmt2->execute();
-        $result2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-
-        $total_amount = $result1['total_amount'] - $result2['total_amount'];
-
         $results[] = [
             'ledgerno' => $ledgerNo,
             'name' => $name,
-            'total_amount' => $total_amount
+            'total_amount' => getValueOfPayable($ledgerNo)
         ];
     }
-
     return $results;
 }
 
@@ -110,7 +38,7 @@ function getValueOfPayable($accountNumber)
 
 
 // add loan to account
-function borrowAsset($accountNumber, $assetCode, $amount)
+function borrowPayable($accountNumber, $assetCode, $amount)
 {
     $accountNumber = getAccountCode($accountNumber);
     $assetCode = getAccountCode($assetCode);
@@ -149,66 +77,33 @@ function payPayable($accountNumber, $assetCode, $amount)
     if (!$assetCode) {
         throw new Exception("Asset code not found");
     }
+    
+    $SALARY = getAccountCode("Salary Payable");
+    $WITHHOLDING_TAX = getAccountCode("Withholding Tax Payable");
 
+    if ($assetCode == $SALARY || $assetCode == $WITHHOLDING_TAX) {
+        $HUMAN_RESOURCES = "Human Resources";
+        addTransactionPondo($accountNumber, $assetCode, $amount, $HUMAN_RESOURCES);
+        return;
+    }
     insertLedgerXact($accountNumber, $assetCode, $amount, "Paid $accountNumber using $assetCode");
     return;
 }
 
-function addPayable($name, $contact, $contactName)
+function addPayable($name, $contact, $contactName, $accountType)
 {
-    $CAPITAL = getAccountCode("Accounts Payable");
+    $accountType = getAccountCode($accountType);
 
     $db = Database::getInstance();
     $conn = $db->connect();
 
-    $sql = "INSERT INTO Ledger (name, contactIfLE, contactName, accounttype) VALUES (:name, :contact, :contactName, :CAPITAL)";
+    $sql = "INSERT INTO Ledger (name, contactIfLE, contactName, accounttype) VALUES (:name, :contact, :contactName, :accounttype)";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':name', $name);
     $stmt->bindParam(':contact', $contact);
     $stmt->bindParam(':contactName', $contactName);
-    $stmt->bindParam(':CAPITAL', $CAPITAL);
+    $stmt->bindParam(':accounttype', $accountType);
     $stmt->execute();
     return;
 }
 
-
-function payInvestor($accountNumber, $assetCode, $amount)
-{
-    $accountNumber = getAccountCode($accountNumber);
-    $assetCode = getAccountCode($assetCode);
-
-    $currentPayable = getValueOfPayable($accountNumber);
-
-    if ($amount <= 0) {
-        throw new Exception("Amount must be greater than 0");
-    }
-    if ($amount > $currentPayable) {
-        throw new Exception("Amount is greater than current payable");
-    }
-    if (!$accountNumber) {
-        throw new Exception("Account number not found");
-    }
-    if (!$assetCode) {
-        throw new Exception("Asset code not found");
-    }
-
-    insertLedgerXact($accountNumber, $assetCode, $amount, "Paid $accountNumber using $assetCode");
-    return;
-}
-
-function addInvestor($name, $contact, $contactName)
-{
-    $CAPITAL = getAccountCode("Capital Accounts");
-
-    $db = Database::getInstance();
-    $conn = $db->connect();
-
-    $sql = "INSERT INTO Ledger (name, contactIfLE, contactName, accounttype) VALUES (:name, :contact, :contactName, :CAPITAL)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':contact', $contact);
-    $stmt->bindParam(':contactName', $contactName);
-    $stmt->bindParam(':CAPITAL', $CAPITAL);
-    $stmt->execute();
-    return;
-}

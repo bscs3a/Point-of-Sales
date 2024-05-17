@@ -1,9 +1,9 @@
 Todo:
 7. check payable(add salary tax payable, and withholding tax payable to pondo of hr)
-8. Check Everything
 
 
 1. update charts on the dashboard -- very last to do
+8. Check Everything
 
 
 Done:

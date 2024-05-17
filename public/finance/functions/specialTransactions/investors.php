@@ -11,15 +11,24 @@ function getAllInvestors(){
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':capital', $CAPITAL);
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ledgers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return $result;
+    $results = [];
+    foreach ($ledgers as $ledger) {
+        $ledgerNo = $ledger['ledgerno'];
+        $name = $ledger['name'];
+        $results[] = [
+            'ledgerno' => $ledgerNo,
+            'name' => $name,
+            'total_amount' => getValueOfInvestor($ledgerNo), 2
+        ];
+    }
+    return $results;
 }
 
 function getValueOfInvestor($accountNumber){
     return abs(getAccountBalanceV2($accountNumber));
 }
-
 
 // add investment
 function investAsset($accountNumber, $assetCode, $amount){
@@ -36,7 +45,7 @@ function investAsset($accountNumber, $assetCode, $amount){
         throw new Exception("Asset code not found");
     }
 
-    insertLedgerXact($assetCode,$accountNumber,$amount,"Investment of $accountNumber in $assetCode");
+    insertLedgerXact($assetCode,$accountNumber,$amount,"Investment of $accountNumber in $assetCode with $amount");
     return;
 }
 

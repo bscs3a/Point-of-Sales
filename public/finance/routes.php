@@ -2,6 +2,7 @@
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
 require_once "public/finance/functions/pondo/requestExpense.php";
+require_once "public/finance/functions/specialTransactions/investors.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
 
@@ -129,46 +130,57 @@ Router::post('/addInvestor', function () {
 
 //does not seem to work or execute at all idk why
 
-Router::post('/payLoan', function () {
-   
-    
-    // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
-    $details = isset($_POST['description']) ? $_POST['description'] : null;
-    $amount = intval($_POST['amount']);
-    $binabayaran = ($_POST['ledgerNo']);
-    $pambayad = ($_POST['ledgerName']);
-    // $datetime = $datetime->format('Y-m-d H:i:s');
+Router::post('/payPayable', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+     $amount = intval($_POST['amount']);
+ 
+     $account = ($_POST['ledgerNo']);
+     $item = ($_POST['ledgerName']);
+     
+    payPayable($account, $item, $amount);
+ 
+     $rootFolder = dirname($_SERVER['PHP_SELF']);
+     header("Location: $rootFolder/fin/ledger/accounts/payable");
+ });
 
-    $SALARY_PAYABLE = getLedgerCode("Salary Payable");
-    $WITHHOLDING_TAX_PAYABLE = getLedgerCode("Withholding Tax Payable");
+Router::post('/borrowPayable', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+     $amount = intval($_POST['amount']);
+ 
+     $account = ($_POST['ledgerNo']);
+     $item = ($_POST['ledgerName']);
+     
+    borrowPayable($account, $item, $amount);
+ 
+     $rootFolder = dirname($_SERVER['PHP_SELF']);
+     header("Location: $rootFolder/fin/ledger/accounts/payable");
+ });
 
-    if($binabayaran == $SALARY_PAYABLE || $binabayaran == $WITHHOLDING_TAX_PAYABLE){
-        addTransactionPondo($binabayaran, $pambayad, $amount);
-    }
-    else {
-        insertLedgerXact($binabayaran, $pambayad, $amount, $details);
-    }
-  
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/payable");
-});
+Router::post('/investAsset', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+     $amount = intval($_POST['amount']);
+ 
+     $investingAccount = ($_POST['ledgerNo']);
+     $item = ($_POST['ledgerName']);
+     
+    investAsset($investingAccount, $item, $amount);
+ 
+     $rootFolder = dirname($_SERVER['PHP_SELF']);
+     header("Location: $rootFolder/fin/ledger/accounts/investors");
+ });
 
-Router::post('/inveees', function () {
-   
-    
-    // $datetime = DateTime::createFromFormat('F d, Y', $_POST['date']);
-    $details = isset($_POST['description']) ? $_POST['description'] : null;
-    $amount = intval($_POST['amount']);
-    $nanguutang = ($_POST['ledgerNo']);
-    $gamit = ($_POST['ledgerName']);
-    
-    // dr = gamit
-    insertLedgerXact($gamit, $nanguutang, $amount, $details);
-
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/investors");
-});
-
+ Router::post('/withdrawAsset', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+     $amount = intval($_POST['amount']);
+ 
+     $investingAccount = ($_POST['ledgerNo']);
+     $item = ($_POST['ledgerName']);
+     
+    withdrawAsset($investingAccount, $item, $amount);
+ 
+     $rootFolder = dirname($_SERVER['PHP_SELF']);
+     header("Location: $rootFolder/fin/ledger/accounts/investors");
+ });
 
 
 Router::post('/fin/getEquityReport', function (){
