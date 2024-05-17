@@ -111,7 +111,7 @@
                         <button id="openModal"
                             class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm py-1 px-3 rounded-lg border border-gray-500">
                             <i class="ri-add-box-line"></i>
-                            Add Invesment
+                            Add Account Payable
                         </button>
                     </div>
                 </div>
@@ -198,8 +198,9 @@
                             class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
                             <div class="text-center p-5 ">
                                 <br><br><br>
-                                <h1 class="text-5xl">Credit</h1>
-                                <p><?= $results['name'] ?></p>
+                                <h1 class="text-5xl"><?= $results['name'] ?></h1>
+                                <p>Contact Name: <?= $results['contact_name']?>  </p>
+                                <p>Contact info: <?= $results['contact']?>  </p>
                                 <p>Total: <?= $results['total_amount'] ?></p>
                             </div>
                             <div class="p-10">
@@ -292,7 +293,7 @@
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
                                     <form action="/borrowPayable" method="POST">
-                                        <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
+                                        <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" readonly/>
                                         <div class="mb-4 relative">
                                             <label for="description" class="block text-xs font-medium text-gray-900">
                                                 Description

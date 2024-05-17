@@ -1,7 +1,6 @@
 <?php
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
-require_once "public/finance/functions/pondo/requestExpense.php";
 require_once "public/finance/functions/specialTransactions/investors.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
@@ -32,12 +31,30 @@ $fin = [
     '/fin/ledger/accounts/taxPayable' => $basePath . "ledger.taxPayable.php",
 
     //funds
-    '/fin/funds/HR' => $basePath . "funds.HR.php",
-    '/fin/funds/PO' => $basePath . "funds.PO.php",
-    '/fin/funds/Sales' => $basePath . "funds.sales.php",
-    '/fin/funds/Inventory' => $basePath . "funds.inventory.php",
-    '/fin/funds/Delivery' => $basePath . "funds.delivery.php",
-    '/fin/funds/finance' => $basePath . "funds.finance.php",
+    '/fin/funds/HR/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.HR.php";
+    },
+    '/fin/funds/PO/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.PO.php";
+    },
+    '/fin/funds/Sales/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.sales.php";
+    },
+    '/fin/funds/Inventory/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.inventory.php";
+    },
+    '/fin/funds/Delivery/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.delivery.php";
+    },
+    '/fin/funds/finance/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.finance.php";
+    },
 
     '/fin/test' => $basePath . "test.php",
 
@@ -113,9 +130,8 @@ Router::post('/reportGeneration', function () {
 
 // for accounts payable
 Router::post('/addPayable', function () {
-    addPayable($_POST['name'], $_POST['contact'], $_POST['contactName'], $_POST['accounttype']);
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/payable");
+    addPayable($_POST['name'], $_POST['contact'], $_POST['contactName'], $_POST['acctype']);
+    header("Location: " . $_SERVER['HTTP_REFERER']);
 });
 
 
@@ -127,8 +143,7 @@ Router::post('/payPayable', function () {
     
     payPayable($account, $item, $amount);
     
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/payable");
+    header("Location: " . $_SERVER['HTTP_REFERER']);
 });
 
 Router::post('/borrowPayable', function () {
@@ -140,8 +155,7 @@ Router::post('/borrowPayable', function () {
     
     borrowPayable($account, $item, $amount);
     
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/ledger/accounts/payable");
+    header("Location: " . $_SERVER['HTTP_REFERER']);
 });
 
 // for investors

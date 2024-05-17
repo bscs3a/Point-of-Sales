@@ -21,12 +21,13 @@ function getAllInvestors(){
         $results[] = [
             'ledgerno' => $ledgerNo,
             'name' => $name,
-            'total_amount' => getValueOfInvestor($ledgerNo), 2
+            'contact_name' => $ledger['contactName'],
+            'contact' => $ledger['contactIfLE'],
+            'total_amount' => getValueOfInvestor($ledgerNo)
         ];
     }
     return $results;
 }
-
 function getValueOfInvestor($accountNumber){
     return abs(getAccountBalanceV2($accountNumber));
 }

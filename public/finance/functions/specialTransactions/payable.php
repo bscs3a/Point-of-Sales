@@ -24,7 +24,9 @@ function getAllPayable()
         $results[] = [
             'ledgerno' => $ledgerNo,
             'name' => $name,
-            'total_amount' => getValueOfPayable($ledgerNo)
+            'contact_name' => $ledger['contactName'],
+            'contact' => $ledger['contactIfLE'],
+            'total_amount' => getValueOfInvestor($ledgerNo)
         ];
     }
     return $results;
@@ -50,7 +52,9 @@ function getAllTaxPayable()
         $results[] = [
             'ledgerno' => $ledgerNo,
             'name' => $name,
-            'total_amount' => getValueOfPayable($ledgerNo)
+            'contact_name' => $ledger['contactName'],
+            'contact' => $ledger['contactIfLE'],
+            'total_amount' => getValueOfInvestor($ledgerNo)
         ];
     }
     return $results;
