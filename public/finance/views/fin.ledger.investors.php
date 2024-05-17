@@ -66,8 +66,10 @@
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Accounts Payable
                                 </a>
-
-
+                                <a route='/fin/ledger/accounts/taxPayable'
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    Tax Payable
+                                </a>
                             </nav>
                         </div>
                     </div>
@@ -118,7 +120,7 @@
                     class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div class="bg-white rounded shadow-lg w-1/3">
                         <div class="border-b pl-3 pr-3 pt-3 flex">
-                            <h5 class="font-bold uppercase text-gray-600">New Transactions</h5>
+                            <h5 class="font-bold uppercase text-gray-600">New Account</h5>
                             <!-- <button id="closeModal" class="ml-auto text-gray-600 hover:text-gray-800 cursor-pointer">
                                 <i class="ri-close-line"></i>
                             </button> -->
@@ -127,15 +129,14 @@
                         <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                         <div class="p-5">
                             <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                            <form action="/addPayable" method="POST">
+                            <form action="/addInvestor" method="POST">
                                 <div class="mb-4 relative">
                                     <label for="acctype" class="block text-xs font-medium text-gray-900">
-                                        Capital
+                                        Account Type
                                     </label>
-                                    <input type="text" id="description" name="acctype" required value="Capital"
+                                    <input type="text" id="description" name="acctype" required value="Capital Accounts"
                                         readonly
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
-
                                 </div>
 
 
@@ -149,7 +150,7 @@
                                 </div>
                                 <div class="mb-4 relative">
                                     <label for="contact" class="block text-xs font-medium text-gray-900">
-                                        Contact
+                                        Contact Info
                                     </label>
                                     <input type="text" id="contact" name="contact" required
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
@@ -193,7 +194,7 @@
                                 <br><br><br>
                                 <h1 class="text-5xl">Credit</h1>
                                 <p><?= $results['name'] ?></p>
-                                <p>Total: <?= $results['total_amount'] ?></p>
+                                <p>Total: <?= number_format($results['total_amount'],2) ?></p>
                             </div>
                             <div class="p-10">
                             <button id="openLoanModal<?= $id ?>"
@@ -220,7 +221,7 @@
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                                    <form action="/addToLoan" method="POST">
+                                    <form action="/withdrawAsset" method="POST">
                                         <div class="mb-4 relative">
 
                                             Total: <?= $results['total_amount'] ?>
@@ -285,7 +286,7 @@
                                 <?php $rootFolder = dirname($_SERVER['PHP_SELF']); ?>
                                 <div class="p-5">
                                     <!-- <form action="<?= $rootFolder . '/fin/ledger' ?>" method="POST"> -->
-                                    <form action="/inveees" method="POST">
+                                    <form action="/investAsset" method="POST">
                                         <input type="text" id="ledgerNo" name="ledgerNo" value="<?= $id ?>" />
                                         <div class="mb-4 relative">
                                             <label for="description" class="block text-xs font-medium text-gray-900">

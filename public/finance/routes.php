@@ -29,12 +29,7 @@ $fin = [
     },
     '/fin/ledger/accounts/investors' => $basePath . "ledger.investors.php",
     '/fin/ledger/accounts/payable' => $basePath . "ledger.payable.php",
-
-
-    //request
-    '/fin/expense' => $basePath . "requestExpense.php",
-    '/fin/request' => $basePath . "requestInventory.php",
-    '/fin/salary' => $basePath . "requestSalary.php",
+    '/fin/ledger/accounts/taxPayable' => $basePath . "ledger.taxPayable.php",
 
     //funds
     '/fin/funds/HR' => $basePath . "funds.HR.php",
@@ -116,45 +111,45 @@ Router::post('/reportGeneration', function () {
     exit;
 });
 
+// for accounts payable
 Router::post('/addPayable', function () {
-    addPayable($_POST['name'], $_POST['contact'], $_POST['contactName']);
+    addPayable($_POST['name'], $_POST['contact'], $_POST['contactName'], $_POST['accounttype']);
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/accounts/payable");
 });
 
+
+Router::post('/payPayable', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+    $amount = intval($_POST['amount']);
+    $account = ($_POST['ledgerNo']);
+    $item = ($_POST['ledgerName']);
+    
+    payPayable($account, $item, $amount);
+    
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/accounts/payable");
+});
+
+Router::post('/borrowPayable', function () {
+    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
+    $amount = intval($_POST['amount']);
+    
+    $account = ($_POST['ledgerNo']);
+    $item = ($_POST['ledgerName']);
+    
+    borrowPayable($account, $item, $amount);
+    
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/accounts/payable");
+});
+
+// for investors
 Router::post('/addInvestor', function () {
     addInvestor($_POST['name'], $_POST['contact'], $_POST['contactName']);
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/accounts/investors");
 });
-
-//does not seem to work or execute at all idk why
-
-Router::post('/payPayable', function () {
-    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
-     $amount = intval($_POST['amount']);
- 
-     $account = ($_POST['ledgerNo']);
-     $item = ($_POST['ledgerName']);
-     
-    payPayable($account, $item, $amount);
- 
-     $rootFolder = dirname($_SERVER['PHP_SELF']);
-     header("Location: $rootFolder/fin/ledger/accounts/payable");
- });
-
-Router::post('/borrowPayable', function () {
-    // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
-     $amount = intval($_POST['amount']);
- 
-     $account = ($_POST['ledgerNo']);
-     $item = ($_POST['ledgerName']);
-     
-    borrowPayable($account, $item, $amount);
- 
-     $rootFolder = dirname($_SERVER['PHP_SELF']);
-     header("Location: $rootFolder/fin/ledger/accounts/payable");
- });
 
 Router::post('/investAsset', function () {
     // credit-ledgerno is positive. debit-ledgerno_dr is negative in this account
@@ -181,7 +176,7 @@ Router::post('/investAsset', function () {
      $rootFolder = dirname($_SERVER['PHP_SELF']);
      header("Location: $rootFolder/fin/ledger/accounts/investors");
  });
-
+// end
 
 Router::post('/fin/getEquityReport', function (){
     $year = date('Y');

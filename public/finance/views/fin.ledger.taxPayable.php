@@ -62,12 +62,12 @@
                                     Investors
                                 </a>
                                 <a route='/fin/ledger/accounts/payable'
-                                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
-                                    aria-current="page">
+                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Accounts Payable
                                 </a>
                                 <a route='/fin/ledger/accounts/taxPayable'
-                                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
+                                    aria-current="page">
                                     Tax Payable
                                 </a>
                             </nav>
@@ -135,10 +135,9 @@
                                     <label for="acctype" class="block text-xs font-medium text-gray-900">
                                         Account Type
                                     </label>
-                                    <input type="text" id="description" name="acctype" required value="Accounts Payable"
+                                    <input type="text" id="description" name="acctype" required value="Tax Payable"
                                         readonly
                                         class="mt-1 py-1 px-3 w-full rounded-md border border-gray-400 shadow-md sm:text-sm" />
-
                                 </div>
 
 
