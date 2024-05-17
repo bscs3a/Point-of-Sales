@@ -187,7 +187,7 @@
                 <div class="flex flex-wrap gap-5">
                     <?php
                     require_once "public/finance/functions/specialTransactions/payable.php";
-                    $result = getAllPayable();
+                    $result = getAllTaxPayable();
                     ?>
 
                     <?php foreach ($result as $results): ?>

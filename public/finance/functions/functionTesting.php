@@ -1,20 +1,18 @@
 <?php
-require_once "otherGroups\inventory.php";
-require_once "otherGroups\productOrder.php";
-require_once "otherGroups\salary.php";
-require_once "otherGroups\sales.php";
-session_start();
-session_destroy();
-$department = "Human Resources";
+require_once 'specialTransactions/investors.php';
+require_once 'specialTransactions/payable.php';
 
 
-$totalExpenses = getExpensesPondo($department, 'Cash on hand') + getExpensesPondo($department, 'Cash on bank');
+$account = 'aries';
+$asset = 'Cash on bank';
+$amount = 100;
 
-$cashOnHand = getRemainingPondo($department, "Cash on hand");
-$cashOnBank = getRemainingPondo($department, "Cash on bank");
-$remainingPondo = $cashOnHand + $cashOnBank;
+$name = "aries";
+$contact = "123456789";
+$contactName = "aries tagle assitant";
 
-echo $totalExpenses;
-echo $remainingPondo;
-echo $cashOnHand;
-echo $cashOnBank;
+
+// echo investAsset($account, $asset, $amount);
+echo withdrawAsset($account, $asset, $amount);
+var_dump(getAllInvestors());
+// echo addInvestor($name, $contact, $contactName);

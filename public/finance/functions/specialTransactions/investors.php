@@ -1,11 +1,12 @@
 <?php
+// require_once "../generalFunctions.php";
 require_once "public/finance/functions/generalFunctions.php";
 
 function getAllInvestors(){
     $db = Database::getInstance();
     $conn = $db->connect();  
 
-    $CAPITAL = getLedgerCode("Capital Accounts");
+    $CAPITAL = getAccountCode("Capital Accounts");
     $sql = "SELECT * FROM Ledger WHERE accounttype = :capital";
 
     $stmt = $conn->prepare($sql);

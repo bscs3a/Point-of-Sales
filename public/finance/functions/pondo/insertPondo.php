@@ -83,11 +83,11 @@ function validCredit(){
 function getRandomEmployee($department){
     $db = Database::getInstance();
     $conn = $db->connect();
-    $sql = "SELECT employee_id FROM employee WHERE department = :department";
+    $sql = "SELECT id FROM employees WHERE department = :department";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':department', $department);
     $stmt->execute();
     $result = $stmt->fetchAll();
     $randomEmployee = $result[array_rand($result)];
-    return $randomEmployee['employee_id'];
+    return $randomEmployee['id'];
 }

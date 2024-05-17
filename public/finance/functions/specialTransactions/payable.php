@@ -1,17 +1,44 @@
 <?php
+// require_once "../pondo/insertPondo.php";
+// require_once "../generalFunctions.php";
 require_once "public/finance/functions/generalFunctions.php";
-require_once "public/finance/pondo/insertPondo.php";
+require_once "public/finance/functions/pondo/insertPondo.php";
 
+//for accounts payable
 function getAllPayable()
 {
     $db = Database::getInstance();
     $conn = $db->connect();
 
     $AP = getAccountCode("Accounts Payable");
-    $TP = getAccountCode("Tax Payable");
-    $sql = "SELECT * FROM ledger WHERE accounttype = :AP OR accounttype = :TP";
+    $sql = "SELECT * FROM ledger WHERE accounttype = :AP";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':AP', $AP);
+    $stmt->execute();
+    $ledgers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $results = [];
+    foreach ($ledgers as $ledger) {
+        $ledgerNo = $ledger['ledgerno'];
+        $name = $ledger['name'];
+        $results[] = [
+            'ledgerno' => $ledgerNo,
+            'name' => $name,
+            'total_amount' => getValueOfPayable($ledgerNo)
+        ];
+    }
+    return $results;
+}
+
+// for tax payable
+function getAllTaxPayable()
+{
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $TP = getAccountCode("Tax Payable");
+    $sql = "SELECT * FROM ledger WHERE accounttype = :TP";
+    $stmt = $conn->prepare($sql);
     $stmt->bindParam(':TP', $TP);
     $stmt->execute();
     $ledgers = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,7 +56,6 @@ function getAllPayable()
     return $results;
 }
 
-
 // get total value of payble minus the paid amount
 function getValueOfPayable($accountNumber)
 {
@@ -40,8 +66,8 @@ function getValueOfPayable($accountNumber)
 // add loan to account
 function borrowPayable($accountNumber, $assetCode, $amount)
 {
-    $accountNumber = getAccountCode($accountNumber);
-    $assetCode = getAccountCode($assetCode);
+    $accountNumber = getLedgerCode($accountNumber);
+    $assetCode = getLedgerCode($assetCode);
 
     if ($amount <= 0) {
         throw new Exception("Amount must be greater than 0");
@@ -60,8 +86,8 @@ function borrowPayable($accountNumber, $assetCode, $amount)
 //withdraw investment 
 function payPayable($accountNumber, $assetCode, $amount)
 {
-    $accountNumber = getAccountCode($accountNumber);
-    $assetCode = getAccountCode($assetCode);
+    $accountNumber = getLedgerCode($accountNumber);
+    $assetCode = getLedgerCode($assetCode);
 
     $currentPayable = getValueOfPayable($accountNumber);
 
@@ -78,12 +104,12 @@ function payPayable($accountNumber, $assetCode, $amount)
         throw new Exception("Asset code not found");
     }
     
-    $SALARY = getAccountCode("Salary Payable");
-    $WITHHOLDING_TAX = getAccountCode("Withholding Tax Payable");
+    $SALARY = getLedgerCode("Salary Payable");
+    $WITHHOLDING_TAX = getLedgerCode("Withholding Tax Payable");
 
-    if ($assetCode == $SALARY || $assetCode == $WITHHOLDING_TAX) {
+    if ($accountNumber == $SALARY || $accountNumber == $WITHHOLDING_TAX) {
         $HUMAN_RESOURCES = "Human Resources";
-        addTransactionPondo($accountNumber, $assetCode, $amount, $HUMAN_RESOURCES);
+        echo addTransactionPondo($accountNumber, $assetCode, $amount, $HUMAN_RESOURCES);
         return;
     }
     insertLedgerXact($accountNumber, $assetCode, $amount, "Paid $accountNumber using $assetCode");
