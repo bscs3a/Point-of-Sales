@@ -26,7 +26,14 @@ $keywords = [
 ];
 
 // assign only array based on array, asd
-$routes = $keywords[$role];
+// $routes = $keywords[$role];
+if (isset($keywords[$role])) {
+    $routes = $keywords[$role];
+} else {
+    // Handle the case where $role is not a key in $keywords
+    // This could be setting $routes to a default value, showing an error message, etc.
+    $routes = $keywords['Default']; // assuming 'default' is a valid key in $keywords
+}
 
 Router::setRoutes($routes);
 
