@@ -43,7 +43,7 @@ $prevNetSales = calculateNetSalesOrLoss($curr_year, $prev_month);
         <div class="font-bold  border-none ">
             <input type="text" class = "yearpicker" name="" id="">
         <script>
-            $(".yearpicker").yearpicker()
+            // $(".yearpicker").yearpicker()
         </script>
         </div>
 

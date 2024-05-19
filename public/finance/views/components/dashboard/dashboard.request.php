@@ -1,12 +1,12 @@
 <!-- Start: Request Section -->
 <div class="mt-10  grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- Start: general ledger -->
-    <div class="px-5 border-2 border-solid border-gray-300 shadow-lg flex flex-col">
+    <div class="px-5 border-2 border-solid border-gray-300 shadow-lg flex flex-col rounded-md">
         <!-- Start: Header -->
         <div class="flex justify-between mt-5 ">
             <div>
                 <h1 class="font-sans text-xl font-bold">
-                    General Ledger
+                    <a route="/fin/ledger/page=1">General Ledger</a>
                 </h1>
             </div>
         </div>
@@ -46,10 +46,99 @@
     </div>
     <!-- End: general ledger  -->
     
-    <div class = "">
-        
-    </div>
+    <!-- Start: Account Ledger -->
+    <div class="px-5 border-2 border-solid shadow-lg flex flex-col rounded-md bg-gradient-to-b from-[#F8B721] to-[#FBCF68]">
+        <!-- Start: Header -->
+        <div class="flex justify-between mt-5 ">
+            <div>
+                <h1 class="font-sans text-xl font-semibold text-white">
+                    <a route="/fin/ledger/accounts/investors">Account Ledger</a>
+                </h1>
+            </div>
+        </div>
+        <!-- End: Header -->
 
+        <!-- Start: Tab -->
+        <div class="flex justify-stretch overflow-x-auto hide-scrollbar">
+            <button
+                class="btn btn_dept btn_active flex-grow px-10 py-2 font-xl text-white font-extrabold" id="btn1">Investor</button>
+            <button
+                class="btn btn_dept flex-grow px-10 py-2 font-xl font-semibold text-white opacity-75" id="btn2">Payable</button>
+                <button
+                class="btn btn_dept flex-grow px-10 py-2 font-xl font-semibold text-white opacity-75" id="btn3">Tax</button>
+        </div>
+        <!-- End: Tab -->
+
+        <!-- body of account ledger -->
+        <!-- investor -->
+        <div class="h-full text-white" id="investorAccounts">
+            <table class="table-fixed my-5 w-full text-center border-spacing-y-4" id="general_ledger">
+                <thead class="text-xl font-bold">
+                    <td>Account Name</td>
+                    <td>Amount Remaining</td>
+                </thead>
+                <tbody>                
+                <?php $transaction = getAllInvestors(); ?>                
+                <?php
+                $counter = 0;
+                foreach ($transaction as $trans){
+                    if ($counter == 6) break; ?>
+                    <tr class="text-md text-white font-medium">
+                        <td class = "font-semibold"><?php echo $trans['name']?></td>
+                        <td>₱<?php echo $trans['total_amount']?></td>
+                    </tr>
+                <?php $counter++;
+                } ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- payable -->
+        <div class="h-full hidden text-white" id="payableAccounts">
+            <table class="table-fixed my-5 w-full text-center border-spacing-y-4" id="general_ledger">
+                <thead class="text-xl font-bold">
+                    <td>Account Name</td>
+                    <td>Amount Remaining</td>
+                </thead>
+                <tbody>                
+                <?php $transaction = getAllPayable(); ?>                
+                <?php
+                $counter = 0;
+                foreach ($transaction as $trans){
+                    if ($counter == 6) break; ?>
+                    <tr class="text-md text-white font-medium">
+                        <td class = "font-semibold"><?php echo $trans['name']?></td>
+                        <td>₱<?php echo $trans['total_amount']?></td>
+                    </tr>
+                <?php $counter++;
+                } ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- tax -->
+        <div class="h-full hidden text-white" id="taxAccounts">
+            <table class="table-fixed my-5 w-full text-center border-spacing-y-4" id="general_ledger">
+                <thead class="text-xl font-bold">
+                    <td>Account Name</td>
+                    <td>Amount Remaining</td>
+                </thead>
+                <tbody>                
+                <?php $transaction = getAllTaxPayable(); ?>                
+                <?php
+                $counter = 0;
+                foreach ($transaction as $trans){
+                    if ($counter == 6) break; ?>
+                    <tr class="text-md text-white font-medium">
+                        <td class = "font-semibold"><?php echo $trans['name']?></td>
+                        <td>₱<?php echo $trans['total_amount']?></td>
+                    </tr>
+                <?php $counter++;
+                } ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- end body -->
+    </div>
+    <!-- End: Account Ledger -->
 </div>
 <!-- End: Request Section -->
 <div id="myModal"
@@ -145,6 +234,43 @@
     </div>
 </div>
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('btn1').addEventListener('click', function() {
+        document.getElementById('investorAccounts').style.display = 'block';
+        document.getElementById('payableAccounts').style.display = 'none';
+        document.getElementById('taxAccounts').style.display = 'none';
+    });
+
+    document.getElementById('btn2').addEventListener('click', function() {
+        document.getElementById('investorAccounts').style.display = 'none';
+        document.getElementById('payableAccounts').style.display = 'block';
+        document.getElementById('taxAccounts').style.display = 'none';
+    });
+    document.getElementById('btn3').addEventListener('click', function() {
+        document.getElementById('investorAccounts').style.display = 'none';
+        document.getElementById('payableAccounts').style.display = 'none';
+        document.getElementById('taxAccounts').style.display = 'block';
+    });
+    var buttons = document.getElementsByClassName('btn_dept');
+
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function() {
+            var activeButton = document.querySelector('.btn_active');
+            if (activeButton) {
+                swapClasses(this, activeButton);
+            }
+        });
+    }
+    });
+
+    function swapClasses(btn1, btn2) {
+        var btn1Classes = btn1.className;
+        var btn2Classes = btn2.className;
+
+        btn1.className = btn2Classes;
+        btn2.className = btn1Classes;
+    }
     function closeModalAndClearInputs() {
         document.getElementById('myModal').classList.add('hidden');
         ['description', 'credit', 'debit', 'amount'].forEach(id => document.getElementById(id).value = '');
