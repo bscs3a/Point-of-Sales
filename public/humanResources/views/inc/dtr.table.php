@@ -24,7 +24,7 @@
                 <div class="flex-shrink-0 w-10 h-10">
                   <!-- THESE IS FROM EMPLOYEES TABLE -->
                   <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1669355498234318849/Kg3mWUFZ_400x400.jpg"
+                    src="<?php echo $dtr['image_url']; ?>"
                     alt="">
                 </div>
                 <div class="ml-4">
@@ -47,6 +47,7 @@
               <div class="text-sm leading-5 text-gray-900"><?php echo $dtr['department']; ?></div>
               <div class="text-sm leading-5 text-gray-500"><?php echo $dtr['position']; ?></div>
             </td>
+            <!-- THESE ARE FROM ATTENDANCE TABLE -->
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
               <span class="text-sm leading-5 text-gray-900"><?php echo $dtr['attendance_date']; ?></span>
             </td>

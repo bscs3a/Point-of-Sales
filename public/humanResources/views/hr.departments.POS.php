@@ -56,11 +56,24 @@
    </ul>
    <ul class="ml-auto flex items-center">
   <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
+  <?php
+  $username = $_SESSION['user']['username'];
+  ?>
+    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium"><?php echo $username; ?></a>
   </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
+  <li class="mr-1 relative">
+    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300 dropdown-btn"><i class="ri-arrow-down-s-line"></i></button>
+    <div class="dropdown-content hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg">
+      <form method="post" action="/logout">
+          <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+      </form>
+    </div>
+</li>
+  <script>
+      document.querySelector('.dropdown-btn').addEventListener('click', function() {
+          document.querySelector('.dropdown-content').classList.toggle('hidden');
+      });
+  </script>
    </ul>
   </div>
   <!-- End Top Bar -->
@@ -117,81 +130,6 @@
     } 
   ?>
   <!-- END EMPLOYEES -->
-
-  <!-- TEST Employees -->
-  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
-  <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
-    <table class="min-w-full">
-      <thead>
-        <tr>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Name</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            ID</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Department</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Action</th>
-        </tr>
-      </thead>
-        <tbody class="bg-white">
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1669355498234318849/Kg3mWUFZ_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Ike Eveland
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">ikeymikumiku@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10612</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Point of Sale</div>
-              <div class="text-sm leading-5 text-gray-500">Business Analyst</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1720500138106585088/8aqYRQ3D_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Claude Clawmark
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">claudeclawmark@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10122</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Points of Sale</div>
-              <div class="text-sm leading-5 text-gray-500">Sales Associate</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div> -->
-  <!-- End TEST Employees -->
 
 </main>
 <!-- End Main Bar -->

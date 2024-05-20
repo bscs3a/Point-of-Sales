@@ -60,11 +60,24 @@ $stmt = null;
    </ul>
    <ul class="ml-auto flex items-center">
   <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
+  <?php
+  $username = $_SESSION['user']['username'];
+  ?>
+    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium"><?php echo $username; ?></a>
   </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
+  <li class="mr-1 relative">
+    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300 dropdown-btn"><i class="ri-arrow-down-s-line"></i></button>
+    <div class="dropdown-content hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg">
+      <form method="post" action="/logout">
+          <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+      </form>
+    </div>
+</li>
+  <script>
+      document.querySelector('.dropdown-btn').addEventListener('click', function() {
+          document.querySelector('.dropdown-content').classList.toggle('hidden');
+      });
+  </script>
    </ul>
   </div>
   <!-- End Top Bar -->
@@ -109,26 +122,6 @@ $stmt = null;
     } 
   ?>
 <!-- End Leave Requests -->
-  
-<!-- Accept modal -->
-<!-- <div id="acceptModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-    <form action="/master/approve/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
-        <h2 class="mb-4">Approve request of leave?</h2>
-        <input type="hidden" name="id" id="idToAccept">
-        <input type="submit" value="Yes" id="confirmAccept" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
-        <input type="button" value="No" id="cancelAccept" class="px-4 py-2 bg-gray-300 text-black rounded">
-    </form>
-</div> -->
-
-  <!-- Reject modal -->
-  <!-- <div id="rejectModal" class="hidden fixed flex top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50">
-    <form action="/master/deny/leave-requests" method="POST" class="bg-white p-5 rounded-lg text-center">
-        <h2 class="mb-4">Deny request of leave?</h2>
-        <input type="hidden" name="id" id="idToReject"> 
-        <input type="submit" value="Yes" id="confirmReject" class="mr-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded">
-        <input type="button" value="No" id="cancelReject" class="px-4 py-2 bg-gray-300 text-black rounded">
-    </form>
-</div> -->
   
 </main>
 <!-- End Main Bar -->

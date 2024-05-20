@@ -31,14 +31,103 @@
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Dashboard</a>
    </ul>
    <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
+   <li class="mr-1">
+   <?php
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $username = $_SESSION['user']['username'];
+
+    // Fetch the employees_id based on the username
+    $stmt = $conn->prepare("SELECT employees_id FROM account_info WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $employees_id = $user['employees_id'];
+
+    // Use the current date for attendance_date
+    date_default_timezone_set('Asia/Manila');
+    $attendance_date = date('Y-m-d');
+
+    // Check if a row exists for the current date and employees_id
+    $stmt = $conn->prepare("SELECT * FROM attendance WHERE attendance_date = :attendance_date AND employees_id = :employees_id");
+    $stmt->execute([
+        ':attendance_date' => $attendance_date,
+        ':employees_id' => $employees_id,
+    ]);
+    $attendance = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $pdo=null;
+    $stmt=null;
+
+    $stmt = $conn->prepare("SELECT * FROM attendance WHERE attendance_date = :attendance_date AND employees_id = :employees_id AND clock_out IS NULL");
+    $stmt->execute([
+        ':attendance_date' => $attendance_date,
+        ':employees_id' => $employees_id,
+    ]);
+    $clockOut = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $pdo=null;
+    $stmt=null;
+    ?>
+
+    <?php if (!$attendance): ?>
+        <form method="post" action="/clock-in">
+            <button id="clockInButton" type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">Clock In</button>
+        </form>
+    <?php elseif ($clockOut): ?>
+        <form method="post" action="/clock-out">
+            <button id="clockOutButton" type="submit" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">Clock Out</button>
+        </form>
+    <?php elseif (!$clockOut): ?>
+        <button id="workDoneButton" type="button" class="bg-gray-300 text-black px-2 py-1 rounded">See You Tomorrow!</button>
+    <?php endif; ?>
+
+    </li>
+
+    <div class="ml-3 h-6 w-px mr-3 bg-gray-300"></div>
+
+   <li class="mr-1">
+  <?php
+  $username = $_SESSION['user']['username'];
+  ?>
+    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium"><?php echo $username; ?></a>
   </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
+  <li class="mr-1 relative">
+    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300 dropdown-btn"><i class="ri-arrow-down-s-line"></i></button>
+    <div class="dropdown-content hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg">
+      <form method="post" action="/logout">
+          <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+      </form>
+    </div>
   </li>
+    <script>
+        document.querySelector('.dropdown-btn').addEventListener('click', function() {
+            document.querySelector('.dropdown-content').classList.toggle('hidden');
+        });
+    </script>
    </ul>
   </div>
+  
+  <!-- WELCOME, USER! -->
+  <?php
+  $db = Database::getInstance();
+  $conn = $db->connect();
+
+  $username = $_SESSION['user']['username'];
+
+  $stmt = $conn->prepare("SELECT employees.first_name FROM account_info 
+                        JOIN employees ON account_info.employees_id = employees.id 
+                        WHERE account_info.username = :username");
+
+  $stmt->bindParam(':username', $username);
+  $stmt->execute();
+
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  $firstName = $user['first_name'];
+  ?>
+  <h1 class="ml-6 mt-4 text-4xl font-bold">Welcome, <?php echo $firstName; ?>!</h1>
+
   <!-- Employee  -->
   <div class="p-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -98,9 +187,16 @@
     $stmtLeave->execute();
     $resultLeave = $stmtLeave->fetch(PDO::FETCH_ASSOC);
     $leaveCount = $resultLeave['count'];
+    
+    // Query to get the number of employees on clocked in
+    $queryAttendance = "SELECT COUNT(*) as count FROM attendance WHERE attendance_date = CURDATE() AND clock_out IS NULL";
+    $stmtAttendance = $conn->prepare($queryAttendance);
+    $stmtAttendance->execute();
+    $resultAttendance = $stmtAttendance->fetch(PDO::FETCH_ASSOC);
+    $attendanceCount = $resultAttendance['count'];
 
     // Calculate the number of employees on board
-    $onBoardCount = $totalCount - $leaveCount;
+    $onBoardCount = $attendanceCount;
 
     $pdo = null;
     $stmtTotal = null;

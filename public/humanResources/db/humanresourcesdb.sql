@@ -82,9 +82,9 @@ CREATE TABLE payroll (
 -- DTR
 CREATE TABLE attendance (
     id INT(10) NOT NULL AUTO_INCREMENT,
-    attendance_date DATETIME NOT NULL,
-    clock_in TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    clock_out TIMESTAMP DEFAULT current_timestamp(),
+    attendance_date DATE NOT NULL,
+    clock_in VARCHAR(20) NOT NULL,
+    clock_out VARCHAR(20) NULL,
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id)
