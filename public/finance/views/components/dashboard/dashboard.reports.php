@@ -3,7 +3,7 @@
     role="dialog" aria-modal="true">
     <div class=" pt-4 px-4 pb-20 sm::block sm:p-0 bg-white rounded shadow-lg ">
        
-    <form action="/reportGeneration" method="post" class="font-sans p-10 border-2 border-black rounded-md]" id="requestReportForm">
+        <form action="/reportGeneration" method="post" class="font-sans p-10 border-2 border-black rounded-md]" id="requestReportForm">
             <h2 class="font-semibold text-lg m-1">
                 Generate Report
             </h2>
