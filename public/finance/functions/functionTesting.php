@@ -1,10 +1,20 @@
 <?php
-// for testing purposes
-// run function in the command line using
-// php -r "require 'public\finance\functions\functionTesting.php';"  
-// php -r "require 'public\finance\views\test.php';'
+require_once "otherGroups\inventory.php";
+require_once "otherGroups\productOrder.php";
+require_once "otherGroups\salary.php";
+require_once "otherGroups\sales.php";
+session_start();
+session_destroy();
+$department = "Human Resources";
 
-require_once 'generalFunctions.php';
 
-echo getTotalOfAccountType("Sales");
+$totalExpenses = getExpensesPondo($department, 'Cash on hand') + getExpensesPondo($department, 'Cash on bank');
 
+$cashOnHand = getRemainingPondo($department, "Cash on hand");
+$cashOnBank = getRemainingPondo($department, "Cash on bank");
+$remainingPondo = $cashOnHand + $cashOnBank;
+
+echo $totalExpenses;
+echo $remainingPondo;
+echo $cashOnHand;
+echo $cashOnBank;

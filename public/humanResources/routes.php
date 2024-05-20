@@ -862,3 +862,4 @@ Router::post('/delete', function () {
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/hr/employees");
 });
+
