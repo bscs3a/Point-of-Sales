@@ -1,5 +1,5 @@
 
-<div id="report_generation_modal" class="modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
+<div id="report_generation_modal" class="hidden modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
     role="dialog" aria-modal="true">
     <div class=" pt-4 px-4 pb-20 sm::block sm:p-0 bg-white rounded shadow-lg ">
        
@@ -12,7 +12,7 @@
             </p>
             <div class = "my-10">
                 <label for="written" 
-                class = "font-bold border-2 border[#F8B721] rounded-md px-4 py-2 text-[#F8B721] has-[:checked]:text-white has-[:checked]:bg-[#F8B721] ">
+                class = "font-bold border-2 border[#F8B721] rounded-md px-4 py-2 text-[#F8B721] has-[:checked]:text-white has-[:checked]:bg-[#F8B721] me-2">
                     Written Report
                     <input type="radio" id = "written" name="writtenOrChart" value = "written" checked class="hidden">
                 </label>
@@ -27,8 +27,8 @@
             <label for="report" class="font-medium m-1">
                 Type of Report
             </label>
-            <select name="file" id="report"
-                class="m-1 bg-gray-50 border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            <select name="file" id="report" 
+                class="m-1 bg-gray-50 border-2 border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                 required>
                 <option selected value = "">Choose a report</option>
                 <option value="Income">Income Report</option>
@@ -39,8 +39,21 @@
             <label for="monthYear" class="font-medium m-1">
                 Date
             </label>
-            <input type="text" id="monthYear" name="monthYear"
-                class=" border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" required readonly placeholder="Month-year">
+            <div id="buttonDateSelectorReportGenerate" class = "flex items-center border-2 bg-gray-50 border-black rounded-lg cursor-pointer">
+                <span class = "border-r-2 border-black p-2">
+                    <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <rect width="33" height="33" fill="url(#pattern0_5815_1498)"/>
+                        <defs>
+                            <pattern id="pattern0_5815_1498" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                <use xlink:href="#image0_5815_1498" transform="scale(0.0104167)"/>
+                            </pattern>
+                        <image id="image0_5815_1498" width="96" height="96" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAC+ElEQVR4nO2dz04UQRDGPyI3RuUdBA+aiPIaSngYhUTlZkg4EAkPoRCuRmUlAk/hnydwOcLu1bRpaRIOdu8w7XZVT32/pI7b3fV9PTUz6U0NQAghhBBCCCGEEEJId+4DWAdwBOA7gDEAV2mMQw4+lzUAi5o3xkMAHxSI5qYc3oxlKGIWwC6A3wrEcYXC57oTchdlPuwIZzQGAO5KiX8LwCcFIjjh+CJ1JewqSN4pibelxV+eUPN/AXgJYAnAHOplLuTwCsAwka/X4nHJhaXq/vvKRY/RANhL5H2Igs/5sUW8AzCD/jIzwYSFEotYT5Qdv0v6TpMoRy8ky4+v+VZ4nXgsnTo/I5M/gh2WIhr8KDH5KDK5hfJzRRPRwGszdWI3IGs4KR1owCU0QBh1BjBAA5yCjcArADRAfBc6XgHyQjiWIHkxnKV7gDUcDZCFBghDA4ShAcLQAGFogDA0QJhqDVgFcBr+eTwGcAJg5YZr0DBGlQZsJX6/WdkY1Rmw2uI1/lklY+TokE3XiU9bJH5cyRg5OmTTdeLYvynctbioZIwcHVQbcF7JGDk6ZNN14pMWiX+tZIwcHbLpOvFKi8SfVjJGjg7Z5Ey8mfj9m8rGqNIAhEe841CLR+Fyb7PjtI1RrQF9wdEAWWiAMDRAGBogDA0QhgYIQwOEqdYADadZZg3Qcppl0gBNp1kmDdB0mmXSAE2nWf+DXhpwXmAMswZoOs0yaYCm0yyTBmg6zTJrgJbTLNMG9AUnpcNFZGJL7WruSD6BsWET/nZI/JcBvs+0WMsy39rRChuSLcvWIpMPjZSh2wDOIho8L7GAxcQNaM9A28r9RP73Si1kMMGEpqc7fz+R9+fSN6FU6+JhaO34pHIzmpDDRqLsuKBF8a6RO4kFWYttCLWv/6ggeWe1fT3CxwtS94O+x2F4KRNlNvTPt/YJk+1QBdTwAMCBAnHclOOo9LcCbspC6CLuS9O3lqdYTmmMQg6D8JJV7DmfEEIIIYQQQgghhKB3/AFCDqueoOvDcAAAAABJRU5ErkJggg=="/>
+                        </defs>
+                    </svg>
+                </span>
+                <input type="text" id="monthYear" name="monthYear"
+                    class="  bg-gray-50 p-2.5 flex-1 focus:outline-none cursor-pointer" required readonly placeholder="Month-year">
+            </div>
             <div id = "dateSelector" class = "hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-4 bg-white p-6 border-2 text-center">
                 <!-- for header year -->
                 <div class = "col-span-3 text-left font-bold text-[#F8B721]" id="yearDate"><?= date('Y'); ?></div>
@@ -168,11 +181,19 @@
                     disabledOrChecked();
                 });
                 window.addEventListener("click", function(event){
-                let dateSelector = document.querySelector('#dateSelector');
-                if (!dateSelector.contains(event.target)){
-                    dateSelector.classList.add('hidden');
-                }
+                    let dateSelector = document.querySelector('#dateSelector');
+                    if (!dateSelector.contains(event.target)){
+                        dateSelector.classList.add('hidden');
+                    }
                 });
+                let buttonDateSelector = document.querySelector('#buttonDateSelectorReportGenerate');
+
+                buttonDateSelector.addEventListener('click', function(event){
+                    event.stopPropagation();
+                    let dateSelector = document.querySelector('#dateSelector');
+                    dateSelector.classList.remove('hidden');
+                });
+
             });
             
             function disabledOrChecked(){
@@ -201,6 +222,7 @@
                     }
                 });
             }
+            
             </script>
             <br>
             <div class="m-1 gap-3 flex justify-end">
