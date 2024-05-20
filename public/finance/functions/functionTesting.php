@@ -1,18 +1,11 @@
 <?php
-require_once 'specialTransactions/investors.php';
-require_once 'specialTransactions/payable.php';
+require_once 'generalFunctions.php';
 
 
-$account = 'aries';
-$asset = 'Cash on bank';
-$amount = 100;
-
-$name = "aries";
-$contact = "123456789";
-$contactName = "aries tagle assitant";
+$year = 2024;
+$bool = true;
+$month = 4;
+$retained = getLedgerCode("Retained Earnings/Loss");
 
 
-// echo investAsset($account, $asset, $amount);
-echo withdrawAsset($account, $asset, $amount);
-var_dump(getAllInvestors());
-// echo addInvestor($name, $contact, $contactName);
+echo getAccountBalance($retained,$bool,$year,$month);

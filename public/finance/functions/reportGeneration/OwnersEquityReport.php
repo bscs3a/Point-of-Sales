@@ -32,11 +32,17 @@ function divideTheGainLoss($accountNumber, $year, $month){
 function insertShare($accountNumber, $year, $month){
     $retained = getLedgerCode("Retained Earnings/Loss");
     // if retained is 0 for the month, that means its already been processed
-    if(abs(getAccountBalance($retained, true, $year, $month)) <= 0){
+
+    //credit is negative, debit is positive(but in income its the opposite so * -1)
+    $retainedValue = getAccountBalance($retained, true, $year, $month) * -1;
+    if($retainedValue == 0){
         return;
     }
+
     //check account if its 0
-    if(abs(getAccountBalanceV2($accountNumber, true, $year,$month)) <= 0)
+    //credit is negative, debit is positive(but in capital accounts its the opposite so * -1)
+    $accountValue = getAccountBalanceV2($accountNumber, true, $year, $month) * -1;
+    if($accountValue <= 0)
     {
         return;
     }
@@ -50,7 +56,7 @@ function insertShare($accountNumber, $year, $month){
     $debitLedger = $retained;
     $creditLedger = $accountNumber;
     
-    if(calculateNetSalesOrLoss($year,$month) < 0){
+    if($retainedValue < 0){
         $debitLedger = $accountNumber;
         $creditLedger = $retained;
     }
@@ -78,28 +84,25 @@ function insertAllShares($year, $month){
         insertShare($ledger['ledgerno'], $year, $month);
     }
 
+
     //declare owner (the purpose of code below is to put the rest of the earnings or loss to the first owner)
     $OWNER_LEDGER = getLedgerCode("A account");
-    //for getting the past month
-    $pastYear = $year;
-    $pastMonth = $month - 1;
-    if($month == 1){
-        $pastYear = $year - 1;
-        $pastMonth = 12;
+    $retainedCode = getLedgerCode("Retained Earnings/Loss");
+    // debit is positive, credit is negative(but in retained, its the opposite)
+    $remainingRetainedValue = getAccountBalance($retainedCode, true, $year, $month) * -1;
+    if($remainingRetainedValue == 0){
+        return;
     }
-    $addedSales =  getTotalOfAccountTypeV2($CAPITAL, $year,$month) - getTotalOfAccountTypeV2($CAPITAL,$pastYear,$pastMonth) - getWholeInvestment($year,$month) - getWholeWithdrawals($year,$month);
-    $amount = calculateNetSalesOrLoss($year, $month) - $addedSales;
-    if($amount != 0 && calculateNetSalesOrLoss($year, $month) != 0){
-        if($amount < 0){
-            $debit = $OWNER_LEDGER;
-            $credit = getLedgerCode("Retained Earnings/Loss");
-        }else{
-            $debit = getLedgerCode("Retained Earnings/Loss");
-            $credit = $OWNER_LEDGER;
-        }
-        insertLedgerXact($debit, $credit,$amount, "putting the rest at the owner", $year, $month);
+    // insert the remaining to the owner
+    $debitLedger = $retainedCode;
+    $creditLedger = $OWNER_LEDGER;
+    
+    if($remainingRetainedValue < 0){
+        $debitLedger = $OWNER_LEDGER;
+        $creditLedger = $retainedCode;
     }
 
+    insertLedgerXact($debitLedger, $creditLedger, $remainingRetainedValue, "giving the remaining to the owner", $year, $month);
 }
 
 function generateOEReport($year, $month){

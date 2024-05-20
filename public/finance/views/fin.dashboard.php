@@ -3,6 +3,7 @@ define('YEAR', date('Y'));
 define('MONTH', date('m'));
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
+require_once "components/dashboard/dashboard.performFunctions.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">

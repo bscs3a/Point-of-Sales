@@ -716,6 +716,10 @@ video {
   left: 0px;
 }
 
+.left-1\/2{
+  left: 50%;
+}
+
 .left-2{
   left: 0.5rem;
 }
@@ -778,6 +782,14 @@ video {
 
 .col-span-2{
   grid-column: span 2 / span 2;
+}
+
+.col-span-3{
+  grid-column: span 3 / span 3;
+}
+
+.col-span-4{
+  grid-column: span 4 / span 4;
 }
 
 .float-start{
@@ -921,6 +933,11 @@ video {
 .my-8{
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.my-auto{
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .-mb-px{
@@ -1113,6 +1130,10 @@ video {
 
 .mt-9{
   margin-top: 2.25rem;
+}
+
+.ms-auto{
+  margin-inline-start: auto;
 }
 
 .box-border{
@@ -1370,6 +1391,10 @@ video {
   height: 100vh;
 }
 
+.h-5{
+  height: 1.25rem;
+}
+
 .max-h-\[20rem\]{
   max-height: 20rem;
 }
@@ -1530,6 +1555,10 @@ video {
   width: 100vw;
 }
 
+.w-5{
+  width: 1.25rem;
+}
+
 .min-w-0{
   min-width: 0px;
 }
@@ -1645,6 +1674,11 @@ video {
 
 .origin-top-right{
   transform-origin: top right;
+}
+
+.-translate-x-1\/2{
+  --tw-translate-x: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .-translate-x-full{
@@ -1975,6 +2009,10 @@ video {
 
 .grid-cols-3{
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-4{
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .grid-cols-5{
@@ -2801,6 +2839,11 @@ video {
 
 .border-none{
   border-style: none;
+}
+
+.border-\[\#F19C00\]{
+  --tw-border-opacity: 1;
+  border-color: rgb(241 156 0 / var(--tw-border-opacity));
 }
 
 .border-\[\#F8B721\]{
@@ -3941,6 +3984,11 @@ video {
   color: rgb(202 138 4 / var(--tw-text-opacity));
 }
 
+.text-\[\#7B8199\]{
+  --tw-text-opacity: 1;
+  color: rgb(123 129 153 / var(--tw-text-opacity));
+}
+
 .underline{
   text-decoration-line: underline;
 }
@@ -4917,6 +4965,20 @@ video {
 .group.selected .group-\[\.selected\]\:text-gray-100{
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
+}
+
+.has-\[\:disabled\]\:cursor-no-drop:has(:disabled){
+  cursor: no-drop;
+}
+
+.has-\[\:checked\]\:bg-\[\#F8B721\]:has(:checked){
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 183 33 / var(--tw-bg-opacity));
+}
+
+.has-\[\:checked\]\:text-white:has(:checked){
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 @media (min-width: 640px){

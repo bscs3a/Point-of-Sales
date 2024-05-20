@@ -1,15 +1,28 @@
 
-<div id="report_generation_modal" class="modal hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
+<div id="report_generation_modal" class="modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
     role="dialog" aria-modal="true">
-    <div class=" pt-4 px-4 pb-20 text-center sm::block sm:p-0 bg-white rounded shadow-lg ">
+    <div class=" pt-4 px-4 pb-20 sm::block sm:p-0 bg-white rounded shadow-lg ">
        
-    <form action="/reportGeneration" method="post" class="font-sans p-10 border-2 border-black rounded-md">
+    <form action="/reportGeneration" method="post" class="font-sans p-10 border-2 border-black rounded-md]" id="requestReportForm">
             <h2 class="font-semibold text-lg m-1">
                 Generate Report
             </h2>
             <p class="italic opacity-50 m-1">
                 To generate your report, please choose the type of financial report and specify the date
             </p>
+            <div class = "my-10">
+                <label for="written" 
+                class = "font-bold border-2 border[#F8B721] rounded-md px-4 py-2 text-[#F8B721] has-[:checked]:text-white has-[:checked]:bg-[#F8B721] ">
+                    Written Report
+                    <input type="radio" id = "written" name="writtenOrChart" value = "written" checked class="hidden">
+                </label>
+
+                <label for="chart" 
+                class = "font-bold border-2 border[#F8B721] rounded-md px-4 py-2 text-[#F8B721] has-[:checked]:text-white has-[:checked]:bg-[#F8B721] ">
+                    Chart Report
+                    <input type="radio" id = "chart" name="writtenOrChart" value = "chart" class="hidden">
+                </label>
+            </div>
 
             <label for="report" class="font-medium m-1">
                 Type of Report
@@ -26,10 +39,169 @@
             <label for="monthYear" class="font-medium m-1">
                 Date
             </label>
-            <input type="month" id="monthYearIncome" name="monthYear"
-                class="m-1 border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" 
-                min="2020-01" max="2023-12" required>
+            <input type="text" id="monthYear" name="monthYear"
+                class=" border-2 bg-gray-50 border-black rounded-lg p-2.5 w-full" required readonly placeholder="Month-year">
+            <div id = "dateSelector" class = "hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-4 bg-white p-6 border-2 text-center">
+                <!-- for header year -->
+                <div class = "col-span-3 text-left font-bold text-[#F8B721]" id="yearDate"><?= date('Y'); ?></div>
+                <div>
+                    <button type="button" class="year-mover" id = "minusYear">
+                        <span class="sr-only">Previous year</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                            clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button type="button" class = "year-mover" id="addYear">
+                        <span class="sr-only">Next Year</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- end header year -->
 
+            </div>
+            <input type="hidden" name="hiddenDate" id="hiddenDate" value = "">
+            <!-- for generating the month selector -->
+            <script>
+                function monthSelector() {
+                // Create the container div
+                let container = document.querySelector('#dateSelector');
+                
+                // Array of month names
+                let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                let now = new Date();
+                let lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                let selectedMonth = lastMonth.getMonth() + 1;
+                selectedMonth =  lastMonth.getFullYear() + "-" + selectedMonth;
+
+                let hiddenInputDate = document.querySelector('#hiddenDate');
+                hiddenInputDate.value = selectedMonth;
+                // Create a radio button for each month
+                months.forEach(function(month, index) {
+                    // Create the radio input
+                    let radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'month';
+                    radio.id = 'month' + (index + 1);
+                    radio.value = index + 1;
+                    radio.className = 'hidden absolute monthsInSelector';
+
+                    // Create the label
+                    let label = document.createElement('label');
+                    label.htmlFor = radio.id;
+                    label.textContent = month;
+                    label.className = 'text-[#7B8199] has-[:checked]:text-white has-[:checked]:bg-[#F8B721] rounded-md p-3 cursor-pointer has-[:disabled]:cursor-no-drop';
+
+                    // Create a div for each month
+                    let monthDiv = document.createElement('div');
+                    monthDiv.appendChild(label);
+                    label.appendChild(radio);
+
+                    // Add the div to the container
+                    container.appendChild(monthDiv);
+
+                    radio.addEventListener('click', function() {
+                        let hiddenInputDate = document.querySelector('#hiddenDate');
+                        hiddenInputDate.value = document.querySelector('#yearDate').textContent + "-" + (index + 1);
+                    });
+                });
+
+                let formReport = document.querySelector('#requestReportForm');
+
+                //cancel
+                let cancel =document.createElement('button');
+                cancel.textContent = 'Cancel';
+                cancel.className = 'bg-white text-black rounded-md p-3 border-2 border-black col-span-2';
+                cancel.type = 'button';
+                cancel.addEventListener('click', function() {
+                    let dateSelector = document.querySelector('#dateSelector');
+                    dateSelector.classList.add('hidden');
+                });
+                container.appendChild(cancel);
+
+                //apply
+                let apply = document.createElement('button');
+                apply.textContent = 'Apply';
+                apply.className = 'bg-[#F8B721] text-white rounded-md p-3 border-2 border-black col-span-2';
+                apply.type = 'button';
+                apply.addEventListener('click', function() {
+                    let hiddenInputDate = document.querySelector('#hiddenDate');
+                    let monthYear = document.querySelector('#monthYear');
+                    monthYear.value = hiddenInputDate.value;
+
+                    let dateSelector = document.querySelector('#dateSelector');
+                    dateSelector.classList.add('hidden');
+                });
+                container.appendChild(apply);
+
+                
+                // Add the container to the form
+                formReport.appendChild(container);
+                disabledOrChecked();
+            }
+            monthSelector();
+
+            window.addEventListener("DOMContentLoaded", function(){
+                // Get the yearDate element
+                let yearDate = document.querySelector('#yearDate');
+
+                // Get the addYear and minusYear buttons
+                let addYear = document.querySelector('#addYear');
+                let minusYear = document.querySelector('#minusYear');
+
+                // Add event listener to the addYear button
+                addYear.addEventListener('click', function() {
+                    // Increment the year in the yearDate element
+                    yearDate.textContent = parseInt(yearDate.textContent) + 1;
+                    disabledOrChecked();
+                });
+
+                // Add event listener to the minusYear button
+                minusYear.addEventListener('click', function() {
+                    // Decrement the year in the yearDate element
+                    yearDate.textContent = parseInt(yearDate.textContent) - 1;
+                    disabledOrChecked();
+                });
+                window.addEventListener("click", function(event){
+                let dateSelector = document.querySelector('#dateSelector');
+                if (!dateSelector.contains(event.target)){
+                    dateSelector.classList.add('hidden');
+                }
+                });
+            });
+            
+            function disabledOrChecked(){
+                let selected = document.querySelector('#hiddenDate').value;
+                let year = document.querySelector('#yearDate').textContent;
+                
+                let months = document.querySelectorAll('.monthsInSelector');
+                let now = new Date();
+                let currentYear = now.getFullYear();
+                let currentMonth = now.getMonth() + 1; // getMonth() returns 0-11, so add 1
+
+                let currentMonthYear = currentYear + '-' + currentMonth;
+                months.forEach(function(month){
+                    let monthValue = year + "-" + month.value;
+                    if(monthValue== selected){
+                        month.checked = true;
+                    }
+                    else{
+                        month.checked = false;
+                    }
+                    if(year > currentYear || (year == currentYear && month.value >= currentMonth)){
+                        month.disabled = true;
+                    }
+                    else{
+                        month.disabled = false;
+                    }
+                });
+            }
+            </script>
             <br>
             <div class="m-1 gap-3 flex justify-end">
                 <button id="cancel_btn" class="border-2 rounded-md border-black font-bold py-2.5 px-4 drop-shadow-md" type="button">
@@ -41,53 +213,45 @@
                 </button>
             </div>
         </form>
-        <script>
-            // Get the current date
-            now = new Date();
-
-            // Get the current year and month
-            let year = now.getFullYear();
-            let month = now.getMonth(); // getMonth() is zero-based
-
-            // Subtract one from the month to get the last month
-            if (month === 0) {
-                month = 12;
-                year--;
-            }
-
-            // Pad the month with a leading zero, if necessary
-            if (month < 10) month = '0' + month;
-
-            // Set the max attribute of the monthYear input field
-            document.getElementById('monthYearIncome').max = year + '-' + month;
-        </script>
     </div>
 </div>
 
 <!-- for balance and income report -->
 <div class="mt-10  h-2/4">
-    <!-- Start: Header Report -->
-    <div class="my-10 flex justify-between">
-        <h1 class="font-sans font-bold text-3xl">Report</h1>
-        <button id="generate_modal_btn" class="font-sans font-bold text-2xl ">
-            <i class="ri-download-2-line"></i>
-            Generate
-        </button>
-    </div>
-
+    <!-- for button clicks in the form above(generate report) -->
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
         // Generate Report Modal
         var report_generation_modal = document.getElementById('report_generation_modal');
-        // Get the button that opens the modal
-        var generate_modal_btn = document.getElementById('generate_modal_btn');
-
+        
         // Get the cancel button
         var cancel_btn =document.getElementById('cancel_btn');
 
-        // When the user clicks the button, open the modal
-        generate_modal_btn.onclick = function () {
-            report_generation_modal.classList.remove('hidden');
-        }
+        // Get the buttons that open the modal
+        let generate_modal_btns = document.querySelectorAll('.elipsis-report-button');
+
+        // When the user clicks a button, open the modal
+        generate_modal_btns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                let selectReport = document.querySelector('#report');
+                
+                // Get the id of the clicked button
+                let btnId = btn.id;
+
+                // Map the button id to the corresponding option value
+                let optionValueMap = {
+                    'income_report_button': 'Income',
+                    'balance_sheet_button': 'TrialBalance',
+                    'equity_button': 'OwnerEquity',
+                    'cash_flow_button': 'CashFlow'
+                };
+
+                // Set the selected option of the select element
+                selectReport.value = optionValueMap[btnId];
+
+                report_generation_modal.classList.remove('hidden');
+            });
+        });
 
         // When the user clicks the cancel button, close the modal
         cancel_btn.onclick = function () {
@@ -100,6 +264,7 @@
                 report_generation_modal.classList.add('hidden');
             }
         }
+    });
     </script>
 
     <div class="grid grid-co
@@ -109,14 +274,16 @@
 
         <div class="px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
             <div class="flex justify-between">
-                <h2 class="font-sans font-bold text-xl">Balance</h2>
-                <!-- <a href="#" class="text-sm font-sans font-semibold">
-                    <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a> -->
-                <div class="font-bold  border-none ">
-                    <input id='calendarBalance' />
+                <h2 class="font-sans font-bold text-xl">Balance Sheet</h2>
+                <!-- elipsis -->
+                <div class = "flex gap-1 items-center elipsis-report-button cursor-pointer" id="balance_sheet_button">
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
                 </div>
-
             </div>
             <!-- Balance Sheet in Pie Graph -->
             <div class="w-full h-3/4 flex justify-center">
@@ -125,21 +292,6 @@
             </div>
         </div>
     </div>
-    <!-- for calendar js -->
-    <script>
-        // Enable the year and month picker
-        // Get the first and last day of the past month
-        let now = new Date();
-        let lastDayOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-
-        let lastDay = lastDayOfLastMonth.toISOString().split('T')[0];
-
-        jSuites.calendar(document.getElementById('calendarBalance'), {
-            type: 'year-month-picker',
-            format: 'MMM-YYYY',
-            validRange: [ '2024-02-01', lastDay]
-        });
-    </script>
 
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -219,9 +371,15 @@
         <div class="col-span-1 px-5 pt-5 border-solid border-2 border-gray-200 shadow-md rounded-lg">
             <div class="flex justify-between">
                 <h2 class="font-sans font-bold text-xl">Equity</h2>
-                <!-- <a href="#" class="text-sm font-sans font-semibold">
-                    <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a> -->
+                <!-- elipsis -->
+                <div class = "flex gap-1 items-center elipsis-report-button cursor-pointer" id="equity_button">
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
+                </div>
             </div>
             <?php 
                 //equity report sharings
@@ -254,14 +412,14 @@
             <div class="flex justify-between">
 
                 <h2 class=" font-sans  font-bold text-xl">Cash Flow</h2>
-                <!-- <a href="#" class="text-sm font-sans font-semibold">
-                    <i class="ri-more-line text-3xl text-[#F8B721]"></i>
-                </a> -->
-                <div class="font-bold  border-none ">
-                    <select name="" id="" class="bg-white border-collapse text-xl">
-                        <option value="year" selected>Year</option>
-                        <option value="month">Month</option>
-                    </select>
+                <!-- elipsis -->
+                <div class = "flex gap-1 items-center elipsis-report-button cursor-pointer" id="cash_flow_button">
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
+                    <div class="rounded-full h-2.5 w-2.5 bg-white border-[#F19C00] border-2">
+                    </div>
                 </div>
             </div>
             <div>
