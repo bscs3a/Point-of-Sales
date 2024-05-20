@@ -1,5 +1,5 @@
 Todo:
-1. update charts on the dashboard -- very last to do
+1. REPORTS ON DASHBOARD
 8. Check Everything
 
 
@@ -14,3 +14,4 @@ Done:
 6. Check purchases in income report(this is just inventory -- depending on the system)
 5. special insert sa ibang group
 3. audit log -- remove; for changes sa database nalang to
+11. Dashboard design
