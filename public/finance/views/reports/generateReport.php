@@ -1,20 +1,42 @@
 <?php
-require_once '../../../../vendor/autoload.php';
+require_once './vendor/autoload.php';
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
+$options = new Options();
+$options->set('isRemoteEnabled', true);
+
+
+$fileNeeded = $_SESSION['postdata']['file'];
+if($fileNeeded === null){
+    echo "No file selected";
+    header ("Location: /fin/dashboard");
+    exit();
+}
 
 // Start output buffering
 ob_start();
 
 
 // Include the script
-require_once 'incomeReport.php';
+if($fileNeeded === "Income"){
+    require_once 'incomeReport.php';
+}
+else if($fileNeeded === "OwnerEquity"){
+    require_once 'OwnersEquityReport.php';
+}
+else if($fileNeeded === "TrialBalance"){
+    require_once 'TrialBalance.php';
+}
+else if($fileNeeded === "CashFlow"){
+    require_once 'cashFlow.php';
+}
 
 // Get the output of the script
 $html = ob_get_clean();
 
 // Instantiate Dompdf class
-$dompdf = new Dompdf();
+$dompdf = new Dompdf($options);
 
 // Load HTML content
 $dompdf->loadHtml($html);
