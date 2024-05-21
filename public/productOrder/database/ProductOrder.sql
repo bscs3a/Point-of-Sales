@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2024 at 04:17 PM
+-- Generation Time: May 09, 2024 at 06:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -141,11 +141,12 @@ CREATE TABLE `products` (
   `Category` varchar(50) DEFAULT NULL,
   `DeliveryRequired` varchar(3) DEFAULT NULL,
   `Price` decimal(10,2) DEFAULT NULL,
+  `Retail_Price` decimal(10,2) NOT NULL,
   `Stocks` int(11) DEFAULT NULL,
   `UnitOfMeasurement` varchar(20) DEFAULT NULL,
   `TaxRate` decimal(5,2) DEFAULT NULL,
   `ProductWeight` decimal(10,2) DEFAULT NULL,
-  `Status` varchar(35) NOT NULL
+  `Availability` varchar(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

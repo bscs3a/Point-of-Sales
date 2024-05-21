@@ -141,9 +141,13 @@
                     <th class="px-4 py-2 font-semibold">Product Image</th>
                     <th class="px-4 py-2 font-semibold">Product Name</th>
                     <th class="px-4 py-2 font-semibold">Category</th>
-                    <th class="px-4 py-2 font-semibold">Price</th>
+                    <th class="px-4 py-2 font-semibold">Product Price</th>
+                    <th class="px-4 py-2 font-semibold">Retail Price</th>
                     <!-- <th class="px-4 py-2 font-semibold">Quantity</th> -->
+                    <th class="px-4 py-2 font-semibold">Availability</th>
                     <th class="px-4 py-2 font-semibold">Description</th>
+                    <th class="px-4 py-2 font-semibold">Product Weight(for delivery)KG</th>
+
                   </tr>
                 </thead>
                 <tbody>
@@ -163,8 +167,20 @@
                     </td>
                     <td><input type="number" name="price1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="number" name="retailprice1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td>
+                    <select name="avail1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description1"
-                        class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td><input type="number" name="productweight1"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                   </tr>
                   <!-- Repeat rows 2 to 5 similarly -->
                   <tr>
@@ -181,8 +197,19 @@
                     </td>
                     <td><input type="number" name="price2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="number" name="retailprice2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td>
+                    <select name="avail2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description2"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                  <td><input type="number" name="productweight2"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                   </tr>
                   <!-- Row 3 -->
 
@@ -200,8 +227,19 @@
                     </td>
                     <td><input type="number" name="price3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="number" name="retailprice3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td>
+                    <select name="avail3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description3"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                        <td><input type="number" name="productweight3"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                   </tr>
                   <!-- Row 4 -->
                   <tr>
@@ -218,8 +256,19 @@
                     </td>
                     <td><input type="number" name="price4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="number" name="retailprice4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td>
+                    <select name="avail4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description4"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                        <td><input type="number" name="productweight4"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                   </tr>
                   <!-- Row 5 -->
                   <tr>
@@ -236,8 +285,19 @@
                     </td>
                     <td><input type="number" name="price5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="number" name="retailprice5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
+                    <td>
+                    <select name="avail5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                      <option value="Available">Available</option>
+                      <option value="Not Available">Not Available</option>
+                    </select>
+                  </td>
                     <td><input type="text" name="description5"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                        <td><input type="number" name="productweight5"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                   </tr>
                   <!-- You can copy the structure of Row 1 and paste it here for Rows 5 to 10 -->
                 </tbody>

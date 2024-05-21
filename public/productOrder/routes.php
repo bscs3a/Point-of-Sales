@@ -90,17 +90,17 @@ Router::post('/login/user', function () {
 
             $_SESSION['employee'] = $user['employee'];
 
-            // Insert log entry for successful login audit log
-            $user_id = $user['employee'];
-            $action = "Logged In";
-            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+            // // Insert log entry for successful login audit log
+            // $user_id = $user['employee'];
+            // $action = "Logged In";
+            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            $sql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':user_id', $user_id);
-            $stmt->bindValue(':action', $action);
-            $stmt->bindValue(':time_out', $time_out);
-            $stmt->execute();
+            // $sql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            // $stmt = $conn->prepare($sql);
+            // $stmt->bindValue(':user_id', $user_id);
+            // $stmt->bindValue(':action', $action);
+            // $stmt->bindValue(':time_out', $time_out);
+            // $stmt->execute();
 
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             // Redirect to the dashboard page after successful login
@@ -202,7 +202,10 @@ Router::post('/insert/addsupplier/', function () {
             $productName = $_POST["productName$i"];
             $categoryName = $_POST["category$i"];
             $price = $_POST["price$i"];
+            $retailprice = $_POST["retailprice$i"];
+            $availability = $_POST["avail$i"];
             $description = $_POST["description$i"];
+            $productWeight = $_POST["productweight$i"];
 
             // Handle file upload for each row
             $fileFieldName = "productImage$i";
@@ -215,8 +218,8 @@ Router::post('/insert/addsupplier/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
-                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :categoryName, :productImage, :suppliername)";
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
+                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, :suppliername, :productWeight)";
                     $productStmt = $conn->prepare($productSql);
 
                     // Retrieve the category_id based on the category name
@@ -238,9 +241,12 @@ Router::post('/insert/addsupplier/', function () {
                     $productStmt->bindParam(':productName', $productName);
                     $productStmt->bindParam(':description', $description);
                     $productStmt->bindParam(':price', $price);
+                    $productStmt->bindParam(':retailprice', $retailprice);
+                    $productStmt->bindParam(':availability', $availability);
                     $productStmt->bindParam(':categoryName', $categoryName);
                     $productStmt->bindParam(':productImage', $uploadPath);
                     $productStmt->bindParam(':suppliername', $suppliername);
+                    $productStmt->bindParam(':productWeight', $productWeight);
 
                     // Execute the product SQL statement
                     $productStmt->execute();
@@ -256,16 +262,16 @@ Router::post('/insert/addsupplier/', function () {
 
 
         // Audit log for adding a supplier
-        $user_id = $_SESSION['employee']; // Assuming you have a user session
-        $action = "Added Supplier: $suppliername";
-        $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+        // $user_id = $_SESSION['employee']; // Assuming you have a user session
+        // $action = "Added Supplier: $suppliername";
+        // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-        $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-        $auditStmt = $conn->prepare($auditSql);
-        $auditStmt->bindParam(':user_id', $user_id);
-        $auditStmt->bindParam(':action', $action);
-        $auditStmt->bindParam(':time_out', $time_out);
-        $auditStmt->execute();
+        // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+        // $auditStmt = $conn->prepare($auditSql);
+        // $auditStmt->bindParam(':user_id', $user_id);
+        // $auditStmt->bindParam(':action', $action);
+        // $auditStmt->bindParam(':time_out', $time_out);
+        // $auditStmt->execute();
 
         // Redirect to the supplier addition page upon successful insertion
         $rootFolder = dirname($_SERVER['PHP_SELF']);
@@ -296,7 +302,11 @@ Router::post('/po/addbulk/', function () {
             $productName = $_POST["productName$i"];
             $categoryName = $_POST["category$i"];
             $price = $_POST["price$i"];
+            $retailprice = $_POST["retailprice$i"];
+            $availability = $_POST["avail$i"];
             $description = $_POST["description$i"];
+            $productWeight = $_POST["productweight$i"];
+
 
             // Handle file upload for each row
             $fileFieldName = "productImage$i";
@@ -309,8 +319,8 @@ Router::post('/po/addbulk/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Category, ProductImage, Supplier) 
-                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :categoryName, :productImage, s.Supplier_Name 
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
+                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, s.Supplier_Name , :productWeight
                                 FROM suppliers s 
                                 INNER JOIN categories c ON c.category_name = :categoryName 
                                 WHERE s.Supplier_ID = :supplierID";
@@ -322,7 +332,10 @@ Router::post('/po/addbulk/', function () {
                     $productStmt->bindParam(':productName', $productName);
                     $productStmt->bindParam(':description', $description);
                     $productStmt->bindParam(':price', $price);
+                    $productStmt->bindParam(':retailprice', $retailprice);
+                    $productStmt->bindParam(':availability', $availability);
                     $productStmt->bindParam(':productImage', $uploadPath);
+                    $productStmt->bindParam(':productWeight', $productWeight);
 
                     // Execute the product SQL statement
                     $productStmt->execute();
@@ -349,12 +362,12 @@ Router::post('/po/addbulk/', function () {
         $action = "Added items for Supplier: $supplierName";
         $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-        $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-        $auditStmt = $conn->prepare($auditSql);
-        $auditStmt->bindParam(':user_id', $user_id);
-        $auditStmt->bindParam(':action', $action);
-        $auditStmt->bindParam(':time_out', $time_out);
-        $auditStmt->execute();
+        // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+        // $auditStmt = $conn->prepare($auditSql);
+        // $auditStmt->bindParam(':user_id', $user_id);
+        // $auditStmt->bindParam(':action', $action);
+        // $auditStmt->bindParam(':time_out', $time_out);
+        // $auditStmt->execute();
 
         // Redirect to the products page upon successful insertion
         $rootFolder = dirname($_SERVER['PHP_SELF']);
@@ -381,7 +394,7 @@ function getNextBatchID($conn)
 }
 
 Router::post('/placeorder/supplier/', function () {
-    if (!isset ($_POST['products']) || !is_array($_POST['products'])) {
+    if (!isset($_POST['products']) || !is_array($_POST['products'])) {
         echo "No products selected for ordering.";
         return;
     }
@@ -408,13 +421,29 @@ Router::post('/placeorder/supplier/', function () {
         $totalQuantity = 0;
         $totalAmount = 0;
 
-        // Loop through each selected product
+        // Flag to track availability status of products
+        $allProductsAvailable = true;
+
         foreach ($_POST['products'] as $productID) {
             $quantityField = 'quantity_' . $productID;
-            $quantity = isset ($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
+            $quantity = isset($_POST[$quantityField]) ? intval($_POST[$quantityField]) : 0;
 
             // Ensure quantity is greater than 0 before processing
             if ($quantity > 0) {
+                // Check product availability
+                $availabilityQuery = "SELECT Availability FROM products WHERE ProductID = :productID";
+                $availabilityStmt = $conn->prepare($availabilityQuery);
+                $availabilityStmt->bindParam(':productID', $productID, PDO::PARAM_INT);
+                $availabilityStmt->execute();
+                $availability = $availabilityStmt->fetchColumn();
+
+                // If product is not available, set flag to false and halt order processing
+                if ($availability === 'Not Available') {
+                    $allProductsAvailable = false;
+                    echo "Product with ID $productID is not available and cannot be ordered.<br>";
+                    break; // Stop processing further products
+                }
+
                 // Bind parameters for order details insertion
                 $orderStmt->bindParam(':supplierID', $supplierID);
                 $orderStmt->bindParam(':productID', $productID);
@@ -445,41 +474,46 @@ Router::post('/placeorder/supplier/', function () {
                 $supplierNameStmt = $conn->prepare($supplierNameQuery);
                 $supplierNameStmt->bindParam(':supplierID', $supplierID);
                 $supplierNameStmt->execute();
-                $supplierName = $supplierNameStmt->fetchColumn();
+                // $supplierName = $supplierNameStmt->fetchColumn();
 
-                $action = "Placed an Order for Supplier: $supplierName";
-                $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+                // $action = "Placed an Order for Supplier: $supplierName";
+                // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-                $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-                $auditStmt = $conn->prepare($auditSql);
-                $auditStmt->bindParam(':user_id', $user_id);
-                $auditStmt->bindParam(':action', $action);
-                $auditStmt->bindParam(':time_out', $time_out);
-                $auditStmt->execute();
+                // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+                // $auditStmt = $conn->prepare($auditSql);
+                // $auditStmt->bindParam(':user_id', $user_id);
+                // $auditStmt->bindParam(':action', $action);
+                // $auditStmt->bindParam(':time_out', $time_out);
+                // $auditStmt->execute();
             }
         }
 
-        // If total quantity is greater than 0, proceed with batch order insertion
-        if ($totalQuantity > 0) {
-            // Bind parameters for batch order insertion
-            $batchOrderStmt->bindParam(':supplierID', $supplierID);
-            $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
-            $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
-
-            // Execute the statement for batch order insertion
-            $batchOrderStmt->execute();
-
-            // Commit the transaction
-            $conn->commit();
-
-            // Redirect the user after successful order placement
-            $rootFolder = dirname($_SERVER['PHP_SELF']);
-            header("Location: $rootFolder/po/orderDetail");
-            exit (); // Ensure that script execution stops after redirection
+        // If any product is not available, halt the order processing
+        if (!$allProductsAvailable) {
+            echo "Order cannot be processed because one or more products are not available.<br>";
         } else {
-            // Rollback the transaction if no products were ordered
-            $conn->rollBack();
-            echo "No products were ordered.";
+            // If total quantity is greater than 0, proceed with batch order insertion
+            if ($totalQuantity > 0) {
+                // Bind parameters for batch order insertion
+                $batchOrderStmt->bindParam(':supplierID', $supplierID);
+                $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
+                $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
+
+                // Execute the statement for batch order insertion
+                $batchOrderStmt->execute();
+
+                // Commit the transaction
+                $conn->commit();
+
+                // Redirect the user after successful order placement
+                $rootFolder = dirname($_SERVER['PHP_SELF']);
+                header("Location: $rootFolder/po/orderDetail");
+                exit (); // Ensure that script execution stops after redirection
+            } else {
+                // Rollback the transaction if no products were ordered
+                $conn->rollBack();
+                echo "No products were ordered.";
+            }
         }
     } catch (PDOException $e) {
         // Rollback the transaction on error
@@ -490,6 +524,7 @@ Router::post('/placeorder/supplier/', function () {
         $conn = null;
     }
 });
+
 
 
 //function to delete view details
@@ -534,16 +569,16 @@ Router::post('/delete/viewdetails', function () {
             $updateStmt->execute();
 
             // Audit log for deleting a product
-            $user_id = $_SESSION['employee']; // Assuming you have a user session
-            $action = "Deleted Product ID: $productID from Order #$batchID";
-            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+            // $user_id = $_SESSION['employee']; // Assuming you have a user session
+            // $action = "Deleted Product ID: $productID from Order #$batchID";
+            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            $auditStmt = $conn->prepare($auditSql);
-            $auditStmt->bindParam(':user_id', $user_id);
-            $auditStmt->bindParam(':action', $action);
-            $auditStmt->bindParam(':time_out', $time_out);
-            $auditStmt->execute();
+            // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            // $auditStmt = $conn->prepare($auditSql);
+            // $auditStmt->bindParam(':user_id', $user_id);
+            // $auditStmt->bindParam(':action', $action);
+            // $auditStmt->bindParam(':time_out', $time_out);
+            // $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -746,16 +781,16 @@ Router::post('/addfeedback/viewtransaction', function () {
             $updateStmt->execute();
 
             // Audit log for adding feedback
-            $user_id = $_SESSION['employee']; // Assuming you have a user session
-            $action = "Added feedback a for Order #$batchID";
-            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+            // $user_id = $_SESSION['employee']; // Assuming you have a user session
+            // $action = "Added feedback a for Order #$batchID";
+            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            $auditStmt = $conn->prepare($auditSql);
-            $auditStmt->bindParam(':user_id', $user_id);
-            $auditStmt->bindParam(':action', $action);
-            $auditStmt->bindParam(':time_out', $time_out);
-            $auditStmt->execute();
+            // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            // $auditStmt = $conn->prepare($auditSql);
+            // $auditStmt->bindParam(':user_id', $user_id);
+            // $auditStmt->bindParam(':action', $action);
+            // $auditStmt->bindParam(':time_out', $time_out);
+            // $auditStmt->execute();
         }
 
         // Close the database connection
@@ -801,19 +836,28 @@ Router::post('/edit/editsupplier', function () {
             $productID = substr($key, strlen('product_name_'));
             $categoryKey = 'product_category_' . $productID;
             $priceKey = 'product_price_' . $productID;
+            $retailpriceKey = 'retail_price_' . $productID;
             $descriptionKey = 'product_description_' . $productID;
+            $productWeightKey = 'product_weight_' . $productID;
+            $availabilityKey = 'availability_' . $productID;
 
             // Update product information
             $productName = $_POST[$key];
             $category = $_POST[$categoryKey];
             $price = $_POST[$priceKey];
+            $retailprice = $_POST[$retailpriceKey];
             $description = $_POST[$descriptionKey];
+            $productWeight = $_POST[$productWeightKey];
+            $availability = $_POST[$availabilityKey];
 
-            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Description = :description WHERE ProductID = :productID");
+            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Retail_Price =:retailprice, Description = :description, ProductWeight = :productWeight, Availability = :availability WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
             $stmt_product->bindParam(':category', $category);
             $stmt_product->bindParam(':price', $price);
+            $stmt_product->bindParam(':retailprice', $retailprice);
             $stmt_product->bindParam(':description', $description);
+            $stmt_product->bindParam(':productWeight', $productWeight);
+            $stmt_product->bindParam(':availability', $availability);
             $stmt_product->bindParam(':productID', $productID);
             $stmt_product->execute();
         }
@@ -839,16 +883,16 @@ Router::post('/edit/editsupplier', function () {
     }
 
     // Audit log for updating supplier and product information
-    $user_id = $_SESSION['employee']; // Assuming you have a user session
-    $action = "Updated the Supplier Information and Products on Supplier: $supplierName";
-    $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+    // $user_id = $_SESSION['employee']; // Assuming you have a user session
+    // $action = "Updated the Supplier Information and Products on Supplier: $supplierName";
+    // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-    $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-    $auditStmt = $conn->prepare($auditSql);
-    $auditStmt->bindParam(':user_id', $user_id);
-    $auditStmt->bindParam(':action', $action);
-    $auditStmt->bindParam(':time_out', $time_out);
-    $auditStmt->execute();
+    // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+    // $auditStmt = $conn->prepare($auditSql);
+    // $auditStmt->bindParam(':user_id', $user_id);
+    // $auditStmt->bindParam(':action', $action);
+    // $auditStmt->bindParam(':time_out', $time_out);
+    // $auditStmt->execute();
 
     // Redirect back to the page
     $rootFolder = dirname($_SERVER['PHP_SELF']);
@@ -880,16 +924,16 @@ Router::post('/delete/supplier', function () {
     $stmt_products->execute();
 
     // Audit log for updating supplier and product information
-    $user_id = $_SESSION['employee']; // Assuming you have a user session
-    $action = "Deleted Supplier: $supplierName";
-    $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+    // $user_id = $_SESSION['employee']; // Assuming you have a user session
+    // $action = "Deleted Supplier: $supplierName";
+    // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-    $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-    $auditStmt = $conn->prepare($auditSql);
-    $auditStmt->bindParam(':user_id', $user_id);
-    $auditStmt->bindParam(':action', $action);
-    $auditStmt->bindParam(':time_out', $time_out);
-    $auditStmt->execute();
+    // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+    // $auditStmt = $conn->prepare($auditSql);
+    // $auditStmt->bindParam(':user_id', $user_id);
+    // $auditStmt->bindParam(':action', $action);
+    // $auditStmt->bindParam(':time_out', $time_out);
+    // $auditStmt->execute();
 
     // Redirect back to a specific page after deletion
     $rootFolder = dirname($_SERVER['PHP_SELF']);
@@ -1076,16 +1120,16 @@ function updateOrderStatusToCompleted()
             $insertStmt->execute();
 
             // Audit log for completing an order
-            $user_id = $_SESSION['employee']; // Assuming you have a user session
-            $action = "Completed Order #$batchID";
-            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+            // $user_id = $_SESSION['employee']; // Assuming you have a user session
+            // $action = "Completed Order #$batchID";
+            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            $auditStmt = $conn->prepare($auditSql);
-            $auditStmt->bindParam(':user_id', $user_id);
-            $auditStmt->bindParam(':action', $action);
-            $auditStmt->bindParam(':time_out', $time_out);
-            $auditStmt->execute();
+            // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            // $auditStmt = $conn->prepare($auditSql);
+            // $auditStmt->bindParam(':user_id', $user_id);
+            // $auditStmt->bindParam(':action', $action);
+            // $auditStmt->bindParam(':time_out', $time_out);
+            // $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -1149,16 +1193,16 @@ function updateOrderStatusToCancel()
             $insertStmt->execute();
 
             // Audit log for cancelling an order
-            $user_id = $_SESSION['employee']; // Assuming you have a user session
-            $action = "Cancelled Order #$batchID";
-            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+            // $user_id = $_SESSION['employee']; // Assuming you have a user session
+            // $action = "Cancelled Order #$batchID";
+            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            $auditStmt = $conn->prepare($auditSql);
-            $auditStmt->bindParam(':user_id', $user_id);
-            $auditStmt->bindParam(':action', $action);
-            $auditStmt->bindParam(':time_out', $time_out);
-            $auditStmt->execute();
+            // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            // $auditStmt = $conn->prepare($auditSql);
+            // $auditStmt->bindParam(':user_id', $user_id);
+            // $auditStmt->bindParam(':action', $action);
+            // $auditStmt->bindParam(':time_out', $time_out);
+            // $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
