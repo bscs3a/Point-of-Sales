@@ -78,6 +78,7 @@
                 <th class="px-4 py-2 font-semibold">Retail Price</th>
                 <th class="px-4 py-2 font-semibold">Availability</th>
                 <th class="px-4 py-2 font-semibold">Description</th>
+                <th class="px-4 py-2 font-semibold">Product Weight(for delivery)KG</th>
               </tr>
             </thead>
 
@@ -111,6 +112,9 @@
                   </td>
                   <td><input type="text" name="description1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight1"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 2 -->
                 <tr>
@@ -137,6 +141,9 @@
                   </td>
                   <td><input type="text" name="description2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight2"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 3 -->
                 <tr>
@@ -163,6 +170,9 @@
                   </td>
                   <td><input type="text" name="description3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight3"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 4 -->
                 <tr>
@@ -189,6 +199,9 @@
                   </td>
                   <td><input type="text" name="description4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight4"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 5 -->
                 <tr>
@@ -215,6 +228,9 @@
                   </td>
                   <td><input type="text" name="description5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight5"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 6 -->
                 <tr>
@@ -241,6 +257,9 @@
                   </td>
                   <td><input type="text" name="description6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight6"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 7 -->
                 <tr>
@@ -267,6 +286,9 @@
                   </td>
                   <td><input type="text" name="description7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight7"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 8 -->
                 <tr>
@@ -293,6 +315,9 @@
                   </td>
                   <td><input type="text" name="description8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight8"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 9 -->
                 <tr>
@@ -319,6 +344,9 @@
                   </td>
                   <td><input type="text" name="description9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
+                  <td><input type="number" name="productweight9"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 10 -->
                 <tr>
@@ -345,6 +373,9 @@
                   </td>
                   <td><input type="text" name="description10"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                      <td><input type="number" name="productweight10"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 11 -->
                 <tr>
@@ -371,6 +402,9 @@
                   </td>
                   <td><input type="text" name="description11"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                      <td><input type="number" name="productweight12"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 12 -->
                 <tr>
@@ -397,6 +431,9 @@
                   </td>
                   <td><input type="text" name="description12"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                      <td><input type="number" name="productweight12"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
                 <!-- Row 13 -->
                 <tr>
@@ -423,6 +460,9 @@
                   </td>
                   <td><input type="text" name="description13"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
+                      <td><input type="number" name="productweight13"
+                        class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                    </td>
                 </tr>
               </tbody>
         </div>

@@ -146,6 +146,7 @@
                                 <th class="px-4 py-2 font-semibold">Product Price</th>
                                 <th class="px-4 py-2 font-semibold">Retail Price</th>
                                 <th class="px-4 py-2 font-semibold">Description</th>
+                                <th class="px-4 py-2 font-semibold">Product Weight(for delivery)KG</th>
                                 <th class="px-4 py-2 font-semibold">Availability</th>
                                 <th class="px-4 py-2 font-semibold"></th>
                               </tr>
@@ -206,6 +207,10 @@
                             <td class="px-4 py-4">
                                 <textarea name="product_description_<?php echo $product['ProductID']; ?>"
                                     class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
+                            </td>
+                            <td class="px-4 py-4">
+                                <textarea name="product_weight_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['ProductWeight']; ?></textarea>
                             </td>
                             <td class="px-4 py-4">
                                 <select name="availability_<?php echo $product['ProductID']; ?>"
