@@ -828,6 +828,10 @@ video {
   margin: 0.25rem;
 }
 
+.m-16{
+  margin: 4rem;
+}
+
 .m-2{
   margin: 0.5rem;
 }
@@ -840,12 +844,32 @@ video {
   margin: 1rem;
 }
 
+.m-40{
+  margin: 10rem;
+}
+
+.m-44{
+  margin: 11rem;
+}
+
 .m-5{
   margin: 1.25rem;
 }
 
+.m-52{
+  margin: 13rem;
+}
+
+.m-56{
+  margin: 14rem;
+}
+
 .m-6{
   margin: 1.5rem;
+}
+
+.m-7{
+  margin: 1.75rem;
 }
 
 .m-8{
@@ -1289,6 +1313,10 @@ video {
 .size-8{
   width: 2rem;
   height: 2rem;
+}
+
+.h-0{
+  height: 0px;
 }
 
 .h-1{
@@ -4412,6 +4440,14 @@ video {
           backdrop-filter: none;
 }
 
+.\!transition{
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter !important;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter !important;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 150ms !important;
+}
+
 .transition{
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -4482,6 +4518,14 @@ video {
 
 .\!\[a-zA-Z\:_\]{
   a-z-a--z:  !important;
+}
+
+.\[vite\:css\]{
+  vite: css;
+}
+
+.\[vite\:html\]{
+  vite: html;
 }
 
 @media (min-width: 640px){
@@ -4797,6 +4841,12 @@ video {
 .hover\:shadow-lg:hover{
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.hover\:shadow-inner:hover{
+  --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 

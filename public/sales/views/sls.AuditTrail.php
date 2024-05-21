@@ -33,11 +33,14 @@
 
             </ul>
 
+          
             <!-- End: Active Menu -->
 
             <!-- Start: Profile -->
 
             <ul class="ml-auto flex items-center">
+
+            <button class="p-2 px-4 rounded-full mx-4 bg-gray-200 justify-end hover:bg-green-800 transition-colors hover:text-white shadow-inner">Clock In</button>
 
                 <div class="relative inline-block text-left">
                      <div>
