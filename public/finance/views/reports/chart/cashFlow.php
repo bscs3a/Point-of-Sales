@@ -25,7 +25,7 @@ if ($today < $lastDayOfMonth) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income Report</title>
+    <title>Cash Flow</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Russo+One&display=swap" rel="stylesheet">
     <link href="<?php echo $_SERVER["DOCUMENT_ROOT"].'/public\finance\views\reports\reports.css';?>"/>
 </head>
@@ -118,14 +118,14 @@ tfoot{
                 <td class="header1 text-right width-auto-wrap">BSCS 3A</td>
             </tr>
             <tr>
-                <td class ="headerPartner"><?php echo "For the month end: $monthName $year" ?></td>
+                <td class ="headerPartner"><?php echo "$date" ?></td>
                 <td class="headerPartner text-right width-auto-wrap">Hardware Management Store</td>
             </tr>
         </table>
     </header>
-    <?php
-        echo generateCashFlowReport($year, $month);
-    ?> 
+    <main>
+        
+    </main>
 </body>
 
 </html>

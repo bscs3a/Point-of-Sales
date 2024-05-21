@@ -8,6 +8,7 @@ $options->set('isRemoteEnabled', true);
 
 
 $fileNeeded = $_SESSION['postdata']['file'];
+$typeOfReport = $_SESSION['postdata']['writtenOrChart'];
 if($fileNeeded === null){
     echo "No file selected";
     header ("Location: /fin/dashboard");
@@ -17,19 +18,24 @@ if($fileNeeded === null){
 // Start output buffering
 ob_start();
 
+$basePath = 'written';
+// types of report
+if (strcasecmp($typeOfReport, "chart") === 0) {
+    $basePath = 'chart';
+}
 
 // Include the script
 if($fileNeeded === "Income"){
-    require_once 'incomeReport.php';
+    require_once "$basePath/incomeReport.php";
 }
 else if($fileNeeded === "OwnerEquity"){
-    require_once 'OwnersEquityReport.php';
+    require_once "$basePath/OwnersEquityReport.php";
 }
 else if($fileNeeded === "TrialBalance"){
-    require_once 'TrialBalance.php';
+    require_once "$basePath/TrialBalance.php";
 }
 else if($fileNeeded === "CashFlow"){
-    require_once 'cashFlow.php';
+    require_once "$basePath/cashFlow.php";
 }
 
 // Get the output of the script
