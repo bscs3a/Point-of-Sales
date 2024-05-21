@@ -1,19 +1,22 @@
 <?php 
     require_once 'public\finance\functions\reportGeneration\CashFlow.php';
-    $fromDate = $_SESSION['postdata']['fromMonthYear'];
-    $toDate = $_SESSION['postdata']['toMonthYear'];
+    $today = new DateTime();
+    $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
-    
+if ($today < $lastDayOfMonth) {
+    $today->modify('-1 month');
+}
 
-    $fromYear = explode('-', $fromDate)[0];
-    $fromMonthNumber = explode('-', $fromDate)[1];
-    $fromMonth = date('F', mktime(0, 0, 0, $fromMonthNumber, 10));
+    $year = $today->format('Y');
+    $month = $today->format('n');
+    if (isset($_SESSION['postdata']['year']) && isset($_SESSION['postdata']['month'])){
+        $year = $_SESSION['postdata']['year'];
+        $month =$_SESSION['postdata']['month'];
+    }
 
-    $toYear = explode('-', $toDate)[0];
-    $toMonthNumber = explode('-', $toDate)[1];
-    $toMonth = date('F', mktime(0, 0, 0, $toMonthNumber, 10));
-
-    $date = "From $fromMonth, $fromYear to $toMonth, $toYear";
+    $year = intval($year);
+    $month = intval($month);
+    $monthName = date('F', mktime(0, 0, 0, $month, 10));
 ?>
 
 <!DOCTYPE html>
@@ -98,6 +101,21 @@ tfoot{
     color: #262261;
     font-weight: bold;
 }
+body {
+    position: relative;
+    height: 100%;
+    margin: 0;
+}
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.center img {
+    width: 100%;
+    height: 100%;
+}
 </style>
 
 <body>
@@ -115,13 +133,19 @@ tfoot{
                 <td class="header1 text-right width-auto-wrap">BSCS 3A</td>
             </tr>
             <tr>
-                <td class ="headerPartner"><?php echo "$date" ?></td>
+                <td class ="headerPartner"><?php echo "For the month end: $monthName $year" ?></td>
                 <td class="headerPartner text-right width-auto-wrap">Hardware Management Store</td>
             </tr>
         </table>
     </header>
     <main>
-        
+        <div class="center">
+            <?php 
+                $image = file_get_contents('public/finance/img/charts/chart.png');
+                $image = base64_encode($image);
+            ?>
+            <img src="data:image;base64,<?= $image?>"/>
+        </div>           
     </main>
 </body>
 

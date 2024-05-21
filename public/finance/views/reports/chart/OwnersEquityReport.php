@@ -25,7 +25,7 @@ if ($today < $lastDayOfMonth) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner/'s Equity Report</title>
+    <title>Owner's Equity</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Russo+One&display=swap" rel="stylesheet">
     <link href="<?php echo $_SERVER["DOCUMENT_ROOT"].'/public\finance\views\reports\reports.css';?>"/>
 </head>
@@ -101,13 +101,28 @@ tfoot{
     color: #262261;
     font-weight: bold;
 }
+body {
+    position: relative;
+    height: 100%;
+    margin: 0;
+}
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.center img {
+    width: 100%;
+    height: 100%;
+}
 </style>
 
 <body>
     <header>
         <table>
             <tr>
-                <td class="header2">Cash Flow</td>
+                <td class="header2">Owner's Equity</td>
                 <td rowspan="2" class="text-right width-auto-wrap">
                     <?php 
                         $image = file_get_contents('public/finance/img/logo_reports.png');
@@ -118,13 +133,19 @@ tfoot{
                 <td class="header1 text-right width-auto-wrap">BSCS 3A</td>
             </tr>
             <tr>
-                <td class ="headerPartner"><?php echo "$date" ?></td>
+                <td class ="headerPartner"><?php echo "For the month end: $monthName $year" ?></td>
                 <td class="headerPartner text-right width-auto-wrap">Hardware Management Store</td>
             </tr>
         </table>
     </header>
     <main>
-
+        <div class="center">
+            <?php 
+                $image = file_get_contents('public/finance/img/charts/chart.png');
+                $image = base64_encode($image);
+            ?>
+            <img src="data:image;base64,<?= $image?>"/>
+        </div>           
     </main>
 </body>
 

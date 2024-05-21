@@ -101,6 +101,21 @@ tfoot{
     color: #262261;
     font-weight: bold;
 }
+body {
+    position: relative;
+    height: 100%;
+    margin: 0;
+}
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.center img {
+    width: 100%;
+    height: 100%;
+}
 </style>
 
 <body>
@@ -118,19 +133,20 @@ tfoot{
                 <td class="header1 text-right width-auto-wrap">BSCS 3A</td>
             </tr>
             <tr>
-                <td class ="headerPartner"><?php echo "$date" ?></td>
+                <td class ="headerPartner"><?php echo "For the month end: $monthName $year" ?></td>
                 <td class="headerPartner text-right width-auto-wrap">Hardware Management Store</td>
             </tr>
         </table>
     </header>
     <main>
-        <canvas id="imageHere" class="px-3 py-3"></canvas>
-
+        <div class="center">
+            <?php 
+                $image = file_get_contents('public/finance/img/charts/chart.png');
+                $image = base64_encode($image);
+            ?>
+            <img src="data:image;base64,<?= $image?>"/>
+        </div>           
     </main>
-
-    <script>
-        
-    </script>
 </body>
 
 </html>

@@ -419,9 +419,9 @@
                             monthYearInput.setCustomValidity('');
                         }
                     }
-                    // if (formReport.checkValidity()) {
-                    //     formReport.submit();
-                    // }
+                    if (formReport.checkValidity()) {
+                        formReport.submit();
+                    }
                     monthYearInput.readOnly = true;
                     fromMonthYearInput.readOnly = true;
                     toMonthYearInput.readOnly = true;
@@ -482,7 +482,7 @@
                 }
             </script>
             <br>
-            <canvas id="emptyCanvas"> </canvas>
+            <canvas id="emptyCanvas" class="hidden"> </canvas>
             <div class="m-1 gap-3 flex justify-end">
                 <button id="cancel_btn" class="border-2 rounded-md border-black font-bold py-2.5 px-4 drop-shadow-md" type="button">
                     Cancel

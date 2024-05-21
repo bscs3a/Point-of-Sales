@@ -103,8 +103,6 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                     class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                                     Finance
                                 </a>
-
-
                             </nav>
                         </div>
                     </div>
