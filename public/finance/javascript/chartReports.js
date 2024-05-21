@@ -39,7 +39,7 @@ function recordChartAsAnImage(typeFile){
         // Convert the chart to a data URL
         var url = myChart.toBase64Image();
         // Send the image data to the server
-        fetch('http://localhost/master/chartGenerator', {
+        fetch('http://localhost/Finance/chartGenerator', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

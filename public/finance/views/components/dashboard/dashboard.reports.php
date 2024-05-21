@@ -567,7 +567,7 @@
 
         });
 
-        fetch('http://localhost/master/fin/getBalanceReport', {
+        fetch('http://localhost/Finance/fin/getBalanceReport', {
             method: 'POST',
         })
         .then(response => {
@@ -704,7 +704,7 @@
             }
         });
         //ajax for equityChart
-        fetch('http://localhost/master/fin/getEquityReport', {
+        fetch('http://localhost/Finance/fin/getEquityReport', {
             method: 'POST',
         })
         .then(response => {
@@ -779,7 +779,7 @@
             }
         });
         //ajax for equityChart
-        fetch('http://localhost/master/fin/getCashFlowReport', {
+        fetch('http://localhost/Finance/fin/getCashFlowReport', {
             method: 'POST',
         })
         .then(response => {
