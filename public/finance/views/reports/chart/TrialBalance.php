@@ -107,7 +107,7 @@ tfoot{
     <header>
         <table>
             <tr>
-                <td class="header2">Cash Flow</td>
+                <td class="header2">Trial Balance</td>
                 <td rowspan="2" class="text-right width-auto-wrap">
                     <?php 
                         $image = file_get_contents('public/finance/img/logo_reports.png');
@@ -139,7 +139,7 @@ tfoot{
             data: {
                 labels: ['Assets', 'Liabilities'],
                 datasets: [{
-                    data: [],
+                    data: [0.93, 0.07],
                     backgroundColor: ['rgb(255, 165, 0)', 'rgb(255, 205, 86)']
                 }]
             },
@@ -170,31 +170,31 @@ tfoot{
 
         });
 
-        fetch('http://localhost/Finance/fin/getBalanceReport', {
-            method: 'POST',
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            updateBalanceChart(myBalancePieChart, data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-        //function to update equity Chart
-        function updateBalanceChart(chart, paramData) {
-            let data = [];
+        // fetch('http://localhost/Finance/fin/getBalanceReport', {
+        //     method: 'POST',
+        // })
+        // .then(response => {
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     return response.json();
+        // })
+        // .then(data => {
+        //     updateBalanceChart(myBalancePieChart, data);
+        // })
+        // .catch((error) => {
+        //     console.error('Error:', error);
+        // });
+        // //function to update equity Chart
+        // function updateBalanceChart(chart, paramData) {
+        //     let data = [];
 
-            data.push(paramData.asset);
-            data.push(paramData.liability);
+        //     data.push(paramData.asset);
+        //     data.push(paramData.liability);
 
-            chart.data.datasets[0].data = data;
-            chart.update();
-        }
+        //     chart.data.datasets[0].data = data;
+        //     chart.update();
+        // }
 
         chartInstance.options.animation.onComplete = function() {
             var url = chartInstance.toBase64Image();

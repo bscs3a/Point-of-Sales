@@ -5,6 +5,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 $options = new Options();
 $options->set('isRemoteEnabled', true);
+$options->set('isJavascriptEnabled', TRUE);
 
 
 $fileNeeded = $_SESSION['postdata']['file'];

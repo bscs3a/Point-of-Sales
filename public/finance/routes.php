@@ -265,3 +265,18 @@ Router::post("/pondo/transaction", function () {
 
     header("Location: " . $_SERVER['HTTP_REFERER']);
 });
+
+
+Router::post("/chartGenerator", function () {
+    // Get the image data from the request
+    $data = json_decode(file_get_contents('php://input'), true);
+    $imageData = $data['imageData'];
+
+    // Remove the data URL prefix
+    $imageData = str_replace('data:image/png;base64,', '', $imageData);
+    // Decode the image data
+    $imageData = base64_decode($imageData);
+
+    $filePath = __DIR__ . '/img/charts/chart.png';
+    file_put_contents($filePath, $imageData);
+});

@@ -387,8 +387,102 @@
                         dateFromToSelector.dataset.focus = 'true';
                     });
                 });
+
+                // submit the form
+                let formReport = document.querySelector('#requestReportForm');
+                formReport.addEventListener("submit", function(){
+                    event.preventDefault();
+                    let monthYearInput = document.querySelector('#monthYear');
+                    let fromMonthYearInput = document.querySelector('#fromMonthYear');
+                    let toMonthYearInput = document.querySelector('#toMonthYear');
+                    let isChart = document.querySelector('#chart').checked;
+                    if(isChart){
+                        fromMonthYearInput.readOnly = false;
+                        toMonthYearInput.readOnly = false;
+                        let fromMonthYear = fromMonthYearInput.value;
+                        let toMonthYear = toMonthYearInput.value;
+                        if (fromMonthYear === '' || toMonthYear === '') {
+                            fromMonthYearInput.setCustomValidity('From and To Month and Year is required');
+                            toMonthYearInput.setCustomValidity('From and To Month and Year is required');
+                        } else {
+                            fromMonthYearInput.setCustomValidity('');
+                            toMonthYearInput.setCustomValidity('');
+                        }
+                        recordChartAsAnImage();
+                    }else{
+                        
+                        monthYearInput.readOnly = false;
+                        let monthYear = monthYearInput.value;
+                        if (monthYear === '') {
+                            monthYearInput.setCustomValidity('Month and Year is required');
+                        } else {
+                            monthYearInput.setCustomValidity('');
+                        }
+                    }
+                    // if (formReport.checkValidity()) {
+                    //     formReport.submit();
+                    // }
+                    monthYearInput.readOnly = true;
+                    fromMonthYearInput.readOnly = true;
+                    toMonthYearInput.readOnly = true;
+                });
+                function recordChartAsAnImage(){
+                    // Create the chart
+                var ctx = document.getElementById('emptyCanvas').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Assets', 'Liabilities'],
+                        datasets: [{
+                            data: [0.93,0.07],
+                            backgroundColor: ['rgb(255, 165, 0)', 'rgb(255, 205, 86)']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        size: 20,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+
+                        layout: {
+                            padding: {
+                                left: 20,
+                                right: 20,
+                                top: 0,
+                                bottom: 0
+                            }
+                        }
+                    }     
+                });
+
+                // Function to run when the chart animation is complete
+                myChart.options.animation.onComplete = function() {
+                    // Convert the chart to a data URL
+                    var url = myChart.toBase64Image();
+                    // Send the image data to the server
+                    fetch('http://localhost/Finance/chartGenerator', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            imageData: url,
+                        }),
+                    });
+                };
+                }
             </script>
             <br>
+            <canvas id="emptyCanvas"> </canvas>
             <div class="m-1 gap-3 flex justify-end">
                 <button id="cancel_btn" class="border-2 rounded-md border-black font-bold py-2.5 px-4 drop-shadow-md" type="button">
                     Cancel

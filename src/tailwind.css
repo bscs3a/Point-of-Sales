@@ -1075,6 +1075,10 @@ video {
   margin-inline-start: 0.75rem;
 }
 
+.ms-4{
+  margin-inline-start: 1rem;
+}
+
 .mt-0{
   margin-top: 0px;
 }
@@ -3528,6 +3532,10 @@ video {
   padding-right: 2rem;
 }
 
+.ps-4{
+  padding-inline-start: 1rem;
+}
+
 .pt-10{
   padding-top: 2.5rem;
 }
@@ -4667,6 +4675,11 @@ video {
 .hover\:bg-red-50:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(254 242 242 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-600:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-red-700:hover{
