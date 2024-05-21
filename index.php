@@ -24,7 +24,7 @@ Router::post('/login', function(){
     $stmt->execute();
     $user = $stmt->fetch();
 
-    $base_url = 'Finance'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user'] = array();
         // Password is correct
@@ -66,7 +66,7 @@ Router::post('/login', function(){
 
 Router::post('/logout', function(){
     session_destroy();
-    $base_url = 'Finance'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
     header("Location: /$base_url/");
     exit();
 });
