@@ -1,5 +1,5 @@
 
-<div id="report_generation_modal" class="hidden modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
+<div id="report_generation_modal" class="modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
     role="dialog" aria-modal="true">
     <div class=" pt-4 px-4 pb-20 sm::block sm:p-0 bg-white rounded shadow-lg ">
        
@@ -36,10 +36,12 @@
                 <option value="TrialBalance">Trial Balance</option>
                 <option value="CashFlow">Cash Flow</option>
             </select>
+            <!-- select one date -->
             <label for="monthYear" class="font-medium m-1">
                 Date
             </label>
-            <div id="buttonDateSelectorReportGenerate" class = "flex items-center border-2 bg-gray-50 border-black rounded-lg cursor-pointer">
+            
+            <div id = "oneMonthSelector" class = "flex items-center border-2 bg-gray-50 border-black rounded-lg cursor-pointer date-selector-inputs">
                 <span class = "border-r-2 border-black p-2">
                     <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <rect width="33" height="33" fill="url(#pattern0_5815_1498)"/>
@@ -54,6 +56,43 @@
                 <input type="text" id="monthYear" name="monthYear"
                     class="  bg-gray-50 p-2.5 flex-1 focus:outline-none cursor-pointer" required readonly placeholder="Month-year">
             </div>
+            <!-- end -->
+            <!-- for from a date to a date -->
+            <div id = "twoMonthSelector" class = "hidden flex items-center justify-between gap-5">
+                <div class = "flex-1 flex items-center border-2 bg-gray-50 border-black rounded-lg cursor-pointer date-selector-inputs">
+                    <span class = "border-r-2 border-black p-2">
+                        <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <rect width="33" height="33" fill="url(#pattern0_5815_1498)"/>
+                            <defs>
+                                <pattern id="pattern0_5815_1498" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                    <use xlink:href="#image0_5815_1498" transform="scale(0.0104167)"/>
+                                </pattern>
+                            <image id="image0_5815_1498" width="96" height="96" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAC+ElEQVR4nO2dz04UQRDGPyI3RuUdBA+aiPIaSngYhUTlZkg4EAkPoRCuRmUlAk/hnydwOcLu1bRpaRIOdu8w7XZVT32/pI7b3fV9PTUz6U0NQAghhBBCCCGEEEJId+4DWAdwBOA7gDEAV2mMQw4+lzUAi5o3xkMAHxSI5qYc3oxlKGIWwC6A3wrEcYXC57oTchdlPuwIZzQGAO5KiX8LwCcFIjjh+CJ1JewqSN4pibelxV+eUPN/AXgJYAnAHOplLuTwCsAwka/X4nHJhaXq/vvKRY/RANhL5H2Igs/5sUW8AzCD/jIzwYSFEotYT5Qdv0v6TpMoRy8ky4+v+VZ4nXgsnTo/I5M/gh2WIhr8KDH5KDK5hfJzRRPRwGszdWI3IGs4KR1owCU0QBh1BjBAA5yCjcArADRAfBc6XgHyQjiWIHkxnKV7gDUcDZCFBghDA4ShAcLQAGFogDA0QJhqDVgFcBr+eTwGcAJg5YZr0DBGlQZsJX6/WdkY1Rmw2uI1/lklY+TokE3XiU9bJH5cyRg5OmTTdeLYvynctbioZIwcHVQbcF7JGDk6ZNN14pMWiX+tZIwcHbLpOvFKi8SfVjJGjg7Z5Ey8mfj9m8rGqNIAhEe841CLR+Fyb7PjtI1RrQF9wdEAWWiAMDRAGBogDA0QhgYIQwOEqdYADadZZg3Qcppl0gBNp1kmDdB0mmXSAE2nWf+DXhpwXmAMswZoOs0yaYCm0yyTBmg6zTJrgJbTLNMG9AUnpcNFZGJL7WruSD6BsWET/nZI/JcBvs+0WMsy39rRChuSLcvWIpMPjZSh2wDOIho8L7GAxcQNaM9A28r9RP73Si1kMMGEpqc7fz+R9+fSN6FU6+JhaO34pHIzmpDDRqLsuKBF8a6RO4kFWYttCLWv/6ggeWe1fT3CxwtS94O+x2F4KRNlNvTPt/YJk+1QBdTwAMCBAnHclOOo9LcCbspC6CLuS9O3lqdYTmmMQg6D8JJV7DmfEEIIIYQQQgghhKB3/AFCDqueoOvDcAAAAABJRU5ErkJggg=="/>
+                            </defs>
+                        </svg>
+                    </span>
+                    <input type="text" id="fromMonthYear" name="fromMonthYear"
+                        class="  bg-gray-50 p-2.5 flex-1 focus:outline-none cursor-pointer" required readonly placeholder="From month-year">
+                </div>
+                <div class = "flex-1 flex items-center border-2 bg-gray-50 border-black rounded-lg cursor-pointer date-selector-inputs">
+                    <span class = "border-r-2 border-black p-2">
+                        <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <rect width="33" height="33" fill="url(#pattern0_5815_1498)"/>
+                            <defs>
+                                <pattern id="pattern0_5815_1498" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                    <use xlink:href="#image0_5815_1498" transform="scale(0.0104167)"/>
+                                </pattern>
+                            <image id="image0_5815_1498" width="96" height="96" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAC+ElEQVR4nO2dz04UQRDGPyI3RuUdBA+aiPIaSngYhUTlZkg4EAkPoRCuRmUlAk/hnydwOcLu1bRpaRIOdu8w7XZVT32/pI7b3fV9PTUz6U0NQAghhBBCCCGEEEJId+4DWAdwBOA7gDEAV2mMQw4+lzUAi5o3xkMAHxSI5qYc3oxlKGIWwC6A3wrEcYXC57oTchdlPuwIZzQGAO5KiX8LwCcFIjjh+CJ1JewqSN4pibelxV+eUPN/AXgJYAnAHOplLuTwCsAwka/X4nHJhaXq/vvKRY/RANhL5H2Igs/5sUW8AzCD/jIzwYSFEotYT5Qdv0v6TpMoRy8ky4+v+VZ4nXgsnTo/I5M/gh2WIhr8KDH5KDK5hfJzRRPRwGszdWI3IGs4KR1owCU0QBh1BjBAA5yCjcArADRAfBc6XgHyQjiWIHkxnKV7gDUcDZCFBghDA4ShAcLQAGFogDA0QJhqDVgFcBr+eTwGcAJg5YZr0DBGlQZsJX6/WdkY1Rmw2uI1/lklY+TokE3XiU9bJH5cyRg5OmTTdeLYvynctbioZIwcHVQbcF7JGDk6ZNN14pMWiX+tZIwcHbLpOvFKi8SfVjJGjg7Z5Ey8mfj9m8rGqNIAhEe841CLR+Fyb7PjtI1RrQF9wdEAWWiAMDRAGBogDA0QhgYIQwOEqdYADadZZg3Qcppl0gBNp1kmDdB0mmXSAE2nWf+DXhpwXmAMswZoOs0yaYCm0yyTBmg6zTJrgJbTLNMG9AUnpcNFZGJL7WruSD6BsWET/nZI/JcBvs+0WMsy39rRChuSLcvWIpMPjZSh2wDOIho8L7GAxcQNaM9A28r9RP73Si1kMMGEpqc7fz+R9+fSN6FU6+JhaO34pHIzmpDDRqLsuKBF8a6RO4kFWYttCLWv/6ggeWe1fT3CxwtS94O+x2F4KRNlNvTPt/YJk+1QBdTwAMCBAnHclOOo9LcCbspC6CLuS9O3lqdYTmmMQg6D8JJV7DmfEEIIIYQQQgghhKB3/AFCDqueoOvDcAAAAABJRU5ErkJggg=="/>
+                            </defs>
+                        </svg>
+                    </span>
+                    <input type="text" id="toMonthYear" name="toMonthYear"
+                        class="  bg-gray-50 p-2.5 flex-1 focus:outline-none cursor-pointer" required readonly placeholder="To month-year">
+                </div>
+            </div>
+            <!-- end -->
+
+            <!-- modal for date selection -->
             <div id = "dateSelector" class = "hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-4 bg-white p-6 border-2 text-center">
                 <!-- for header year -->
                 <div class = "col-span-3 text-left font-bold text-[#F8B721]" id="yearDate"><?= date('Y'); ?></div>
@@ -75,12 +114,28 @@
                         </svg>
                     </button>
                 </div>
+                <!-- from month -->
+                <div class = "hidden col-span-2 p-2 date-to-and-from-dateselector data-[focus=true]:border-[#F8B721] data-[focus=true]:border-2 rounded-md" data-focus="true">
+                    <label for="startDateInsideSelector" class="block font-medium">
+                        Start Date
+                    </label>
+                    <input type="text" id = "startDateInsideSelector" value="" class="font-bold text-center border-2 border-[#B5B5B5] drop-shadow-md rounded-md" readonly>
+                </div>
+                <!-- to month -->
+                <div class = "hidden col-span-2 p-2 date-to-and-from-dateselector data-[focus=true]:border-[#F8B721] data-[focus=true]:border-2 rounded-md" data-focus="false">
+                    <label for="endDateInsideSelector" class="block font-medium">
+                        End Date
+                    </label>
+                    <input type="text" id = "endDateInsideSelector" value="" class="font-bold text-center border-2 border-[#B5B5B5] drop-shadow-md rounded-md" readonly>
+                </div>
                 <!-- end header year -->
 
             </div>
             <input type="hidden" name="hiddenDate" id="hiddenDate" value = "">
+
             <!-- for generating the month selector -->
             <script>
+                // for creating months
                 function monthSelector() {
                 // Create the container div
                 let container = document.querySelector('#dateSelector');
@@ -119,8 +174,31 @@
                     container.appendChild(monthDiv);
 
                     radio.addEventListener('click', function() {
+                        // Get the name of the radio button group
+                        let name = 'writtenOrChart';
+                        // Get the selected radio button
+                        let selected = document.querySelector('input[name="' + name + '"]:checked');
+                        // Get the value of the selected radio button
+                        let radioValue = selected.value;
+
+                        let dateValue = document.querySelector('#yearDate').textContent + "-" + (index + 1);
+
                         let hiddenInputDate = document.querySelector('#hiddenDate');
-                        hiddenInputDate.value = document.querySelector('#yearDate').textContent + "-" + (index + 1);
+                        hiddenInputDate.value = dateValue;
+
+                        if(radioValue =="chart"){
+                            let startDateInsideSelector = document.querySelector('#startDateInsideSelector');
+                            let endDateInsideSelector = document.querySelector('#endDateInsideSelector');
+
+                            let focusDate = startDateInsideSelector.parentElement.dataset.focus;
+                            console.log(focusDate);
+                            if(focusDate == 'true'){
+                                startDateInsideSelector.value = dateValue;
+                            }
+                            else{
+                                endDateInsideSelector.value = dateValue;
+                            }
+                        }
                     });
                 });
 
@@ -143,12 +221,38 @@
                 apply.className = 'bg-[#F8B721] text-white rounded-md p-3 border-2 border-black col-span-2';
                 apply.type = 'button';
                 apply.addEventListener('click', function() {
-                    let hiddenInputDate = document.querySelector('#hiddenDate');
-                    let monthYear = document.querySelector('#monthYear');
-                    monthYear.value = hiddenInputDate.value;
-
                     let dateSelector = document.querySelector('#dateSelector');
                     dateSelector.classList.add('hidden');
+
+                    // Get the name of the radio button group
+                    let name = 'writtenOrChart';
+                    // Get the selected radio button
+                    let selected = document.querySelector('input[name="' + name + '"]:checked');
+                    // Get the value of the selected radio button
+                    let radioValue = selected.value;
+
+
+                    let hiddenInputDate = document.querySelector('#hiddenDate');
+                    let monthYear = document.querySelector('#monthYear');
+                    let fromMonthYear =document.querySelector('#fromMonthYear');
+                    let toMonthYear = document.querySelector('#toMonthYear');
+                    if (radioValue == 'written'){
+                        monthYear.value = hiddenInputDate.value;
+
+                        // just for the sake of filling it up
+                        fromMonthYear.value = hiddenInputDate.value;
+                        toMonthYear.value = hiddenInputDate.value;
+                    }
+                    else{
+                        let startDateInsideSelector = document.querySelector('#startDateInsideSelector');
+                        let endDateInsideSelector = document.querySelector('#endDateInsideSelector');
+                        fromMonthYear.value = startDateInsideSelector.value;
+                        toMonthYear.value = endDateInsideSelector.value;
+
+                        // just for the sake of filling it up
+                        monthYear.value =startDateInsideSelector.value;
+                    }
+                    
                 });
                 container.appendChild(apply);
 
@@ -157,72 +261,115 @@
                 formReport.appendChild(container);
                 disabledOrChecked();
             }
-            monthSelector();
+                monthSelector();
 
-            window.addEventListener("DOMContentLoaded", function(){
-                // Get the yearDate element
-                let yearDate = document.querySelector('#yearDate');
+                // event listener for adding the date to the input/and adding years
+                window.addEventListener("DOMContentLoaded", function(){
+                    // Get the yearDate element
+                    let yearDate = document.querySelector('#yearDate');
 
-                // Get the addYear and minusYear buttons
-                let addYear = document.querySelector('#addYear');
-                let minusYear = document.querySelector('#minusYear');
+                    // Get the addYear and minusYear buttons
+                    let addYear = document.querySelector('#addYear');
+                    let minusYear = document.querySelector('#minusYear');
 
-                // Add event listener to the addYear button
-                addYear.addEventListener('click', function() {
-                    // Increment the year in the yearDate element
-                    yearDate.textContent = parseInt(yearDate.textContent) + 1;
-                    disabledOrChecked();
+                    // Add event listener to the addYear button
+                    addYear.addEventListener('click', function() {
+                        // Increment the year in the yearDate element
+                        yearDate.textContent = parseInt(yearDate.textContent) + 1;
+                        disabledOrChecked();
+                    });
+
+                    // Add event listener to the minusYear button
+                    minusYear.addEventListener('click', function() {
+                        // Decrement the year in the yearDate element
+                        yearDate.textContent = parseInt(yearDate.textContent) - 1;
+                        disabledOrChecked();
+                    });
+                    window.addEventListener("click", function(event){
+                        let dateSelector = document.querySelector('#dateSelector');
+                        if (!dateSelector.contains(event.target)){
+                            dateSelector.classList.add('hidden');
+                        }
+                    });
+                    let buttonDateSelectors = document.querySelectorAll('.date-selector-inputs');
+
+                    buttonDateSelectors.forEach(function(buttonDateSelector) {
+                        buttonDateSelector.addEventListener('click', function(event){
+                            event.stopPropagation();
+                            let dateSelector = document.querySelector('#dateSelector');
+                            dateSelector.classList.remove('hidden');
+                        });
+                    });
                 });
-
-                // Add event listener to the minusYear button
-                minusYear.addEventListener('click', function() {
-                    // Decrement the year in the yearDate element
-                    yearDate.textContent = parseInt(yearDate.textContent) - 1;
-                    disabledOrChecked();
-                });
-                window.addEventListener("click", function(event){
-                    let dateSelector = document.querySelector('#dateSelector');
-                    if (!dateSelector.contains(event.target)){
-                        dateSelector.classList.add('hidden');
-                    }
-                });
-                let buttonDateSelector = document.querySelector('#buttonDateSelectorReportGenerate');
-
-                buttonDateSelector.addEventListener('click', function(event){
-                    event.stopPropagation();
-                    let dateSelector = document.querySelector('#dateSelector');
-                    dateSelector.classList.remove('hidden');
-                });
-
-            });
-            
-            function disabledOrChecked(){
-                let selected = document.querySelector('#hiddenDate').value;
-                let year = document.querySelector('#yearDate').textContent;
                 
-                let months = document.querySelectorAll('.monthsInSelector');
-                let now = new Date();
-                let currentYear = now.getFullYear();
-                let currentMonth = now.getMonth() + 1; // getMonth() returns 0-11, so add 1
+                // disable or checked the selected month
+                function disabledOrChecked(){
+                    let selected = document.querySelector('#hiddenDate').value;
+                    let year = document.querySelector('#yearDate').textContent;
+                    
+                    let months = document.querySelectorAll('.monthsInSelector');
+                    let now = new Date();
+                    let currentYear = now.getFullYear();
+                    let currentMonth = now.getMonth() + 1; // getMonth() returns 0-11, so add 1
 
-                let currentMonthYear = currentYear + '-' + currentMonth;
-                months.forEach(function(month){
-                    let monthValue = year + "-" + month.value;
-                    if(monthValue== selected){
-                        month.checked = true;
-                    }
-                    else{
-                        month.checked = false;
-                    }
-                    if(year > currentYear || (year == currentYear && month.value >= currentMonth)){
-                        month.disabled = true;
-                    }
-                    else{
-                        month.disabled = false;
-                    }
+                    let currentMonthYear = currentYear + '-' + currentMonth;
+                    months.forEach(function(month){
+                        let monthValue = year + "-" + month.value;
+                        if(monthValue== selected){
+                            month.checked = true;
+                        }
+                        else{
+                            month.checked = false;
+                        }
+                        if(year > currentYear || (year == currentYear && month.value >= currentMonth)){
+                            month.disabled = true;
+                        }
+                        else{
+                            month.disabled = false;
+                        }
+                    });
+                }
+                
+                // Get the radio buttons
+                let radios = document.getElementsByName('writtenOrChart');
+
+                let writtenDate = document.querySelector('#oneMonthSelector');
+                let chartDate = document.querySelector('#twoMonthSelector');
+                // Add a change event listener to each radio button
+                for (var i = 0; i < radios.length; i++) {
+                    radios[i].addEventListener('change', function() {
+                        // If the "written" option is selected, hide the part of the page
+                        if (this.value === 'written') {
+                            writtenDate.classList.remove('hidden');
+                            chartDate.classList.add('hidden');
+                            let dateFromToSelectors = document.querySelectorAll('.date-to-and-from-dateselector');
+                            dateFromToSelectors.forEach(function(dateFromToSelector){
+                                dateFromToSelector.classList.add('hidden');
+                            });
+                        }
+                        // If the "chart" option is selected, show the part of the page
+                        else if (this.value === 'chart') {
+                            writtenDate.classList.add('hidden');
+                            chartDate.classList.remove('hidden');
+                            let dateFromToSelectors = document.querySelectorAll('.date-to-and-from-dateselector');
+                            dateFromToSelectors.forEach(function(dateFromToSelector){
+                                dateFromToSelector.classList.remove('hidden');
+                            });
+                        }
+                    });
+                }
+
+                // for focus on start to from in dateselector
+                let dateFromToSelectors = document.querySelectorAll('.date-to-and-from-dateselector');
+                dateFromToSelectors.forEach(function(dateFromToSelector){
+                    dateFromToSelector.addEventListener('click', function(){
+                        let dateFromToSelectors = document.querySelectorAll('.date-to-and-from-dateselector');
+                        dateFromToSelectors.forEach(function(dateFromToSelector){
+                            dateFromToSelector.dataset.focus = 'false';
+                        });
+                        dateFromToSelector.dataset.focus = 'true';
+                    });
                 });
-            }
-            
             </script>
             <br>
             <div class="m-1 gap-3 flex justify-end">

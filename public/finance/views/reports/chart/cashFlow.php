@@ -124,8 +124,13 @@ tfoot{
         </table>
     </header>
     <main>
-        
+        <canvas id="imageHere" class="px-3 py-3"></canvas>
+
     </main>
+
+    <script>
+        
+    </script>
 </body>
 
 </html>

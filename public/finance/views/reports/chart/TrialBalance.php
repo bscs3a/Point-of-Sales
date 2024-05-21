@@ -124,8 +124,91 @@ tfoot{
         </table>
     </header>
     <main>
+        <canvas id="imageHere" class="px-3 py-3"></canvas>
+        <div id="content">
 
+        </div>
     </main>
+
+    <script>
+    // Get the context of the canvas element we want to select
+        var balancePie = document.getElementById('balancePie').getContext('2d');
+
+        var myBalancePieChart = new Chart(balancePie, {
+            type: 'pie',
+            data: {
+                labels: ['Assets', 'Liabilities'],
+                datasets: [{
+                    data: [],
+                    backgroundColor: ['rgb(255, 165, 0)', 'rgb(255, 205, 86)']
+                }]
+            },
+            options: {
+                responsive: true,
+
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 20,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+
+                layout: {
+                    padding: {
+                        left: 20,
+                        right: 20,
+                        top: 0,
+                        bottom: 0
+                    }
+                }
+            }
+
+        });
+
+        fetch('http://localhost/Finance/fin/getBalanceReport', {
+            method: 'POST',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateBalanceChart(myBalancePieChart, data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        //function to update equity Chart
+        function updateBalanceChart(chart, paramData) {
+            let data = [];
+
+            data.push(paramData.asset);
+            data.push(paramData.liability);
+
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+
+        chartInstance.options.animation.onComplete = function() {
+            var url = chartInstance.toBase64Image();
+
+            // Create a new image element
+            var img = new Image();
+
+            // Set the image source to the data URL
+            img.src = url;
+
+            // Insert the image into the HTML content
+            document.getElementById('content').appendChild(img);
+        };
+    </script>
 </body>
 
 </html>
