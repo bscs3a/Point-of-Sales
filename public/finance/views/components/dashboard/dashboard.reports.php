@@ -174,6 +174,7 @@
                     container.appendChild(monthDiv);
 
                     radio.addEventListener('click', function() {
+                        applyButton.disabled = false;
                         // Get the name of the radio button group
                         let name = 'writtenOrChart';
                         // Get the selected radio button
@@ -185,18 +186,31 @@
 
                         let hiddenInputDate = document.querySelector('#hiddenDate');
                         hiddenInputDate.value = dateValue;
+                        // startDateInsideSelector.value = dateValue;
+                        // endDateInsideSelector.value = dateValue;
 
                         if(radioValue =="chart"){
                             let startDateInsideSelector = document.querySelector('#startDateInsideSelector');
                             let endDateInsideSelector = document.querySelector('#endDateInsideSelector');
 
                             let focusDate = startDateInsideSelector.parentElement.dataset.focus;
-                            console.log(focusDate);
                             if(focusDate == 'true'){
                                 startDateInsideSelector.value = dateValue;
                             }
                             else{
                                 endDateInsideSelector.value = dateValue;
+                            }
+                        }
+
+                        if(radioValue == "chart"){
+                            let startDateInsideSelector = document.querySelector('#startDateInsideSelector');
+                            let endDateInsideSelector = document.querySelector('#endDateInsideSelector');
+    
+                            let fromMonthYearInDateFormat = new Date(startDateInsideSelector.value);
+                            let toMonthYearInDateFormat = new Date(endDateInsideSelector.value);
+                            let applyButton = document.querySelector('#applyButton');
+                            if (isNaN(fromMonthYearInDateFormat.getTime()) || isNaN(toMonthYearInDateFormat.getTime()) || fromMonthYearInDateFormat > toMonthYearInDateFormat) {
+                                applyButton.disabled = true;
                             }
                         }
                     });
@@ -218,12 +232,10 @@
                 //apply
                 let apply = document.createElement('button');
                 apply.textContent = 'Apply';
-                apply.className = 'bg-[#F8B721] text-white rounded-md p-3 border-2 border-black col-span-2';
+                apply.className = 'bg-[#F8B721] text-white rounded-md p-3 border-2 border-black col-span-2 disabled:bg-gray-300 disabled:cursor-not-allowed';
                 apply.type = 'button';
+                apply.id = "applyButton"
                 apply.addEventListener('click', function() {
-                    let dateSelector = document.querySelector('#dateSelector');
-                    dateSelector.classList.add('hidden');
-
                     // Get the name of the radio button group
                     let name = 'writtenOrChart';
                     // Get the selected radio button
@@ -246,12 +258,16 @@
                     else{
                         let startDateInsideSelector = document.querySelector('#startDateInsideSelector');
                         let endDateInsideSelector = document.querySelector('#endDateInsideSelector');
+
                         fromMonthYear.value = startDateInsideSelector.value;
                         toMonthYear.value = endDateInsideSelector.value;
-
                         // just for the sake of filling it up
                         monthYear.value =startDateInsideSelector.value;
                     }
+
+                    //hide the modal
+                    let dateSelector = document.querySelector('#dateSelector');
+                    dateSelector.classList.add('hidden');
                     
                 });
                 container.appendChild(apply);
@@ -298,6 +314,7 @@
                             event.stopPropagation();
                             let dateSelector = document.querySelector('#dateSelector');
                             dateSelector.classList.remove('hidden');
+                            applyButton.disabled = false;
                         });
                     });
                 });

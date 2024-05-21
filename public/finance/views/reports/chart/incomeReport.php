@@ -1,22 +1,19 @@
 <?php 
     require_once 'public\finance\functions\reportGeneration\CashFlow.php';
-    $today = new DateTime();
-    $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
+    $fromDate = $_SESSION['postdata']['fromMonthYear'];
+    $toDate = $_SESSION['postdata']['toMonthYear'];
 
-if ($today < $lastDayOfMonth) {
-    $today->modify('-1 month');
-}
+    
 
-    $year = $today->format('Y');
-    $month = $today->format('n');
-    if (isset($_SESSION['postdata']['year']) && isset($_SESSION['postdata']['month'])){
-        $year = $_SESSION['postdata']['year'];
-        $month =$_SESSION['postdata']['month'];
-    }
+    $fromYear = explode('-', $fromDate)[0];
+    $fromMonthNumber = explode('-', $fromDate)[1];
+    $fromMonth = date('F', mktime(0, 0, 0, $fromMonthNumber, 10));
 
-    $year = intval($year);
-    $month = intval($month);
-    $monthName = date('F', mktime(0, 0, 0, $month, 10));
+    $toYear = explode('-', $toDate)[0];
+    $toMonthNumber = explode('-', $toDate)[1];
+    $toMonth = date('F', mktime(0, 0, 0, $toMonthNumber, 10));
+
+    $date = "From $fromMonth, $fromYear to $toMonth, $toYear";
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +104,7 @@ tfoot{
     <header>
         <table>
             <tr>
-                <td class="header2">Cash Flow</td>
+                <td class="header2">Income Report</td>
                 <td rowspan="2" class="text-right width-auto-wrap">
                     <?php 
                         $image = file_get_contents('public/finance/img/logo_reports.png');
