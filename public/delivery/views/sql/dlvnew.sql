@@ -214,13 +214,13 @@ VALUES
     (33, 5, 'uploads/Paint_Roller_Set.png', 'Paint Roller Set', 'Supplier R', 'Set of paint rollers for applying paint smoothly on surfaces', 'No', 300.00, 35, 'set', 0.12, 0.8),
     (34, 5, 'uploads/Adhesive_Primer_(1_gallon).png', 'Adhesive Primer (1 gallon)', 'Supplier S', 'Adhesive primer for preparing surfaces before painting', 'No', 210.00, 20, 'gallon', 0.12, 8);
 
-    INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Light-Duty', 'ALD123');
-    INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Light-Duty', 'DUY234');
-    INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Light-Duty', 'VRR125');
+    INSERT INTO trucks (TruckType, PlateNumber, Capacity) VALUES ('Light-Duty', 'ALD123', '4000');
+    INSERT INTO trucks (TruckType, PlateNumber, Capacity) VALUES ('Light-Duty', 'DUY234', '4000');
+    INSERT INTO trucks (TruckType, PlateNumber, Capacity) VALUES ('Light-Duty', 'VRR125', '4000');
 
-    INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Heavy-Duty', 'DJD233');
-    INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Heavy-Duty', 'PGD994');
-    INSERT INTO trucks (TruckType, PlateNumber) VALUES ('Heavy-Duty', 'UHD535');
+    INSERT INTO trucks (TruckType, PlateNumber, Capacity) VALUES ('Heavy-Duty', 'DJD233', '20000');
+    INSERT INTO trucks (TruckType, PlateNumber, Capacity) VALUES ('Heavy-Duty', 'PGD994', '20000');
+    INSERT INTO trucks (TruckType, PlateNumber, Capacity) VALUES ('Heavy-Duty', 'UHD535', '20000');
 
     INSERT INTO employees (first_name, middle_name, last_name, dateofbirth, gender, nationality, address, contact_no, email, civil_status, department, position) VALUES
     ('FName1', 'M1', 'LName1', '1997-06-18', 'Male', 'Filipino', 'Manila, Philippines', '09123456772', 'f1@sample.com', 'Married', 'Delivery', 'Driver'),

@@ -48,7 +48,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Truck Assign</title>
-    <link href="/Master/src/tailwind.css" rel="stylesheet">
+
+    <link href="./../../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 
     <!-- This is for sorting library -->
@@ -421,8 +422,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/master/src/route.js"></script>
-    <script src="/master/src/form.js"></script>
+    <script src="./../../src/route.js"></script>
+    <script src="./../../src/form.js"></script>
 </body>
 
 </html>
