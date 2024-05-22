@@ -320,6 +320,85 @@ Router::post('/chartGeneration/getEquityReport', function (){
     echo json_encode($return);
 });
 
+Router::post('/chartGeneration/getCashFlowReport', function(){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+    $return = [];
+
+    $currentYear = $fromYear;
+    $currentMonth = $fromMonth;
+
+    while ($currentYear < $toYear || ($currentYear == $toYear && $currentMonth <= $toMonth)) {
+        $key = sprintf('%04d-%02d', $currentYear, $currentMonth);
+        $return[$key] = getAccountBalance("Cash on Hand", true, $currentYear, $currentMonth) + getAccountBalance("Cash on Bank", true, $currentYear, $currentMonth);
+        
+        // Increment month and check if it's December
+        if ($currentMonth == 12) {
+            // If it's December, increment the year and reset the month to January
+            $currentYear++;
+            $currentMonth = 1;
+        } else {
+            // If it's not December, just increment the month
+            $currentMonth++;
+        }
+    }
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/chartGeneration/getIncomeReport', function(){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+    $return = [];
+
+    $currentYear = $fromYear;
+    $currentMonth = $fromMonth;
+
+    while ($currentYear < $toYear || ($currentYear == $toYear && $currentMonth <= $toMonth)) {
+        $key = sprintf('%04d-%02d', $currentYear, $currentMonth);
+        $return[$key] = calculateNetSalesOrLoss($currentYear, $currentMonth);
+        
+        // Increment month and check if it's December
+        if ($currentMonth == 12) {
+            // If it's December, increment the year and reset the month to January
+            $currentYear++;
+            $currentMonth = 1;
+        } else {
+            // If it's not December, just increment the month
+            $currentMonth++;
+        }
+    }
+    
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
 
 Router::post("/pondo/transaction", function () {
     $debitLedger = $_POST['payFor'];

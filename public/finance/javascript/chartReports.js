@@ -31,9 +31,75 @@ async function recordChartAsAnImage(typeFile, fromDate, toDate){
     };
 }
 
-function generateIncomeChart(){
+function generateIncomeChart(fromDate, toDate){
+    let dataToSend = {
+        fromDate : fromDate,
+        toDate : toDate,
+    };
+    return fetch('http://localhost/Finance/chartGeneration/getIncomeReport', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Populate labels and data arrays with data from the server
+            let labels = [];
+            let datasetData = [];
+            for (let key in data) {
+                labels.push(key);
+                datasetData.push(data[key]);
+            }
+            // Return the chart configuration object
+            return {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                        data: datasetData,
+                        backgroundColor: ['#F8B721'],
+                        borderColor: 'rgba(255, 165, 0, 1)',
+                        borderWidth: 1
+                        },
+                    ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
 
-}
+                        layout: {
+                            padding: {
+                                left: 20,
+                                right: 20,
+                                top: 50,
+                                bottom: 0
+                            }
+
+                        }
+                    }
+                };
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+};
+
 
 function generateBalanceChart(fromDate, toDate){
     let dataToSend = {
@@ -55,13 +121,25 @@ function generateBalanceChart(fromDate, toDate){
             return response.json();
         })
         .then(data => {
+            // Initialize labels and data arrays
+            let labels = [];
+            let datasetData = [];
+            
+            // Populate labels and data arrays with data from the server
+            for (let key in data) {
+                if (data[key] == 0){
+                    continue;
+                }
+                labels.push(key);
+                datasetData.push(data[key]);
+            }
             // Return the chart configuration object
             return {
                 type: 'pie',
                 data: {
-                    labels: ['Assets', 'Liabilities'],
+                    labels: labels,
                     datasets: [{
-                        data: [data.asset, data.liability],
+                        data: datasetData,
                         backgroundColor: ['rgb(255, 165, 0)', 'rgb(255, 205, 86)']
                     }]
                 },
@@ -122,6 +200,9 @@ function generateEquityChart(fromDate, toDate){
             // Populate labels and data arrays with data from the server
             for (let key in data.owners) {
                 console.log(data.owners[key]);
+                if (data.owners[key].dividedShare == 0){
+                    continue;
+                }
                 labels.push(data.owners[key].name);
                 datasetData.push(data.owners[key].dividedShare);
                 colors.push(generateRandomColor());
@@ -166,6 +247,61 @@ function generateEquityChart(fromDate, toDate){
         });
 };
 
-function generateCashFlowChart(){
-
-}
+function generateCashFlowChart(fromDate, toDate){
+    let dataToSend = {
+        fromDate : fromDate,
+        toDate : toDate,
+    };
+    return fetch('http://localhost/Finance/chartGeneration/getCashFlowReport', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Populate labels and data arrays with data from the server
+            let labels = [];
+            let datasetData = [];
+            for (let key in data) {
+                labels.push(key);
+                datasetData.push(data[key]);
+            }
+            // Return the chart configuration object
+            return {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Cash Flow',
+                        data: datasetData, // Replace with your data
+                        backgroundColor: 'rgba(255, 165, 0, 0.4)',
+                        fill: true,
+                        borderColor: 'rgba(255, 165, 0, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            };
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+};
