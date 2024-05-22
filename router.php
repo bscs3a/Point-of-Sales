@@ -78,7 +78,9 @@ class Router
 
     private static function redirect($user){
         $_SESSION['pageNotFound'] = true;
-        $base_url = 'Delivery'; // Define your base URL here
+
+        $base_url = 'master'; // Define your base URL here
+
         if ($user == 'Product Order') {
             header("Location: /$base_url/po/dashboard");
             exit();
