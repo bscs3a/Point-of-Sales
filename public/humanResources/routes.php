@@ -11,12 +11,12 @@ $hr = [
     '/hr/employees/add' => $basePath . "employees.add.php",
     // departments
     '/hr/employees/departments' => $basePath . "departments.php", // hr.departments.php
-    '/hr/employees/departments/product-order' => $basePath . "departments.PO.php", // hr.departments.PO.php
-    '/hr/employees/departments/inventory' => $basePath . "departments.inv.php", // hr.departments.inv.php
-    '/hr/employees/departments/sales' => $basePath . "departments.POS.php", // hr.departments.POS.php
-    '/hr/employees/departments/finance' => $basePath . "departments.fin.php", // hr.departments.fin.php
-    '/hr/employees/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
-    '/hr/employees/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
+    '/hr/departments/product-order' => $basePath . "departments.PO.php", // hr.departments.PO.php
+    '/hr/departments/inventory' => $basePath . "departments.inv.php", // hr.departments.inv.php
+    '/hr/departments/sales' => $basePath . "departments.POS.php", // hr.departments.POS.php
+    '/hr/departments/finance' => $basePath . "departments.fin.php", // hr.departments.fin.php
+    '/hr/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
+    '/hr/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
     // applicants
     '/hr/applicants' => $basePath . "applicants.php",
     '/hr/applicants/accept={id}' => function($id) use ($basePath) {
@@ -38,10 +38,14 @@ $hr = [
         include $basePath . "leave-requests.details.php";
     },
     '/hr/schedule' => $basePath . "schedule.php",
-    '/hr/payroll' => $basePath . "payroll.list.php",
-    '/hr/dtr' => $basePath . "daily-time-record.php",
+    '/hr/payroll' => $basePath . "payroll.php",
+    //view payslip
+    '/hr/payroll/id={id}' => function($id) use ($basePath) {
+        $_SESSION['id'] = $id;
+        include $basePath . "payslip.view.php";
+    },
     '/hr/generate-payslip' => $basePath . "payslip.generate.php",
-    '/hr/payslipreport' => $basePath . "payslip.report.php",
+    '/hr/dtr' => $basePath . "daily-time-record.php",
     //view employee profile
     '/hr/employees/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
@@ -52,7 +56,6 @@ $hr = [
         $_SESSION['id'] = $id;
         include $basePath . "employees.update.php";
     },
-    
     //view applicant profile
     '/hr/applicants/id={id}' => function($id) use ($basePath) {
         $_SESSION['id'] = $id;
@@ -63,80 +66,19 @@ $hr = [
         $_GET['page'] = $pageNumber;
         include $basePath . "employees.php";
     },
-    '/hr/departments/page={pageNumber}' => function($pageNumber) use ($basePath) {
+    '/hr/departments/product-order/page={pageNumber}' => function($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
-        include $basePath . "employees.php";
+        include $basePath . "departments.PO.php";
+    },
+    '/hr/departments/human-resources/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "departments.HR.php";
     },
     '/hr/funds/page={pageNumber}' => function($pageNumber) use ($basePath){
         $_GET['page'] = $pageNumber;
         include $basePath . "funds.php";
     },
 ];
-// TAX CALCULATION
-// Function to calculate tax amount based on monthly salary | INCOME TAX
-function calculateIncomeTax($monthlysalary) {
-    if ($monthlysalary <= 20833.33) {
-        // Over 0 but not over 20,833.33 (250,000 annual salary)
-        return 0;
-    } elseif ($monthlysalary <= 33333.33) {
-        // Over 20,833.33 but not over 33,333.33 (400,000 annual salary)
-        return ($monthlysalary - 20833.33) * 0.20;
-    } elseif ($monthlysalary <= 66666.67) {
-        // Over 33,333.33 but not over 66,666 (800,000 annual salary)
-        return 2500 + ($monthlysalary - 33333.33) * 0.25;
-    } elseif ($monthlysalary <= 166666.67) {
-        // Over 66,666 but not over 166,666 (2,000,000 annual salary)
-        return 10833.33 + ($monthlysalary - 66666.67) * 0.30;
-    } elseif ($monthlysalary <= 666666.67) {
-        // Over 166,666 but not over 666,666 (8,000,000 annual salary)
-        return 40833.33 + ($monthlysalary - 166666.67) * 0.32;
-    } else {
-        // Over 666,666 (8,000,000 annual salary)
-        return 200833.33 + ($monthlysalary - 666666.67) * 0.35;
-    }
-}
-// Function to calculate tax amount based on monthly salary | WITHHOLDING TAX
-function calculateWithholdingTax($monthlysalary) {
-    if ($monthlysalary <= 20833.33) {
-        // 20,833.33 and below
-        return 0;
-    } elseif ($monthlysalary <= 33333.33) {
-        // 20,833.34 to 33,333.33
-        return 0 + ($monthlysalary - 20833.33) * 0.15;
-    } elseif ($monthlysalary <= 66666.67) {
-        // 33,333.34 to 66,666.67
-        return 1875 + ($monthlysalary - 33333.33) * 0.20;
-    } elseif ($monthlysalary <= 166666.67) {
-        // 66,666.68 to 166,666.67
-        return 8541.80 + ($monthlysalary - 66666.67) * 0.25;
-    } elseif ($monthlysalary <= 666666.67) {
-        // 166,666.68 to 666,666.67
-        return 33541.80 + ($monthlysalary - 166666.67) * 0.30;
-    } else {
-        // 666,666.68 and above
-        return 183541.80 + ($monthlysalary - 666666.67) * 0.35;
-    }
-}
-// Function to calculate SSS contribution
-function calculateSSS($monthlysalary) {
-    // SSS contribution is 14% of the monthly salary
-    return ($monthlysalary * 0.14) * 0.32;
-}
-// Function to calculate Philhealth contribution
-function calculatePhilhealth($monthlysalary) {
-    if ($monthlysalary <= 10000.00) {
-        return 500.00;
-    } elseif ($monthlysalary <= 99999.99) {
-        return 500.00 + ($monthlysalary - 10000.00) * 0.05;
-    } else {
-        return 5000.00;
-    }
-}
-// Function to calculate Pag-IBIG fund contribution
-function calculatePagibig($monthlysalary) {
-    // Pag-IBIG fund contribution is fixed at P200
-    return 200.00;
-}
 // ADD employees
 Router::post('/hr/employees/add', function () {
     $db = Database::getInstance();
@@ -479,73 +421,73 @@ Router::post('/hr/employees/page=1', function () {
     include './public/humanResources/views/hr.employees.php';
 });
 // search employees in DEPARTMENTS : Product Order
-Router::post('/hr/employees/departments/product-order', function () {
+Router::post('/hr/departments/product-order', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/product-order");
+        header("Location: $rootFolder/hr/departments/product-order");
         return;
     }
     include './public/humanResources/views/hr.departments.PO.php';
 });
 // search employees in DEPARTMENTS : Inventory
-Router::post('/hr/employees/departments/inventory', function () {
+Router::post('/hr/departments/inventory', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/inventory");
+        header("Location: $rootFolder/hr/departments/inventory");
         return;
     }
     include './public/humanResources/views/hr.departments.inv.php';
 });
 // search employees in DEPARTMENTS : Point of Sales
-Router::post('/hr/employees/departments/sales', function () {
+Router::post('/hr/departments/sales', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/sales");
+        header("Location: $rootFolder/hr/departments/sales");
         return;
     }
     include './public/humanResources/views/hr.departments.POS.php';
 });
 // search employees in DEPARTMENTS : Finance
-Router::post('/hr/employees/departments/finance', function () {
+Router::post('/hr/departments/finance', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/finance");
+        header("Location: $rootFolder/hr/departments/finance");
         return;
     }
     include './public/humanResources/views/hr.departments.fin.php';
 });
 // search employees in DEPARTMENTS : Delivery
-Router::post('/hr/employees/departments/delivery', function () {
+Router::post('/hr/departments/delivery', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/delivery");
+        header("Location: $rootFolder/hr/departments/delivery");
         return;
     }
     include './public/humanResources/views/hr.departments.dlv.php';
 });
 // search employees in DEPARTMENTS : Human Resources
-Router::post('/hr/employees/departments/human-resources', function () {
+Router::post('/hr/departments/human-resources', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees/departments/human-resources");
+        header("Location: $rootFolder/hr/departments/human-resources");
         return;
     }
     include './public/humanResources/views/hr.departments.HR.php';
@@ -884,6 +826,7 @@ Router::post('/create/payslip', function () {
     header("Location: $rootFolder/hr/generate-payslip");
     exit(); // Ensure script termination after redirection
 });
+
 // SAVE/CREATE event - schedule/calendar
 Router::post('/create/schedule', function () {
     $db = Database::getInstance();
@@ -909,7 +852,7 @@ Router::post('/remove/schedule', function () {
     $query = "DELETE FROM calendar WHERE id = :id";
     $stmt = $conn->prepare($query);
     $stmt->execute([':id' => $idToDelete]);
-    // Execute the statement
+
     $stmt->execute();
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/hr/schedule");

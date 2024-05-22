@@ -96,7 +96,7 @@ INSERT INTO salary_info (monthly_salary, total_salary, total_deductions, employe
 (18000.00, 16093.60, 1906.4, 6),
 (20000.00, 17904.00, 2096, 7),
 (45000.00, 30909.00, 14091.00, 8),
-(35000.00, 26357.00, 8643, 3);
+(35000.00, 26357.00, 8643, 9);
 
 CREATE TABLE tax_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
