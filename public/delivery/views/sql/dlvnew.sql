@@ -119,6 +119,10 @@ CREATE TABLE employees (
     civil_status ENUM('Single','Married','Divorced','Widowed') NOT NULL,
     department ENUM('Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery') NOT NULL,
 	position VARCHAR(50) NOT NULL,
+    sss_number varchar(20) DEFAULT NULL,
+    philhealth_number varchar(20) DEFAULT NULL,
+    tin_number varchar(20) DEFAULT NULL,
+    pagibig_number varchar(20) DEFAULT NULL
     PRIMARY KEY (id)
 );
 -- (HR) attendance table

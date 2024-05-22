@@ -35,9 +35,17 @@
     </li>
 
     <li class="mb-1 hover:bg-slate-400 rounded-xl">
-        <a route='/dlv/req' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
+        <a route='/dlv/pondo/page=1' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
             <i class="ri-bank-line mr-3 text-lg"></i>
             <span class="text-sm font-medium">Expenses Request</span>
+            <i class="ri-arrow-right-s-line ml-auto"></i>
+        </a>
+    </li>
+
+    <li class="mb-1 hover:bg-slate-400 rounded-xl">
+        <a route='/dlv/req' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
+            <i class="ri-bank-line mr-3 text-lg"></i>
+            <span class="text-sm font-medium">OLD Expenses Request</span>
             <i class="ri-arrow-right-s-line ml-auto"></i>
         </a>
     </li>

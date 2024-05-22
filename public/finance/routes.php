@@ -1,7 +1,6 @@
 <?php
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
-require_once "public/finance/functions/pondo/requestExpense.php";
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
 
