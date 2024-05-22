@@ -16,7 +16,7 @@
             Out</th>
         </tr>
       </thead>
-      <?php foreach ($attendance as $dtr): ?>
+      <?php foreach ($dailyTimeRecord as $dtr): ?>
         <tbody class="bg-white">
           <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">

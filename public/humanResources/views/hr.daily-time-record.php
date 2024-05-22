@@ -15,7 +15,7 @@ if (!empty($search)) {
 
 $stmt = $conn->prepare($query);
 $stmt->execute($params);
-$attendance = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$dailyTimeRecord = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $pdo = null;
 $stmt = null;
@@ -52,27 +52,7 @@ $stmt = null;
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Daily Time Record</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-  <?php
-  $username = $_SESSION['user']['username'];
-  ?>
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium"><?php echo $username; ?></a>
-  </li>
-  <li class="mr-1 relative">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300 dropdown-btn"><i class="ri-arrow-down-s-line"></i></button>
-    <div class="dropdown-content hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg">
-      <form method="post" action="/logout">
-          <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
-      </form>
-    </div>
-</li>
-  <script>
-      document.querySelector('.dropdown-btn').addEventListener('click', function() {
-          document.querySelector('.dropdown-content').classList.toggle('hidden');
-      });
-  </script>
-   </ul>
+   <?php require_once 'inc/logout.php' ?>
   </div>
   <!-- End Top Bar -->
 
@@ -88,7 +68,7 @@ $stmt = null;
 
   <!-- UNCOMMENT THIS AFTER FINISHING THE BACKEND FOR DTR -->
   <?php 
-    if (empty($attendance)) {
+    if (empty($dailyTimeRecord)) {
         require_once 'inc/noResult.php';
     } 
     else {

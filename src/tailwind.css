@@ -856,6 +856,11 @@ video {
   margin: 2rem;
 }
 
+.mx-0{
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
 .mx-1{
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -1081,10 +1086,6 @@ video {
 
 .ms-3{
   margin-inline-start: 0.75rem;
-}
-
-.ms-4{
-  margin-inline-start: 1rem;
 }
 
 .mt-0{
@@ -3149,6 +3150,10 @@ video {
   --tw-bg-opacity: 0.5;
 }
 
+.bg-\[url\(\'\.\.\/public\/finance\/img\/logo_reports\.png\'\)\]{
+  background-image: url('../public/finance/img/logo_reports.png');
+}
+
 .bg-gradient-to-b{
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
@@ -3546,10 +3551,6 @@ video {
   padding-right: 2rem;
 }
 
-.ps-4{
-  padding-inline-start: 1rem;
-}
-
 .pt-10{
   padding-top: 2.5rem;
 }
@@ -3710,10 +3711,6 @@ video {
   font-weight: 800;
 }
 
-.font-light{
-  font-weight: 300;
-}
-
 .font-medium{
   font-weight: 500;
 }
@@ -3813,10 +3810,6 @@ video {
 
 .leading-8{
   line-height: 2rem;
-}
-
-.leading-none{
-  line-height: 1;
 }
 
 .leading-tight{
@@ -4644,11 +4637,6 @@ video {
   background-color: rgb(3 7 18 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-green-600:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-green-800:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(22 101 52 / var(--tw-bg-opacity));
@@ -4662,6 +4650,11 @@ video {
 .hover\:bg-green-950:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(5 46 22 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-indigo-500:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-red-400:hover{
@@ -4895,6 +4888,11 @@ video {
   --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
 }
 
+.focus\:ring-indigo-500:focus{
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity));
+}
+
 .focus\:ring-red-300:focus{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(252 165 165 / var(--tw-ring-opacity));
@@ -5013,6 +5011,17 @@ video {
 }
 
 @media (min-width: 640px){
+  .sm\:not-sr-only{
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
   .sm\:mb-0{
     margin-bottom: 0px;
   }
@@ -5027,6 +5036,10 @@ video {
 
   .sm\:block{
     display: block;
+  }
+
+  .sm\:w-\[780px\]{
+    width: 780px;
   }
 
   .sm\:w-auto{

@@ -1,4 +1,5 @@
 <?php
+require_once 'public\finance\functions\otherGroups\salary.php';
 $path = './public/humanResources/views';
 $basePath = "$path/hr.";
 $hr = [
@@ -61,6 +62,14 @@ $hr = [
     '/hr/employees/page={pageNumber}' => function($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "employees.php";
+    },
+    '/hr/departments/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "employees.php";
+    },
+    '/hr/funds/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "funds.php";
     },
 ];
 // TAX CALCULATION
@@ -460,11 +469,11 @@ Router::post('/delete/employees', function () {
     header("Location: $rootFolder/hr/employees");
 });
 // SEARCH employees
-Router::post('/hr/employees', function () {
+Router::post('/hr/employees/page=1', function () {
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/employees");
+        header("Location: $rootFolder/hr/employees/page=1");
         return;
     }
     include './public/humanResources/views/hr.employees.php';
@@ -834,20 +843,29 @@ Router::post('/create/payslip', function () {
     $status = $_POST['status'];
     $employee_id = $_POST['employee_id']; // Get the employee ID from the form
 
-    // Assuming you have the employee's information available when the modal is opened
-    // If not, you'll need a way to retrieve it, such as an AJAX request
-    $full_name = "John Doe"; // Example full name
-    $position = "Manager"; // Example position
-    $total_salary = 5000.00; // Example total salary
-    $monthly_salary = 4000.00; // Example monthly salary
-    $total_deductions = 1000.00; // Example total deductions
-
     // Retrieve salary_id from salary_info table based on employee_id
-    $salary_query = "SELECT id FROM salary_info WHERE employees_id = :employees_id";
+    $salary_query = "SELECT id, monthly_salary FROM salary_info WHERE employees_id = :employees_id";
     $salary_stmt = $conn->prepare($salary_query);
     $salary_stmt->bindParam(':employees_id', $employee_id);
     $salary_stmt->execute();
-    $salary_id = $salary_stmt->fetchColumn();
+    $row = $salary_stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        $salary_id = $row['id'];
+        $monthly_salary = $row['monthly_salary'];
+    }
+    
+    // Retrieve tax_id from tax_info table based on employee_id
+    $tax_query = "SELECT id, withholding_tax FROM tax_info WHERE salary_id = :salary_id";
+    $tax_stmt = $conn->prepare($tax_query);
+    $tax_stmt->bindParam(':salary_id', $salary_id);
+    $tax_stmt->execute();
+    $row = $tax_stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($row) {
+        $withholding_tax = $row['withholding_tax'];
+    }
+
     // Insert data into payroll table
     $query = "INSERT INTO payroll (pay_date, month, status, salary_id, employees_id) VALUES (:pay_date, :month, :status, :salary_id, :employees_id)";
     $stmt = $conn->prepare($query);
@@ -859,6 +877,9 @@ Router::post('/create/payslip', function () {
     $stmt->bindParam(':employees_id', $employee_id);
     // Execute the query
     $stmt->execute();
+
+    inputSalary($monthly_salary, $withholding_tax);
+    
     // Redirect to a success page or reload the current page
     header("Location: $rootFolder/hr/generate-payslip");
     exit(); // Ensure script termination after redirection

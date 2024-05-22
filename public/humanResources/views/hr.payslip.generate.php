@@ -40,6 +40,7 @@ $stmt = $conn->query($query);
       <li class="text-[#151313] mr-2 font-medium">/</li>
       <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Payroll</a>
     </ul>
+    <!-- require_once 'inc/logout.php' ?> -->
     <ul class="ml-auto flex items-center">
       <li class="mr-1">
   <?php
@@ -61,6 +62,7 @@ $stmt = $conn->query($query);
       });
   </script>
     </ul>
+    <!--  -->
   </div>
   <!-- End Top Bar -->
 
@@ -107,23 +109,22 @@ $stmt = $conn->query($query);
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               echo "<tr>";
               $fullName = $row['first_name'] . ' ';
-if (!empty($row['middle_name'])) {
-    $fullName .= substr($row['middle_name'], 0, 1) . '. ';
-}
-$fullName .= $row['last_name'];
+              if (!empty($row['middle_name'])) {
+                  $fullName .= substr($row['middle_name'], 0, 1) . '. ';
+              }
+              $fullName .= $row['last_name'];
 
-echo "<td class='px-4 py-2 text-center'>" . $fullName . "</td>";
+              echo "<td class='px-4 py-2 text-center'>" . $fullName . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['department'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['position'] . "</td>";
               echo "<td class='px-4 py-2 text-center'>" . $row['total_salary'] . "</td>";
               $fullName = $row['first_name'] . ' ';
-if (!empty($row['middle_name'])) {
-    $fullName .= substr($row['middle_name'], 0, 1) . '. ';
-}
-$fullName .= $row['last_name'];
+              if (!empty($row['middle_name'])) {
+                  $fullName .= substr($row['middle_name'], 0, 1) . '. ';
+              }
+              $fullName .= $row['last_name'];
 
-echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['id'] . "\", \"" . $fullName . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
-
+              echo "<td class='px-4 py-2 text-center'><button class='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onclick='showModal(\"" . $row['id'] . "\", \"" . $fullName . "\", \"" . $row['department'] . "\", \"" . $row['position'] . "\", \"" . $row['total_salary'] . "\", \"" . $row['monthly_salary'] . "\", \"" . $row['total_deductions'] . "\")'>Generate</button></td>";
 
               echo "</tr>";
             }
