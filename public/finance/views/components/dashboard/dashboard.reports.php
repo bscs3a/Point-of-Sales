@@ -420,10 +420,13 @@
                         }
                     }
                     if (formReport.checkValidity()) {
-                        recordChartAsAnImage(typeFile);
+                        let typeFile = document.querySelector('#report').value;
+                        let fromDate = fromMonthYearInput.value;
+                        let toDate = toMonthYearInput.value;
+                        recordChartAsAnImage(typeFile, fromDate, toDate);
                         // Function to run when the chart animation is complete
                         
-                        formReport.submit();
+                        // formReport.submit();
                     }
                     monthYearInput.readOnly = true;
                     fromMonthYearInput.readOnly = true;
@@ -432,8 +435,9 @@
 
                 
             </script>
+            <script src="./../public/finance/javascript\chartReports.js"></script>
             <br>
-            <canvas id="emptyCanvas" class="hidden"> </canvas>
+            <canvas id="emptyCanvas" class=""> </canvas>
             <div class="m-1 gap-3 flex justify-end">
                 <button id="cancel_btn" class="border-2 rounded-md border-black font-bold py-2.5 px-4 drop-shadow-md" type="button">
                     Cancel

@@ -255,6 +255,70 @@ Router::post('/fin/getCashFlowReport', function(){
     echo json_encode($return);
 });
 
+//chart Reports 
+Router::post('/chartGeneration/getBalanceReport', function(){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+    
+    $return = [];
+    $assetValue = getTotalOfGroupV3("Asset",$fromYear, $fromMonth, $toYear, $toMonth);
+    $liabilityValue = getTotalOfAccountTypeV3("Accounts Payable",$fromYear, $fromMonth, $toYear, $toMonth);
+    $liabilityValue += getTotalOfAccountTypeV3("Tax Payable",$fromYear, $fromMonth, $toYear, $toMonth);
+    $total = $assetValue + $liabilityValue;
+
+    if ($total == 0) {
+        $total = 1;
+        $return["asset"] = 0;
+        $return["liability"] = 0;
+    }
+    else {
+        $return["asset"] = $assetValue/($total);
+        $return["liability"] = $liabilityValue/($total);
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/chartGeneration/getEquityReport', function (){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+
+    $return = [];
+    $return["owners"] = getAllLedgerAccounts("Capital Accounts");
+    foreach ($return["owners"] as $key => $owner) {
+        $return["owners"][$key]["dividedShare"] = calculateShareV2($owner["ledgerno"], $fromYear,$fromMonth,$toYear, $toMonth);
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
 
 
 Router::post("/pondo/transaction", function () {
