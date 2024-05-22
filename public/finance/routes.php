@@ -10,7 +10,6 @@ require_once "public/finance/functions/pondo/insertPondo.php";
 
 
 
-
 $path = './public/finance/views';
 
 $basePath = "$path/fin.";
@@ -389,7 +388,7 @@ Router::post('/chartGeneration/getIncomeReport', function(){
             // If it's December, increment the year and reset the month to January
             $currentYear++;
             $currentMonth = 1;
-        } else {
+        }    {
             // If it's not December, just increment the month
             $currentMonth++;
         }

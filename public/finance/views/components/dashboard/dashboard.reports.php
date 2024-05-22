@@ -1,5 +1,5 @@
 
-<div id="report_generation_modal" class="modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
+<div id="report_generation_modal" class="hidden modal fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" aria-labelledby="modal-title"
     role="dialog" aria-modal="true">
     <div class=" pt-4 px-4 pb-20 sm::block sm:p-0 bg-white rounded shadow-lg ">
        
@@ -423,21 +423,26 @@
                         let typeFile = document.querySelector('#report').value;
                         let fromDate = fromMonthYearInput.value;
                         let toDate = toMonthYearInput.value;
-                        recordChartAsAnImage(typeFile, fromDate, toDate);
-                        // Function to run when the chart animation is complete
-                        
-                        // formReport.submit();
+                        recordChartAsAnImage(typeFile, fromDate, toDate).then(() => {
+                            formReport.submit();
+                        });
                     }
                     monthYearInput.readOnly = true;
                     fromMonthYearInput.readOnly = true;
                     toMonthYearInput.readOnly = true;
+                });
+                window.addEventListener("DOMContentLoaded", function(){
+                    var ctx = document.getElementById('emptyCanvas');
+                    if (ctx) {
+                        ctx.style.display = 'none';
+                    }
                 });
 
                 
             </script>
             <script src="./../public/finance/javascript\chartReports.js"></script>
             <br>
-            <canvas id="emptyCanvas" class=""> </canvas>
+            <canvas id="emptyCanvas" class="hidden"> </canvas>
             <div class="m-1 gap-3 flex justify-end">
                 <button id="cancel_btn" class="border-2 rounded-md border-black font-bold py-2.5 px-4 drop-shadow-md" type="button">
                     Cancel

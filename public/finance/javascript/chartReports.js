@@ -1,34 +1,37 @@
-async function recordChartAsAnImage(typeFile, fromDate, toDate){
-    // Create the chart
-    var ctx = document.getElementById('emptyCanvas').getContext('2d');
-    let chartValue = {};
-    if (typeFile == 'Income'){
-        chartValue = await generateIncomeChart(fromDate, toDate);
-    }
-    else if (typeFile == 'OwnerEquity'){
-        chartValue = await generateEquityChart(fromDate, toDate);
-    }
-    else if (typeFile == 'TrialBalance'){
-        chartValue = await generateBalanceChart(fromDate, toDate);
-    }
-    else if (typeFile == 'CashFlow'){
-        chartValue = await generateCashFlowChart(fromDate, toDate);
-    }
-    var myChart = new Chart(ctx, chartValue);
-    myChart.options.animation.onComplete = function() {
-        // Convert the chart to a data URL
-        var url = myChart.toBase64Image();
-        // Send the image data to the server
-        fetch('http://localhost/Finance/chartGenerator', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },  
-            body: JSON.stringify({
-                imageData: url,
-            }),
-        });
-    };
+async function recordChartAsAnImage(typeFile, fromDate, toDate) {
+    return new Promise(async (resolve, reject) => {
+        // Create the chart
+        var ctx = document.getElementById('emptyCanvas').getContext('2d');
+        // ctx.style.display = 'none';
+        let chartValue = {};
+        if (typeFile == 'Income'){
+            chartValue = await generateIncomeChart(fromDate, toDate);
+        }
+        else if (typeFile == 'OwnerEquity'){
+            chartValue = await generateEquityChart(fromDate, toDate);
+        }
+        else if (typeFile == 'TrialBalance'){
+            chartValue = await generateBalanceChart(fromDate, toDate);
+        }
+        else if (typeFile == 'CashFlow'){
+            chartValue = await generateCashFlowChart(fromDate, toDate);
+        }
+        var myChart = new Chart(ctx, chartValue);
+        myChart.options.animation.onComplete = function() {
+            // Convert the chart to a data URL
+            var url = myChart.toBase64Image();
+            // Send the image data to the server
+            fetch('http://localhost/Finance/chartGenerator', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },  
+                body: JSON.stringify({
+                    imageData: url,
+                }),
+            }).then(() => resolve());
+        };
+    });
 }
 
 function generateIncomeChart(fromDate, toDate){
@@ -72,6 +75,7 @@ function generateIncomeChart(fromDate, toDate){
                     ]
                     },
                     options: {
+                        
                         scales: {
                             y: {
                                 beginAtZero: true
@@ -80,7 +84,17 @@ function generateIncomeChart(fromDate, toDate){
                         plugins: {
                             legend: {
                                 display: false
-                            }
+                            },
+                            title: {
+                                display: true,
+                                text: fromDate + ' - ' + toDate,
+                                font: {
+                                    size: 20
+                                },
+                                padding: {
+                                    bottom: 30
+                                }
+                            },
                         },
 
                         layout: {
@@ -155,7 +169,18 @@ function generateBalanceChart(fromDate, toDate){
                                     weight: 'bold'
                                 }
                             }
-                        }
+                        },
+                        title: {
+                            display: true,
+                            text: fromDate + ' - ' + toDate,
+                            font: {
+                                size: 20
+                            },
+                            padding: {
+                                bottom: 30
+                            }
+
+                        },
                     },
                     layout: {
                         padding: {
@@ -229,7 +254,18 @@ function generateEquityChart(fromDate, toDate){
                                     weight: 'bold'
                                 }
                             }
-                        }
+                        },
+                        title: {
+                            display: true,
+                            text: fromDate + ' - ' + toDate,
+                            font: {
+                                size: 20
+                            },
+                            padding: {
+                                bottom: 30
+                            }
+
+                        },
                     },
                     layout: {
                         padding: {
@@ -296,7 +332,18 @@ function generateCashFlowChart(fromDate, toDate){
                     plugins: {
                         legend: {
                             display: false
-                        }
+                        },
+                        title: {
+                            display: true,
+                            text: fromDate + ' - ' + toDate,
+                            font: {
+                                size: 20
+                            },
+                            padding: {
+                                bottom: 30
+                            }
+
+                        },
                     }
                 }
             };
