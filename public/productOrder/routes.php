@@ -1119,17 +1119,30 @@ function updateOrderStatusToCompleted()
             $insertStmt->bindParam(':orderStatus', $orderStatus);
             $insertStmt->execute();
 
-            // Audit log for completing an order
-            // $user_id = $_SESSION['employee']; // Assuming you have a user session
-            // $action = "Completed Order #$batchID";
-            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+            // Fetch Product_ID and Product_Quantity from order_details table based on Batch_ID
+            $orderDetailsStmt = $conn->prepare("SELECT Product_ID, Product_Quantity FROM order_details WHERE Batch_ID = :batchID");
+            $orderDetailsStmt->bindParam(':batchID', $batchID);
+            $orderDetailsStmt->execute();
+            $orderDetails = $orderDetailsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // $auditSql = "INSERT INTO audit_log (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            // $auditStmt = $conn->prepare($auditSql);
-            // $auditStmt->bindParam(':user_id', $user_id);
-            // $auditStmt->bindParam(':action', $action);
-            // $auditStmt->bindParam(':time_out', $time_out);
-            // $auditStmt->execute();
+            // Update the Stocks column in the Products table
+            foreach ($orderDetails as $detail) {
+                $productID = $detail['Product_ID'];
+                $productQuantity = $detail['Product_Quantity'];
+
+                // Fetch current stock
+                $stockStmt = $conn->prepare("SELECT Stocks FROM Products WHERE ProductID = :productID");
+                $stockStmt->bindParam(':productID', $productID);
+                $stockStmt->execute();
+                $currentStock = $stockStmt->fetchColumn();
+
+                // Update stock
+                $newStock = $currentStock + $productQuantity;
+                $updateStockStmt = $conn->prepare("UPDATE Products SET Stocks = :newStock WHERE ProductID = :productID");
+                $updateStockStmt->bindParam(':newStock', $newStock);
+                $updateStockStmt->bindParam(':productID', $productID);
+                $updateStockStmt->execute();
+            }
 
             // Commit the transaction
             $conn->commit();
@@ -1146,7 +1159,6 @@ function updateOrderStatusToCompleted()
         echo "Error: " . $e->getMessage();
     }
 }
-
 
 
 
