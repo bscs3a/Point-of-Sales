@@ -112,7 +112,7 @@
                   </td>
                   <td><input type="text" name="description1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight1"
+                  <td><input type="float" name="productweight1"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -141,7 +141,7 @@
                   </td>
                   <td><input type="text" name="description2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight2"
+                  <td><input type="float" name="productweight2"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -170,7 +170,7 @@
                   </td>
                   <td><input type="text" name="description3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight3"
+                  <td><input type="float" name="productweight3"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -199,7 +199,7 @@
                   </td>
                   <td><input type="text" name="description4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight4"
+                  <td><input type="float" name="productweight4"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -228,7 +228,7 @@
                   </td>
                   <td><input type="text" name="description5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight5"
+                  <td><input type="float" name="productweight5"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -257,7 +257,7 @@
                   </td>
                   <td><input type="text" name="description6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight6"
+                  <td><input type="float" name="productweight6"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -286,7 +286,7 @@
                   </td>
                   <td><input type="text" name="description7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight7"
+                  <td><input type="float" name="productweight7"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -315,7 +315,7 @@
                   </td>
                   <td><input type="text" name="description8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight8"
+                  <td><input type="float" name="productweight8"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -344,7 +344,7 @@
                   </td>
                   <td><input type="text" name="description9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td><input type="number" name="productweight9"
+                  <td><input type="float" name="productweight9"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -373,7 +373,7 @@
                   </td>
                   <td><input type="text" name="description10"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                      <td><input type="number" name="productweight10"
+                      <td><input type="float" name="productweight10"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -402,7 +402,7 @@
                   </td>
                   <td><input type="text" name="description11"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                      <td><input type="number" name="productweight12"
+                      <td><input type="float" name="productweight12"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -431,7 +431,7 @@
                   </td>
                   <td><input type="text" name="description12"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                      <td><input type="number" name="productweight12"
+                      <td><input type="float" name="productweight12"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
@@ -460,7 +460,7 @@
                   </td>
                   <td><input type="text" name="description13"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                      <td><input type="number" name="productweight13"
+                      <td><input type="float" name="productweight13"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
                 </tr>
