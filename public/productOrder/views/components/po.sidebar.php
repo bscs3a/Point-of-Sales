@@ -49,6 +49,19 @@
         </span>
       </a>
 
+      <a route='/po/pondo' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
+        <span class="flex items-center">
+          <i class="ri-history-line" style="font-size: 1.2em;"></i>
+          <span class="mx-4 text-sm font-medium">Pondo</span>
+        </span>
+
+        <span>
+          <i class="ri-arrow-right-s-line"></i>
+        </span>
+      </a>
+
+      
+
     
 
      

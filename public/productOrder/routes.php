@@ -24,6 +24,14 @@ $po = [
     '/po/editsupplier' => $basePath . "editsupplier.php",
     '/po/test' => $basePath . "test.php",
     '/po/test1' => $basePath . "test1.php",
+    '/po/pondo' => $basePath . "pondo.php",
+    '/po/logout' => $basePath . "pondo.php",
+
+    //funds
+    '/po/pondo/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "pondo.php";
+    },
 
     //umm idk what to say here view orders route
     '/po/viewdetails/Batch={id}' => function ($id) use ($basePath) {
