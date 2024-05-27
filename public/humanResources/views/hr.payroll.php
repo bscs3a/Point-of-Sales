@@ -3,10 +3,10 @@ $db = Database::getInstance();
 $conn = $db->connect();
 
 $search = $_POST['search'] ?? '';
-$query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
+$query = "SELECT payroll.*, salary_info.total_deductions, salary_info.total_salary, employees.first_name, employees.last_name, employees.middle_name, employees.position FROM payroll";
 $query .= " 
 LEFT JOIN employees ON payroll.employees_id = employees.id
-LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
+LEFT JOIN salary_info ON payroll.salary_id = salary_info.id AND salary_info.employees_id = employees.id";
 $query .= " ORDER BY payroll.id DESC";
 $stmt = $conn->prepare($query);
 $stmt->execute();
