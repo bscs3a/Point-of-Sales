@@ -4453,6 +4453,10 @@ video {
   a-z-a--z:  !important;
 }
 
+.\[image\:\$img\|\$width\|\$height\|\$type\]{
+  image: $img|$width|$height|$type;
+}
+
 @media (min-width: 640px){
   .sm\:container{
     width: 100%;

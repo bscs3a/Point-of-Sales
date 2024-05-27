@@ -49,6 +49,13 @@ $sls = [
     // functions
     // can't recognize by the router logout can proceed
     '/sls/logout' => "./public/sales/views/function/logout.php",
+
+
+    '/sls/funds/Sales/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "pondo.php";
+    },
+
 ];
 
 // // Get the current URL path

@@ -62,24 +62,24 @@
 
 <body>
     <?php include "components/sidebar.php" ?>
-    <?php 
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            if (isset($_SESSION['employee_name']) && isset($_SESSION['just_logged_in'])) {
-                $db = Database::getInstance();
-                $pdo = $db->connect();
-                
-                $logAction = "Log in";
-        
-                $sql = "INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
-                $stmt->bindParam(":log_action", $logAction);
-                $stmt->execute();
-    
-                // Unset the 'just_logged_in' session variable
-                unset($_SESSION['just_logged_in']);
-            }
+    <?php
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        if (isset($_SESSION['employee_name']) && isset($_SESSION['just_logged_in'])) {
+            $db = Database::getInstance();
+            $pdo = $db->connect();
+
+            $logAction = "Log in";
+
+            // $sql = "INSERT INTO tbl_sls_audit (employee_name, log_action) VALUES (:employee_name, :log_action)";
+            // $stmt = $pdo->prepare($sql);
+            // $stmt->bindParam(":employee_name", $_SESSION['employee_name']);
+            // $stmt->bindParam(":log_action", $logAction);
+            // $stmt->execute();
+
+            // Unset the 'just_logged_in' session variable
+            unset($_SESSION['just_logged_in']);
         }
+    }
     ?>
 
     <!-- Main container -->
@@ -107,42 +107,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
-                        id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout"
-                                class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function () {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -161,7 +126,7 @@
                     FROM TargetSales 
                     WHERE DATE_FORMAT(MonthYear, '%Y-%m') = ?
                 ";
-                $stmtTargetSales = $pdo->prepare($sqlTargetSales);
+                $stmtTargetSales = $conn->prepare($sqlTargetSales);
                 $stmtTargetSales->execute([$currentMonth]);
                 $targetSales = $stmtTargetSales->fetchColumn();
 
@@ -171,7 +136,7 @@
                     FROM Sales 
                     WHERE DATE_FORMAT(SaleDate, '%Y-%m') = ?
                 ";
-                $stmtActualSales = $pdo->prepare($sqlActualSales);
+                $stmtActualSales = $conn->prepare($sqlActualSales);
                 $stmtActualSales->execute([$currentMonth]);
                 $actualSales = $stmtActualSales->fetchColumn();
                 ?>
@@ -207,7 +172,7 @@
                     FROM Sales 
                     WHERE DATE_FORMAT(SaleDate, '%Y-%m') = ?
                 ";
-                $stmtTransactionRate = $pdo->prepare($sqlTransactionRate);
+                $stmtTransactionRate = $conn->prepare($sqlTransactionRate);
                 $stmtTransactionRate->execute([$currentMonth]);
                 $transactionRate = $stmtTransactionRate->fetchColumn() ?: 0;
 
@@ -220,7 +185,7 @@
                         GROUP BY DATE_FORMAT(SaleDate, '%Y-%m')
                     ) AS MonthlyTransactions
                 ";
-                $stmtAverageTransactionRate = $pdo->prepare($sqlAverageTransactionRate);
+                $stmtAverageTransactionRate = $conn->prepare($sqlAverageTransactionRate);
                 $stmtAverageTransactionRate->execute();
                 $averageTransactionRate = $stmtAverageTransactionRate->fetchColumn() ?: 0;
 
@@ -520,6 +485,7 @@
         });
     </script>
     <script src="./../src/route.js"></script>
+    <script src="./../src/form.js"></script>
 </body>
 
 </html>

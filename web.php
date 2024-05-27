@@ -32,7 +32,7 @@ Router::setRoutes($routes);
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$basePath = '/master'; // change me according to your root folder name
+$basePath = '/sales'; // change me according to your root folder name
 $path = str_replace($basePath, '', $path);
 
 
