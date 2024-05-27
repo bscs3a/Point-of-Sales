@@ -42,39 +42,7 @@
 
             <!-- Start: Profile -->
 
-            <ul class="ml-auto flex items-center">
-
-                <div class="relative inline-block text-left">
-                    <div>
-                        <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                            <div class="text-black font-medium mr-4 ">
-                            <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['employee_name']; ?>
-                            </div>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </a>
-                    </div>
-
-                    <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <div class="py-1" role="none">
-                            <a route="/sls/logout" class="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                <i class="ri-logout-box-line"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    document.getElementById('options-menu').addEventListener('click', function() {
-                        var dropdownMenu = document.getElementById('dropdown-menu');
-                        if (dropdownMenu.classList.contains('hidden')) {
-                            dropdownMenu.classList.remove('hidden');
-                        } else {
-                            dropdownMenu.classList.add('hidden');
-                        }
-                    });
-                </script>
-            </ul>
+            <?php require_once "components/logout/logout.php"?>
 
             <!-- End: Profile -->
 
@@ -114,7 +82,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Fetch data from the result set -->
+                            <?php if ($stmt): ?>
+                                <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+                                     <!-- Fetch data from the result set -->
                             <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
                                 <?php $saleId = $row['SaleID']; ?>
                                 <tr class='border border-gray-200 bg-white' data-sale-id='<?php echo $saleId; ?>'>
@@ -127,6 +97,13 @@
                                     <td class='px-4 py-2'><a route='/sls/Transaction-Details/sale=<?php echo $saleId; ?>' class='text-blue-500 hover:underline view-link'>View</a></td>
                                 </tr>
                             <?php endwhile; ?>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="7">No data found</td>
+                                </tr>
+                            <?php endif; ?>
+                           
                         </tbody>
                     </table>
 

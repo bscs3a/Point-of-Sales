@@ -42,7 +42,7 @@
         </a>
     </li> -->
 
-    <!-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.toggle-transactions').addEventListener('click', function () {
                 document.getElementById('transactions').classList.toggle('hidden');
@@ -57,7 +57,7 @@
             });
         });
 
-    </script> -->
+    </script>
 
          <li class="mb-1 rounded-xl">
             <button id="transactions-button"
