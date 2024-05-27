@@ -61,13 +61,13 @@
   </a>
 </li>
 <!-- Funds -->
-<li class="mb-1 group">
+<!-- <li class="mb-1 group">
   <a route="/hr/funds/page=1" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
     <i class="ri-money-dollar-circle-line mr-3 text-lg"></i>
     <span class="text-sm">Funds</span>
     <i class="ri-arrow-right-s-line ml-auto"></i>
   </a>
-</li>
+</li> -->
 <li class="mb-1 group">
     <a route="#" class="flex items-center py-2 px-4 text-gray-50 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
       <i class="ri-line-chart-line mr-3 text-lg"></i>
