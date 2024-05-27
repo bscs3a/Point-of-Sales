@@ -1075,10 +1075,6 @@ video {
   margin-inline-start: 0.75rem;
 }
 
-.ms-4{
-  margin-inline-start: 1rem;
-}
-
 .mt-0{
   margin-top: 0px;
 }
@@ -3532,10 +3528,6 @@ video {
   padding-right: 2rem;
 }
 
-.ps-4{
-  padding-inline-start: 1rem;
-}
-
 .pt-10{
   padding-top: 2.5rem;
 }
@@ -4459,10 +4451,6 @@ video {
 
 .\!\[a-zA-Z\:_\]{
   a-z-a--z:  !important;
-}
-
-.\[image\:\$img\|\$width\|\$height\|\$type\]{
-  image: $img|$width|$height|$type;
 }
 
 @media (min-width: 640px){

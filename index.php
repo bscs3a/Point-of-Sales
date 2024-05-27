@@ -1,5 +1,5 @@
 <?php
- session_start();
+session_start();
 
 // database conncetion
 require_once './src/dbconn.php';
@@ -12,7 +12,7 @@ require_once './router.php';
 require_once './web.php';
 
 
-Router::post('/login', function(){
+Router::post('/login', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
@@ -37,34 +37,34 @@ Router::post('/login', function(){
         if ($user['role'] == 'Product Order') {
             header("Location: /$base_url/po/dashboard");
             exit();
-        } 
+        }
         if ($user['role'] == 'Human Resources') {
             header("Location: /$base_url/hr/dashboard");
             exit();
-        } 
+        }
         if ($user['role'] == 'Point of Sales') {
             header("Location: /$base_url/sls/Dashboard");
             exit();
-        } 
+        }
         if ($user['role'] == 'Inventory') {
             header("Location: /$base_url/inv/main");
             exit();
-        } 
+        }
         if ($user['role'] == 'Finance') {
             header("Location: /$base_url/fin/dashboard");
             exit();
-        } 
+        }
         if ($user['role'] == 'Delivery') {
             header("Location: /$base_url/dlv/dashboard");
             exit();
-        } 
+        }
     } else {
         header("Location: /$base_url/?error=1");
         exit();
     }
 });
 
-Router::post('/logout', function(){
+Router::post('/logout', function () {
     session_destroy();
     $base_url = 'master'; // Define your base URL here
     header("Location: /$base_url/");
@@ -72,6 +72,3 @@ Router::post('/logout', function(){
 });
 
 // header("Location: /Finance/");
-
-
-
