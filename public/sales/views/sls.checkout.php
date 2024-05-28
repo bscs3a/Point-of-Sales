@@ -142,7 +142,7 @@
 
                                 <label for="municipality" class="block mb-2">Municipality:</label>
                                 <select id="municipality" name="municipality" class="w-full p-2 border border-gray-300 rounded mb-4" required>
-                                    <option value="">Select Municipality</option>
+                                    <option value="none">Select Municipality</option>
                                     <option value="Angeles">Angeles</option>
                                     <option value="San Fernando">San Fernando</option>
                                     <option value="Mabalacat">Mabalacat</option>
@@ -169,10 +169,10 @@
 
 
                                 <label for="barangayStreet" class="block mb-2">Street and Barangay:</label>
-                                <input type="text" id="barangayStreet" name="streetBarangayAddress" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter Barangay and Street" required>
+                                <input type="text" id="barangayStreet" name="streetBarangayAddress" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter Barangay and Street">
 
                                 <label for="deliveryDate" class="block mb-2">Delivery Date:</label>
-                                <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>" required>
+                                <input type="date" id="deliveryDate" name="deliveryDate" class="w-full p-2 border border-gray-300 rounded mb-4" min="<?php echo date('Y-m-d'); ?>">
                             </div>
 
                             <!-- Mode of payment -->
