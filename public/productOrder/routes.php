@@ -415,14 +415,29 @@ Router::post('/placeorder/supplier/', function () {
         // Start a transaction
         $conn->beginTransaction();
 
+        // Get Supplier_ID from the form data
+        $supplierID = $_POST['supplierID'];
+
+        // Check supplier status
+        $statusQuery = "SELECT Status FROM suppliers WHERE Supplier_ID = :supplierID";
+        $statusStmt = $conn->prepare($statusQuery);
+        $statusStmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+        $statusStmt->execute();
+        $supplierStatus = $statusStmt->fetchColumn();
+
+        if ($supplierStatus === 'Inactive') {
+            echo "<script>alert('This supplier is inactive and you cannot place orders with them.');</script>";
+            echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+            return;
+        }
+
         // Prepare SQL statement for inserting orders into order_details table
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
         // Prepare SQL statement for inserting batch into batch_orders table
         $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive')");
 
-        // Get Supplier_ID and Batch_ID from the form data
-        $supplierID = $_POST['supplierID'];
+        // Get Batch_ID
         $batchID = getNextBatchID($conn); // Function to get the next available batch ID
 
         // Initialize total quantity and total amount
@@ -449,7 +464,6 @@ Router::post('/placeorder/supplier/', function () {
                 if ($availability === 'Not Available') {
                     $allProductsAvailable = false;
                     echo "<script>alert('Product with ID $productID is not available and cannot be ordered.');</script>";
-                    // Optionally you can redirect to another page after the alert
                     echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
                     break; // Stop processing further products
                 }
@@ -535,7 +549,6 @@ Router::post('/placeorder/supplier/', function () {
                 // Rollback the transaction if no products were ordered
                 $conn->rollBack();
                 echo "<script>alert('No products were ordered.');</script>";
-                // Optionally you can redirect to another page after the alert
                 echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
             }
         }
