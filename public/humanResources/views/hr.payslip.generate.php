@@ -186,11 +186,11 @@ $stmt = $conn->query($query);
                     <div class="flex items-center">
                         <input type="radio" id="status_paid" name="status" value="paid" class="mr-2">
                         <label for="status_paid" class="mr-4">Paid</label>
-                        <!-- <input type="radio" id="status_pending" name="status" value="pending" class="mr-2">
-                        <label for="status_pending" class="mr-4">Pending</label> -->
+                        <input type="radio" id="status_pending" name="status" value="pending" class="mr-2">
+                        <label for="status_pending" class="mr-4">Pending</label>
                     </div>
                 </div>
-                <!-- <div class="flex items-center">
+                <div class="flex items-center">
                     <label class="block font-bold mr-4">Paid Type:</label>
                     <div class="flex items-center">
                         <input type="radio" id="paid_type_cash" name="paid_type" value="cash" class="mr-2">
@@ -198,7 +198,7 @@ $stmt = $conn->query($query);
                         <input type="radio" id="paid_type_bank" name="paid_type" value="bank" class="mr-2">
                         <label for="paid_type_bank">Bank</label>
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <!-- Button Group -->
@@ -239,13 +239,20 @@ document.getElementById('generatePayslipCloseButton').addEventListener('click', 
 });
   
 document.getElementById('createPayslip').addEventListener('submit', function(event) {
-    var statusPaid = document.getElementById('status_paid').checked;
-    var payDate = document.getElementById('pay_date').value;
+  var statusPaid = document.getElementById('status_paid').checked;
+    var statusPending = document.getElementById('status_pending').checked;
+    var paidTypeCash = document.getElementById('paid_type_cash').checked;
+    var paidTypeBank = document.getElementById('paid_type_bank').checked;
 
-    if (!statusPaid) {
-        alert('Please select "Paid" status before submitting.');
+    if (!statusPaid && !statusPending) {
+        alert('Please select a status.');
+        event.preventDefault();
+    } else if (!paidTypeCash && !paidTypeBank) {
+        alert('Please select a paid type.');
         event.preventDefault();
     }
+    
+    var payDate = document.getElementById('pay_date').value;
 
     if (!payDate) {
         alert('Please fill out the pay date before submitting.');

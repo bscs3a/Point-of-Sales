@@ -80,7 +80,7 @@ $hr = [
     },
 ];
 // ADD employees
-Router::post('/hr/employees/add', function () {
+Router::post('/add-employees', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $rootFolder = dirname($_SERVER['PHP_SELF']);
@@ -121,7 +121,7 @@ Router::post('/hr/employees/add', function () {
         header("Location: $rootFolder/hr/employees/add");
         return;
     }
-    $stmt->execute([
+    $resultEmployee = $stmt->execute([
         'image_url' => $image_url,
         ':firstName' => $firstName,
         ':middleName' => $middleName,
@@ -140,6 +140,12 @@ Router::post('/hr/employees/add', function () {
         ':tinNumber' => $tinNumber,
         ':pagibigNumber' => $pagibigNumber,
     ]);
+    if (!$resultEmployee) {
+        $errorInfo = $stmt->errorInfo();
+        echo "EMPLOYEE SQL Error: {$errorInfo[2]}";
+        die();
+    }
+
     $employeeId = $conn->lastInsertId();
     // EMPLOYMENT INFORMATION
     $dateofhire = $_POST['dateofhire'];
@@ -151,12 +157,17 @@ Router::post('/hr/employees/add', function () {
         header("Location: $rootFolder/hr/employees/add");
         return;
     }
-    $stmt->execute([
+    $resultEmploymentInfo = $stmt->execute([
         ':employeeId' => $employeeId,
         ':dateofhire' => $dateofhire,
         ':startdate' => $startdate,
         ':enddate' => $enddate,
     ]);
+    if (!$resultEmploymentInfo) {
+        $errorInfo = $stmt->errorInfo();
+        echo "EMPLOYMENT INFO SQL Error: {$errorInfo[2]}";
+        die();
+    }
     // SALARY AND TAX INFORMATION
     // salary FK : employees_id
     $monthlysalary = $_POST['monthlysalary'];
@@ -166,21 +177,27 @@ Router::post('/hr/employees/add', function () {
 $totalDeductions = calculatePagibig($monthlysalary) + calculateSSS($monthlysalary) + calculatePhilhealth($monthlysalary) + calculateIncomeTax($monthlysalary) + calculateWithholdingTax($monthlysalary);
 // Calculate total salary
 $totalSalary = $monthlysalary - $totalDeductions;
-$query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, total_deductions, daily_rate) VALUES (:employeeId, :monthlysalary, :totalsalary, :totaldeductions, :dailyrate);";
+$query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, total_deductions) VALUES (:employeeId, :monthlysalary, :totalsalary, :totaldeductions);";
 $stmt = $conn->prepare($query);
 if (empty($monthlysalary)) {
     header("Location: $rootFolder/hr/employees/add");
     return;
 }
 // Calculate daily rate based on monthly salary and assuming 22 weekdays in a month
-$dailyRate = $monthlysalary / 22;
-$stmt->execute([
+// $dailyRate = $monthlysalary / 22;
+$resultSalary = $stmt->execute([
     ':employeeId' => $employeeId,
     ':monthlysalary' => $monthlysalary,
     ':totalsalary' => $totalSalary,
     ':totaldeductions' => $totalDeductions,
-    ':dailyrate' => $dailyRate,
+    // ':dailyrate' => $dailyRate,
 ]);
+if (!$resultSalary) {
+    $errorInfo = $stmt->errorInfo();
+    echo "SALARY SQL Error: {$errorInfo[2]}";
+    die();
+}
+
     // tax : FK salary_id
     $incometax = $_POST['incometax'];
     $withholdingtax = $_POST['withholdingtax'];
@@ -189,11 +206,16 @@ $stmt->execute([
     $taxAmount = calculateWithholdingTax($monthlysalary);
     $query = "INSERT INTO tax_info (salary_id, income_tax, withholding_tax) VALUES (:salaryId, :incometax, :withholdingtax);";
     $stmt = $conn->prepare($query);
-    $stmt->execute([
+    $resultTax = $stmt->execute([
         ':salaryId' => $salaryId,
         ':incometax' => $incometax,
         ':withholdingtax' => $taxAmount,
     ]);
+    if (!$resultTax) {
+        $errorInfo = $stmt->errorInfo();
+        echo "TAX SQL Error: {$errorInfo[2]}";
+        die();
+    }
     
     // benefits : FK salary_id
     $sss = $_POST['sss'];
@@ -214,13 +236,19 @@ $stmt->execute([
     $thirteenthmonth = max($minimumThirteenthMonthPay, $monthlysalary);
     $query = "INSERT INTO benefit_info (salary_id, sss_fund, pagibig_fund, philhealth, thirteenth_month) VALUES (:salaryId, :sss, :pagibig, :philhealth, :thirteenthmonth);";
     $stmt = $conn->prepare($query);
-    $stmt->execute([
+    $resultBenefit = $stmt->execute([
         ':salaryId' => $salaryId,
         ':sss' => $sssContribution,
         ':pagibig' => $pagibigContribution,
         ':philhealth' => $philhealthContribution,
         ':thirteenthmonth' => $thirteenthmonth,
     ]);
+    if (!$resultBenefit) {
+        $errorInfo = $stmt->errorInfo();
+        echo "BENEFIT SQL Error: {$errorInfo[2]}";
+        die();
+    }
+
     // ACCOUNT INFORMATION
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -231,16 +259,21 @@ $stmt->execute([
         header("Location: $rootFolder/hr/employees/add");
         return;
     }
-    $stmt->execute([
+    $resultAccount = $stmt->execute([
         ':employeeId' => $employeeId,
         ':username' => $username,
         ':password' => $password,
         ':role' => $role,
     ]);
-    header("Location: $rootFolder/hr/employees");
+    if (!$resultAccount) {
+        $errorInfo = $stmt->errorInfo();
+        echo "ACCOUNT SQL Error: {$errorInfo[2]}";
+        die();
+    }
+    header("Location: $rootFolder/hr/employees/page=1");
 });
 // UPDATE employees information
-Router::post('/hr/employees/update', function () {
+Router::post('/update-employees', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $rootFolder = dirname($_SERVER['PHP_SELF']);
