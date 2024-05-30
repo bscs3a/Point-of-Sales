@@ -11,7 +11,7 @@
     <?php
     // Database connection
     $db = Database::getInstance();
-    $pdo = $db->connect();
+    $conn = $db->connect();
 
     // Get saleId, saledetailsId, and productId from URL
     $saleId = $_GET['sale'];
@@ -23,7 +23,7 @@
         FROM Products p 
         JOIN Categories c ON p.Category_ID = c.Category_ID 
         WHERE p.ProductID = :product_id";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
     $productDetails = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@
                                      FROM SaleDetails sd 
                                      JOIN Products p ON sd.ProductID = p.ProductID 
                                      WHERE sd.SaleID = :sale_id AND sd.ProductID = :product_id";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bindParam(":sale_id", $saleId);
     $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
@@ -45,7 +45,7 @@
 
     // Fetch quantity
     $sql = "SELECT Quantity FROM SaleDetails WHERE SaleDetailID = :saledetails_id AND ProductID = :product_id";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bindParam(":saledetails_id", $saledetailsId);
     $stmt->bindParam(":product_id", $productId);
     $stmt->execute();
@@ -83,7 +83,7 @@
 
             <!-- Start: Profile -->
 
-            <?php require_once "components/logout/logout.php"?>
+            <?php require_once "components/logout/logout.php" ?>
 
             <!-- End: Profile -->
         </div>
@@ -120,12 +120,12 @@
 
                 // Check if the SaleID and ProductID exist in the returnproducts table
                 $sql = "SELECT 1 FROM returnproducts WHERE SaleID = :sale_id AND ProductID = :product_id";
-                $stmt = $pdo->prepare($sql);
+                $stmt = $conn->prepare($sql);
                 $stmt->execute([':sale_id' => $saleId, ':product_id' => $productId]);
                 $isReturned = $stmt->fetchColumn();
 
                 if (!$isReturned) : ?>
-                    <form action="/returnProduct" method="post" class="w-full p-4">
+                    <form action="/returnProduct" method="post" class="w-full p-4" id="returnproduct">
                         <div class="mb-4 hidden">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="product_id">
                                 Product ID
@@ -183,6 +183,18 @@
                     <p class="text-red-500 text-xl p-4">This product has already been returned.</p>
                 <?php endif; ?>
             </div>
+
+            <script>
+                document.querySelector('#returnproduct').addEventListener('submit', function(event) {
+                    var amount = document.getElementById('payment_returned').value;
+                    var maxAmount = <?php echo getBalanceCashAccount('Cash on hand') ?>;
+
+                    if (amount > maxAmount) {
+                        alert('Cash on hand must not exceed ' + maxAmount);
+                        event.preventDefault(); // Prevent form from submitting
+                    }
+                });
+            </script>
 
             <script>
                 function calculatePaymentReturned() {

@@ -12,6 +12,7 @@ function insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $disco
         throw new Exception("Amount(tax or sales) must be greater than 0");
     }
     if($salesPaymentMethod !== "Cash on hand" && $salesPaymentMethod !== "Cash on bank" ){
+        echo $salesPaymentMethod;
         throw new Exception("Payment must be cash on hand or cash on bank");
     }
     if($discount < 0){
