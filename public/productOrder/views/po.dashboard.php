@@ -1,5 +1,5 @@
 <?php
-// print_r($_SESSION);
+print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +39,7 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -72,8 +72,8 @@
         $conn = $db->connect();
 
         try {
-          // Prepare SQL statement to fetch data from the audit_log table
-          $stmt = $conn->query("SELECT * FROM audit_log ORDER BY audit_log.audit_ID DESC");
+          // Prepare SQL statement to fetch data from the poauditlogs table
+          $stmt = $conn->query("SELECT * FROM poauditlogs ORDER BY poauditlogs.audit_ID DESC");
           $audit_logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
           echo "Error: " . $e->getMessage();
@@ -110,6 +110,7 @@
                 </tr>
               <?php endif; ?>
             </tbody>
+
             <?php
     $db = Database::getInstance();
     $conn = $db->connect();

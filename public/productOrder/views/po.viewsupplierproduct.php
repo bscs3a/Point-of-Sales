@@ -1,3 +1,6 @@
+<?php
+require_once "public/finance/functions/otherGroups/productOrder.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,8 +39,8 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
-              <i class="ri-arrow-down-s-line"></i>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
+                <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
@@ -171,7 +174,7 @@
 
                   // Check if there are any rows or results
                   if ($statement->rowCount() > 0) {
-                    echo '<form method="post" action="/master/placeorder/supplier/">';
+                    echo '<form method="post" action="/master/placeorder/supplier/" id="orderform">';
 
                     // Add hidden input for Supplier_ID
                     echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
@@ -266,6 +269,32 @@
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Assuming the remaining funds for the department is available as a JavaScript variable
+            var remainingFunds =  <?php   echo getRemainingProductOrderPondo();   ?>; 
+          
+          
+           // Example remaining funds
+
+            var orderForm = document.getElementById("orderform");
+            orderForm.addEventListener("submit", function(event) {
+                var amountInput = document.getElementById("amount"); //need to check the amount BEFORE ordering
+                var amount = parseFloat(amountInput.value);
+
+                if (isNaN(amount)) {
+                    alert("Please enter a valid number for the amount.");
+                    event.preventDefault();
+                    return;
+                }
+
+                if (amount > remainingFunds) {
+                    alert("The entered amount exceeds the remaining funds for the department.");
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>
