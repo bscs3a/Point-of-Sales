@@ -269,7 +269,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-<script>
+<!-- <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Assuming the remaining funds for the department is available as a JavaScript variable
         var remainingFunds = <?php echo getRemainingProductOrderPondo(); ?>;
@@ -298,7 +298,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
             }
         });
     });
-</script>
+</script> -->
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>

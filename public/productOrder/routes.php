@@ -451,7 +451,6 @@ Router::post('/placeorder/supplier/', function () {
                     echo "<script>alert('Product with ID $productID is not available and cannot be ordered.');</script>";
                     // Optionally you can redirect to another page after the alert
                     echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
-         
                     break; // Stop processing further products
                 }
 
@@ -499,7 +498,15 @@ Router::post('/placeorder/supplier/', function () {
             }
         }
 
-//add a validation to check if there is enough funds before buying/ordering the products from the supplier before any transaction start
+        // Fetch the shipping fee for the supplier
+        $shippingFeeQuery = "SELECT Shipping_fee FROM suppliers WHERE Supplier_ID = :supplierID";
+        $shippingFeeStmt = $conn->prepare($shippingFeeQuery);
+        $shippingFeeStmt->bindParam(':supplierID', $supplierID, PDO::PARAM_INT);
+        $shippingFeeStmt->execute();
+        $shippingFee = $shippingFeeStmt->fetchColumn();
+
+        // Add the shipping fee to the total amount
+        $totalAmount += $shippingFee;
 
         // If any product is not available, halt the order processing
         if (!$allProductsAvailable) {
@@ -507,7 +514,7 @@ Router::post('/placeorder/supplier/', function () {
         } else {
             // If total quantity is greater than 0, proceed with batch order insertion
             if ($totalQuantity > 0) {
-                recordBuyingInventory($totalAmount); //this will save the total ammount in finance
+                // recordBuyingInventory($totalAmount); // This will save the total amount in finance
 
                 // Bind parameters for batch order insertion
                 $batchOrderStmt->bindParam(':supplierID', $supplierID);
@@ -523,7 +530,7 @@ Router::post('/placeorder/supplier/', function () {
                 // Redirect the user after successful order placement
                 $rootFolder = dirname($_SERVER['PHP_SELF']);
                 header("Location: $rootFolder/po/orderDetail");
-                exit (); // Ensure that script execution stops after redirection
+                exit(); // Ensure that script execution stops after redirection
             } else {
                 // Rollback the transaction if no products were ordered
                 $conn->rollBack();
@@ -537,12 +544,11 @@ Router::post('/placeorder/supplier/', function () {
         $conn->rollBack();
         echo "Error placing order: " . $e->getMessage();
     } finally {
-        
         // Close connection
         $conn = null;
     }
-
 });
+
 
 
 
@@ -1119,7 +1125,7 @@ function updateOrderStatusToCompleted()
             $conn->beginTransaction();
 
             // Update the order status in the batch_orders table
-            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = 'Completed' WHERE Batch_ID = :batchID");
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Completed', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND Order_Status LIKE 'to receive%'");
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
@@ -1184,7 +1190,7 @@ function updateOrderStatusToCompleted()
 
 
 
-//function to set the order status of to complete and also add the data in the transaction history
+
 // Route to handle the cancel order status action
 Router::post('/cancel/orderDetail', function () {
     // Call the function to cancel order status
@@ -1204,7 +1210,7 @@ function updateOrderStatusToCancel()
             $conn->beginTransaction();
 
             // Update the order status in the batch_orders table
-            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = 'Cancelled' WHERE Batch_ID = :batchID");
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Cancelled', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND Order_Status LIKE 'to receive%'");
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
@@ -1250,6 +1256,83 @@ function updateOrderStatusToCancel()
         echo "Error: " . $e->getMessage();
     }
 }
+
+// Route to handle the delay order status action
+Router::post('/delay/orderDetail', function () {
+    // Call the function to delay order status
+    updateOrderStatusToDelay();
+});
+
+function updateOrderStatusToDelay()
+{
+    try {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+
+        if (isset($_POST['Batch_ID'])) {
+            $batchID = $_POST['Batch_ID'];
+
+            // Begin a transaction
+            $conn->beginTransaction();
+
+            // Fetch current order status from the batch_orders table based on Batch_ID
+            $currentOrderStatusStmt = $conn->prepare("SELECT Order_Status FROM batch_orders WHERE Batch_ID = :batchID");
+            $currentOrderStatusStmt->bindParam(':batchID', $batchID);
+            $currentOrderStatusStmt->execute();
+            $currentOrderStatus = $currentOrderStatusStmt->fetchColumn();
+
+            // New order status will be the concatenation of the current status and "Delayed"
+            $newOrderStatus = $currentOrderStatus . " + Delayed";
+
+            // Update the order status in the batch_orders table
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = :newOrderStatus WHERE Batch_ID = :batchID");
+            $stmt->bindParam(':newOrderStatus', $newOrderStatus);
+            $stmt->bindParam(':batchID', $batchID);
+            $stmt->execute();
+
+            // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
+            // $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status FROM batch_orders WHERE Batch_ID = :batchID");
+            // $orderDetailsStmt->bindParam(':batchID', $batchID);
+            // $orderDetailsStmt->execute();
+            // $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
+            // $supplierID = $orderDetails['Supplier_ID'];
+            // $orderStatus = $orderDetails['Order_Status'];
+
+            // Insert data into transaction_history table
+            // $insertStmt = $conn->prepare("INSERT INTO transaction_history (Batch_ID, Supplier_ID, Order_Status) VALUES (:batchID, :supplierID, :orderStatus)");
+            // $insertStmt->bindParam(':batchID', $batchID);
+            // $insertStmt->bindParam(':supplierID', $supplierID);
+            // $insertStmt->bindParam(':orderStatus', $orderStatus);
+            // $insertStmt->execute();
+
+            // Audit log for delaying an order
+            $user_id = $_SESSION['user']['username']; // Assuming you have a user session
+            $action = "Delayed Order #$batchID";
+            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+            $auditSql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $auditStmt = $conn->prepare($auditSql);
+            $auditStmt->bindParam(':user_id', $user_id);
+            $auditStmt->bindParam(':action', $action);
+            $auditStmt->bindParam(':time_out', $time_out);
+            $auditStmt->execute();
+
+            // Commit the transaction
+            $conn->commit();
+
+            echo "Order status updated to '$newOrderStatus' for Order ID: $batchID";
+
+            $rootFolder = dirname($_SERVER['PHP_SELF']);
+            header("Location: $rootFolder/po/orderDetail");
+            exit(); // Stop script execution after redirection
+        }
+    } catch (PDOException $e) {
+        // Rollback the transaction in case of error
+        $conn->rollBack();
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 
 Router::post('/delete/product', function () {
     $db = Database::getInstance();

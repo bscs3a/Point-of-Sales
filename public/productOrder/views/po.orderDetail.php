@@ -71,7 +71,7 @@
             {
               try {
                 // Query to count the number of unique suppliers
-                $query = "SELECT COUNT(DISTINCT Transaction_ID) AS DeliveredCount FROM transaction_history WHERE Order_Status = 'Completed'";
+                $query = "SELECT COUNT(DISTINCT Transaction_ID) AS DeliveredCount FROM transaction_history WHERE Order_Status = 'Completed' OR Order_Status = 'Completed + Delayed'";
                 $statement = $conn->prepare($query);
                 $statement->execute();
 
@@ -105,7 +105,7 @@
             {
               try {
                 // Query to count the number of ordered items
-                $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'to receive'";
+                $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'to receive' OR Order_Status = 'to receive + Delayed'";
                 $statement = $conn->prepare($query);
                 $statement->execute();
 
@@ -148,63 +148,78 @@
             </thead>
 
             <?php
-            function displayPendingOrders()
-            {
-              try {
-                // require_once 'dbconn.php'; // Include your database connection file
-                $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
-            
-                $query = "SELECT bo.*, s.Supplier_Name, s.Address, s.Estimated_Delivery
-        FROM batch_orders bo
-        JOIN suppliers s ON bo.Supplier_ID = s.Supplier_ID
-        WHERE bo.Order_Status = 'to receive';";
+function displayPendingOrders()
+{
+    try {
+        // require_once 'dbconn.php'; // Include your database connection file
+        $conn = Database::getInstance()->connect(); // Assuming this is how you establish a database connection
 
-                $statement = $conn->prepare($query);
-                $statement->execute();
+        $query = "SELECT bo.*, s.Supplier_Name, s.Address, s.Estimated_Delivery
+                  FROM batch_orders bo
+                  JOIN suppliers s ON bo.Supplier_ID = s.Supplier_ID
+                  WHERE bo.Order_Status LIKE 'to receive%';";
 
-                // Fetch all rows as associative array
-                $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $statement = $conn->prepare($query);
+        $statement->execute();
 
-                // Loop through each row and display data in HTML table format
-                foreach ($rows as $row) {
-                  echo '<tbody>';
-                  echo '<tr>';
-                  echo '<td class="px-4 py-7">' . $row['Batch_ID'] . '</td>';
-                  echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
-                  echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
-                  echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';
-                  echo '<td class="px-4 py-7">' . $row['Address'] . '</td>';
-                  echo '<td class="px-4 py-7">' . $row['Estimated_Delivery'] . '</td>';
+        // Fetch all rows as associative array
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                  echo '<td class="px-4 py-6">';
-                  // Form for Completed status
-                  echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2 pt-2" onsubmit="return confirm(\'Are you sure you want to mark this order as complete?\');">';
-                  echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
-                  echo '<button type="submit" class="rounded-full border border-green-900 hover:bg-green-900 border-b block px-4 py-1 text-sm font-semibold text-green-900 hover:text-white focus:outline-none">Complete</button>';
-                  echo '</form>';
+        // Loop through each row and display data in HTML table format
+        foreach ($rows as $row) {
+            echo '<tbody>';
+            echo '<tr>';
+            echo '<td class="px-4 py-7">' . $row['Batch_ID'] . '</td>';
+            echo '<td class="px-4 py-7">' . $row['Supplier_Name'] . '</td>';
+            echo '<td class="px-4 py-7">' . $row['Date_Ordered'] . '</td>';
+            echo '<td class="px-4 py-7">' . $row['Time_Ordered'] . '</td>';
+            echo '<td class="px-4 py-7">' . $row['Address'] . '</td>';
+            echo '<td class="px-4 py-7">' . $row['Estimated_Delivery'] . '</td>';
 
-                  // Form for Cancel status
-                  echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2" onsubmit="return confirm(\'Are you sure you want to cancel this order?\');">';
-                  echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
-                  echo '<button type="submit" class="rounded-full border border-gray-500 border-b block px-7 py-1 text-sm font-semibold text-gray-900 focus:outline-none">Cancel</button>';
-                  echo '</form>';
-                  echo '</td>';
+            echo '<td class="px-4 py-6">';
+            // Form for Completed status
+            echo '<form action="/master/complete/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2 pt-2" onsubmit="return confirm(\'Are you sure you want to mark this order as complete?\');">';
+            echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
+            echo '<button type="submit" class="rounded-full border border-green-600 hover:bg-green-600 bg-green-200 border-b block px-4 py-1 text-sm font-semibold text-green-900 hover:text-white focus:outline-none">Complete</button>';
+            echo '</form>';
 
-                  // for VIEW order
-                  echo '<td class="px-4 py-4">';
-                  echo '<a href="/master/po/viewdetails/Batch=' . $row['Batch_ID'] . '">View</a>';
-                  echo '</td>';
-                  echo '</tr>';
-                  echo '</tbody>';
-                }
-              } catch (PDOException $e) {
-                echo "Connection failed: " . $e->getMessage();
-              }
+            // Form for Cancel status
+            echo '<form action="/master/cancel/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2" onsubmit="return confirm(\'Are you sure you want to cancel this order?\');">';
+            echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
+            echo '<button type="submit" class="rounded-full border border-red-600 hover:bg-red-600 bg-red-200 border-b block px-7 py-1 text-sm font-semibold text-red-900 hover:text-white focus:outline-none">Cancel</button>';
+            echo '</form>';
+
+            // Form for Delayed status
+            if ($row['Order_Status'] == 'to receive + Delayed') {
+                // If status is already 'to receive + Delayed', set button color to purple
+                echo '<button type="button" class="rounded-full border border-purple-600 bg-purple-600 block px-7 py-1 text-sm font-semibold text-white focus:outline-none" disabled style="background-color: #8A2BE2;">Delayed</button>';
+              } else {
+                // If status is not 'to receive + Delayed', render the button with blue color
+                echo '<form action="/master/delay/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2" onsubmit="return confirm(\'Are you sure you want to mark this order as delayed?\');">';
+                echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
+                echo '<button type="submit" class="rounded-full border border-blue-600 hover:bg-blue-600 bg-blue-200 border-b block px-7 py-1 text-sm font-semibold text-blue-900 hover:text-white focus:outline-none">Delayed</button>';
+                echo '</form>';
             }
+            echo '</td>';
 
-            // Call the function to display pending orders
-            displayPendingOrders();
-            ?>
+            // for VIEW order
+            echo '<td class="px-4 py-4">';
+            echo '<a href="/master/po/viewdetails/Batch=' . $row['Batch_ID'] . '">View</a>';
+            echo '</td>';
+            echo '</tr>';
+            echo '</tbody>';
+        }
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
+}
+
+// Call the function to display pending orders
+displayPendingOrders();
+?>
+
+
+
           </table>
         </div>
       </div>

@@ -76,11 +76,11 @@
 
                         // Prepare and execute a SQL query to fetch data based on the ID
                         $stmt = $conn->prepare("
-        SELECT b.*, s.Supplier_Name, s.Status, s.Address, s.Contact_Name, s.Contact_Number, s.Estimated_Delivery
-        FROM batch_orders b
-        JOIN suppliers s ON b.Supplier_ID = s.Supplier_ID
-        WHERE b.Batch_ID = :id
-    ");
+                            SELECT b.*, s.Supplier_Name, s.Status, s.Address, s.Contact_Name, s.Contact_Number, s.Estimated_Delivery ,s.Shipping_fee
+                            FROM batch_orders b
+                            JOIN suppliers s ON b.Supplier_ID = s.Supplier_ID
+                            WHERE b.Batch_ID = :id
+                        ");
                         $stmt->execute(['id' => $id]);
                         // Fetch the data
                         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -124,6 +124,12 @@
                                                 <?= $data['Time_Ordered'] ?>
                                             </span>
                                         </li>
+                                        <li class="flex py-1">
+                                            <span class="font-semibold w-40">Shipping Fee:</span>
+                                            <span class="font-medium text-gray-900">
+                                                <?= $data['Shipping_fee'] ?>
+                                            </span>
+                                        </li>
                                     </ul>
 
                                     <ul class=" text-gray-900 ">
@@ -145,6 +151,7 @@
                                                 <?= $data['Status'] ?>
                                             </span>
                                         </li>
+                                        
                                     </ul>
                                 </div>
 
