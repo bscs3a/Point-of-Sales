@@ -31,10 +31,13 @@ $remainingPondo = $cashOnHand + $cashOnBank;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
 
+
 <body>
-
-    <?php include "components/po.sidebar.php" ?>
-
+<div class="flex h-screen bg-white">
+<!-- sidebar -->
+<div id="sidebar" class="flex h-screen">
+      <?php include "components/po.sidebar.php" ?>
+    </div>
     <!-- Start: Dashboard -->
 
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main">
@@ -325,9 +328,10 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                 <?php endif; ?>
             </ol>
         </div>
-
+       
             
     </main>
+ </div>
     <script src="./../src/route.js"></script>
     <script src="./../src/form.js"></script>
     <!-- Start: Sidebar -->
