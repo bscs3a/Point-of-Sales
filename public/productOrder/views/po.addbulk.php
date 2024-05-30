@@ -93,13 +93,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -122,13 +136,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -151,13 +179,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -180,13 +222,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -209,13 +265,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -238,13 +308,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -267,13 +351,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -296,13 +394,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -325,13 +437,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
-                  <td>
-                    <select name="category9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -354,13 +480,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName10"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                  <td>
-                    <select name="category10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -383,13 +523,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName11"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                  <td>
-                    <select name="category11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -412,13 +566,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName12"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                  <td>
-                    <select name="category12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
@@ -441,13 +609,27 @@
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                   <td><input type="text" name="productName13"
                       class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                  <td>
-                    <select name="category13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
-                      <option value="Hand Tools">Hand Tools</option>
-                      <option value="Power Tools">Power Tools</option>
-                      <option value="Category 3">Category 3</option>
-                    </select>
-                  </td>
+                  <?php
+                    // Database connection (ensure this is correctly configured)
+                    $db = Database::getInstance();
+                    $conn = $db->connect();
+
+                    // Fetch categories from the database
+                    $query = "SELECT Category_Name FROM categories";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute();
+                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <td>
+                      <select name="category13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                        <?php foreach ($categories as $category): ?>
+                          <option value="<?php echo htmlspecialchars($category['Category_Name']); ?>">
+                            <?php echo htmlspecialchars($category['Category_Name']); ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </td>
                   <td><input type="number" name="price13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
                   </td>
                   <td><input type="number" name="retailprice13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
