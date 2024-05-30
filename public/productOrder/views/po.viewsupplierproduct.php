@@ -93,7 +93,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
             <div class="flex place-content-end mt-2 m-3">
               <?php
               // Fetch data from the database
-// Assuming $conn is your database connection
+              // Assuming $conn is your database connection
               $db = Database::getInstance();
               $conn = $db->connect();
 
@@ -194,7 +194,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Retail_Price'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Availability'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center"></td>';
+                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Price'] . '"></td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
@@ -269,32 +269,36 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-  <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Assuming the remaining funds for the department is available as a JavaScript variable
-            var remainingFunds =  <?php   echo getRemainingProductOrderPondo();   ?>; 
-          
-          
-           // Example remaining funds
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Assuming the remaining funds for the department is available as a JavaScript variable
+        var remainingFunds = <?php echo getRemainingProductOrderPondo(); ?>;
 
-            var orderForm = document.getElementById("orderform");
-            orderForm.addEventListener("submit", function(event) {
-                var amountInput = document.getElementById("amount"); //need to check the amount BEFORE ordering
-                var amount = parseFloat(amountInput.value);
+        var orderForm = document.getElementById("orderform");
+        orderForm.addEventListener("submit", function(event) {
+            var totalAmount = 0;
+            var quantityInputs = document.querySelectorAll(".quantity-input");
 
-                if (isNaN(amount)) {
-                    alert("Please enter a valid number for the amount.");
+            quantityInputs.forEach(function(input) {
+                var quantity = parseFloat(input.value);
+                var price = parseFloat(input.getAttribute('data-price'));
+
+                if (isNaN(quantity) || quantity < 0) {
+                    alert("Please enter a valid number for the quantity of all products.");
                     event.preventDefault();
                     return;
                 }
 
-                if (amount > remainingFunds) {
-                    alert("The entered amount exceeds the remaining funds for the department.");
-                    event.preventDefault();
-                }
+                totalAmount += quantity * price;
             });
+
+            if (totalAmount > remainingFunds) {
+                alert("The total amount (" + totalAmount + ") exceeds the remaining funds for the department.");
+                event.preventDefault();
+            }
         });
-    </script>
+    });
+</script>
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>
