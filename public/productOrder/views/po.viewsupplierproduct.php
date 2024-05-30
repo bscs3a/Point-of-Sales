@@ -1,3 +1,6 @@
+<?php
+require_once "public/finance/functions/otherGroups/productOrder.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,8 +39,8 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
-              <i class="ri-arrow-down-s-line"></i>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
+                <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
@@ -90,7 +93,7 @@
             <div class="flex place-content-end mt-2 m-3">
               <?php
               // Fetch data from the database
-// Assuming $conn is your database connection
+              // Assuming $conn is your database connection
               $db = Database::getInstance();
               $conn = $db->connect();
 
@@ -171,7 +174,7 @@
 
                   // Check if there are any rows or results
                   if ($statement->rowCount() > 0) {
-                    echo '<form method="post" action="/master/placeorder/supplier/">';
+                    echo '<form method="post" action="/master/placeorder/supplier/" id="orderform">';
 
                     // Add hidden input for Supplier_ID
                     echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
@@ -191,7 +194,7 @@
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Retail_Price'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Availability'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center"></td>';
+                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Price'] . '"></td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
@@ -266,6 +269,36 @@
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Assuming the remaining funds for the department is available as a JavaScript variable
+        var remainingFunds = <?php echo getRemainingProductOrderPondo(); ?>;
+
+        var orderForm = document.getElementById("orderform");
+        orderForm.addEventListener("submit", function(event) {
+            var totalAmount = 0;
+            var quantityInputs = document.querySelectorAll(".quantity-input");
+
+            quantityInputs.forEach(function(input) {
+                var quantity = parseFloat(input.value);
+                var price = parseFloat(input.getAttribute('data-price'));
+
+                if (isNaN(quantity) || quantity < 0) {
+                    alert("Please enter a valid number for the quantity of all products.");
+                    event.preventDefault();
+                    return;
+                }
+
+                totalAmount += quantity * price;
+            });
+
+            if (totalAmount > remainingFunds) {
+                alert("The total amount (" + totalAmount + ") exceeds the remaining funds for the department.");
+                event.preventDefault();
+            }
+        });
+    });
+</script> -->
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>

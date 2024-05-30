@@ -35,7 +35,7 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -112,12 +112,13 @@
                           </div>
                         </div>
                         <div>
-                          <div class="mb-4">
-                            <label for="status" class="block text-black font-semibold mb-2">Status</label>
-                            <input type="text" id="status" name="status"
-                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                              value="<?php echo $supplier['Status']; ?>" required>
-                          </div>
+                        <div class="mb-4">
+                          <label for="status" class="block text-black font-semibold mb-2">Status</label>
+                          <select id="status" name="status" class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400" required>
+                              <option value="Active" <?php echo $supplier['Status'] == 'Active' ? 'selected' : ''; ?>>Active</option>
+                              <option value="Inactive" <?php echo $supplier['Status'] == 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
+                          </select>
+                      </div>
                           <div class="mb-4">
                             <label for="location" class="block text-black font-semibold mb-2">Location</label>
                             <input type="text" id="Address" name="Address"

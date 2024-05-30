@@ -34,7 +34,7 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -282,7 +282,7 @@
           <form action="/master/addfeedback/viewtransaction" method="post" enctype="multipart/form-data" class="px-8">
             <input type="hidden" name="supplierID" value="<?= $data['Supplier_ID'] ?>">
             <!--get the supplier ID in the query -->
-            <input type="hidden" name="user" value="<?= $_SESSION['employee'] ?>"> <!--get the employeein th seeiony -->
+            <input type="hidden" name="user" value="<?= $_SESSION['user']['username'] ?>"> <!--get the employeein th seeiony -->
             <input type="hidden" name="batchID" value="<?= $_GET['id'] ?>"> <!--get the batchID in the $GET -->
             <h2 class="font-bold text-lg pb-2">Feedback</h2>
             <?php

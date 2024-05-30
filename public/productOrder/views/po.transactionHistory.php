@@ -35,7 +35,7 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -73,7 +73,7 @@
           {
             try {
               // Query to count the number of unique suppliers
-              $query = "SELECT COUNT(DISTINCT Transaction_ID) AS DeliveredCount FROM transaction_history WHERE Order_Status = 'Completed'";
+              $query = "SELECT COUNT(DISTINCT Transaction_ID) AS DeliveredCount FROM transaction_history WHERE Order_Status = 'Completed' OR Order_Status = 'Completed + Delayed'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
@@ -110,7 +110,7 @@
           {
             try {
               // Query to count the number of ordered items
-              $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'to receive'";
+              $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'to receive' OR Order_Status = 'to receive + Delayed'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
@@ -145,7 +145,7 @@
           {
             try {
               // Query to count the number of unique suppliers
-              $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'Cancelled'";
+              $query = "SELECT COUNT(DISTINCT Batch_ID) AS OrderCount FROM batch_orders WHERE Order_Status = 'Cancelled' OR Order_Status = 'Cancelled + Delayed'";
               $statement = $conn->prepare($query);
               $statement->execute();
 
@@ -211,8 +211,8 @@
                   echo '<tr>';
                   echo '<td class="px-4 py-4">' . $transaction['Batch_ID'] . '</td>';
                   echo '<td class="px-4 py-4">' . $transaction['Supplier_Name'] . '</td>';
-                  if ($transaction['Order_Status'] == 'Cancelled') {
-                  echo '<td class="px-4 py-4">n/a</td>';
+                  if ($transaction['Order_Status'] == 'Cancelled' || $transaction['Order_Status'] == 'Cancelled + Delayed') {
+                    echo '<td class="px-4 py-4">n/a</td>';
                   echo '<td class="px-4 py-4">n/a</td>';
                   } else {
                   echo '<td class="px-4 py-4">' . $transaction['Date_Delivered'] . '</td>';

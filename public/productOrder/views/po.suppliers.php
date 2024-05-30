@@ -35,7 +35,7 @@
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['employee']; ?></a>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
               <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
@@ -117,15 +117,19 @@
                   <div class="flex flex-col gap-2">
                     <div class="flex flex-row justify-between">
                       <div>
-                      <a class="text-1xl font-semibold">Supplier Name:</a>
-                      <a class="ml-3 text-black-500"><?php echo $row['Supplier_Name']; ?></a>
+                        <a class="text-1xl font-semibold">Supplier Name:</a>
+                        <a class="ml-3 text-black-500"><?php echo $row['Supplier_Name']; ?></a>
                       </div>
                       <a href="/master/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
-                      class="bg-violet-950 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
+                        class="bg-violet-950 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
                     </div>
                     <div class="flex flex-row">
                       <a class="text-1xl font-semibold">Status:</a>
-                      <a class="ml-3 text-green-600"><?php echo $row['Status']; ?></a>
+                      <?php if ($row['Status'] == 'Active'): ?>
+                        <a class="ml-3 text-green-600"><?php echo $row['Status']; ?></a>
+                      <?php else: ?>
+                        <a class="ml-3 text-red-600"><?php echo $row['Status']; ?></a>
+                      <?php endif; ?>
                     </div>
                   </div>
                   <div class="flex justify-between items-center pt-3">
