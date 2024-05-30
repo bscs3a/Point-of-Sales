@@ -11,18 +11,18 @@
     <?php
     // Database connection
     $db = Database::getInstance();
-    $pdo = $db->connect();
+    $conn = $db->connect();
 
     // Fetch number of returns
     $sql = "SELECT COUNT(*) as count FROM ReturnProducts";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute();
     $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
     $sql = "SELECT rp.ReturnID, rp.SaleID, p.ProductID, p.ProductName, rp.Quantity, rp.Reason, rp.ReturnDate, rp.PaymentReturned 
     FROM ReturnProducts rp 
     JOIN Products p ON rp.ProductID = p.ProductID";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute();
     $returnedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
@@ -146,14 +146,14 @@
                                     <?php
                                     // Fetch CategoryID
                                     $sql = "SELECT Category_ID FROM Products WHERE ProductID = :product_id";
-                                    $stmt = $pdo->prepare($sql);
+                                    $stmt = $conn->prepare($sql);
                                     $stmt->bindParam(":product_id", $product['ProductID']);
                                     $stmt->execute();
                                     $categoryId = $stmt->fetch(PDO::FETCH_ASSOC)['Category_ID'];
 
                                     // Fetch CategoryName
                                     $sql = "SELECT Category_Name FROM Categories WHERE Category_ID = :category_id";
-                                    $stmt = $pdo->prepare($sql);
+                                    $stmt = $conn->prepare($sql);
                                     $stmt->bindParam(":category_id", $categoryId);
                                     $stmt->execute();
                                     $categoryName = $stmt->fetch(PDO::FETCH_ASSOC)['Category_Name'];
@@ -224,7 +224,7 @@
                         <?php
                             // Fetch total of PaymentReturned
                             $sql = "SELECT SUM(PaymentReturned) as total FROM ReturnProducts";
-                            $stmt = $pdo->prepare($sql);
+                            $stmt = $conn->prepare($sql);
                             $stmt->execute();
                             $totalPaymentReturned = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
                         ?>
