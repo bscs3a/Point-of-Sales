@@ -1,7 +1,6 @@
 <?php
-session_start();
-
-// database conncetion
+ session_start();
+ // database conncetion
 require_once './src/dbconn.php';
 
 
@@ -30,31 +29,37 @@ Router::post('/login', function () {
         // Password is correct
         $_SESSION['user']['account_id'] = $user['id'];
         $_SESSION['user']['username'] = $user['username'];
-        $_SESSION['user']['role'] = $user['role'];
         $_SESSION['user']['employee_id'] = $user['employees_id'];
 
+        $stmt = $conn->prepare("SELECT department FROM employees WHERE id = :id");
+        $stmt->bindParam(':id', $user['employees_id']);
+        $stmt->execute();
+        $department = $stmt->fetch();
+        $_SESSION['user']['role'] = $department['department'];
+
+        Router::audit_log();
         //redirects to the right page
-        if ($user['role'] == 'Product Order') {
+        if ($_SESSION['user']['role'] == 'Product Order') {
             header("Location: /$base_url/po/dashboard");
             exit();
-        }
-        if ($user['role'] == 'Human Resources') {
+        } 
+        if ($_SESSION['user']['role'] == 'Human Resources') {
             header("Location: /$base_url/hr/dashboard");
             exit();
-        }
-        if ($user['role'] == 'Point of Sales') {
+        } 
+        if ($_SESSION['user']['role'] == 'Point of Sales') {
             header("Location: /$base_url/sls/Dashboard");
             exit();
-        }
-        if ($user['role'] == 'Inventory') {
+        } 
+        if ($_SESSION['user']['role'] == 'Inventory') {
             header("Location: /$base_url/inv/main");
             exit();
-        }
-        if ($user['role'] == 'Finance') {
+        } 
+        if ($_SESSION['user']['role'] == 'Finance') {
             header("Location: /$base_url/fin/dashboard");
             exit();
-        }
-        if ($user['role'] == 'Delivery') {
+        } 
+        if ($_SESSION['user']['role'] == 'Delivery') {
             header("Location: /$base_url/dlv/dashboard");
             exit();
         }
@@ -71,4 +76,8 @@ Router::post('/logout', function () {
     exit();
 });
 
-// header("Location: /Finance/");
+
+// header("Location: /Master/");
+
+
+

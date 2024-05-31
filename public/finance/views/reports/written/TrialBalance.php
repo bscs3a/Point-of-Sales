@@ -91,7 +91,7 @@ thead > tr > th{
 }
 
 .content-amount{
-    /* margin-left:auto; */
+    text-align: right;
 }
 
 tfoot{

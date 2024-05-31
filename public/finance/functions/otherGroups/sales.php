@@ -22,11 +22,12 @@ function insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $disco
     $SALES =  getLedgerCode("Sales");
     $salesDetails = "made a sale with tax";
     $VALUE_ADDED_TAX = getLedgerCode("Value Added Tax Payable");
+    $taxExpense = getLedgerCode("Tax Expense");
 
     $remainingSalesAmount = $salesAmount - $taxAmount;
 
     insertLedgerXact($salesPaymentMethod, $SALES, $remainingSalesAmount, $salesDetails);
-    insertLedgerXact($salesPaymentMethod, $VALUE_ADDED_TAX, $taxAmount, $salesDetails);
+    insertLedgerXact($taxExpense, $VALUE_ADDED_TAX, $taxAmount, $salesDetails);
 
     //for discount
     if ($discount > 0){
@@ -75,5 +76,32 @@ function insertSalesAllowance($amount, $paymentMethod){
 
 function getBalanceCashAccount($paymentMethod){
     return getAccountBalanceV2($paymentMethod);
+}
+
+
+//for sales revenue display requested by aian
+
+// TAKE NOT; THIS ONLY APPLIES TO THE LATEST MONTH, SINCE EVERYMONTH WE CLOSE THIS ACCOUNTS
+function amountOfRawSales(){
+    return getAccountBalanceV2("Sales");
+}
+
+//this is not an expense account, so eto baka mapa sobra kasi utang tong mga to hindi nagiging expense
+function amountOfSalesTax(){
+    return getAccountBalanceV2("Tax Expense");
+}
+
+// wala kaming amount of transactions
+
+function totalSalesMinusTax(){
+    return amountOfRawSales() - amountOfSalesTax();
+}
+
+function totalReturns(){
+    return getAccountBalanceV2("Returns");
+}
+
+function totalSalesMinusTaxAndReturns(){
+    return totalSalesMinusTax() - totalReturns();
 }
 ?>
