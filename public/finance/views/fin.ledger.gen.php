@@ -55,9 +55,13 @@
                     <div class="items-start mb-1">
                         <div class="relative">
                             <div class="inline-flex items-center overflow-hidden rounded-lg  border border-gray-500">
+                                <?php 
+                                $selected = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
+                                $recent = isset($_SESSION['postdata']['recent']) ? $_SESSION['postdata']['recent'] : false;
+                                ?>
                                 <label for="recent" id="recentLabel" class="border-r-5 border-black px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 min-w-12">
-                                    <span id="labelText">Old</span>
-                                    <input type="checkbox" name="recent" id="recent" class="hidden">
+                                    <span id="labelText"><?php echo $recent ? "Recent" : "Old"?></span>
+                                    <input type="checkbox" name="recent" id="recent" class="hidden" <?php echo $recent ? "selected" : "" ?>>
                                 </label>
                                 <script>
                                     document.getElementById('recent').addEventListener('change', function() {
@@ -71,12 +75,12 @@
                                 </script>
                                 <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
                                 <select class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
-                                    <option value="">Select</option>
-                                    <option value="sample" selected>sample</option>
+                                    <option value="" <?php echo is_null($selected) ? "selected" : ""?>>Select</option>
                                     <?php 
                                     $select = getAllLedgerAccounts();
                                     foreach ($select as $row) {
-                                        echo "<option value=\"{$row['ledgerno']}\">{$row['name']}</option>";
+                                        $option = $row['ledgerno'] == $selected ? "selected" : "";
+                                        echo "<option value=\"{$row['ledgerno']}\" "."$option".">{$row['name']}</option>";
                                     }
                                     ?>
                                 </select>
