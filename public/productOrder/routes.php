@@ -214,6 +214,7 @@ Router::post('/insert/addsupplier/', function () {
             $availability = $_POST["avail$i"];
             $description = $_POST["description$i"];
             $productWeight = $_POST["productweight$i"];
+            $measurement = $_POST["measurement$i"];
 
             // Handle file upload for each row
             $fileFieldName = "productImage$i";
@@ -226,8 +227,8 @@ Router::post('/insert/addsupplier/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Supplier_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
-                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, :suppliername, :productWeight)";
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Supplier_Price, Availability, Category, ProductImage, Supplier, ProductWeight, UnitOfMeasurement, TaxRate) 
+                                VALUES (:supplierId, :categoryId, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, :suppliername, :productWeight, :measurement, 0.12)";
                     $productStmt = $conn->prepare($productSql);
 
                     // Retrieve the category_id based on the category name
@@ -255,6 +256,7 @@ Router::post('/insert/addsupplier/', function () {
                     $productStmt->bindParam(':productImage', $uploadPath);
                     $productStmt->bindParam(':suppliername', $suppliername);
                     $productStmt->bindParam(':productWeight', $productWeight);
+                    $productStmt->bindParam(':measurement', $measurement);
 
                     // Execute the product SQL statement
                     $productStmt->execute();
@@ -314,7 +316,7 @@ Router::post('/po/addbulk/', function () {
             $availability = $_POST["avail$i"];
             $description = $_POST["description$i"];
             $productWeight = $_POST["productweight$i"];
-
+            $measurement = $_POST["measurement$i"];
 
             // Handle file upload for each row
             $fileFieldName = "productImage$i";
@@ -327,8 +329,8 @@ Router::post('/po/addbulk/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Supplier_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
-                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, s.Supplier_Name , :productWeight
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Supplier_Price, Availability, Category, ProductImage, Supplier, ProductWeight, UnitOfMeasurement, TaxRate) 
+                                SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, s.Supplier_Name , :productWeight, :measurement, 0.12
                                 FROM suppliers s 
                                 INNER JOIN categories c ON c.category_name = :categoryName 
                                 WHERE s.Supplier_ID = :supplierID";
@@ -344,6 +346,7 @@ Router::post('/po/addbulk/', function () {
                     $productStmt->bindParam(':availability', $availability);
                     $productStmt->bindParam(':productImage', $uploadPath);
                     $productStmt->bindParam(':productWeight', $productWeight);
+                    $productStmt->bindParam(':measurement', $measurement);
 
                     // Execute the product SQL statement
                     $productStmt->execute();
@@ -389,6 +392,7 @@ Router::post('/po/addbulk/', function () {
         $conn = null;
     }
 });
+
 
 
 // Function to get the next available batch ID

@@ -141,15 +141,15 @@
               <table id="productTable" class="min-w-full text-center mx-auto bg-white">
                 <thead class="bg-gray-200 border-b border-gray-400 text-sm">
                   <tr>
-                    <th class="px-4 py-2 font-semibold">Product Image</th>
-                    <th class="px-4 py-2 font-semibold">Product Name</th>
-                    <th class="px-4 py-2 font-semibold">Category</th>
-                    <th class="px-4 py-2 font-semibold">Product Price</th>
-                    <th class="px-4 py-2 font-semibold">Supplier Price</th>
-                    <!-- <th class="px-4 py-2 font-semibold">Quantity</th> -->
-                    <th class="px-4 py-2 font-semibold">Availability</th>
-                    <th class="px-4 py-2 font-semibold">Description</th>
-                    <th class="px-4 py-2 font-semibold">Product Weight(for delivery)KG</th>
+                  <th class="px-4 py-2 font-semibold">Product Image</th>
+                <th class="px-4 py-2 font-semibold">Product Name</th>
+                <th class="px-4 py-2 font-semibold">Category</th>
+                <th class="px-4 py-2 font-semibold">Product Price</th>
+                <th class="px-4 py-2 font-semibold">Supplier Price</th>
+                <th class="px-4 py-2 font-semibold">Availability</th>
+                <th class="px-4 py-2 font-semibold">Description</th>
+                <th class="px-4 py-2 font-semibold">Product Weight (KG)</th>
+                <th class="px-4 py-2 font-semibold">Unit of Measurement</th>
 
                   </tr>
                 </thead>
@@ -199,6 +199,8 @@
                     <td><input type="float" name="productweight1"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                   </tr>
                   <!-- Repeat rows 2 to 5 similarly -->
                   <tr>
@@ -243,6 +245,8 @@
                     <td><input type="float" name="productweight2"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                   </tr>
                   <!-- Row 3 -->
 
@@ -288,6 +292,8 @@
                     <td><input type="float" name="productweight3"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                   </tr>
                   <!-- Row 4 -->
                   <tr>
@@ -332,6 +338,8 @@
                     <td><input type="float" name="productweight4"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                   </tr>
                   <!-- Row 5 -->
                   <tr>
@@ -376,6 +384,8 @@
                     <td><input type="float" name="productweight5"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                   </tr>
                   <!-- You can copy the structure of Row 1 and paste it here for Rows 5 to 10 -->
                 </tbody>
