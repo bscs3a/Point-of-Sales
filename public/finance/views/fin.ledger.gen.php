@@ -55,17 +55,46 @@
                     <div class="items-start mb-1">
                         <div class="relative">
                             <div class="inline-flex items-center overflow-hidden rounded-lg  border border-gray-500">
+                                <label for="recent" id="recentLabel" class="border-r-5 border-black px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 min-w-12">
+                                    <span id="labelText">Old</span>
+                                    <input type="checkbox" name="recent" id="recent" class="hidden">
+                                </label>
+                                <script>
+                                    document.getElementById('recent').addEventListener('change', function() {
+                                        var labelText = document.getElementById('labelText');
+                                        if (this.checked) {
+                                            labelText.textContent = 'Recent';
+                                        } else {
+                                            labelText.textContent = 'Old';
+                                        }
+                                    });
+                                </script>
                                 <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
                                 <select class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
                                     <option value="">Select</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <!-- Add more options as needed -->
+                                    <?php 
+                                    $select = getAllLedgerAccounts();
+                                    foreach ($select as $row) {
+                                        echo "<option value=\"{$row['ledgerno']}\">{$row['name']}</option>";
+                                    }
+                                    ?>
                                 </select>
-
+                                
                                 <button
+                                    type ="submit"
                                     class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900">
-                                    Recent
+                                    <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                                    <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                        viewBox="0 0 488.4 488.4" xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path d="M0,203.25c0,112.1,91.2,203.2,203.2,203.2c51.6,0,98.8-19.4,134.7-51.2l129.5,129.5c2.4,2.4,5.5,3.6,8.7,3.6
+                                                s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-129.6-129.5c31.8-35.9,51.2-83,51.2-134.7c0-112.1-91.2-203.2-203.2-203.2
+                                                S0,91.15,0,203.25z M381.9,203.25c0,98.5-80.2,178.7-178.7,178.7s-178.7-80.2-178.7-178.7s80.2-178.7,178.7-178.7
+                                                S381.9,104.65,381.9,203.25z"/>
+                                        </g>
+                                    </g>
+                                    </svg>
                                 </button>
                             </div>
 

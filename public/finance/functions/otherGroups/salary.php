@@ -1,7 +1,7 @@
 <?php 
 require_once "public/finance/functions/generalFunctions.php";
 require_once "public/finance/functions\pondo\generalPondo.php";
-
+require_once "public/finance/functions\pondo\insertPondo.php";
 // get payment method
 //check pending
 function inputSalary($monthlySalary, $withHoldingTax, $isPending, $paymentMethod){
@@ -19,14 +19,14 @@ function inputSalary($monthlySalary, $withHoldingTax, $isPending, $paymentMethod
     }
 
     $hrRemainingPondo = getRemainingHRPondo($paymentMethod);
-    if($hrRemainingPondo > $monthlySalary){
+    if($hrRemainingPondo < $monthlySalary){
         throw new Exception("HR Pondo is greater than the total salary");
     }
-    if(is_bool($isPending)){
+    if(!is_bool($isPending)){
         throw new Exception("isPending must be a boolean");
     }
     if(!$isPending){
-        addSalaryPondoHR($SALARY, $monthlySalary, $paymentMethod);
+        addSalaryPondoHR($SALARY, $totalSalary, $paymentMethod);
     }
     else{
         insertLedgerXact($SALARY, $SALARY_PAYABLE, $totalSalary);
@@ -51,7 +51,7 @@ function addSalaryPondoHR($account, $amount, $paymentMethod){
         throw new Exception("Amount to be bought is greater than the remaining pondo of the department");
     }
     // divide it to the 2; to avoid error
-    addTransactionPondo($account, $paymentMethod, $amount);
+    addTransactionPondo($account, $paymentMethod, $amount, $department);
     return;
 }
 ?>
