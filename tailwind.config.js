@@ -18,7 +18,7 @@ module.exports = {
       },
 
       backgroundImage: {
-        'wave': "url('../public/finance/img/wave.png')",
+        'wave': "url('public/finance/img/wave.png')",
         'request-money': "url('../public/finance/img/RequestMoney.png')",
         'profit': "url('../public/finance/img/Profit.png')",
         'radial-gradient': 'radial-gradient(circle, var(--tw-gradient-stops))',

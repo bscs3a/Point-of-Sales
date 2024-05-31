@@ -10,7 +10,6 @@ require_once "public/finance/functions/pondo/insertPondo.php";
 
 
 
-
 $path = './public/finance/views';
 
 $basePath = "$path/fin.";
@@ -18,8 +17,10 @@ $basePath = "$path/fin.";
 $fin = [
     //dashboard
     '/fin/dashboard' => $basePath . "dashboard.php",
-    '/fin/logs' => $basePath . "auditLog.php",
-
+    '/fin/logs/page={pageNumber}' => function ($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
     //ledger
     // '/fin/ledger' => $basePath . "ledger.gen.php",
     '/fin/ledger/page={pageNumber}' => function ($pageNumber) use ($basePath) {
@@ -67,6 +68,8 @@ $fin = [
     // can't recognize by the router logout can proceed
     '/fin/logout' => "./public/finance/functions/logout.php",
     '/fin/report' => $path . "/reports/generateReport.php",
+
+
 ];
 
 Router::post('/test', function () {
@@ -255,6 +258,149 @@ Router::post('/fin/getCashFlowReport', function(){
     echo json_encode($return);
 });
 
+//chart Reports 
+Router::post('/chartGeneration/getBalanceReport', function(){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+    
+    $return = [];
+    $assetValue = getTotalOfGroupV3("Asset",$fromYear, $fromMonth, $toYear, $toMonth);
+    $liabilityValue = getTotalOfAccountTypeV3("Accounts Payable",$fromYear, $fromMonth, $toYear, $toMonth);
+    $liabilityValue += getTotalOfAccountTypeV3("Tax Payable",$fromYear, $fromMonth, $toYear, $toMonth);
+    $total = $assetValue + $liabilityValue;
+
+    if ($total == 0) {
+        $total = 1;
+        $return["asset"] = 0;
+        $return["liability"] = 0;
+    }
+    else {
+        $return["asset"] = $assetValue/($total);
+        $return["liability"] = $liabilityValue/($total);
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/chartGeneration/getEquityReport', function (){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+
+    $return = [];
+    $return["owners"] = getAllLedgerAccounts("Capital Accounts");
+    foreach ($return["owners"] as $key => $owner) {
+        $return["owners"][$key]["dividedShare"] = calculateShareV2($owner["ledgerno"], $fromYear,$fromMonth,$toYear, $toMonth);
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/chartGeneration/getCashFlowReport', function(){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+    $return = [];
+
+    $currentYear = $fromYear;
+    $currentMonth = $fromMonth;
+
+    while ($currentYear < $toYear || ($currentYear == $toYear && $currentMonth <= $toMonth)) {
+        $key = sprintf('%04d-%02d', $currentYear, $currentMonth);
+        $return[$key] = getAccountBalance("Cash on Hand", true, $currentYear, $currentMonth) + getAccountBalance("Cash on Bank", true, $currentYear, $currentMonth);
+        
+        // Increment month and check if it's December
+        if ($currentMonth == 12) {
+            // If it's December, increment the year and reset the month to January
+            $currentYear++;
+            $currentMonth = 1;
+        } else {
+            // If it's not December, just increment the month
+            $currentMonth++;
+        }
+    }
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
+
+Router::post('/chartGeneration/getIncomeReport', function(){
+    // Get the JSON data from the request
+    $json = file_get_contents('php://input');
+
+    // Convert the JSON data to an associative array
+    $data = json_decode($json, true);
+
+    // Now you can access the fromDate and toDate values like this:
+    $fromDate = $data['fromDate'];
+    $toDate = $data['toDate'];
+    
+    $fromYear = explode("-",$fromDate)[0];
+    $fromMonth = explode("-",$fromDate)[1];
+    $toYear = explode("-",$toDate)[0];
+    $toMonth = explode("-",$toDate)[1];
+
+    $return = [];
+
+    $currentYear = $fromYear;
+    $currentMonth = $fromMonth;
+
+    while ($currentYear < $toYear || ($currentYear == $toYear && $currentMonth <= $toMonth)) {
+        $key = sprintf('%04d-%02d', $currentYear, $currentMonth);
+        $return[$key] = calculateNetSalesOrLoss($currentYear, $currentMonth);
+        
+        // Increment month and check if it's December
+        if ($currentMonth == 12) {
+            // If it's December, increment the year and reset the month to January
+            $currentYear++;
+            $currentMonth = 1;
+        }    {
+            // If it's not December, just increment the month
+            $currentMonth++;
+        }
+    }
+    
+    header('Content-Type: application/json');
+    echo json_encode($return);
+});
 
 
 Router::post("/pondo/transaction", function () {
@@ -279,4 +425,21 @@ Router::post("/chartGenerator", function () {
 
     $filePath = __DIR__ . '/img/charts/chart.png';
     file_put_contents($filePath, $imageData);
+});
+
+Router::post("/fin/genSearch", function(){
+    $_SESSION['postdata']['generalLedgerSelected'] = $_POST['generalLedgerSelected'] == "" ? null : $_POST['generalLedgerSelected'];
+    $_SESSION['postdata']['recent'] = $_POST['recent'];
+    $page = $_POST['pageNumber'];
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/page=$page");
+});
+
+Router::post("/auditlogSearch", function(){
+    $_SESSION['postdata']['searchQueryAudit'] = $_POST['searchQueryAudit'];
+    $page = $_POST['pageNumber'];
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/logs/page=$page");
 });

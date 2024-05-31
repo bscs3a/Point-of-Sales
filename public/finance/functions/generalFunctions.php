@@ -490,4 +490,135 @@ function getAllGroupTypes(){
 
     return $result;
 }
+
+
+//v3 have special functions to get FROM A DATE --- TO A DATE
+function getAccountBalanceV3($ledger, $fromYear, $fromMonth, $toYear, $toMonth) {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $ledgerNo = getLedgerCode($ledger);
+
+    if ($ledgerNo === false) {
+        throw new Exception("Account not found in Ledger table.");
+    }
+
+    // Format the dates
+    $fromDate = sprintf('%04d-%02d-01', $fromYear, $fromMonth);
+    $toDate = new DateTime(sprintf('%04d-%02d-01', $toYear, $toMonth));
+    $toDate->modify('last day of this month');
+    $toDate = $toDate->format('Y-m-d');
+
+    $sql = "SELECT * FROM LedgerTransaction WHERE (ledgerno = ? OR ledgerNo_Dr = ?) AND datetime BETWEEN ? AND ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$ledgerNo, $ledgerNo, $fromDate, $toDate]);
+
+    $balance = 0;
+
+    while ($row = $stmt->fetch()) {
+        if ($row['LedgerNo_Dr'] == $ledgerNo) {
+            $balance += $row['amount'];
+        } else if ($row['LedgerNo'] == $ledgerNo) {
+            $balance -= $row['amount'];
+        }
+    }
+    return $balance;
+}
+
+function getTotalOfAccountTypeV3($accountType, $fromYear, $fromMonth, $toYear, $toMonth) {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+    
+    $accountType = getAccountCode($accountType);
+    
+    if ($accountType === false) {
+        throw new Exception("Account not found in accounttype table.");
+    }
+    
+    $fromDate = "{$fromYear}-{$fromMonth}-01";
+    $toDate = date("Y-m-t", strtotime("{$toYear}-{$toMonth}-01"));
+
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.accountType = :accountType AND lt.datetime BETWEEN :fromDate AND :toDate";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountType', $accountType);
+    $stmt->bindParam(':fromDate', $fromDate);
+    $stmt->bindParam(':toDate', $toDate);
+    $stmt->execute();
+    
+    $netAmount = 0;
+    
+    while ($row = $stmt->fetch()) {
+        $netAmount += $row['amount'];
+    }
+    
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo_dr = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.accountType = :accountType AND lt.datetime BETWEEN :fromDate AND :toDate";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':accountType', $accountType);
+    $stmt->bindParam(':fromDate', $fromDate);
+    $stmt->bindParam(':toDate', $toDate);
+    $stmt->execute();
+    
+    while ($row = $stmt->fetch()) {
+        $netAmount -= $row['amount'];
+    }
+    
+    return abs($netAmount);
+}
+
+function getTotalOfGroupV3($groupType, $fromYear, $fromMonth, $toYear, $toMonth) {
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $groupType = getGroupCode($groupType);
+
+    if ($groupType === false) {
+        throw new Exception("Group not found in grouptype table.");
+    }
+
+    $fromDate = "{$fromYear}-{$fromMonth}-01";
+    $toDate = date("Y-m-t", strtotime("{$toYear}-{$toMonth}-01"));
+
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.groupType = :groupType AND lt.datetime BETWEEN :fromDate AND :toDate";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':groupType', $groupType);
+    $stmt->bindParam(':fromDate', $fromDate);
+    $stmt->bindParam(':toDate', $toDate);
+    $stmt->execute();
+
+    $netAmount = 0;
+
+    while ($row = $stmt->fetch()) {
+        $netAmount += $row['amount'];
+    }
+
+    $sql = "SELECT lt.* FROM LedgerTransaction lt
+            JOIN Ledger l ON lt.ledgerNo_dr = l.ledgerNo
+            JOIN AccountType at ON l.accountType = at.accountType
+            WHERE at.groupType = :groupType AND lt.datetime BETWEEN :fromDate AND :toDate";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':groupType', $groupType);
+    $stmt->bindParam(':fromDate', $fromDate);
+    $stmt->bindParam(':toDate', $toDate);
+    $stmt->execute();
+
+    while ($row = $stmt->fetch()) {
+        $netAmount -= $row['amount'];
+    }
+
+    return abs($netAmount);
+}
+
 ?>

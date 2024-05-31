@@ -33,7 +33,7 @@ class Router
 
         $validRoutes = self::$validRoutes;
         if (array_key_exists($currentUri, $validRoutes)) {
-            
+            self::audit_log();
             require_once $validRoutes[$currentUri];
         } else {
             // Check for dynamic routes
@@ -41,6 +41,7 @@ class Router
                 // Replace {param} with regex pattern
                 $pattern = preg_replace('/{[\w-]+}/', '(\w+)', $route);
                 if (preg_match("#^$pattern$#", $currentUri, $matches)) {
+                    self::audit_log();
                     array_shift($matches); // remove the first match
                     call_user_func_array($action, $matches);
                     exit();
@@ -71,6 +72,7 @@ class Router
         }
 
         if ($currentMethod === 'POST' && $currentUri === $path) {
+            self::audit_log();
             call_user_func($callback);
             exit();
         }
@@ -78,7 +80,7 @@ class Router
 
     private static function redirect($user){
         $_SESSION['pageNotFound'] = true;
-        $base_url = 'master'; // Define your base URL here
+        $base_url = 'Finance'; // Define your base URL here
         if ($user == 'Product Order') {
             header("Location: /$base_url/po/dashboard");
             exit();
@@ -107,6 +109,25 @@ class Router
             header("Location: /$base_url/");
             exit();
         }
+    }
+
+    public static function audit_log(){
+        $db = Database::getInstance();
+        $conn = $db->connect();
+    
+        $account_id = isset($_SESSION['user']['account_id']) ? $_SESSION['user']['account_id'] : null;
+    
+        if ($account_id == null) {
+            return;
+        }
+        $date = date('Y-m-d H:i:s');
+        $action = $_SERVER['REQUEST_METHOD'].": " . $_SERVER['REQUEST_URI'];
+        $sql = "INSERT INTO audit_log (account_id, action, datetime) VALUES (:account_id, :action, :date)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':account_id', $account_id);
+        $stmt->bindParam(':action', $action);
+        $stmt->bindParam(':date', $date);
+        $stmt->execute();
     }
 }
 

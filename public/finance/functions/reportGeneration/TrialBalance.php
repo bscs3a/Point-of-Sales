@@ -61,7 +61,7 @@ function generateTrialBalance($year, $month) {
         $html .= "<tfoot>";
         $html .= "<tr>";
         $html .= "<td>{$resultText}</td>";
-        $html .= "<td>{$total}</td>";
+        $html .= "<td class='content-amount'>{$total}</td>";
         $html .= "</tr>";
         $html .= "</tfoot>";
         $html .= "</table>";
