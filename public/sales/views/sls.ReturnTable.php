@@ -95,6 +95,7 @@
                                 <th class="px-4 py-2 font-semibold">Sale ID</th>
                                 <th class="px-4 py-2 font-semibold">Product ID</th>
                                 <th class="px-4 py-2 font-semibold">Payment Returned</th>
+                                <th class="px-4 py-2 font-semibold">Return Date</th> <!-- Added this -->
                                 <th class="px-4 py-2 font-semibold">Action</th>
                             </tr>
                         </thead>
@@ -109,6 +110,7 @@
                                     <td class='px-4 py-2'><?php echo $product['SaleID']; ?></td>
                                     <td class='px-4 py-2'><?php echo $product['ProductID']; ?></td>
                                     <td class='px-4 py-2'><?php echo $product['PaymentReturned']; ?></td>
+                                    <td class='px-4 py-2'><?php echo $product['ReturnDate']; ?></td> <!-- Added this -->
                                     <td class='px-4 py-2'>
                                         <button route="/sls/ReturnDetails/returnID=<?php echo $product['ReturnID']; ?>" class='text-blue-500 hover:underline view-link'>View</button>
                                     </td>
