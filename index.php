@@ -1,6 +1,5 @@
 <?php
  session_start();
-
  // database conncetion
 require_once './src/dbconn.php';
 
@@ -38,7 +37,7 @@ Router::post('/login', function(){
         $department = $stmt->fetch();
         $_SESSION['user']['role'] = $department['department'];
 
-
+        Router::audit_log();
         //redirects to the right page
         if ($_SESSION['user']['role'] == 'Product Order') {
             header("Location: /$base_url/po/dashboard");

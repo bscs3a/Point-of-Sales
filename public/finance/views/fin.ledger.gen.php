@@ -72,6 +72,7 @@
                                 <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
                                 <select class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500">
                                     <option value="">Select</option>
+                                    <option value="sample" selected>sample</option>
                                     <?php 
                                     $select = getAllLedgerAccounts();
                                     foreach ($select as $row) {

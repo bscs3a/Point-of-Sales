@@ -111,7 +111,7 @@ class Router
         }
     }
 
-    private static function audit_log(){
+    public static function audit_log(){
         $db = Database::getInstance();
         $conn = $db->connect();
     
