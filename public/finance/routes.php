@@ -422,3 +422,12 @@ Router::post("/chartGenerator", function () {
     $filePath = __DIR__ . '/img/charts/chart.png';
     file_put_contents($filePath, $imageData);
 });
+
+Router::post("/fin/genSearch", function(){
+    $_SESSION['postdata']['generalLedgerSelected'] = $_POST['generalLedgerSelected'] == "" ? null : $_POST['generalLedgerSelected'];
+    $_SESSION['postdata']['recent'] = $_POST['recent'];
+    $page = $_POST['pageNumber'];
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/ledger/page=$page");
+});
