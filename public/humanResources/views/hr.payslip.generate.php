@@ -193,13 +193,14 @@ $stmt = $conn->query($query);
                 <div class="flex items-center">
                     <label class="block font-bold mr-4">Paid Type:</label>
                     <div class="flex items-center">
-                        <input type="radio" id="paid_type_cash" name="paid_type" value="cash" class="mr-2">
+                        <input type="radio" id="paid_type_cash" name="paid_type" value="Cash on hand" class="mr-2">
                         <label for="paid_type_cash" class="mr-4">Hand Cash</label>
-                        <input type="radio" id="paid_type_bank" name="paid_type" value="bank" class="mr-2">
+                        <input type="radio" id="paid_type_bank" name="paid_type" value="Cash on bank" class="mr-2">
                         <label for="paid_type_bank">Bank</label>
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="monthlySalaryInput">
 
             <!-- Button Group -->
             <div class="flex justify-end mt-4">
@@ -217,6 +218,7 @@ function showModal(id, fullName, department, position, totalSalary, monthlySalar
     let labels = ['Employee: ', 'Department: ', 'Position: ', 'Total Salary: ', 'Monthly Salary: ', 'Total Deductions: '];
     let values = [fullName, department, position, totalSalary, monthlySalary, totalDeductions];
     let ids = ['full_name', 'department', 'position', 'total_salary', 'monthly_salary', 'total_deductions'];
+    document.getElementById('monthlySalaryInput').value = monthlySalary;
 
     for (let i = 0; i < labels.length; i++) {
         let boldText = document.createElement('span');
@@ -240,9 +242,9 @@ document.getElementById('generatePayslipCloseButton').addEventListener('click', 
   
 document.getElementById('createPayslip').addEventListener('submit', function(event) {
   var statusPaid = document.getElementById('status_paid').checked;
-    var statusPending = document.getElementById('status_pending').checked;
-    var paidTypeCash = document.getElementById('paid_type_cash').checked;
-    var paidTypeBank = document.getElementById('paid_type_bank').checked;
+  var statusPending = document.getElementById('status_pending').checked;
+  var paidTypeCash = document.getElementById('paid_type_cash').checked;
+  var paidTypeBank = document.getElementById('paid_type_bank').checked;
 
     if (!statusPaid && !statusPending) {
         alert('Please select a status.');
@@ -256,6 +258,21 @@ document.getElementById('createPayslip').addEventListener('submit', function(eve
 
     if (!payDate) {
         alert('Please fill out the pay date before submitting.');
+        event.preventDefault();
+    }
+
+    var cashOnHand = <?php echo json_encode(getRemainingHRPondo('Cash on hand')); ?>;
+    var cashOnBank = <?php echo json_encode(getRemainingHRPondo('Cash on bank')); ?>;
+
+    let monthlySalary = document.getElementById('monthlySalaryInput').value;
+    // console.log(monthlySalary);
+    if (statusPaid == true && paidTypeCash == true && cashOnHand < monthlySalary) {
+      alert('Not enough funds. Cash on Hand: ' + cashOnHand);
+        event.preventDefault();
+    }
+
+    if (statusPaid == true &&  paidTypeBank == true && cashOnBank < monthlySalary) {
+      alert('Not enough funds. Cash in the Bank: ' + cashOnBank);
         event.preventDefault();
     }
 });

@@ -179,7 +179,7 @@ Router::post('/add-employees', function () {
         }
     } else {
         echo "An error occurred: " . $_FILES['image_url']['error'];
-        header("Location: $rootFolder/hr/leave-requests");
+        header("Location: $rootFolder/hr/employees/add");
         // header("Location: $rootFolder/hr/employees/page=2");
         return;
     }
@@ -220,10 +220,12 @@ Router::post('/add-employees', function () {
     // ACCOUNT INFORMATION
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $role = $_POST['department'];
-    $query = "INSERT INTO account_info (employees_id, username, password, role) VALUES (:employeeId, :username, :password, :role);";
+    // Hash the password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $query = "INSERT INTO account_info (employees_id, username, password) VALUES (:employeeId, :username, :password);";
     $stmt = $conn->prepare($query);
-    if (empty($username) || empty($password) || empty($role)) {
+    if (empty($username) || empty($password)) {
         // header("Location: $rootFolder/hr/employees/add");
         header("Location: $rootFolder/hr/dashboard");
         return;
@@ -231,8 +233,7 @@ Router::post('/add-employees', function () {
     $resultAccount = $stmt->execute([
         ':employeeId' => $employeeId,
         ':username' => $username,
-        ':password' => $password,
-        ':role' => $role,
+        ':password' => $hashedPassword,
     ]);
     if (!$resultAccount) {
         $errorInfo = $stmt->errorInfo();
@@ -274,8 +275,8 @@ Router::post('/add-employees', function () {
     $query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, total_deductions) VALUES (:employeeId, :monthlysalary, :totalsalary, :totaldeductions);";
     $stmt = $conn->prepare($query);
     if (empty($monthlysalary)) {
-        // header("Location: $rootFolder/hr/employees/add");
-        header("Location: $rootFolder/hr/departments/product-order");
+        header("Location: $rootFolder/hr/employees/add");
+        // header("Location: $rootFolder/hr/departments/product-order");
         return;
     }
     // Calculate daily rate based on monthly salary and assuming 22 weekdays in a month
@@ -365,6 +366,7 @@ Router::post('/update-employees', function () {
     $email = $_POST['email'];
     $department = $_POST['department'];
     $position = $_POST['position'];
+
     $query = "SELECT image_url FROM employees WHERE id = :id";
     $stmt = $conn->prepare($query);
     $stmt->execute([':id' => $id]);
@@ -469,18 +471,18 @@ Router::post('/update-employees', function () {
     // ACCOUNT INFORMATION
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $role = $_POST['department'];
-    $query = "UPDATE account_info SET username = :username, password = :password, role = :role WHERE employees_id = :id";
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $query = "UPDATE account_info SET username = :username, password = :password WHERE employees_id = :id";
     $stmt = $conn->prepare($query);
-    if (empty($username) || empty($password) || empty($role)) {
+    if (empty($username) || empty($password)) {
         header("Location: $rootFolder/hr/employees/update=$id");
         return;
     }
     $stmt->execute([
         ':id' => $id,
         ':username' => $username,
-        ':password' => $password,
-        ':role' => $role,
+        ':password' => $hashedPassword,
     ]);
     header("Location: $rootFolder/hr/employees/id=$id");
 });
@@ -760,10 +762,9 @@ Router::post('/hr/applicants/accept', function () {
     // ACCOUNT INFORMATION
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $role = $_POST['department'];
-    $query = "INSERT INTO account_info (employees_id, username, password, role) VALUES (:employeeId, :username, :password, :role);";
+    $query = "INSERT INTO account_info (employees_id, username, password) VALUES (:employeeId, :username, :password);";
     $stmt = $conn->prepare($query);
-    if (empty($username) || empty($password) || empty($role)) {
+    if (empty($username) || empty($password)) {
         header("Location: $rootFolder/hr/employees/add");
         return;
     }
@@ -771,7 +772,6 @@ Router::post('/hr/applicants/accept', function () {
         ':employeeId' => $employeeId,
         ':username' => $username,
         ':password' => $password,
-        ':role' => $role,
     ]);
     
     // Delete a row from APPLICANTS table
@@ -902,7 +902,8 @@ Router::post('/create/payslip', function () {
     // Capture form data
     $pay_date = $_POST['pay_date'];
     $month = $_POST['month'];
-    $status = $_POST['status'];
+    $isPending = $_POST['status'];
+    $paymentMethod = $_POST['paid_type'];
     $employee_id = $_POST['employee_id']; // Get the employee ID from the form
 
     // Retrieve salary_id from salary_info table based on employee_id
@@ -929,42 +930,44 @@ Router::post('/create/payslip', function () {
     }
 
     // Insert data into payroll table
-    $query = "INSERT INTO payroll (pay_date, month, status, salary_id, employees_id) VALUES (:pay_date, :month, :status, :salary_id, :employees_id)";
+    $query = "INSERT INTO payroll (pay_date, month, status, paid_type, salary_id, employees_id) VALUES (:pay_date, :month, :status, :paid_type, :salary_id, :employees_id)";
     $stmt = $conn->prepare($query);
     // Bind parameters
     $stmt->bindParam(':pay_date', $pay_date);
     $stmt->bindParam(':month', $month);
-    $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':status', $isPending);
+    $stmt->bindParam(':paid_type', $paymentMethod);
     $stmt->bindParam(':salary_id', $salary_id); // Bind the retrieved salary_id
     $stmt->bindParam(':employees_id', $employee_id);
     // Execute the query
     $stmt->execute();
 
-    inputSalary($monthly_salary, $withholding_tax);
+    if ($isPending == 'pending')
+    {
+        $isPending = true;
+    }
+    else
+    {
+        $isPending = false;
+    }
+
+    inputSalary($monthly_salary, $withholding_tax, $isPending, $paymentMethod);
     
-    // Redirect to a success page or reload the current page
     header("Location: $rootFolder/hr/generate-payslip");
-    exit(); // Ensure script termination after redirection
+    exit();
 });
-// SEARCH generate payslip (filter)
-Router::post('/hr/generate-payslip', function () {
+// UPDATE PAYROLL STATUS FROM 'Pending' TO 'Paid'
+Router::post('/pay-salary', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
-    $selected_department = $_POST['department'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    if (empty($selected_department)) {
-        header("Location: $rootFolder/hr/generate-payslip");
-        return;
-    }
-    $query = "SELECT payroll.*, employees.department FROM payroll 
-    LEFT JOIN employees ON payroll.employees_id = employees.id
-    WHERE employees.department = :department";
+    $idToPay = $_POST['id'];
+    $query = "UPDATE payroll SET status = 'Paid' WHERE id = :id";
     $stmt = $conn->prepare($query);
-    $stmt->bindParam(':department', $selected_department);
-    // Execute the statement
-    $stmt->execute();
-    $payslip = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    include './public/humanResources/views/hr.payslip.generate.php';
+    $stmt->execute([
+        ':id' => $idToPay,
+    ]);
+    header("Location: $rootFolder/hr/payroll");
 });
 // SAVE/CREATE event - schedule/calendar
 Router::post('/create/schedule', function () {

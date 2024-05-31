@@ -38,22 +38,22 @@ CREATE TABLE account_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
     username VARCHAR(30) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role ENUM('Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery') NOT NULL,
+    -- role ENUM('Product Order','Human Resources','Point of Sales', 'Inventory','Finance','Delivery') NOT NULL,
     employees_id INT(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (employees_id) REFERENCES employees (id)
 );
 
-INSERT INTO account_info (username, password, role, employees_id) VALUES
-('bscs3a001', 'bscs3a1HR', 'Human Resources', 1),
-('bscs3a002', 'bscs3a2HR', 'Human Resources', 2),
-('bscs3a003', 'bscs3a3HR', 'Human Resources', 3),
-('bscs3a004', 'bscs3a4HR', 'Human Resources', 4),
-('bscs3a005', 'bscs3a5HR', 'Human Resources', 5),
-('bscs3a006', 'bscs3a1PO', 'Product Order', 6),
-('bscs3a007', 'bscs3a1DL', 'Delivery', 7),
-('bscs3a008', 'bscs3a1FN', 'Finance', 8),
-('bscs3a009', 'bscs3a1IN', 'Inventory', 9);
+INSERT INTO account_info (username, password, employees_id) VALUES
+('bscs3a001', '$2y$10$PW/c9BII9bnoXc79OX7RqeME3kh6xjaWy0SvQfEU8IgRw98QfzKgG', 1), -- bscs3a1HR!
+('bscs3a002', '$2y$10$rp12pB9FDhZI6rGGfaGM4.u24z53.tdES2RxkmnhgAelU6Cq1r5iy', 2), -- bscs3a2HR!
+('bscs3a003', '$2y$10$dOdwUUSFu0zZgbUDTNcuTuzBnsTW0YsA/GvIuMs6getfOg9JU6A5K', 3), -- bscs3a3HR!
+('bscs3a004', '$2y$10$LDGZL1.TjxpZXPN7ZJyvo.z79lkWQH5vXOkB2wOQlfemP7pOs/7Lq', 4), -- bscs3a4HR!
+('bscs3a005', '$2y$10$29paW1LDnm8v5NPVMdhnVOh16nRHfM9K6axPgqP6vZtqjlgeOCgcS', 5), -- bscs3a5HR!
+('bscs3a006', '$2y$10$k5cpSGzyQWXmjiFod96nh.ADnmNIYrFq2tdZzHIMZcBIb5yEuuIXK', 6), -- bscs3a1PO!
+('bscs3a007', '$2y$10$/tozH33lVxPszcRFiEONOOCL6FrPjYJDACpTiFHTW9kZucOEF7sQy', 7), -- bscs3a1DL!
+('bscs3a008', '$2y$10$79UG/QbIpdCocBdIgwju/eSyuGYSkny1.n6NoQMtlzXRI7A9jgmAu', 8), -- bscs3a1FN!
+('bscs3a009', '$2y$10$qGalLOBVynm7X.VYbY9HYOghjEbLJEZkayyga5dFa9Gc7SOMK3fU6', 9); -- bscs3a1IN!
 
 CREATE TABLE employment_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
@@ -548,8 +548,9 @@ CREATE TABLE payroll (
     pay_date DATE NOT NULL,
     month VARCHAR(20) NOT NULL,
     -- deductions DECIMAL(10,2) NOT NULL,
-    monthly_salary DECIMAL(10,2) NOT NULL,
+    -- monthly_salary DECIMAL(10,2) NOT NULL,
     status ENUM('Pending','Paid') DEFAULT 'Pending',
+    paid_type ENUM('Cash on hand', 'Cash on bank') NOT NULL,
     salary_id INT(10) NOT NULL,
     employees_id INT(10) NOT NULL,
     -- total_deductions DECIMAL(10,2) NOT NULL,
@@ -659,6 +660,14 @@ CREATE TABLE transaction_history (
   Order_Status varchar(50) DEFAULT NULL,
   Feedback varchar(250) DEFAULT NULL,
   PRIMARY KEY (Transaction_ID)
+);
+
+CREATE TABLE audit_log (
+  id int(11) NOT NULL,
+  account_id int(11) NOT NULL,
+  datetime datetime NOT NULL,
+  action text NOT NULL,
+  FOREIGN KEY (account_id) REFERENCES account_info (id)
 );
 
 
