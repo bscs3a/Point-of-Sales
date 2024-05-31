@@ -60,8 +60,43 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Update</a>
    </ul>
+   <ul class="ml-auto flex items-center">
+    
+   <div class="relative inline-block text-left ml-4">
+                <div>
+                <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                    <div class="text-black font-medium mr-4 ">
+                    <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['user']['username']; ?>
+                    </div>
+                    <i class="ri-arrow-down-s-line"></i>
+                </a>
+            </div>
+
+            <div class="origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <div class="py-1" role="none">
+                <form action="/logout" method="post">
+                    <button type="submit" class="w-full block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                        <i class="ri-logout-box-line"></i>
+                        Logout
+                    </button>
+                </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('options-menu').addEventListener('click', function() {
+                var dropdownMenu = document.getElementById('dropdown-menu');
+                if (dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.remove('hidden');
+                } else {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        </script>
+    </ul>
    <?php 
-    require_once 'inc/logout.php';
+    // require_once 'inc/logout.php';
   ?>
   </div>
   <!-- End Top Bar -->
@@ -75,12 +110,13 @@
 <div class="py-2 px-6 mt-4">
 <form action= "/update-employees" method="POST" enctype="multipart/form-data">
   <div class="flex">
+
     <div class="mr-4">
       <img src="<?php echo $employees['image_url']; ?>" alt="Profile Picture" name="image_url" id="image_url" class="w-48 h-48 object-cover">
       <input type="file" id="fileInput" name="image_url" accept="image/*" style="display: none;">
       <span>
           <div class="ml-1 mb-20 mt-4"> 
-              <button type="button" id="uploadButton" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5  mb-2">Upload</button>
+              <button type="button" id="uploadButton" class="focus:outline-none text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5  mb-2">Upload</button>
               <button type="button" id="removeButton" class="focus:outline-none text-black bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Remove</button>
           </div>    
       </span>
@@ -769,39 +805,35 @@
   });
 
   document.getElementById('fileInput').addEventListener('change', function() {
-      var file = this.files[0];
-      var reader = new FileReader();
-      reader.onloadend = function() {
-          document.getElementById('image_url').src = reader.result;
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function() {
+        document.getElementById('image_url').src = reader.result;
       }
-      if (file) {
-          reader.readAsDataURL(file);
+    if (file) {
+        reader.readAsDataURL(file);
       } else {
-          document.getElementById('image_url').src = "";
+        document.getElementById('image_url').src = "";
       }
-  });
-
-  document.getElementById('removeButton').addEventListener('click', function() {
-      document.getElementById('image_url').src = '/master/public/humanResources/img/noPhotoAvailable.png';
-      document.getElementById('fileInput').value = ""; // Clear the file input
-  });
-
-  // Form submission
-  document.getElementById('form').addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      var formData = new FormData(this);
-      var xhr = new XMLHttpRequest();
-
-      xhr.open('POST', 'hr/employees/add', true);
-      xhr.onload = function() {
-          if (xhr.status === 200) {
-              alert('File uploaded successfully.');
-          } else {
-              alert('An error occurred while uploading the file.');
-          }
-      };
-      xhr.send(formData);
+});
+document.getElementById('removeButton').addEventListener('click', function() {
+    document.getElementById('image_url').src = 'public\humanResources\img\noPhotoAvailable.png';
+    document.getElementById('fileInput').value = ""; // Clear the file input
+});
+// Form submission
+document.getElementById('form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'hr/employees/add', true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            alert('File uploaded successfully.');
+        } else {
+            alert('An error occurred while uploading the file.');
+        }
+    };
+    xhr.send(formData);
   });
 
 // Automatic Tax Calculation for UI

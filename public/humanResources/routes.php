@@ -79,6 +79,72 @@ $hr = [
         include $basePath . "funds.php";
     },
 ];
+// TAX CALCULATION
+// Function to calculate tax amount based on monthly salary | INCOME TAX
+function calculateIncomeTax($monthlysalary) {
+    if ($monthlysalary <= 20833.33) {
+        // Over 0 but not over 20,833.33 (250,000 annual salary)
+        return 0;
+    } elseif ($monthlysalary <= 33333.33) {
+        // Over 20,833.33 but not over 33,333.33 (400,000 annual salary)
+        return ($monthlysalary - 20833.33) * 0.20;
+    } elseif ($monthlysalary <= 66666.67) {
+        // Over 33,333.33 but not over 66,666 (800,000 annual salary)
+        return 2500 + ($monthlysalary - 33333.33) * 0.25;
+    } elseif ($monthlysalary <= 166666.67) {
+        // Over 66,666 but not over 166,666 (2,000,000 annual salary)
+        return 10833.33 + ($monthlysalary - 66666.67) * 0.30;
+    } elseif ($monthlysalary <= 666666.67) {
+        // Over 166,666 but not over 666,666 (8,000,000 annual salary)
+        return 40833.33 + ($monthlysalary - 166666.67) * 0.32;
+    } else {
+        // Over 666,666 (8,000,000 annual salary)
+        return 200833.33 + ($monthlysalary - 666666.67) * 0.35;
+    }
+}
+// Function to calculate tax amount based on monthly salary | WITHHOLDING TAX
+function calculateWithholdingTax($monthlysalary) {
+    if ($monthlysalary <= 20833.33) {
+        // 20,833.33 and below
+        return 0;
+    } elseif ($monthlysalary <= 33333.33) {
+        // 20,833.34 to 33,333.33
+        return 0 + ($monthlysalary - 20833.33) * 0.15;
+    } elseif ($monthlysalary <= 66666.67) {
+        // 33,333.34 to 66,666.67
+        return 1875 + ($monthlysalary - 33333.33) * 0.20;
+    } elseif ($monthlysalary <= 166666.67) {
+        // 66,666.68 to 166,666.67
+        return 8541.80 + ($monthlysalary - 66666.67) * 0.25;
+    } elseif ($monthlysalary <= 666666.67) {
+        // 166,666.68 to 666,666.67
+        return 33541.80 + ($monthlysalary - 166666.67) * 0.30;
+    } else {
+        // 666,666.68 and above
+        return 183541.80 + ($monthlysalary - 666666.67) * 0.35;
+    }
+}
+// Function to calculate SSS contribution
+function calculateSSS($monthlysalary) {
+    // SSS contribution is 14% of the monthly salary
+    return ($monthlysalary * 0.14) * 0.32;
+}
+// Function to calculate Philhealth contribution
+function calculatePhilhealth($monthlysalary) {
+    if ($monthlysalary <= 10000.00) {
+        return 500.00;
+    } elseif ($monthlysalary <= 99999.99) {
+        return 500.00 + ($monthlysalary - 10000.00) * 0.05;
+    } else {
+        return 5000.00;
+    }
+}
+// Function to calculate Pag-IBIG fund contribution
+function calculatePagibig($monthlysalary) {
+    // Pag-IBIG fund contribution is fixed at P200
+    return 200.00;
+}
+
 // ADD employees
 Router::post('/add-employees', function () {
     $db = Database::getInstance();
@@ -112,13 +178,16 @@ Router::post('/add-employees', function () {
             return;
         }
     } else {
-        header("Location: $rootFolder/hr/employees/add");
+        echo "An error occurred: " . $_FILES['image_url']['error'];
+        header("Location: $rootFolder/hr/leave-requests");
+        // header("Location: $rootFolder/hr/employees/page=2");
         return;
     }
     $query = "INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirth, gender, nationality, civil_status, address, contact_no, email, department, position, sss_number, philhealth_number, tin_number, pagibig_number) VALUES (:image_url, :firstName, :middleName, :lastName, :dateofbirth, :gender, :nationality, :civilstatus, :address, :contactnumber, :email, :department, :position, :sssNumber, :philhealthNumber, :tinNumber, :pagibigNumber);";
     $stmt = $conn->prepare($query);
     if (empty($firstName) || empty($lastName) || empty($dateofbirth) || empty($gender) || empty($nationality) || empty($civilstatus) || empty($address) || empty($department) || empty($position)) {
-        header("Location: $rootFolder/hr/employees/add");
+        // header("Location: $rootFolder/hr/employees/add");
+        header("Location: $rootFolder/hr/employees/page=2");
         return;
     }
     $resultEmployee = $stmt->execute([
@@ -147,6 +216,30 @@ Router::post('/add-employees', function () {
     }
 
     $employeeId = $conn->lastInsertId();
+
+    // ACCOUNT INFORMATION
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $role = $_POST['department'];
+    $query = "INSERT INTO account_info (employees_id, username, password, role) VALUES (:employeeId, :username, :password, :role);";
+    $stmt = $conn->prepare($query);
+    if (empty($username) || empty($password) || empty($role)) {
+        // header("Location: $rootFolder/hr/employees/add");
+        header("Location: $rootFolder/hr/dashboard");
+        return;
+    }
+    $resultAccount = $stmt->execute([
+        ':employeeId' => $employeeId,
+        ':username' => $username,
+        ':password' => $password,
+        ':role' => $role,
+    ]);
+    if (!$resultAccount) {
+        $errorInfo = $stmt->errorInfo();
+        echo "ACCOUNT SQL Error: {$errorInfo[2]}";
+        die();
+    }
+    
     // EMPLOYMENT INFORMATION
     $dateofhire = $_POST['dateofhire'];
     $startdate = $_POST['startdate'];
@@ -154,7 +247,8 @@ Router::post('/add-employees', function () {
     $query = "INSERT INTO employment_info (employees_id, dateofhire, startdate, enddate) VALUES (:employeeId, :dateofhire, :startdate, :enddate);";
     $stmt = $conn->prepare($query);
     if (empty($dateofhire) || empty($startdate)) {
-        header("Location: $rootFolder/hr/employees/add");
+        // header("Location: $rootFolder/hr/employees/add");
+        header("Location: $rootFolder/hr/schedule");
         return;
     }
     $resultEmploymentInfo = $stmt->execute([
@@ -173,30 +267,31 @@ Router::post('/add-employees', function () {
     $monthlysalary = $_POST['monthlysalary'];
     $totalsalary = $_POST['totalsalary'];
     
-// Calculate total deductions
-$totalDeductions = calculatePagibig($monthlysalary) + calculateSSS($monthlysalary) + calculatePhilhealth($monthlysalary) + calculateIncomeTax($monthlysalary) + calculateWithholdingTax($monthlysalary);
-// Calculate total salary
-$totalSalary = $monthlysalary - $totalDeductions;
-$query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, total_deductions) VALUES (:employeeId, :monthlysalary, :totalsalary, :totaldeductions);";
-$stmt = $conn->prepare($query);
-if (empty($monthlysalary)) {
-    header("Location: $rootFolder/hr/employees/add");
-    return;
-}
-// Calculate daily rate based on monthly salary and assuming 22 weekdays in a month
-// $dailyRate = $monthlysalary / 22;
-$resultSalary = $stmt->execute([
-    ':employeeId' => $employeeId,
-    ':monthlysalary' => $monthlysalary,
-    ':totalsalary' => $totalSalary,
-    ':totaldeductions' => $totalDeductions,
-    // ':dailyrate' => $dailyRate,
-]);
-if (!$resultSalary) {
-    $errorInfo = $stmt->errorInfo();
-    echo "SALARY SQL Error: {$errorInfo[2]}";
-    die();
-}
+    // Calculate total deductions
+    $totalDeductions = calculatePagibig($monthlysalary) + calculateSSS($monthlysalary) + calculatePhilhealth($monthlysalary) + calculateIncomeTax($monthlysalary) + calculateWithholdingTax($monthlysalary);
+    // Calculate total salary
+    $totalSalary = $monthlysalary - $totalDeductions;
+    $query = "INSERT INTO salary_info (employees_id, monthly_salary, total_salary, total_deductions) VALUES (:employeeId, :monthlysalary, :totalsalary, :totaldeductions);";
+    $stmt = $conn->prepare($query);
+    if (empty($monthlysalary)) {
+        // header("Location: $rootFolder/hr/employees/add");
+        header("Location: $rootFolder/hr/departments/product-order");
+        return;
+    }
+    // Calculate daily rate based on monthly salary and assuming 22 weekdays in a month
+    // $dailyRate = $monthlysalary / 22;
+    $resultSalary = $stmt->execute([
+        ':employeeId' => $employeeId,
+        ':monthlysalary' => $monthlysalary,
+        ':totalsalary' => $totalSalary,
+        ':totaldeductions' => $totalDeductions,
+        // ':dailyrate' => $dailyRate,
+    ]);
+    if (!$resultSalary) {
+        $errorInfo = $stmt->errorInfo();
+        echo "SALARY SQL Error: {$errorInfo[2]}";
+        die();
+    }
 
     // tax : FK salary_id
     $incometax = $_POST['incometax'];
@@ -249,27 +344,6 @@ if (!$resultSalary) {
         die();
     }
 
-    // ACCOUNT INFORMATION
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $role = $_POST['department'];
-    $query = "INSERT INTO account_info (employees_id, username, password, role) VALUES (:employeeId, :username, :password, :role);";
-    $stmt = $conn->prepare($query);
-    if (empty($username) || empty($password) || empty($role)) {
-        header("Location: $rootFolder/hr/employees/add");
-        return;
-    }
-    $resultAccount = $stmt->execute([
-        ':employeeId' => $employeeId,
-        ':username' => $username,
-        ':password' => $password,
-        ':role' => $role,
-    ]);
-    if (!$resultAccount) {
-        $errorInfo = $stmt->errorInfo();
-        echo "ACCOUNT SQL Error: {$errorInfo[2]}";
-        die();
-    }
     header("Location: $rootFolder/hr/employees/page=1");
 });
 // UPDATE employees information
@@ -441,7 +515,7 @@ Router::post('/delete/employees', function () {
         $stmt = $conn->prepare($query);
         $stmt->execute([':id' => $idToDelete]);
     $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/hr/employees");
+    header("Location: $rootFolder/hr/employees/page=1");
 });
 // SEARCH employees
 Router::post('/hr/employees/page=1', function () {
