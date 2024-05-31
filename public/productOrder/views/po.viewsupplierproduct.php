@@ -198,7 +198,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['ProductWeight'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['UnitOfMeasurement'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Price'] . '"></td>';
+                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Supplier_Price'] . '"></td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
@@ -273,7 +273,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-<!-- <script>
+<script>
     document.addEventListener("DOMContentLoaded", function() {
         // Assuming the remaining funds for the department is available as a JavaScript variable
         var remainingFunds = <?php echo getRemainingProductOrderPondo(); ?>;
@@ -302,7 +302,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
             }
         });
     });
-</script> -->
+</script>
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>

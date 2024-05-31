@@ -485,7 +485,7 @@ Router::post('/placeorder/supplier/', function () {
                 $totalQuantity += $quantity;
 
                 // Retrieve product price from the database
-                $productPriceQuery = "SELECT Price FROM products WHERE ProductID = :productID";
+                $productPriceQuery = "SELECT Supplier_Price FROM products WHERE ProductID = :productID";
                 $productPriceStmt = $conn->prepare($productPriceQuery);
                 $productPriceStmt->bindParam(':productID', $productID);
                 $productPriceStmt->execute();
@@ -532,7 +532,7 @@ Router::post('/placeorder/supplier/', function () {
         } else {
             // If total quantity is greater than 0, proceed with batch order insertion
             if ($totalQuantity > 0) {
-                // recordBuyingInventory($totalAmount); // This will save the total amount in finance
+                recordBuyingInventory($totalAmount); // This will save the total amount in finance
 
                 // Bind parameters for batch order insertion
                 $batchOrderStmt->bindParam(':supplierID', $supplierID);
