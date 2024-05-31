@@ -17,8 +17,10 @@ $basePath = "$path/fin.";
 $fin = [
     //dashboard
     '/fin/dashboard' => $basePath . "dashboard.php",
-    '/fin/logs' => $basePath . "auditLog.php",
-
+    '/fin/logs/page={pageNumber}' => function ($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
     //ledger
     // '/fin/ledger' => $basePath . "ledger.gen.php",
     '/fin/ledger/page={pageNumber}' => function ($pageNumber) use ($basePath) {
@@ -66,6 +68,8 @@ $fin = [
     // can't recognize by the router logout can proceed
     '/fin/logout' => "./public/finance/functions/logout.php",
     '/fin/report' => $path . "/reports/generateReport.php",
+
+
 ];
 
 Router::post('/test', function () {
@@ -430,4 +434,12 @@ Router::post("/fin/genSearch", function(){
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/page=$page");
+});
+
+Router::post("/auditlogSearch", function(){
+    $_SESSION['postdata']['searchQueryAudit'] = $_POST['searchQueryAudit'];
+    $page = $_POST['pageNumber'];
+
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+    header("Location: $rootFolder/fin/logs/page=$page");
 });

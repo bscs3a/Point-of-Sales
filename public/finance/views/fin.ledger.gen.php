@@ -55,7 +55,7 @@
                     <div class="items-start mb-1">
                         <div class="relative">
                             <div class="inline-flex items-center overflow-hidden rounded-lg  border border-gray-500">
-                                <form action="/fin/genSearch" method="post">
+                                <form action="/fin/genSearch" method="post" class="flex items-center">
                                     <?php 
                                     $selected = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
                                     $recent = array_key_exists('recent', $_SESSION['postdata']) ? $_SESSION['postdata']['recent'] : true;
@@ -88,7 +88,7 @@
                                     <input type="hidden" name="pageNumber" value = "<?php echo isset ($_GET['page']) ? (int) $_GET['page'] : 1?>">
                                     <button
                                         type ="submit"
-                                        class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900">
+                                        class="px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900">
                                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
                                         <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
                                             viewBox="0 0 488.4 488.4" xml:space="preserve">

@@ -1,12 +1,12 @@
 Todo:
 8. Check Everything
-14. audit page
-10.  search general
 
 other todo:
 9. T-Accounts
 
 Done:
+14. audit page
+10.  search general
 13. audit logs
 1. REPORTS ON DASHBOARD
 7. check payable(add salary tax payable, and withholding tax payable to pondo of hr)
