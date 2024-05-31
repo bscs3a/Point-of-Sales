@@ -97,10 +97,13 @@
                 </div>
                 <div>
                   <div class="mb-4">
-                    <label for="location" class="block text-black font-semibold mb-2">Status</label>
-                    <input type="text" id="status" name="status"
+                    <label for="status" class="block text-black font-semibold mb-2">Status</label>
+                    <select id="status" name="status"
                       class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                       required>
+                      <option value="Active">Active</option>
+                      <option value="Not Active">Not Active</option>
+                    </select>
                   </div>
                   <div class="mb-4">
                     <label for="location" class="block text-black font-semibold mb-2">Email</label>
@@ -142,7 +145,7 @@
                     <th class="px-4 py-2 font-semibold">Product Name</th>
                     <th class="px-4 py-2 font-semibold">Category</th>
                     <th class="px-4 py-2 font-semibold">Product Price</th>
-                    <th class="px-4 py-2 font-semibold">Retail Price</th>
+                    <th class="px-4 py-2 font-semibold">Supplier Price</th>
                     <!-- <th class="px-4 py-2 font-semibold">Quantity</th> -->
                     <th class="px-4 py-2 font-semibold">Availability</th>
                     <th class="px-4 py-2 font-semibold">Description</th>
@@ -203,7 +206,7 @@
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName2"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                        <?php
+                    <?php
                     // Database connection (ensure this is correctly configured)
                     $db = Database::getInstance();
                     $conn = $db->connect();
@@ -248,7 +251,7 @@
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName3"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                        <?php
+                    <?php
                     // Database connection (ensure this is correctly configured)
                     $db = Database::getInstance();
                     $conn = $db->connect();
@@ -292,7 +295,7 @@
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName4"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                        <?php
+                    <?php
                     // Database connection (ensure this is correctly configured)
                     $db = Database::getInstance();
                     $conn = $db->connect();
@@ -336,7 +339,7 @@
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
                     <td><input type="text" name="productName5"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full"></td>
-                        <?php
+                    <?php
                     // Database connection (ensure this is correctly configured)
                     $db = Database::getInstance();
                     $conn = $db->connect();

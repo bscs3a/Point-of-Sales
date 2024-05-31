@@ -75,7 +75,7 @@
                 <th class="px-4 py-2 font-semibold">Product Name</th>
                 <th class="px-4 py-2 font-semibold">Category</th>
                 <th class="px-4 py-2 font-semibold">Product Price</th>
-                <th class="px-4 py-2 font-semibold">Retail Price</th>
+                <th class="px-4 py-2 font-semibold">Supplier Price</th>
                 <th class="px-4 py-2 font-semibold">Availability</th>
                 <th class="px-4 py-2 font-semibold">Description</th>
                 <th class="px-4 py-2 font-semibold">Product Weight(for delivery)KG</th>
