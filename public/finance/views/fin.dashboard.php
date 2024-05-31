@@ -85,9 +85,7 @@ require_once "components/dashboard/dashboard.performFunctions.php";
             <div class=" mb-6">
                 <!-- Start: Top Left-Side Section -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 ">
-                    <div class="col-span-1 border-solid border-gray-400 shadow-md rounded-xl px-5 py-10 bg-wave bg-cover bg-[center_top_6rem] bg-[length:100%_70%] bg-no-repeat
-                            
-                        ">
+                    <div class="col-span-1 border-solid border-gray-400 shadow-md rounded-xl px-5 py-10 bg-[url('../public/finance/img/wave.png')] bg-[center_top_6rem] bg-[length:100%_70%] bg-no-repeat">
                         <!-- Start: Welcome Message -->
                         <div class="flex justify-between mb-5">
                             <div>
