@@ -149,7 +149,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                 <th class="px-10 py-2 font-semibold">Supplier Name</th>
                 <th class="px-10 py-2 font-semibold">Category</th>
                 <th class="px-20 py-2 font-semibold">Product Price</th>
-                <th class="px-20 py-2 font-semibold">Retail Price</th>
+                <th class="px-20 py-2 font-semibold">Supplier Price</th>
                 <th class="px-10 py-2 font-semibold">Description</th>
                 <th class="px-10 py-2 font-semibold">Availability</th>
                 <th class="px-10 py-2 font-semibold text-center">Quantity</th>
@@ -191,7 +191,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<td class="px-10 py-4 text-center">' . $row['Supplier'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Category'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Price'] . '</td>';
-                      echo '<td class="px-4 py-4 text-center">Php ' . $row['Retail_Price'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">Php ' . $row['Supplier_Price'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Availability'] . '</td>';
                       echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Price'] . '"></td>';
