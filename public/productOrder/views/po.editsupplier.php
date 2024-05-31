@@ -141,15 +141,16 @@
                           <table class="min-w-full text-center mx-auto bg-white">
                             <thead class="bg-gray-200 border-b border-gray-400 text-sm">
                               <tr>
-                                <th class="px-4 py-2 font-semibold">Product Image</th>
-                                <th class="px-4 py-2 font-semibold">Product Name</th>
-                                <th class="px-4 py-2 font-semibold">Category</th>
-                                <th class="px-4 py-2 font-semibold">Product Price </th>
-                                <th class="px-4 py-2 font-semibold">Supplier Price</th>
-                                <th class="px-4 py-2 font-semibold">Description</th>
-                                <th class="px-4 py-2 font-semibold">Product Weight(for delivery)KG</th>
-                                <th class="px-4 py-2 font-semibold">Availability</th>
-                                <th class="px-4 py-2 font-semibold"></th>
+                              <th class="px-4 py-2 font-semibold">Product Image</th>
+                              <th class="px-4 py-2 font-semibold">Product Name</th>
+                              <th class="px-4 py-2 font-semibold">Category</th>
+                              <th class="px-4 py-2 font-semibold">Product Price</th>
+                              <th class="px-4 py-2 font-semibold">Supplier Price</th>
+                              <th class="px-4 py-2 font-semibold">Availability</th>
+                              <th class="px-4 py-2 font-semibold">Description</th>
+                              <th class="px-4 py-2 font-semibold">Product Weight (KG)</th>
+                              <th class="px-4 py-2 font-semibold">Unit of Measurement</th>
+                              <th class="px-4 py-2 font-semibold"></th>
                               </tr>
                             </thead>
                             
@@ -206,14 +207,6 @@
                                     class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                             </td>
                             <td class="px-4 py-4">
-                                <textarea name="product_description_<?php echo $product['ProductID']; ?>"
-                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
-                            </td>
-                            <td class="px-4 py-4">
-                                <textarea name="product_weight_<?php echo $product['ProductID']; ?>"
-                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['ProductWeight']; ?></textarea>
-                            </td>
-                            <td class="px-4 py-4">
                                 <select name="availability_<?php echo $product['ProductID']; ?>"
                                     class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400">
                                     <option value="Available"
@@ -225,6 +218,15 @@
                                         Not Available
                                     </option>
                                 </select>
+                            </td>
+                            
+                            <td class="px-4 py-4">
+                                <textarea name="product_description_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['Description']; ?></textarea>
+                            </td>
+                            <td class="px-4 py-4">
+                                <textarea name="product_weight_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['ProductWeight']; ?></textarea>
                             </td>
                                   <!-- ... -->
                                   <td class="px-4 py-4">
