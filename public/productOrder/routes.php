@@ -226,7 +226,7 @@ Router::post('/insert/addsupplier/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Supplier_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
                                 VALUES (:supplierId, :categoryId, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, :suppliername, :productWeight)";
                     $productStmt = $conn->prepare($productSql);
 
@@ -327,7 +327,7 @@ Router::post('/po/addbulk/', function () {
                 if (move_uploaded_file($_FILES[$fileFieldName]['tmp_name'], $uploadPath)) {
                     // File uploaded successfully, proceed with database insertion
                     // Prepare SQL statement for inserting product data
-                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Retail_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
+                    $productSql = "INSERT INTO products (Supplier_ID, Category_ID, ProductName, Description, Price, Supplier_Price, Availability, Category, ProductImage, Supplier, ProductWeight) 
                                 SELECT s.Supplier_ID, c.category_id, :productName, :description, :price, :retailprice, :availability, :categoryName, :productImage, s.Supplier_Name , :productWeight
                                 FROM suppliers s 
                                 INNER JOIN categories c ON c.category_name = :categoryName 
@@ -874,7 +874,7 @@ Router::post('/edit/editsupplier', function () {
             $productID = substr($key, strlen('product_name_'));
             $categoryKey = 'product_category_' . $productID;
             $priceKey = 'product_price_' . $productID;
-            $retailpriceKey = 'retail_price_' . $productID;
+            $retailpriceKey = 'supplier_price_' . $productID;
             $descriptionKey = 'product_description_' . $productID;
             $productWeightKey = 'product_weight_' . $productID;
             $availabilityKey = 'availability_' . $productID;
@@ -888,7 +888,7 @@ Router::post('/edit/editsupplier', function () {
             $productWeight = $_POST[$productWeightKey];
             $availability = $_POST[$availabilityKey];
 
-            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Retail_Price =:retailprice, Description = :description, ProductWeight = :productWeight, Availability = :availability WHERE ProductID = :productID");
+            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Supplier_Price =:retailprice, Description = :description, ProductWeight = :productWeight, Availability = :availability WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
             $stmt_product->bindParam(':category', $category);
             $stmt_product->bindParam(':price', $price);
