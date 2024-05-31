@@ -513,7 +513,7 @@
 
                     <div id="grid" class="mb-10" x-bind:class="cartOpen ? ' grid-cols-5 gap-4' : (!cartOpen && sidebarOpen) ? ' grid-cols-5 gap-4' : (!cartOpen && !sidebarOpen) ? ' grid-cols-6 gap-4' : ' grid-cols-6 gap-4'" style="display: grid;">
                         <?php foreach ($products as $product) : ?>
-                            <?php if ($product['Category_ID'] === $category && $product['Availability'] === 'Available') : ?> <!-- Show products only for the current category and if they are available -->
+                            <?php if ($product['Category_ID'] === $category && $product['Availability'] === 'Available' && $product['Stocks'] !== null) : ?> <!-- Show products only for the current category, if they are available, and if the stocks are not null -->
 
                                 <button id="product-item-button" type="button" class="product-item w-52 h-70 p-6 flex flex-col items-center justify-center border rounded-lg border-solid border-gray-300 shadow-lg focus:ring-4 active:scale-90 transform transition-transform ease-in-out" x-for="(item, index) in cart" :key="index" data-product='<?= json_encode($product) ?>' data-product-name='<?= json_encode($product['ProductName']) ?>' data-product-category='<?= json_encode($product['Category_Name']) ?>' @click="
                                     if (<?= $product['Stocks'] ?> > 0) { 
