@@ -19,6 +19,7 @@ $sls = [
     '/sls/POS/Checkout' => $basePath . "checkout.php",
     '/sls/POS/Receipt' => $basePath . "Receipt.php",
     '/sls/Audit-Trail' => $basePath . "AuditTrail.php",
+
     '/sls/Revenue' => $basePath . "Revenue.php",
     '/sls/Returns' => $basePath . "ReturnTable.php",
     '/sls/Sales-Management' => $basePath . "SalesManagement.php",
@@ -57,6 +58,12 @@ $sls = [
         $_GET['page'] = $pageNumber;
         include $basePath . "pondo.php";
     },
+
+    '/sls/Audit-Logs/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
+
 
 ];
 

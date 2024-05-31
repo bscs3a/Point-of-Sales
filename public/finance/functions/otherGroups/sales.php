@@ -94,7 +94,7 @@ function amountOfSalesTax(){
 // wala kaming amount of transactions
 
 function totalSalesMinusTax(){
-    return amountOfRawSales() - amountOfSalesTax();
+    return amountOfRawSales() * -1 - amountOfSalesTax() * -1;
 }
 
 function totalReturns(){
@@ -102,6 +102,6 @@ function totalReturns(){
 }
 
 function totalSalesMinusTaxAndReturns(){
-    return totalSalesMinusTax() - totalReturns();
+    return totalSalesMinusTax() * -1 - totalReturns() * -1;
 }
 ?>
