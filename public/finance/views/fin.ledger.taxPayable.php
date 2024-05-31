@@ -194,7 +194,7 @@
                         <?php $id = $results['ledgerno']; ?>
 
                         <div
-                            class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center">
+                            class="w-1/8 h-full border p-10 border-gray-300 text-gray-900 font-bold py-2 px-4 rounded-lg shadow-lg flex flex-col items-center justify-center accountsDivs">
                             <div class="text-center p-5 ">
                                 <br><br><br>
                                 <h1 class="text-5xl"><?= $results['name'] ?></h1>
@@ -413,7 +413,7 @@
             });
         });
     </script>
-
+    <script src = "./../../../public\finance\javascript\accountFilter.js"></script>
     <script src="./../../../src/form.js"></script>
     <script src="./../../../src/route.js"></script>
 

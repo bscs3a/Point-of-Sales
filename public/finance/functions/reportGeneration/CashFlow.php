@@ -183,8 +183,8 @@ function generateCashFlowOperations($year, $month){
     //net earnings from cash
     $netEarnings = abs(getGroupTypeBalanceBasedOnCash($incomeCode, $year, $month)) - abs(getGroupTypeBalanceBasedOnCash($expenseCode, $year, $month));
     $html .= "<tr class='table-content'>";
-    $html .= "<td class='content'>Net Earnings</td>";
-    $html .= "<td class='content-amount'>".$netEarnings."</td>";
+        $html .= "<td class='content'>Net Earnings</td>";
+        $html .= "<td class='content-amount'>".$netEarnings."</td>";
     $html .= "</tr>";
 
     //get all accounts balance except fixed assets
@@ -223,8 +223,8 @@ function generateCashFlowOperations($year, $month){
     });
 
     //additions
-    $html .= "<tr class='table-content'>";
-    $html .= "<td colspan='2' class='content text-left'>Additions</td>";
+    $html .= "<tr class='table-classifier'>";
+    $html .= "<td colspan='2' class='classifier'>Additions</td>";
     $html .= "</tr>";
     foreach ($positiveAccounts as $ledger) {
         $html .= "<tr class='table-content'>";
@@ -234,8 +234,8 @@ function generateCashFlowOperations($year, $month){
     }
 
     //subtractions
-    $html .= "<tr class='table-content'>";
-    $html .= "<td colspan='2' class='content text-left'>Subtractions</td>";
+    $html .= "<tr class='table-classifier'>";
+    $html .= "<td colspan='2' class='classifier'>Subtractions</td>";
     $html .= "</tr>";
     foreach ($negativeAccounts as $ledger) {
         $html .= "<tr class='table-content'>";
@@ -251,7 +251,7 @@ function generateCashFlowOperations($year, $month){
     $html .= "<tfoot>";
     $html .= "<tr>";
     $html .= "<td>Net Total Cash from Operations</td>";
-    $html .= "<td>".$total."</td>";
+    $html .= "<td class ='content-amount'>".$total."</td>";
     $html .= "</tr>";
     $html .= "</tfoot>";
     $html .= "</table>";
@@ -290,7 +290,7 @@ function generateCashFlowInvesting($year, $month){
     $html .= "<tfoot>";
     $html .= "<tr>";
     $html .= "<td>Net Total Cash from Investing</td>";
-    $html .= "<td>".$total."</td>";
+    $html .= "<td  class ='content-amount'>".$total."</td>";
     $html .= "</tr>";
     $html .= "</tfoot>";
     $html .= "</table>";
@@ -311,7 +311,7 @@ function generateEndingCashFlow($year, $month){
     $html .= "<tfoot>";
     $html .= "<tr>";
     $html .= "<td>Cash Flow for Month Ended ".$monthName." ". $year."</td>";
-    $html .= "<td>{$total}</td>";
+    $html .= "<td class = 'content-amount'>{$total}</td>";
     $html .= "</tr>";
     $html .= "</tfoot>";
     $html .= "</table>";

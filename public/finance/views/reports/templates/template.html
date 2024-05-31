@@ -1,23 +1,4 @@
-<?php 
-    // require_once 'public\finance\functions\reportGeneration\IncomeReport.php';
-    $today = new DateTime();
-    $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
 
-if ($today < $lastDayOfMonth) {
-    $today->modify('-1 month');
-}
-
-    $year = $today->format('Y');
-    $month = $today->format('n');
-    $monthName = $today->format('F');
-    if (isset($_SESSION['postdata']['year']) && isset($_SESSION['postdata']['month'])){
-        $year = $_SESSION['postdata']['year'];
-        $month =$_SESSION['postdata']['month'];
-    }
-
-    $year = intval($year);
-    $month = intval($month);
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +11,7 @@ if ($today < $lastDayOfMonth) {
     <link rel="stylesheet" href="reports.css">
 </head>
 <body>
+    
     <header>
         <table>
             <tr>
