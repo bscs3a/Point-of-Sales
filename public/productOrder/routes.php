@@ -1470,4 +1470,3 @@ Router::post('/delete/product', function () {
 //     // Include the requestHistory.php file to display the search results
 //     include 'views/po.requestHistory.php';
 // });
-

@@ -1,19 +1,3 @@
-<?php
-  $db = Database::getInstance();
-  $conn = $db->connect();
-
-  $query = "SELECT COUNT(*) as total_employees FROM employees";
-  $stmt = $conn->prepare($query);
-  $stmt->execute();
-  $result = $stmt->fetch(PDO::FETCH_ASSOC);
-  $total_employees = $result['total_employees'];
-
-  $query = "SELECT * FROM employees ORDER BY id DESC LIMIT 3";
-  $stmt = $conn->prepare($query);
-  $stmt->execute();
-  $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
 <!doctype html>
 <html>
 
@@ -46,29 +30,107 @@
   <li class="text-[#151313] mr-2 font-medium">/</li>
   <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Dashboard</a>
    </ul>
-   <ul class="ml-auto flex items-center">
-  <li class="mr-1">
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium">Sample User</a>
-  </li>
-  <li class="mr-1">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300"><i class="ri-arrow-down-s-line"></i></button> 
-  </li>
-   </ul>
+   <?php 
+    require_once 'inc/logout.php';
+  ?>
   </div>
+  
+  <!-- WELCOME, USER! -->
+  <?php
+  $db = Database::getInstance();
+  $conn = $db->connect();
+
+  $username = $_SESSION['user']['username'];
+
+  $stmt = $conn->prepare("SELECT employees.first_name FROM account_info 
+                        JOIN employees ON account_info.employees_id = employees.id 
+                        WHERE account_info.username = :username");
+
+  $stmt->bindParam(':username', $username);
+  $stmt->execute();
+
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  $firstName = $user['first_name'];
+  ?>
+  <h1 class="ml-6 mt-4 text-4xl font-bold">Welcome, <?php echo $firstName; ?>!</h1>
+
   <!-- Employee  -->
   <div class="p-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+    <?php
+      $db = Database::getInstance();
+      $conn = $db->connect();
+
+      $query = "SELECT COUNT(*) as total_employees FROM employees";
+      $stmt = $conn->prepare($query);
+      $stmt->execute();
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $total_employees = $result['total_employees'];
+
+      $query = "SELECT * FROM employees ORDER BY id DESC LIMIT 3";
+      $stmt = $conn->prepare($query);
+      $stmt->execute();
+      $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">Total Employees</div>
       <div class="text-2xl text-center font-semibold"><?php echo $total_employees; ?></div>
     </div>
+<!--  -->
+      <?php
+      $db = Database::getInstance();
+      $conn = $db->connect();
+
+      $query = "SELECT COUNT(*) as count FROM leave_requests WHERE CURDATE() BETWEEN start_date AND end_date AND status = 'Approved'";
+      $stmt = $conn->prepare($query);
+      $stmt->execute();
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $onLeave = $result['count'];
+
+      $pdo = null;
+      $stmt = null;
+      ?>
     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">On Leave</div>
-      <div class="text-2xl text-center font-semibold">0</div>
-    </div>        
-      <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
+      <div class="text-2xl text-center font-semibold"><?php echo $onLeave; ?></div>
+    </div>
+<!--  -->
+    <?php
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Query to get the total number of employees
+    $queryTotal = "SELECT COUNT(*) as count FROM employees";
+    $stmtTotal = $conn->prepare($queryTotal);
+    $stmtTotal->execute();
+    $resultTotal = $stmtTotal->fetch(PDO::FETCH_ASSOC);
+    $totalCount = $resultTotal['count'];
+
+    // Query to get the number of employees on leave
+    $queryLeave = "SELECT COUNT(*) as count FROM leave_requests WHERE CURDATE() BETWEEN start_date AND end_date AND status = 'Approved'";
+    $stmtLeave = $conn->prepare($queryLeave);
+    $stmtLeave->execute();
+    $resultLeave = $stmtLeave->fetch(PDO::FETCH_ASSOC);
+    $leaveCount = $resultLeave['count'];
+    
+    // Query to get the number of employees on clocked in
+    $queryAttendance = "SELECT COUNT(*) as count FROM attendance WHERE attendance_date = CURDATE() AND clock_out IS NULL";
+    $stmtAttendance = $conn->prepare($queryAttendance);
+    $stmtAttendance->execute();
+    $resultAttendance = $stmtAttendance->fetch(PDO::FETCH_ASSOC);
+    $attendanceCount = $resultAttendance['count'];
+
+    // Calculate the number of employees on board
+    $onBoardCount = $attendanceCount;
+
+    $pdo = null;
+    $stmtTotal = null;
+    $stmtLeave = null;
+    ?>
+    <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/10">
       <div class="text-2xl text-center font-semibold">On Board</div>
-      <div class="text-2xl text-center font-semibold">0</div>
+      <div class="text-2xl text-center font-semibold"><?php echo $onBoardCount; ?></div>
     </div>
     </div>
   </div>
@@ -83,111 +145,44 @@
         require_once 'inc/employees.table.php';
     } 
   ?>
-  <!-- <div class="ml-6 flex flex-col mt-8 mr-6">
-  <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-300 shadow-md sm:rounded-lg">
-    <table class="min-w-full">
-      <thead>
-        <tr>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Name</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            ID</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Department</th>
-          <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-            Action</th>
-        </tr>
-      </thead>
-        <tbody class="bg-white">
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1720500138106585088/8aqYRQ3D_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Claude Clawmark
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">claudeclawmark@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10122</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Point of Sale</div>
-              <div class="text-sm leading-5 text-gray-500">Sales Associate</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1767366909417144320/4jM8rbT7_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Victoria Brightshield
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">vivibrightshield@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10318</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Inventory</div>
-              <div class="text-sm leading-5 text-gray-500">Materials Manager</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 w-10 h-10">
-                  <img class="w-10 h-10 rounded-full object-cover object-center"
-                    src="https://pbs.twimg.com/profile_images/1720542381903081472/Fo37UVMt_400x400.jpg"
-                    alt="">
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium leading-5 text-gray-900">Kunai Nakasato
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">kunainakasato@example.com</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="text-sm leading-5 text-gray-900">10709</span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <div class="text-sm leading-5 text-gray-900">Accounting</div>
-              <div class="text-sm leading-5 text-gray-500">Auditor</div>
-            </td>
-            <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
   </div>
+  
 </div>
 </div>
 </div>
 <!-- Payroll --> 
 <h4 class="ml-6 mt-4 text-xl font-bold"> Payroll </h4>
+<?php 
+  $db = Database::getInstance();
+  $conn = $db->connect();
+
+  $search = $_POST['search'] ?? '';
+  $query = "SELECT payroll.*, salary_info.*, employees.* FROM payroll";
+  $query .= " 
+  LEFT JOIN employees ON payroll.employees_id = employees.id
+  LEFT JOIN salary_info ON salary_info.employees_id = employees.id AND payroll.salary_id = salary_info.id";
+
+  // Add an ORDER BY clause to sort the results in descending order by payroll.id
+  $query .= " ORDER BY payroll.id DESC";
+
+  // Add a LIMIT clause to limit the results to 3
+  $query .= " LIMIT 3";
+
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $payroll = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $pdo = null;
+  $stmt = null;
+  if (empty($payroll)) {
+      require_once 'inc/noResult.php';
+  } 
+  else {
+      require_once 'inc/payroll-list-dashboard.table.php';
+  } 
+?>
 <!-- Chart -->
-<div>
+<!-- <div>
   <div class="flex items-center min-h-full max-w-full">
     <canvas id="myChart" style="height:400px;"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -215,7 +210,7 @@
       });
     </script>  
   </div>
-</div>
+</div> -->
 <!-- End Chart -->
 </main>
 <!-- End Main Bar-->
