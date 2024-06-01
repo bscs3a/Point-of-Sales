@@ -263,7 +263,8 @@
                                         const productId = <?php echo json_encode($productId); ?>;
 
                                         // Construct the route
-                                        const route = `/sales/sls/ReturnProduct/sale=${saleId}/saledetails=${saleDetailId}/product=${selectedProduct.id}`;
+                                        const basePath = '/master'; // Define the base path here
+                                        const route = basePath + `/sls/ReturnProduct/sale=${saleId}/saledetails=${saleDetailId}/product=${selectedProduct.id}`;
 
                                         // Redirect to the route
                                         window.location.href = route;

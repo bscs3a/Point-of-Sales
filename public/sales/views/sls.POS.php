@@ -393,7 +393,8 @@
 
                     <script>
                         const checkoutButton = document.getElementById('checkout-button');
-                        const checkoutRoute = '/sales/sls/POS/Checkout'; // Define the route path here
+                        const basePath = '/master'; // Define the base path here
+                        const checkoutRoute = basePath + '/sls/POS/Checkout'; // Concatenate base path with the route
 
                         checkoutButton.addEventListener('click', (event) => {
                             // Get the cart from localStorage
