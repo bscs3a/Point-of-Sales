@@ -1,6 +1,6 @@
 <!-- Start: Sidebar -->
 
-<div class="bg-sidebar w-1/5 p-4 z-50 sidebar-menu transition-transform" id = "sidebar">
+<div class="bg-sidebar w-1/5 min-h-screen p-4 z-50 sidebar-menu transition-transform" id = "sidebar">
 
     <div route='/' class="flex items-center pb-4">
         <div class="w-12 h-12 rounded bg-cover bg-[url('../public/finance/img/logo_reports.png')]">
