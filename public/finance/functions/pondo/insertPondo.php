@@ -39,7 +39,7 @@ function validDebit(){
     $inventoryCode = getLedgerCode('Inventory');
     $payrollCode = getLedgerCode('Payroll');
     $interestExpense = getLedgerCode('Interest Expense');
-    $incomeTax = getLedgerCode('Income Tax');
+    $incomeTax = getLedgerCode('Tax Expense');
     $cashOnHand = getLedgerCode('Cash on Hand');
     $cashOnBank = getLedgerCode('Cash on Bank');
 

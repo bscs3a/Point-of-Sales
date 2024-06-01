@@ -1,22 +1,5 @@
 <?php 
-    require_once 'public\finance\functions\reportGeneration\CashFlow.php';
-    $today = new DateTime();
-    $lastDayOfMonth = new DateTime($today->format('Y-m-t'));
-
-if ($today < $lastDayOfMonth) {
-    $today->modify('-1 month');
-}
-
-    $year = $today->format('Y');
-    $month = $today->format('n');
-    if (isset($_SESSION['postdata']['year']) && isset($_SESSION['postdata']['month'])){
-        $year = $_SESSION['postdata']['year'];
-        $month =$_SESSION['postdata']['month'];
-    }
-
-    $year = intval($year);
-    $month = intval($month);
-    $monthName = date('F', mktime(0, 0, 0, $month, 10));
+    $today = date("Y-m-d");
 ?>
 
 <!DOCTYPE html>
@@ -113,8 +96,8 @@ body {
     transform: translate(-50%, -50%);
 }
 .center img {
-    width: 100%;
-    height: 100%;
+    width: 1000px;
+    height: auto;
 }
 </style>
 
@@ -133,7 +116,7 @@ body {
                 <td class="header1 text-right width-auto-wrap">BSCS 3A</td>
             </tr>
             <tr>
-                <td class ="headerPartner"><?php echo "For the month end: $monthName $year" ?></td>
+                <td class ="headerPartner"><?php echo "Generated on: $today" ?></td>
                 <td class="headerPartner text-right width-auto-wrap">Hardware Management Store</td>
             </tr>
         </table>

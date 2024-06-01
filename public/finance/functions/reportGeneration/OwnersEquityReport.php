@@ -340,4 +340,24 @@ function checkShareIfAdded($accountNumber, $year, $month){
 
     return false;
 }
+
+function calculateShareV2($accountNumber,$fromYear,$fromMonth,$toYear,$toMonth){
+    $CAPITAL = "Capital Accounts";
+
+    $accountNumber = getLedgerCode($accountNumber);
+
+    if ($accountNumber === false) {
+        throw new Exception("Account not found in Ledger table.");
+    }
+
+    //get share
+    $accountBalance = abs(getAccountBalanceV3($accountNumber, $fromYear, $fromMonth, $toYear, $toMonth));
+
+    $allBalance = abs(getTotalOfAccountTypeV3($CAPITAL,$fromYear,$fromMonth,$toYear,$toMonth));
+    //divide it by total share
+    if($allBalance == 0){
+        $allBalance = 1;
+    }
+    return round($accountBalance/$allBalance,3);
+}
 ?>
