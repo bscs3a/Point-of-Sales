@@ -59,7 +59,7 @@
       </script>
 
       <!-- New Form for add bulk product -->
-      <div class="flex flex-col justify-center my-24 mx-10">
+      <div class="flex flex-col justify-center my-3 mx-10">
         <!--<div class="flex place-content-end mt-2 m-3">
            <button class="items-end rounded-full px-2 py-1 bg-violet-950 text-white">
             <i class="ri-add-circle-line"></i>
@@ -676,11 +676,14 @@
               </tbody>
         </div>
 
-        <div class="flex flex-row justify-end gap-3 my-3">
-          <a href='/master/po/viewsupplierproduct/Supplier=<?php echo isset($_GET['Supplier_ID']) ? $_GET['Supplier_ID'] : ''; ?>'
-            class="py-2 px-6 border border-gray-600 font-bold rounded-md">Back</a>
-          <button type="submit" class="py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save
-          </button>
+        <div class="flex flex-row justify-between items-center m-3">
+          <a class="flex text-xl font-bold">Add Items</a>
+          <div class="flex flex-row gap-3">
+            <a href='/master/po/viewsupplierproduct/Supplier=<?php echo isset($_GET['Supplier_ID']) ? $_GET['Supplier_ID'] : ''; ?>'
+              class="flex py-2 px-6 border border-gray-600 font-bold rounded-md">Back</a>
+            <button type="submit" class="flex py-2 px-6 border border-gray-600 font-bold rounded-md bg-yellow-400">Save
+            </button>
+          </div>
         </div>
         </form>
       </div>
