@@ -157,9 +157,8 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                 <th class="px-10 py-2 font-semibold text-center">Quantity</th>
               </tr>
             </thead>
-            <a href='/master/po/suppliers' class="border-2 border-black font-bold py-2.5 px-4 ml-3 my-3 rounded">Back
-            </a>
-            <tbody>
+
+            <tbody class="text-sm">
               <?php
               function displayProductsBySupplierID($supplierID)
               {
@@ -189,8 +188,8 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover">';
                       echo '<div>' . $row['ProductName'] . '</div>';
                       echo '</td>';
-                      echo '<td class="px-20 py-4 text-center">' . $row['ProductID'] . '</td>';
-                      echo '<td class="px-10 py-4 text-center">' . $row['Supplier'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['ProductID'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['Supplier'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Category'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Price'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Supplier_Price'] . '</td>';
@@ -198,19 +197,31 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['ProductWeight'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['UnitOfMeasurement'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Supplier_Price'] . '"></td>';
+                      echo '<td class="px-3 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input w-full border-b-2 border-black text-center" data-price="' . $row['Supplier_Price'] . '"></td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
-
+                    
+                    echo '<div class="flex flex-row justify-between">';
+                    echo '<div class="flex flex-row">';
+                    echo '<a href=\'/master/po/suppliers\' class="border-2 border-black font-bold py-2.5 px-4 ml-3 my-3 rounded">Back</a>';
                     echo '<button type="submit" class="ml-3 bg-blue-500 hover:bg-blue-700 border-2 border-black text-white font-bold py-2 px-4 my-3 rounded">Order</button>';
+                    echo '</div>';
 
                     // Add the "Pay Using" dropdown with a larger label
+                    echo '<div class="flex flex-row items-center gap-3 mr-3 my-auto">';
                     echo '<label for="payment-method" class="ml-3 mt-3 text-lg font-bold">Pay Using:</label>';
-                    echo '<select id="payment-method" name="paymentmethod" class="ml-3 mt-1 border-2 border-black rounded">';
+                    echo '<select id="payment-method" name="paymentmethod" class="ml-3 px-3 py-2 mt-1 border-2 border-black rounded">';
                     echo '<option value="Cash on hand">Cash on hand: ' . getRemainingProductOrderPondo('Cash on hand') . '</option>';
                     echo '<option value="Cash on bank">Cash on bank: ' . getRemainingProductOrderPondo('Cash on bank') . '</option>';
-                    echo '</select>';
+                    echo '</div>';
+                    echo '</div>';
+                    // Add the "Pay Using" dropdown
+                    // echo '<label for="payment-method" class="ml-3 mt-3">Pay Using:</label>';
+                    // echo '<select id="payment-method" name="paymentmethod" class="ml-3 mt-1 px-2 py-1 border-2 border-black rounded">';
+                    // echo '<option value="Cash on hand">Cash on hand</option>';
+                    // echo '<option value="Cash on bank">Cash on bank</option>';
+                    // echo '</select>';
 
 
 
@@ -224,7 +235,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                 // Close the database connection
                 $conn = null;
               }
-
+              
               // Check if Supplier_ID is provided via GET method
               if (isset($_GET['Supplier_ID'])) {
                 $supplierID = $_GET['Supplier_ID'];
