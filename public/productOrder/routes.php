@@ -26,6 +26,13 @@ $po = [
     '/po/test1' => $basePath . "test1.php",
     '/po/pondo' => $basePath . "pondo.php",
     '/po/logout' => $basePath . "pondo.php",
+    // '/po/audit_logs' => $basePath . "audit_logs.php",
+
+    //auditlogs
+    '/po/audit_logs/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
 
     //funds
     '/po/pondo/page={pageNumber}' => function($pageNumber) use ($basePath){
@@ -421,6 +428,7 @@ Router::post('/placeorder/supplier/', function () {
 
         // Get Supplier_ID from the form data
         $supplierID = $_POST['supplierID'];
+        $paymentmethod = $_POST['paymentmethod'];
 
         // Check supplier status
         $statusQuery = "SELECT Status FROM suppliers WHERE Supplier_ID = :supplierID";
@@ -532,7 +540,7 @@ Router::post('/placeorder/supplier/', function () {
         } else {
             // If total quantity is greater than 0, proceed with batch order insertion
             if ($totalQuantity > 0) {
-                recordBuyingInventory($totalAmount); // This will save the total amount in finance
+                recordBuyingInventory($totalAmount,$paymentmethod); // This will save the total amount in finance
 
                 // Bind parameters for batch order insertion
                 $batchOrderStmt->bindParam(':supplierID', $supplierID);
