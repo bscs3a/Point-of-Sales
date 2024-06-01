@@ -183,7 +183,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                       // Debugging statement to print image path
                       $imagePath = '../../' . $row['ProductImage'];
-                      echo '<tr>';
+                      echo '<tr class="data-row" data-id="' . $row['ProductID'] . '" data-name="' . $row['ProductName'] . '" data-supplier="' . $row['Supplier'] . '" data-category="' . $row['Category'] . '" data-price="' . $row['Price'] . '" data-description="' . $row['Description'] . '">';
                       echo '<td class="flex flex-col justify-center items-center text-sm gap-3 px-6 py-4 font-normal text-gray-900">';
                       echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover">';
                       echo '<div>' . $row['ProductName'] . '</div>';
