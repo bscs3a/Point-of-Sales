@@ -1,5 +1,6 @@
 Todo:
 8. Check Everything
+15. minimize sidebar
 
 other todo:
 9. T-Accounts

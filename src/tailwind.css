@@ -935,6 +935,10 @@ video {
   margin-bottom: -1px;
 }
 
+.-ml-1{
+  margin-left: -0.25rem;
+}
+
 .mb-1{
   margin-bottom: 0.25rem;
 }
@@ -1546,6 +1550,10 @@ video {
   width: 100vw;
 }
 
+.w-1\/5{
+  width: 20%;
+}
+
 .min-w-0{
   min-width: 0px;
 }
@@ -1710,6 +1718,16 @@ video {
 
 .transform-none{
   transform: none;
+}
+
+@keyframes spin{
+  to{
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin{
+  animation: spin 1s linear infinite;
 }
 
 .cursor-pointer{
@@ -4057,12 +4075,20 @@ video {
   opacity: 0;
 }
 
+.opacity-25{
+  opacity: 0.25;
+}
+
 .opacity-50{
   opacity: 0.5;
 }
 
 .opacity-75{
   opacity: 0.75;
+}
+
+.opacity-100{
+  opacity: 1;
 }
 
 .bg-blend-normal{
