@@ -3,16 +3,17 @@
       <thead class="bg-gray-50">
         <tr>
           <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Name</th>
+          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Employee</th>
           <th scope="col" class="px-6 py-4 font-medium text-gray-900">Request Date</th>
           <th scope="col" class="px-6 py-4 font-medium text-gray-900">Reason</th>
           <th scope="col" class="px-6 py-4 font-medium text-gray-900">Status</th>
-          <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
+          <th scope="col" class="px-6 py-4 font-medium text-gray-900">Action</th>
+          <!-- <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th> -->
         </tr>
       </thead>
       <?php foreach ($leaveRequests as $leaveRequest): ?>
       <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-        <tr class="hover:bg-gray-50">
+        <tr class="hover:bg-gray-50 row">
           <th class="flex gap-3 px-6 py-4 font-normal text-gray-900 items-center">
             <div class="relative h-10 w-10">
                 <!-- THIS IS FROM EMPLOYEES TABLE -->
@@ -21,7 +22,6 @@
                 src="<?php echo $leaveRequest['image_url']; ?>"
                 alt=""
               />
-              <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
             </div>
           </th>
           <td class="px-6 py-4">
@@ -53,20 +53,41 @@
           </td>
           <td class="px-6 py-4">
             <!-- STATUS -->
-            <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-yellow-600">
-            <?php echo $leaveRequest['status']; ?>
-            </span>
+            <?php
+              $status = $leaveRequest['status'];
+              $colorClass = '';
+
+              switch ($status) {
+                  case 'Pending':
+                      $colorClass = 'text-yellow-600';
+                      break;
+                  case 'Denied':
+                      $colorClass = 'text-red-600';
+                      break;
+                  case 'Approved':
+                      $colorClass = 'text-green-600';
+                      break;
+              }
+            ?>
+
+<span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold <?php echo $colorClass; ?>">
+    <?php echo $status; ?>
+</span>
           </td>
           <td class="px-6 py-4">
+            <!-- ACTION -->
+              <a route="/hr/leave-requests/id=<?php echo htmlspecialchars($leaveRequest['id']); ?>"  class="font-medium text-indigo-600 hover:text-indigo-900">View</a>
+          </td>
+          <!-- <td class="px-6 py-4">
             <div class="flex justify-end gap-4">
-              <a x-data="{ tooltip: 'Accept' }" href="#">   
+              <a class="acceptButton" data-id="<?php echo $leaveRequest['id']; ?>" x-data="{ tooltip: 'Accept' }" href="#">   
                 <i class="ri-check-line"></i>     
               </a>
-              <a id="rejectButton" x-data="{ tooltip: 'Reject' }" href="#">
+              <a class="rejectButton" data-id="<?php echo $leaveRequest['id']; ?>" x-data="{ tooltip: 'Reject' }" href="#">
                 <i class="ri-close-line"></i>     
               </a>
             </div>
-          </td>
+          </td> -->
         </tr>  
           <?php endforeach; ?>          
       </tbody>
