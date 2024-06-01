@@ -166,12 +166,12 @@ $stmt = null;
     let monthlySalary = document.getElementById('monthlySalaryInput').value;
     let paidType = document.getElementById('paidTypeInput').value;
     if (paidType == 'Cash on hand' && cashOnHand < monthlySalary) {
-      alert('Not enough funds. Remaing funds on Hand: ' + cashOnHand);
+      alert('Not enough funds. Remaining funds on Hand: ₱' + cashOnHand);
         event.preventDefault();
     }
 
     if (paidType == 'Cash on bank' && cashOnBank < monthlySalary) {
-      alert('Not enough funds. Remaing funds in the Bank: ' + cashOnBank);
+      alert('Not enough funds. Remaining funds in the Bank: ₱' + cashOnBank);
         event.preventDefault();
     }
   });
