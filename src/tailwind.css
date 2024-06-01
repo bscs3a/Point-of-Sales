@@ -3138,11 +3138,9 @@ video {
   background-image: url('../public/finance/img/logo_reports.png');
 }
 
-
 .bg-\[url\(\'\.\.\/public\/finance\/img\/wave\.png\'\)\]{
   background-image: url('../public/finance/img/wave.png');
 }
-
 
 .bg-gradient-to-b{
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
