@@ -1,6 +1,7 @@
 <?php
 
 require_once "public/finance/functions/otherGroups/sales.php";
+require_once "public/finance/functions/otherGroups/inventory.php";
 
 // $_SESSION['user'] = 'admin';
 // $_SESSION['role'] = 'admin';
@@ -54,12 +55,12 @@ $sls = [
     '/sls/logout' => "./public/sales/views/function/logout.php",
 
 
-    '/sls/funds/Sales/page={pageNumber}' => function($pageNumber) use ($basePath){
+    '/sls/funds/Sales/page={pageNumber}' => function ($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "pondo.php";
     },
 
-    '/sls/Audit-Logs/page={pageNumber}' => function($pageNumber) use ($basePath){
+    '/sls/Audit-Logs/page={pageNumber}' => function ($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "audit_logs.php";
     },
@@ -231,6 +232,11 @@ Router::post('/addSales', function () {
         $paymentMode = 'Cash on hand';
     } elseif ($paymentMode === 'card') {
         $paymentMode = 'Cash on bank';
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $supplierPriceTotal = $_POST["supplierPriceTotal"];
+        recountInventory($supplierPriceTotal);
     }
 
     insertSalesLedger($_POST['totalAmount'], $_POST['totalAmount'] - $_POST['subtotal'], $paymentMode);

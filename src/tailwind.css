@@ -4503,6 +4503,10 @@ video {
   a-z-a--z:  !important;
 }
 
+.\[image\:\$img\|\$width\|\$height\|\$type\]{
+  image: $img|$width|$height|$type;
+}
+
 @media (min-width: 480px){
   .sm\:container{
     width: 100%;
@@ -5149,41 +5153,9 @@ video {
     padding-right: 2rem;
   }
 
-  .sm\:pr-2{
-    padding-right: 0.5rem;
-  }
-
-  .sm\:pr-4{
-    padding-right: 1rem;
-  }
-
-  .sm\:pr-3{
-    padding-right: 0.75rem;
-  }
-
-  .sm\:text-lg{
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
-
   .sm\:text-sm{
     font-size: 0.875rem;
     line-height: 1.25rem;
-  }
-
-  .sm\:text-xl{
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  .sm\:text-4xl{
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-  }
-
-  .sm\:text-2xl{
-    font-size: 1.5rem;
-    line-height: 2rem;
   }
 
   .sm\:underline{
@@ -5234,14 +5206,6 @@ video {
 
   .md\:p-52{
     padding: 13rem;
-  }
-
-  .md\:pr-2{
-    padding-right: 0.5rem;
-  }
-
-  .md\:pt-4{
-    padding-top: 1rem;
   }
 
   .md\:pt-6{
@@ -5330,13 +5294,13 @@ video {
     line-height: 1;
   }
 
-  .xl\:text-xl{
-    font-size: 1.25rem;
+  .xl\:text-lg{
+    font-size: 1.125rem;
     line-height: 1.75rem;
   }
 
-  .xl\:text-lg{
-    font-size: 1.125rem;
+  .xl\:text-xl{
+    font-size: 1.25rem;
     line-height: 1.75rem;
   }
 }

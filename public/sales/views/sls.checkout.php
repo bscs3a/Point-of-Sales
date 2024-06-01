@@ -203,6 +203,7 @@
                             <input type="hidden" id="subtotal" name="subtotal">
                             <input type="hidden" id="tax" name="tax">
                             <input type="hidden" id="shippingFee" name="shippingFee">
+                            <input type="hidden" id="supplierPriceTotal" name="supplierPriceTotal">
 
                             <button type="submit" value="Submit" class="bg-green-800 text-white rounded px-4 py-2 mt-4 w-full hover:bg-gray-200 hover:text-green-800 hover:font-bold transition-colors ease-in-out">Complete Sale</button>
                         </form>
@@ -319,12 +320,16 @@
             const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
             const tax = cart.reduce((total, item) => total + item.price * item.quantity * item.TaxRate, 0);
             const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity * (1 + item.TaxRate), 0);
+            const supplierPriceTotal = cart.reduce((total, item) => total + item.supplierPrice * item.quantity, 0);
 
             // Set the value of the hidden input fields
             document.getElementById('subtotal').value = subtotal.toFixed(2);
             document.getElementById('tax').value = tax.toFixed(2);
             document.getElementById('totalAmount').value = totalAmount.toFixed(2);
             document.getElementById('cartData').value = JSON.stringify(cart);
+            document.getElementById('supplierPriceTotal').value = supplierPriceTotal.toFixed(2);
+
+            console.log(document.getElementById('supplierPriceTotal').value);
 
             // Assign the cart to a global variable
             window.cart = cart;
