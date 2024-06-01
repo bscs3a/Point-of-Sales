@@ -219,13 +219,13 @@ $remainingPondo = $cashOnHand + $cashOnBank;
             <!-- changes here -->
             <div class=" mb-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
+                    <div class=" col-span-1 bg-green-800 rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Given Allowance This Month</h1>
                             <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department)['total'];?></p>
                         </div>
                     </div>
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
+                    <div class=" col-span-1 bg-red-600 rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Total Expenses This Month</h1>
                             <p class="mt-5 text-4xl font-medium"><?php echo $totalExpenses;?></p>

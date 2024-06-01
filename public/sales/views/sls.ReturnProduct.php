@@ -180,7 +180,10 @@
                         </div>
                     </form>
                 <?php else : ?>
-                    <p class="text-red-500 text-xl p-4">This product has already been returned.</p>
+                    <div class="flex h-full flex-grid gap-4 text-2xl font-semibold justify-center items-center px-10 pb-10">
+                    <i class="ri-checkbox-fill text-red-500 text-6xl"></i>
+                    <p class="text-red-500">This product has already been returned.</p>
+                    </div>
                 <?php endif; ?>
             </div>
 
