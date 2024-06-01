@@ -7,16 +7,17 @@ module.exports = {
     'bg-profit',
   ],
   theme: {
+    screens: {
+      sm: '480px',
+      md: '768px',
+      lg: '976px',
+      xl: '1440px',
+    },
     extend: {
       fontFamily: {
         'sans': ['Montserrat', 'sans-serif'],
         'russo': ['Russo One'],
       },
-      colors: {
-        'sidebar': '#262261', // Sidebar color
-        // 'primary': '#FFA500', // Primary color
-      },
-
       backgroundImage: {
         'wave': "url('public/finance/img/wave.png')",
         'request-money': "url('../public/finance/img/RequestMoney.png')",
