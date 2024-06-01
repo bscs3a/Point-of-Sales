@@ -32,7 +32,26 @@ INSERT INTO employees (image_url, first_name, middle_name, last_name, dateofbirt
 ('public\humanResources\img\noPhotoAvailable.png', 'Marc', 'Cruz', 'David', '2002-02-09', 'Male', 'Filipino', 'Pampanga', '09293883802', 'sinicchi123@gmail.com','Single', 'Product Order', 'Order Processor','5239186621','113821417235','293860405','677900026630'),
 ('public\humanResources\img\noPhotoAvailable.png', 'Sean Kenji', '', 'Ferrer', '2002-04-22', 'Male', 'Filipino', 'Pampanga', '09123456789', 'seanferrer@example.com','Single', 'Delivery', 'Customer Service Representative','8422736704','199055286298','764442924','092261301180'),
 ('public\humanResources\img\noPhotoAvailable.png', 'Aries Joseph', 'Vergara', 'Tagle', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'ariestagle@example.com','Single', 'Finance', 'Financial Analyst','6715934476','786694635416','004821400','284885227548'),
-('public\humanResources\img\noPhotoAvailable.png', 'Jared Gilmonde', '', 'Ambrocio', '2003-03-05', 'Male', 'Filipino', 'Pampanga', '09123456789', 'jared@example.com','Single', 'Inventory', 'Inventory Planner','7177011845','518287693103','182964876','853988041841');
+('public\humanResources\img\noPhotoAvailable.png', 'Jared Gilmonde', '', 'Ambrocio', '2003-03-05', 'Male', 'Filipino', 'Pampanga', '09123456789', 'jared@example.com','Single', 'Inventory', 'Inventory Planner','7177011845','518287693103','182964876','853988041841'),
+('public\humanResources\img\noPhotoAvailable.png', 'Aian Louise', '', 'Alfaro', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'aian@example.com','Single', 'Point of Sales', 'Business Analyst','901919206','225738265529','3856950537','480432989856'),
+('public\humanResources\img\noPhotoAvailable.png', 'Vince Gerald', '', 'Bantigue', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'vincegerald@example.com','Single', 'Delivery', 'Delivery Driver','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Mark John', '', 'Beltran', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'mjbeltran@example.com','Single', 'Delivery', 'Courier','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Shania', '', 'Castro', '2002-01-01', 'Female', 'Filipino', 'Pampanga', '09123456789', 'shania@example.com','Single', 'Delivery', 'Parcel Sorter','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Mark Kevin', '', 'de Dios', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'markkevin@example.com','Single', 'Delivery', 'Delivery Driver','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Niel Joshua', '', 'Dizon', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'nieljoshua@example.com','Single', 'Delivery', 'Courier','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Alfred', '', 'Laxamana', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'alfred@example.com','Single', 'Delivery', 'Parcel Sorter','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Ryand', '', 'Soriano', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'ryand@example.com','Single', 'Delivery', 'Delivery Driver','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Simon', '', 'Mackay', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'simonmackay@example.com','Single', 'Delivery', 'Courier','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Steven', '', 'Graham', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'steven@example.com','Single', 'Delivery', 'Parcel Sorter','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Peter', '', 'Dyer', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'peter@example.com','Single', 'Delivery', 'Delivery Driver','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Benjamin', '', 'Scott', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'scott@example.com','Single', 'Delivery', 'Courier','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'David', '', 'Mathis', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'davidmathis@example.com','Single', 'Delivery', 'Parcel Sorter','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Stewart', '', 'Butler', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'stewart@example.com','Single', 'Delivery', 'Delivery Driver','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Anthony', '', 'Underwood', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'underwood@example.com','Single', 'Delivery', 'Courier','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Keith', '', 'Glover', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'gloverkeith@example.com','Single', 'Delivery', 'Parcel Sorter','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Joseph', '', 'Carr', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'carr@example.com','Single', 'Delivery', 'Delivery Driver','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Michael', '', 'Sanderson', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'michaelsanderson@example.com','Single', 'Delivery', 'Courier','8422736704','199055286298','764442924','092261301180'),
+('public\humanResources\img\noPhotoAvailable.png', 'Colin', '', 'Greene', '2002-01-01', 'Male', 'Filipino', 'Pampanga', '09123456789', 'colineberde@example.com','Single', 'Delivery', 'Parcel Sorter','8422736704','199055286298','764442924','092261301180');
 
 CREATE TABLE account_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
@@ -45,15 +64,34 @@ CREATE TABLE account_info (
 );
 
 INSERT INTO account_info (username, password, employees_id) VALUES
-('bscs3a001', '$2y$10$PW/c9BII9bnoXc79OX7RqeME3kh6xjaWy0SvQfEU8IgRw98QfzKgG', 1), -- bscs3a1HR!
-('bscs3a002', '$2y$10$rp12pB9FDhZI6rGGfaGM4.u24z53.tdES2RxkmnhgAelU6Cq1r5iy', 2), -- bscs3a2HR!
-('bscs3a003', '$2y$10$dOdwUUSFu0zZgbUDTNcuTuzBnsTW0YsA/GvIuMs6getfOg9JU6A5K', 3), -- bscs3a3HR!
-('bscs3a004', '$2y$10$LDGZL1.TjxpZXPN7ZJyvo.z79lkWQH5vXOkB2wOQlfemP7pOs/7Lq', 4), -- bscs3a4HR!
-('bscs3a005', '$2y$10$29paW1LDnm8v5NPVMdhnVOh16nRHfM9K6axPgqP6vZtqjlgeOCgcS', 5), -- bscs3a5HR!
-('bscs3a006', '$2y$10$k5cpSGzyQWXmjiFod96nh.ADnmNIYrFq2tdZzHIMZcBIb5yEuuIXK', 6), -- bscs3a1PO!
-('bscs3a007', '$2y$10$/tozH33lVxPszcRFiEONOOCL6FrPjYJDACpTiFHTW9kZucOEF7sQy', 7), -- bscs3a1DL!
-('bscs3a008', '$2y$10$79UG/QbIpdCocBdIgwju/eSyuGYSkny1.n6NoQMtlzXRI7A9jgmAu', 8), -- bscs3a1FN!
-('bscs3a009', '$2y$10$qGalLOBVynm7X.VYbY9HYOghjEbLJEZkayyga5dFa9Gc7SOMK3fU6', 9); -- bscs3a1IN!
+('bscs3a001', '$2y$10$iQV1mMZ7wNqr8dz7tvLLGu7oW5B3nkui35vdRtGEzJs3dCsuptmcK', 1), -- BSCS3AHR!
+('bscs3a002', '$2y$10$iQV1mMZ7wNqr8dz7tvLLGu7oW5B3nkui35vdRtGEzJs3dCsuptmcK', 2), 
+('bscs3a003', '$2y$10$iQV1mMZ7wNqr8dz7tvLLGu7oW5B3nkui35vdRtGEzJs3dCsuptmcK', 3), 
+('bscs3a004', '$2y$10$iQV1mMZ7wNqr8dz7tvLLGu7oW5B3nkui35vdRtGEzJs3dCsuptmcK', 4), 
+('bscs3a005', '$2y$10$iQV1mMZ7wNqr8dz7tvLLGu7oW5B3nkui35vdRtGEzJs3dCsuptmcK', 5),
+('bscs3a006', '$2y$10$Sipls.NxKvU5N7AGAEmy5.HvsXo2j080wk9cHih8h2puA.kSeJNna', 6), -- BSCS3APO!
+('bscs3a007', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 7), -- BSCS3ADL!
+('bscs3a008', '$2y$10$uxtn/YaNWUUgbFmgNeuf3Orijlbu.kq1lbLt3jXYGf/ZRJZ2Ccgyq', 8), -- BSCS3AFN!
+('bscs3a009', '$2y$10$2zKFlxCS7GcQ6h3fnBSFMuSjMMP2J1GIRPF4u7jcRb848dOnZA7ZG', 9), -- BSCS3AIN!
+('bscs3a010', '$2y$10$vgUdfpy3TvypVuracMwvHu9.EYJeBmO2/tnMAfRstMIE20hm3TZJy', 10), -- BSCS3ASL!
+('bscs3a011', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 11), -- BSCS3ADL!
+('bscs3a012', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 12), -- BSCS3ADL! 
+('bscs3a013', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 13), -- BSCS3ADL! 
+('bscs3a014', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 14), -- BSCS3ADL! 
+('bscs3a015', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 15), -- BSCS3ADL! 
+('bscs3a016', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 16), -- BSCS3ADL! 
+('bscs3a017', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 17), -- BSCS3ADL! 
+('bscs3a018', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 18), -- BSCS3ADL! 
+('bscs3a019', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 19), -- BSCS3ADL! 
+('bscs3a020', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 20), -- BSCS3ADL! 
+('bscs3a021', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 21), -- BSCS3ADL! 
+('bscs3a022', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 22), -- BSCS3ADL! 
+('bscs3a023', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 23), -- BSCS3ADL! 
+('bscs3a024', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 24), -- BSCS3ADL! 
+('bscs3a025', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 25), -- BSCS3ADL! 
+('bscs3a026', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 26), -- BSCS3ADL! 
+('bscs3a027', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 27), -- BSCS3ADL! 
+('bscs3a028', '$2y$10$AN1T1y9jDmspV1peH2Z30eBjihyeOacoh/UWrO4q1X9e5JNybNzqa', 28); -- BSCS3ADL!  
 
 CREATE TABLE employment_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
@@ -74,7 +112,26 @@ INSERT INTO employment_info (dateofhire, startdate, enddate, employees_id) VALUE
 ('2024-04-11', '2024-04-11', NULL, 6),
 ('2024-04-11', '2024-04-11', NULL, 7),
 ('2024-04-11', '2024-04-11', NULL, 8),
-('2024-04-11', '2024-04-11', NULL, 9);
+('2024-04-11', '2024-04-11', NULL, 9),
+('2024-04-11', '2024-04-11', NULL, 10),
+('2024-04-11', '2024-04-11', NULL, 11),
+('2024-04-11', '2024-04-11', NULL, 12),
+('2024-04-11', '2024-04-11', NULL, 13),
+('2024-04-11', '2024-04-11', NULL, 14),
+('2024-04-11', '2024-04-11', NULL, 15),
+('2024-04-11', '2024-04-11', NULL, 16),
+('2024-04-11', '2024-04-11', NULL, 17),
+('2024-04-11', '2024-04-11', NULL, 18),
+('2024-04-11', '2024-04-11', NULL, 19),
+('2024-04-11', '2024-04-11', NULL, 20),
+('2024-04-11', '2024-04-11', NULL, 21),
+('2024-04-11', '2024-04-11', NULL, 22),
+('2024-04-11', '2024-04-11', NULL, 23),
+('2024-04-11', '2024-04-11', NULL, 24),
+('2024-04-11', '2024-04-11', NULL, 25),
+('2024-04-11', '2024-04-11', NULL, 26),
+('2024-04-11', '2024-04-11', NULL, 27),
+('2024-04-11', '2024-04-11', NULL, 28);
 
 CREATE TABLE salary_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
@@ -96,7 +153,27 @@ INSERT INTO salary_info (monthly_salary, total_salary, total_deductions, employe
 (18000.00, 16093.60, 1906.4, 6),
 (20000.00, 17904.00, 2096, 7),
 (45000.00, 30909.00, 14091.00, 8),
-(35000.00, 26357.00, 8643, 9);
+(35000.00, 26357.00, 8643, 9),
+(45000.00, 30909.00, 14091.00, 10),
+(15000.00, 13378.00, 1622.00, 11),
+(18000.00, 16093.60, 1906.4, 12),
+(15000.00, 13378.00, 1622.00, 13),
+(15000.00, 13378.00, 1622.00, 14),
+(18000.00, 16093.60, 1906.4, 15),
+(15000.00, 13378.00, 1622.00, 16),
+(15000.00, 13378.00, 1622.00, 17),
+(18000.00, 16093.60, 1906.4, 18),
+(15000.00, 13378.00, 1622.00, 19),
+(15000.00, 13378.00, 1622.00, 20),
+(18000.00, 16093.60, 1906.4, 21),
+(15000.00, 13378.00, 1622.00, 22),
+(15000.00, 13378.00, 1622.00, 23),
+(18000.00, 16093.60, 1906.4, 24),
+(15000.00, 13378.00, 1622.00, 25),
+(15000.00, 13378.00, 1622.00, 26),
+(18000.00, 16093.60, 1906.4, 27),
+(15000.00, 13378.00, 1622.00, 28);
+
 
 CREATE TABLE tax_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
@@ -116,7 +193,26 @@ INSERT INTO tax_info (income_tax, withholding_tax, salary_id) VALUES
 (0.00, 0.00, 6),
 (0.00, 0.00, 7),
 (5416.67, 4208.33, 8),
-(2916.67, 2208.33, 9);
+(2916.67, 2208.33, 9),
+(5416.67, 4208.33, 10),
+(0.00, 0.00, 11),
+(0.00, 0.00, 12),
+(0.00, 0.00, 13),
+(0.00, 0.00, 14),
+(0.00, 0.00, 15),
+(0.00, 0.00, 16),
+(0.00, 0.00, 17),
+(0.00, 0.00, 18),
+(0.00, 0.00, 19),
+(0.00, 0.00, 20),
+(0.00, 0.00, 21),
+(0.00, 0.00, 22),
+(0.00, 0.00, 23),
+(0.00, 0.00, 24),
+(0.00, 0.00, 25),
+(0.00, 0.00, 26),
+(0.00, 0.00, 27),
+(0.00, 0.00, 28);
 
 CREATE TABLE benefit_info (
     id INT(10) NOT NULL AUTO_INCREMENT,
@@ -138,7 +234,26 @@ INSERT INTO benefit_info (philhealth, sss_fund, pagibig_fund, thirteenth_month, 
 (900.00, 806.40, 200.00, 18000.00, 6),
 (1000.00, 896.00, 200.00, 20000.00, 7),
 (2250.00, 2016.00, 200.00, 45000.00, 8),
-(1750.00, 1568.00, 200.00, 35000.00, 9);
+(1750.00, 1568.00, 200.00, 35000.00, 9),
+(2250.00, 2016.00, 200.00, 45000.00, 10),
+(750.00, 672.00, 200.00, 15000.00, 11),
+(900.00, 806.40, 200.00, 18000.00, 12),
+(750.00, 672.00, 200.00, 15000.00, 13),
+(750.00, 672.00, 200.00, 15000.00, 14),
+(900.00, 806.40, 200.00, 18000.00, 15),
+(750.00, 672.00, 200.00, 15000.00, 16),
+(750.00, 672.00, 200.00, 15000.00, 17),
+(900.00, 806.40, 200.00, 18000.00, 18),
+(750.00, 672.00, 200.00, 15000.00, 19),
+(750.00, 672.00, 200.00, 15000.00, 20),
+(900.00, 806.40, 200.00, 18000.00, 21),
+(750.00, 672.00, 200.00, 15000.00, 22),
+(750.00, 672.00, 200.00, 15000.00, 23),
+(900.00, 806.40, 200.00, 18000.00, 24),
+(750.00, 672.00, 200.00, 15000.00, 25),
+(750.00, 672.00, 200.00, 15000.00, 26),
+(900.00, 806.40, 200.00, 18000.00, 27),
+(750.00, 672.00, 200.00, 15000.00, 28);
 
 CREATE TABLE products (
   ProductID int(11) NOT NULL AUTO_INCREMENT,
