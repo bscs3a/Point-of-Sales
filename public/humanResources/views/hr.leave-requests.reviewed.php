@@ -9,13 +9,13 @@ $query .= " LEFT JOIN employees ON leave_requests.employees_id = employees.id";
 $params = [];
 
 if (!empty($search)) {
-  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.employees_id = :search) AND";
+  $query .= " WHERE (employees.first_name = :search OR employees.last_name = :search OR employees.position = :search OR employees.department = :search OR leave_requests.id = :search OR leave_requests.type = :search OR leave_requests.status = :search OR leave_requests.employees_id = :search) AND";
   $params[':search'] = $search;
 } else {
   $query .= " WHERE";
 }
 
-$query .= " leave_requests.status = 'pending'";
+$query .= " (leave_requests.status = 'approved' OR leave_requests.status = 'denied')";
 
 $query .= " ORDER BY leave_requests.id DESC";
 
@@ -33,7 +33,7 @@ $stmt = null;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
-  <link href="./../src/tailwind.css" rel="stylesheet">
+  <link href="./../../src/tailwind.css" rel="stylesheet">
   <title>Leave Requests</title>
 </head>
 <body class="text-gray-800 font-sans">
@@ -56,7 +56,9 @@ $stmt = null;
     <a route="/hr/dashboard" class="text-[#151313] hover:text-gray-600 font-medium">Human Resources</a>
   </li>
   <li class="text-[#151313] mr-2 font-medium">/</li>
-  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Leave Requests</a>
+  <a route="/hr/leave-requests" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Leave Requests</a>
+  <li class="text-[#151313] mr-2 font-medium">/</li>
+  <a href="#" class="text-[#151313] mr-2 font-medium hover:text-gray-600">Reviewed</a>
    </ul>
    <?php 
     require_once 'inc/logout.php';
@@ -70,12 +72,12 @@ $stmt = null;
         <div class="border-b border-gray-200">
             <nav class="-mb-px flex flex-wrap gap-6" aria-label="Tabs">
                 <a route="/hr/leave-requests"
-                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
-                    aria-current="page">
+                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                     All Requests
                 </a>
                 <a route="/hr/leave-requests/reviewed"
-                    class="cursor-pointer shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    class="cursor-pointer shrink-0 border-b-2 border-sidebar px-1 pb-4 text-sm font-medium text-sidebar"
+                    aria-current="page">
                     Reviewed Requests
                 </a>
             </nav>
@@ -86,9 +88,10 @@ $stmt = null;
 
   <!-- Leave Requests -->
   <div class="flex flex-wrap">
-    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 font-medium bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">File a Leave</button>
+    <!-- <h3 class="ml-6 mt-8 text-xl font-bold">Leave Requests</h3> -->
+    <button route="/hr/leave-requests/file-leave" class="mt-9 mr-4 flex ml-6 bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">File a Leave</button>
 
-    <form action="/hr/leave-requests" method="POST" class="mt-6 ml-auto mr-4 flex">
+    <form action="/hr/leave-requests/reviewed" method="POST" class="mt-6 ml-auto mr-4 flex">
       <input type="search" id="search" name="search" placeholder="Search" class="w-40 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
       <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600"><i class="ri-search-line"></i></button>
     </form>
@@ -100,49 +103,26 @@ $stmt = null;
         require_once 'inc/noResult.php';
     } 
     else {
-        require_once 'inc/leave-requests.table.php';
+        require_once 'inc/leave-requests.reviewed.table.php';
     } 
   ?>
 <!-- End Leave Requests -->
   
+  
 </main>
 <!-- End Main Bar -->
-<script  src="./../src/route.js"></script>
-<script  src="./../src/form.js"></script>
+<script  src="./../../src/route.js"></script>
+<script  src="./../../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
+
+<!-- Sidebar active/inactive -->
 <script>
-  // REJECT MODAL
-  document.querySelectorAll('.rejectButton').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var id = this.getAttribute('data-id');
-      document.getElementById('idToReject').value = id;
-      document.getElementById('rejectModal').classList.remove('hidden');
-    });
-  });
-
-  document.getElementById('cancelReject').addEventListener('click', function() {
-    document.getElementById('rejectModal').classList.add('hidden');
-  });
-
-  document.getElementById('confirmReject').addEventListener('click', function() {
-    document.getElementById('rejectModal').submit();
-  });
-
-  // ACCEPT MODAL
-  document.querySelectorAll('.acceptButton').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var id = this.getAttribute('data-id');
-      document.getElementById('idToAccept').value = id;
-      document.getElementById('acceptModal').classList.remove('hidden');
-    });
-  });
-
-  document.getElementById('cancelAccept').addEventListener('click', function() {
-    document.getElementById('acceptModal').classList.add('hidden');
-  });
-
-  document.getElementById('confirmAccept').addEventListener('click', function() {
-    document.getElementById('acceptModal').submit();
+  document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+    document.getElementById('sidebar-menu').classList.toggle('hidden');
+    document.getElementById('sidebar-menu').classList.toggle('transform');
+    document.getElementById('sidebar-menu').classList.toggle('-translate-x-full');
+    document.getElementById('mainContent').classList.toggle('md:w-full');
+    document.getElementById('mainContent').classList.toggle('md:ml-64');
   });
 </script>
 </body>
