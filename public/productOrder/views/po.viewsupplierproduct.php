@@ -144,14 +144,16 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
           <table class="min-w-full text-left mx-auto bg-white">
             <thead class="bg-gray-200 border-b border-gray-400 text-sm">
               <tr>
-                <th class="px-10 py-2 font-semibold">Product Image</th>
-                <th class="px-10 py-2 font-semibold">Product ID</th>
-                <th class="px-10 py-2 font-semibold">Supplier Name</th>
-                <th class="px-10 py-2 font-semibold">Category</th>
-                <th class="px-20 py-2 font-semibold">Product Price</th>
-                <th class="px-20 py-2 font-semibold">Retail Price</th>
-                <th class="px-10 py-2 font-semibold">Description</th>
-                <th class="px-10 py-2 font-semibold">Availability</th>
+                <th class="px-4 py-2 font-semibold">Product Image</th>
+                <th class="px-4 py-2 font-semibold">Product ID</th>
+                <th class="px-4 py-2 font-semibold">Supplier</th>
+                <th class="px-4 py-2 font-semibold">Category</th>
+                <th class="px-4 py-2 font-semibold">Product Price</th>
+                <th class="px-4 py-2 font-semibold">Supplier Price</th>
+                <th class="px-4 py-2 font-semibold">Availability</th>
+                <th class="px-4 py-2 font-semibold">Description</th>
+                <th class="px-4 py-2 font-semibold">Product Weight (KG)</th>
+                <th class="px-4 py-2 font-semibold">Unit of Measurement</th>
                 <th class="px-10 py-2 font-semibold text-center">Quantity</th>
               </tr>
             </thead>
@@ -191,10 +193,12 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<td class="px-10 py-4 text-center">' . $row['Supplier'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Category'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Price'] . '</td>';
-                      echo '<td class="px-4 py-4 text-center">Php ' . $row['Retail_Price'] . '</td>';
-                      echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">Php ' . $row['Supplier_Price'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Availability'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Price'] . '"></td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['ProductWeight'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['UnitOfMeasurement'] . '</td>';
+                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Supplier_Price'] . '"></td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
@@ -269,7 +273,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-<!-- <script>
+<script>
     document.addEventListener("DOMContentLoaded", function() {
         // Assuming the remaining funds for the department is available as a JavaScript variable
         var remainingFunds = <?php echo getRemainingProductOrderPondo(); ?>;
@@ -298,7 +302,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
             }
         });
     });
-</script> -->
+</script>
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>

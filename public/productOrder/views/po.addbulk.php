@@ -75,10 +75,11 @@
                 <th class="px-4 py-2 font-semibold">Product Name</th>
                 <th class="px-4 py-2 font-semibold">Category</th>
                 <th class="px-4 py-2 font-semibold">Product Price</th>
-                <th class="px-4 py-2 font-semibold">Retail Price</th>
+                <th class="px-4 py-2 font-semibold">Supplier Price</th>
                 <th class="px-4 py-2 font-semibold">Availability</th>
                 <th class="px-4 py-2 font-semibold">Description</th>
-                <th class="px-4 py-2 font-semibold">Product Weight(for delivery)KG</th>
+                <th class="px-4 py-2 font-semibold">Product Weight (KG)</th>
+                <th class="px-4 py-2 font-semibold">Unit of Measurement</th>
               </tr>
             </thead>
 
@@ -129,6 +130,8 @@
                   <td><input type="float" name="productweight1"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement1" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 2 -->
                 <tr>
@@ -172,6 +175,8 @@
                   <td><input type="float" name="productweight2"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement2" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 3 -->
                 <tr>
@@ -215,6 +220,8 @@
                   <td><input type="float" name="productweight3"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement3" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 4 -->
                 <tr>
@@ -258,6 +265,8 @@
                   <td><input type="float" name="productweight4"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement4" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 5 -->
                 <tr>
@@ -301,6 +310,8 @@
                   <td><input type="float" name="productweight5"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement5" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 6 -->
                 <tr>
@@ -344,6 +355,8 @@
                   <td><input type="float" name="productweight6"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement6" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 7 -->
                 <tr>
@@ -387,6 +400,8 @@
                   <td><input type="float" name="productweight7"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement7" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 8 -->
                 <tr>
@@ -430,6 +445,8 @@
                   <td><input type="float" name="productweight8"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement8" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 9 -->
                 <tr>
@@ -473,6 +490,8 @@
                   <td><input type="float" name="productweight9"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement9" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 10 -->
                 <tr>
@@ -516,6 +535,8 @@
                       <td><input type="float" name="productweight10"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement10" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 11 -->
                 <tr>
@@ -559,6 +580,8 @@
                       <td><input type="float" name="productweight12"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement11" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 12 -->
                 <tr>
@@ -602,6 +625,8 @@
                       <td><input type="float" name="productweight12"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement12" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
                 <!-- Row 13 -->
                 <tr>
@@ -645,6 +670,8 @@
                       <td><input type="float" name="productweight13"
                         class="px-4 py-2 border border-gray-300 rounded-md w-full">
                     </td>
+                    <td><input type="text" name="measurement13" class="px-4 py-2 border border-gray-300 rounded-md w-full">
+                  </td>
                 </tr>
               </tbody>
         </div>

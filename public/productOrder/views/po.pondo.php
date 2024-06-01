@@ -33,6 +33,9 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
 
 <body>
+    <?php 
+    echo $remainingPondo;
+    ?>
 <div class="flex h-screen bg-white">
 <!-- sidebar -->
 <div id="sidebar" class="flex h-screen">

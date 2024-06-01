@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 30, 2024 at 08:56 PM
+-- Generation Time: May 31, 2024 at 05:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -133,23 +133,6 @@ CREATE TABLE `batch_orders` (
   `Total_Amount` int(11) NOT NULL,
   `Order_Status` varchar(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `batch_orders`
---
-
-INSERT INTO `batch_orders` (`Batch_ID`, `Supplier_ID`, `Time_Ordered`, `Date_Ordered`, `Items_Subtotal`, `Total_Amount`, `Order_Status`) VALUES
-(1, 1, '22:37:54', '2024-05-30', 1, 10, 'Completed'),
-(2, 1, '23:08:51', '2024-05-30', 2, 20, 'Cancelled'),
-(3, 1, '23:16:41', '2024-05-30', 13, 180, 'Completed'),
-(4, 1, '23:17:50', '2024-05-30', 1, 60, 'Cancelled'),
-(5, 1, '00:15:38', '2024-05-31', 3, 80, 'Completed'),
-(6, 1, '00:19:13', '2024-05-31', 1, 60, 'Completed + Delayed'),
-(7, 1, '00:20:00', '2024-05-31', 1, 60, 'Completed'),
-(8, 1, '00:20:12', '2024-05-31', 2, 70, 'Cancelled + Delayed'),
-(9, 1, '00:20:18', '2024-05-31', 4, 90, 'Cancelled'),
-(10, 1, '00:23:43', '2024-05-31', 666, 6710, 'to receive + Delayed'),
-(11, 1, '01:42:37', '2024-05-31', 1, 60, 'to receive');
 
 -- --------------------------------------------------------
 
@@ -285,7 +268,7 @@ INSERT INTO `employees` (`id`, `image_url`, `first_name`, `middle_name`, `last_n
 (3, 'https://pbs.twimg.com/profile_images/1556154158860107776/1eTSWQJx_400x400.jpg', 'Ziggy', 'Castro', 'Co', '2001-12-19', 'Female', 'Filipino', 'Pampanga', '09123456789', 'ziggyco@example.com', 'Single', 'Human Resources', 'Compensation and Benefits Specialist', '9842683190', '222904801483', '398938596', '393260427062'),
 (4, 'https://pbs.twimg.com/profile_images/1591010546899308544/9_n476w9_400x400.png', 'Nathaniel', '', 'Fernandez', '2003-04-06', 'Male', 'Filipino', 'Pampanga', '09123456789', 'nathZ@example.com', 'Single', 'Human Resources', 'HR Legal Compliance Specialist', '3217127657', '982459800458', '175523699', '723082092314'),
 (5, 'https://pbs.twimg.com/profile_images/1746139769342742528/cDQRzJIV_400x400.jpg', 'Emmanuel Louise', '', 'Gonzales', '2001-01-27', 'Male', 'Filipino', 'Pampanga', '09123456789', 'emman@example.com', 'Divorced', 'Human Resources', 'Recruiter', '3831913601', '296757397697', '136729120', '687715123719'),
-(6, '/master/public/humanResources/img/noPhotoAvailable.png', 'Joshua', '', 'Casupang', '2003-06-21', 'Male', 'Filipino', 'Pampanga', '09123456789', 'joshua@example.com', 'Married', 'Product Order', 'HR Coordinator', '1788631721', '493539660119', '579494717', '254144900265'),
+(6, '/master/public/humanResources/img/noPhotoAvailable.png', 'Joshua', '', 'Casupang', '2003-06-21', 'Male', 'Filipino', 'Pampanga', '09123456789', 'joshua@example.com', 'Married', 'Human Resources', 'HR Coordinator', '1788631721', '493539660119', '579494717', '254144900265'),
 (7, '/master/public/humanResources/img/noPhotoAvailable.png', 'Marc', 'Cruz', 'David', '2002-02-09', 'Male', 'Filipino', 'Pampanga', '09293883802', 'sinicchi123@gmail.com', 'Single', 'Product Order', 'Order Processor', '5239186621', '113821417235', '293860405', '677900026630'),
 (8, 'https://pbs.twimg.com/profile_images/1776936838118404096/cxF34bgy_400x400.jpg', 'Jarelle Anne', 'Cañada', 'Pamintuan', '2001-08-31', 'Female', 'Filipino', 'Rias-Eveland Boulevard', '09675222420', 'jarelleannepamintuan@gmail.com', 'Single', 'Human Resources', 'HR Manager/Director', '3934191496', '254323228890', '811863948', '077652901241'),
 (9, 'https://pbs.twimg.com/profile_images/1556154158860107776/1eTSWQJx_400x400.jpg', 'Ziggy', 'Castro', 'Co', '2001-12-19', 'Female', 'Filipino', 'Pampanga', '09123456789', 'ziggyco@example.com', 'Single', 'Human Resources', 'Compensation and Benefits Specialist', '9842683190', '222904801483', '398938596', '393260427062'),
@@ -346,20 +329,6 @@ CREATE TABLE `feedbacks` (
   `date` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `feedbacks`
---
-
-INSERT INTO `feedbacks` (`feedback_ID`, `supplier_ID`, `batch_ID`, `user`, `reviews`, `date`) VALUES
-(1, 1, 2, 'bscs3a006', 'Late', '2024-05-30'),
-(2, 1, 8, 'bscs3a006', 'Delayed and Cancelled like watdafak', '2024-05-31'),
-(3, 1, 4, 'bscs3a006', 'useless item and personw', '2024-05-31'),
-(4, 1, 9, 'bscs3a006', 'stoopid', '2024-05-31'),
-(5, 1, 1, 'bscs3a006', 'nice i like it', '2024-05-31'),
-(6, 1, 3, 'bscs3a006', 'so amaying', '2024-05-31'),
-(7, 1, 5, 'bscs3a006', 'watdafah', '2024-05-31'),
-(8, 1, 7, 'bscs3a006', 'xD', '2024-05-31');
-
 -- --------------------------------------------------------
 
 --
@@ -379,12 +348,7 @@ CREATE TABLE `funds_transaction` (
 INSERT INTO `funds_transaction` (`id`, `employee_id`, `lt_id`) VALUES
 (7, 1, 33828),
 (19, 1, 33860),
-(20, 1, 33862),
-(21, 6, 35232),
-(22, 6, 35233),
-(23, 6, 35234),
-(24, 6, 35235),
-(25, 6, 35236);
+(20, 1, 33862);
 
 -- --------------------------------------------------------
 
@@ -526,12 +490,7 @@ INSERT INTO `ledgertransaction` (`LedgerXactID`, `LedgerNo`, `DateTime`, `Ledger
 (34084, 4, '2024-05-17 13:19:16', 37, 100, 'Paid 37 using 4'),
 (35225, 11, '2024-04-01 08:53:46', 4, 100, 'sales try'),
 (35230, 25, '2024-04-30 23:59:59', 11, 100, 'closing of account'),
-(35231, 7, '2024-04-30 23:59:59', 25, 100, 'giving the remaining to the owner'),
-(35232, 3, '2024-05-30 16:37:54', 6, 0, 'Pondo expense for Product Order'),
-(35233, 4, '2024-05-30 16:37:54', 6, 10, 'Pondo expense for Product Order'),
-(35234, 4, '2024-05-30 16:39:13', 1, 10, 'Pondo expense for Product Order'),
-(35235, 3, '2024-05-30 17:08:51', 6, 0, 'Pondo expense for Product Order'),
-(35236, 4, '2024-05-30 17:08:51', 6, 20, 'Pondo expense for Product Order');
+(35231, 7, '2024-04-30 23:59:59', 25, 100, 'giving the remaining to the owner');
 
 -- --------------------------------------------------------
 
@@ -548,23 +507,6 @@ CREATE TABLE `order_details` (
   `Time_Ordered` time NOT NULL DEFAULT current_timestamp(),
   `Date_Ordered` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `order_details`
---
-
-INSERT INTO `order_details` (`Order_ID`, `Product_ID`, `Supplier_ID`, `Batch_ID`, `Product_Quantity`, `Time_Ordered`, `Date_Ordered`) VALUES
-(3, 1, 1, 1, 1, '22:37:54', '2024-05-30'),
-(4, 1, 1, 2, 2, '23:08:51', '2024-05-30'),
-(8, 1, 1, 3, 13, '23:16:41', '2024-05-30'),
-(9, 1, 1, 4, 1, '23:17:50', '2024-05-30'),
-(10, 1, 1, 5, 3, '00:15:38', '2024-05-31'),
-(11, 1, 1, 6, 1, '00:19:13', '2024-05-31'),
-(12, 1, 1, 7, 1, '00:20:00', '2024-05-31'),
-(13, 1, 1, 8, 2, '00:20:12', '2024-05-31'),
-(14, 1, 1, 9, 4, '00:20:18', '2024-05-31'),
-(15, 1, 1, 10, 666, '00:23:43', '2024-05-31'),
-(16, 1, 1, 11, 1, '01:42:37', '2024-05-31');
 
 -- --------------------------------------------------------
 
@@ -668,7 +610,24 @@ INSERT INTO `poauditlogs` (`audit_ID`, `date`, `user`, `action`, `time_in`, `tim
 (69, '2024-05-31', 'bscs3a006', 'Added items for Supplier: San Dy', '02:47:01', '00:00:00'),
 (70, '2024-05-31', 'bscs3a006', 'Added items for Supplier: Edward Shop', '02:50:15', '00:00:00'),
 (71, '2024-05-31', 'bscs3a006', 'Updated the Supplier Information and Products on Supplier: Edward Shop', '02:51:38', '00:00:00'),
-(72, '2024-05-31', '123', 'Logged In', '02:55:49', '00:00:00');
+(72, '2024-05-31', '123', 'Logged In', '02:55:49', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Logged Out', '02:51:38', '21:59:56'),
+(0, '2024-05-31', '123', 'Logged In', '22:01:18', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Logged In', '22:01:55', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added Supplier: Test', '22:08:33', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Updated the Supplier Information and Products on Supplier: Test', '22:14:31', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Updated the Supplier Information and Products on Supplier: Test', '22:16:52', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Updated the Supplier Information and Products on Supplier: Test', '22:17:59', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Placed an Order for Supplier: Test', '22:20:39', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added items for Supplier: Test', '22:22:53', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added items for Supplier: Test', '22:23:24', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added Supplier: Mark', '22:29:08', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added items for Supplier: Test', '22:38:50', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added Supplier: Marc Shop', '22:45:54', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added Supplier: Marc Shop', '22:57:50', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Deleted Supplier: Marc Shop', '22:58:27', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added Supplier: Aian\'s Bakery', '23:00:36', '00:00:00'),
+(0, '2024-05-31', 'bscs3a006', 'Added items for Supplier: Aian\'s Bakery', '23:01:34', '00:00:00');
 
 -- --------------------------------------------------------
 
@@ -687,11 +646,12 @@ CREATE TABLE `products` (
   `Category` varchar(50) DEFAULT NULL,
   `DeliveryRequired` varchar(3) DEFAULT NULL,
   `Price` decimal(10,2) DEFAULT NULL,
-  `Retail_Price` decimal(10,2) DEFAULT NULL,
+  `Supplier_Price` decimal(10,2) DEFAULT NULL,
   `Stocks` int(11) DEFAULT NULL,
   `UnitOfMeasurement` varchar(20) DEFAULT NULL,
   `TaxRate` decimal(5,2) DEFAULT NULL,
   `ProductWeight` decimal(10,2) DEFAULT NULL,
+  `Status` varchar(35) NOT NULL,
   `Availability` varchar(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -699,33 +659,14 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`ProductID`, `Supplier_ID`, `Category_ID`, `ProductImage`, `ProductName`, `Supplier`, `Description`, `Category`, `DeliveryRequired`, `Price`, `Retail_Price`, `Stocks`, `UnitOfMeasurement`, `TaxRate`, `ProductWeight`, `Availability`) VALUES
-(1, 1, 1, 'uploads/hotdog.jpg', 'Hotdog', 'Marc XD', 'A Hot Dog', 'Tools', NULL, 10.00, 15.00, 19, NULL, NULL, 12.00, 'Available'),
-(2, 1, 1, 'uploads/Hammer_(Large).png', 'Hammer (Large)', 'Marc XD', 'Heavy-duty hammer for construction work', 'Tools', NULL, 329.00, 421.00, NULL, NULL, NULL, 1.50, 'Available'),
-(3, 1, 1, 'uploads/Screwdriver_Set_(Standard).png', 'Screwdriver Set (Standard)', 'Marc XD', 'Set of 6 screwdrivers with various sizes', 'Tools', NULL, 969.00, 1135.00, NULL, NULL, NULL, 0.80, 'Available'),
-(4, 1, 1, 'uploads/Paint_Brush_Set.png', 'Paint Brush Set', 'Marc XD', 'Set of 10 paint brushes for art projects', 'Tools', NULL, 209.00, 431.00, NULL, NULL, NULL, 0.50, 'Available'),
-(5, 2, 2, 'uploads/Drill_Machine.png', 'Drill Machine', 'San Dy', 'Cordless drill machine with rechargeable batteries', 'Tools', NULL, 1100.00, 1500.00, NULL, NULL, NULL, 20.00, 'Available'),
-(6, 2, 6, 'uploads/Cement_(50kg).png', 'Cement (50kg)', 'San Dy', 'Portland cement for construction purposes', 'Building Materials', NULL, 240.00, 280.00, NULL, NULL, NULL, 50.00, 'Available'),
-(7, 2, 6, 'uploads/Gravel_(1_ton).png', 'Gravel (1 ton)', 'San Dy', 'Crushed stone for construction projects', 'Building Materials', NULL, 550.00, 610.00, NULL, NULL, NULL, 907.19, 'Available'),
-(8, 3, 6, 'uploads/Plywood_(4x8_feet).png', 'Plywood (4x8 feet)', 'Nature\'s Bounty', 'Plywood sheets for carpentry and construction', 'Building Materials', NULL, 650.00, 730.00, NULL, NULL, NULL, 20.00, 'Available'),
-(9, 3, 6, 'uploads/Brick_(Standard).png', 'Brick (Standard)', 'Nature\'s Bounty', 'Standard clay bricks for construction', 'Building Materials', NULL, 12.00, 18.00, NULL, NULL, NULL, 2.50, 'Available'),
-(10, 3, 9, 'uploads/Acrylic_Paint_Set.png', 'Acrylic Paint Set', 'Nature\'s Bounty', 'Set of vibrant acrylic paints suitable for various...', 'Paints and Chemicals', NULL, 99.00, 130.00, NULL, NULL, NULL, 0.70, 'Not Available'),
-(11, 3, 8, 'uploads/High-Visibility_Safety_Vest.png', 'High-Visibility Safety Vest', 'Nature\'s Bounty', 'Fluorescent safety vest for high-visibility in construction areas', 'Safety Gear', NULL, 58.00, 73.00, NULL, NULL, NULL, 0.40, 'Available'),
-(12, 3, 6, 'uploads/PVC_Pipes_(10_feet).png', 'PVC Pipes (10 feet)', 'Nature\'s Bounty', 'PVC pipes for plumbing and drainage systems', 'Building Materials', NULL, 42.00, 63.00, NULL, NULL, NULL, 6.00, 'Not Available'),
-(13, 1, 1, 'uploads/Adjustable_Wrench_(12_inches).png', 'Adjustable Wrench (12 inches)', 'Marc XD', 'Adjustable wrench for plumbing and mechanical work', 'Tools', NULL, 109.00, 136.00, NULL, NULL, NULL, 1.20, 'Available'),
-(14, 1, 5, 'uploads/Adhesive_Primer_(1_gallon).png', 'Adhesive Primer (1 gallon)', 'Marc XD', 'Adhesive primer for preparing surfaces before painting', 'Paints and Chemicals', NULL, 210.00, 285.00, NULL, NULL, NULL, 0.70, 'Available'),
-(15, 4, 5, 'uploads/Canvas_Roll_(6_feet).png', 'Canvas Roll (6 feet)', 'Edward Shop', 'Roll of primed canvas for painting', 'Paints and Chemicals', NULL, 40.00, 60.00, NULL, NULL, NULL, 3.00, 'Available'),
-(16, 4, 2, 'uploads/Concrete_Blocks_(Standard).png', 'Concrete Blocks (Standard)', 'Edward Shop', 'Standard concrete blocks for building walls', 'Building Materials', NULL, 12.00, 16.00, NULL, NULL, NULL, 2.30, 'Available'),
-(17, 4, 2, 'uploads/Concrete_Mix_(50_lb).png', 'Concrete Mix (50 lb)', 'Edward Shop', 'Pre-mixed concrete for small-scale construction projects', 'Building Materials', NULL, 365.00, 400.00, NULL, NULL, NULL, 22.68, 'Available'),
-(18, 1, 3, 'uploads/Drywall_(4x8_feet).png', 'Drywall (4x8 feet)', 'Marc XD', 'Drywall sheets for interior wall finishing', 'Art Supplies', NULL, 450.00, 489.00, NULL, NULL, NULL, 0.12, 'Available'),
-(19, 1, 1, 'uploads/Electric_Screwdriver.png', 'Electric Screwdriver', 'Marc XD', 'Electric screwdriver with multiple torque settings', 'Tools', NULL, 269.00, 314.00, NULL, NULL, NULL, 0.16, 'Available'),
-(20, 2, 2, 'uploads/Galvanized_Nails_(5_lbs).png', 'Galvanized Nails (5 lbs)', 'San Dy', 'Galvanized nails for various construction applications', 'Building Materials', NULL, 50.00, 55.00, NULL, NULL, NULL, 0.13, 'Available'),
-(21, 2, 4, 'uploads/Hard_Hat_with_Ear_Protection.png', ' Full texts ProductID	 Supplier_ID	 Category_ID	 ProductImage	 ProductName	 Supplier	 Description	 C', 'San Dy', 'Safety hard hat with built-in ear protection for noisy environments', 'Safety Gear', NULL, 305.00, 365.00, NULL, NULL, NULL, 1.13, 'Available'),
-(22, 2, 2, 'uploads/Insulation_Foam_Board_(4x8_feet).png', 'Insulation Foam Board (4x8 feet)', 'San Dy', 'Foam boards for insulation purposes in construction', 'Building Materials', NULL, 380.00, 413.00, NULL, NULL, NULL, 0.80, 'Available'),
-(23, 4, 5, 'uploads/Oil_Paint_Set.png', 'Oil Paint Set', 'Edward Shop', 'Set of high-quality oil paints for professional artists', 'Paints and Chemicals', NULL, 129.00, 153.00, NULL, NULL, NULL, 1.73, 'Available'),
-(24, 4, 5, 'uploads/Paint_Roller_Set.png', 'Paint Roller Set', 'Edward Shop', 'Set of paint rollers for applying paint smoothly on surfaces', 'Paints and Chemicals', NULL, 300.00, 373.00, NULL, NULL, NULL, 0.12, 'Available'),
-(25, 4, 5, 'uploads/Paint_Thinner.png', 'Paint Thinner', 'Edward Shop', 'Solvent used for thinning oil-based paints and cleaning paint brushes', 'Paints and Chemicals', NULL, 170.00, 186.00, NULL, NULL, NULL, 0.60, 'Available'),
-(26, 4, 1, 'uploads/power tool battery.jpg', 'Power Tool Battery', 'Edward Shop', 'A power tool battery is a rechargeable battery designed to power cordless power tools, such as drills, saws, sanders, and other handheld devices.', 'Tools', NULL, 375.00, 456.00, NULL, NULL, NULL, 3.50, 'Available');
+INSERT INTO `products` (`ProductID`, `Supplier_ID`, `Category_ID`, `ProductImage`, `ProductName`, `Supplier`, `Description`, `Category`, `DeliveryRequired`, `Price`, `Supplier_Price`, `Stocks`, `UnitOfMeasurement`, `TaxRate`, `ProductWeight`, `Status`, `Availability`) VALUES
+(1, 2, 1, 'uploads/Hammer_(Large).png', 'Hammer (Large)', 'Marc Shop', 'Heavy-duty hammer for construction work', 'Tools', NULL, 329.00, 200.00, NULL, 'pcs', 0.12, 1.50, '', 'Available'),
+(2, 2, 1, 'uploads/Screwdriver_Set_(Standard).png', 'Screwdriver Set (Standard)', 'Marc Shop', 'Set of 6 screwdrivers with various sizes', 'Tools', NULL, 969.00, 700.00, NULL, 'set', 0.12, 0.80, '', 'Available'),
+(3, 2, 2, 'uploads/Cement_(50kg).png', 'Cement (50kg)', 'Marc Shop', 'Portland cement for construction purposes', 'Building Materials', NULL, 240.00, 180.00, NULL, 'pcs', 0.12, 50.00, '', 'Available'),
+(4, 2, 2, 'uploads/Gravel_(1_ton).png', 'Gravel (1 ton)', 'Marc Shop', 'Crushed stone for construction projects', 'Building Materials', NULL, 550.00, 400.00, NULL, 'ton', 0.12, 907.19, '', 'Available'),
+(5, 2, 3, 'uploads/Paint_Brush_Set.png', 'Paint Brush Set', 'Marc Shop', 'Set of 10 paint brushes for art projects', 'Art Supplies', NULL, 209.00, 150.00, NULL, 'set', 0.12, 0.50, '', 'Available'),
+(6, 3, 2, 'uploads/Galvanized_Nails_(5_lbs).png', 'Galvanized Nails (5 lbs)', 'Aian\'s Bakery', 'Galvanized nails for various construction applicat...', 'Building Materials', NULL, 50.00, 35.00, NULL, 'lbs', 0.12, 2.27, '', 'Available'),
+(7, 3, 2, 'uploads/Concrete_Blocks_(Standard).png', 'Concrete Blocks (Standard)', 'Aian\'s Bakery', 'Standard concrete blocks for building walls', 'Building Materials', NULL, 12.00, 8.00, NULL, 'pcs', 0.12, 2.30, '', 'Available');
 
 -- --------------------------------------------------------
 
@@ -881,10 +822,8 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`Supplier_ID`, `Supplier_Name`, `Contact_Name`, `Contact_Number`, `Status`, `Email`, `Address`, `Estimated_Delivery`, `Shipping_fee`, `Working_days`) VALUES
-(1, 'Marc XD', 'Marc', 91234567, 'Active', 'marc@gmail.com', 'Porac', '5 - 7 Days', '50', 'Monday - Friday'),
-(2, 'San Dy', 'John Smith', 12347890, 'Active', 'john.smith@yahoo.com', 'Manila', '3-5 days', '3 - 5 Days', 'Monday - Friday'),
-(3, 'Nature\'s Bounty', 'David Thompson', 1958201, 'Inactive', 'david.thompson@naturesbounty.com', 'Elmo Street', '2 - 4 Days', '80', 'Tuesday - Sunday'),
-(4, 'Edward Shop', 'Edward', 9167832, 'Active', 'edwardshop@gmail.com', 'Makati', '6 - 12 Days', '60', 'Sunday - Thursday');
+(2, 'Marc Shop', 'Marc', 9128317, 'Active', 'marc@gmail.com', 'Porac', '5 - 7 Days', '20', 'Monday - Wednesday'),
+(3, 'Aian\'s Bakery', 'Aian', 9278173, 'Active', 'aian@gmail.com', 'Bataan', '1 - 2 Days', '100', 'Sunday');
 
 -- --------------------------------------------------------
 
@@ -997,16 +936,7 @@ CREATE TABLE `transaction_history` (
 --
 
 INSERT INTO `transaction_history` (`Transaction_ID`, `Batch_ID`, `Supplier_ID`, `Date_Delivered`, `Time_Delivered`, `Order_Status`, `Feedback`) VALUES
-(1, 1, 1, '2024-05-30', '23:05:45', 'Completed', 'Done'),
-(2, 2, 1, '2024-05-30', '23:13:45', 'Cancelled', 'Done'),
-(3, 3, 1, '2024-05-30', '23:17:03', 'Completed', 'Done'),
-(4, 4, 1, '2024-05-30', '23:49:35', 'to receive + Delayed', 'Done'),
-(5, 4, 1, '2024-05-31', '00:18:26', 'Cancelled', 'Done'),
-(6, 5, 1, '2024-05-31', '00:18:38', 'Completed', 'Done'),
-(7, 6, 1, '2024-05-31', '00:19:17', 'Completed + Delayed', NULL),
-(8, 7, 1, '2024-05-31', '00:20:02', 'Completed', 'Done'),
-(9, 9, 1, '2024-05-31', '00:20:23', 'Cancelled', 'Done'),
-(10, 8, 1, '2024-05-31', '00:20:25', 'Cancelled + Delayed', 'Done');
+(1, 1, 1, '2024-05-31', '22:23:43', 'Completed', NULL);
 
 -- --------------------------------------------------------
 
@@ -1172,12 +1102,6 @@ ALTER TABLE `payroll`
   ADD KEY `salary_id` (`salary_id`);
 
 --
--- Indexes for table `poauditlogs`
---
-ALTER TABLE `poauditlogs`
-  ADD PRIMARY KEY (`audit_ID`);
-
---
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -1292,7 +1216,7 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `batch_orders`
 --
 ALTER TABLE `batch_orders`
-  MODIFY `Batch_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `Batch_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `benefit_info`
@@ -1310,7 +1234,7 @@ ALTER TABLE `calendar`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `Category_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Category_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -1340,13 +1264,13 @@ ALTER TABLE `employment_info`
 -- AUTO_INCREMENT for table `feedbacks`
 --
 ALTER TABLE `feedbacks`
-  MODIFY `feedback_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `feedback_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `funds_transaction`
 --
 ALTER TABLE `funds_transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `leave_requests`
@@ -1364,13 +1288,13 @@ ALTER TABLE `ledger`
 -- AUTO_INCREMENT for table `ledgertransaction`
 --
 ALTER TABLE `ledgertransaction`
-  MODIFY `LedgerXactID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35237;
+  MODIFY `LedgerXactID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35232;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `Order_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `Order_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payroll`
@@ -1379,16 +1303,10 @@ ALTER TABLE `payroll`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `poauditlogs`
---
-ALTER TABLE `poauditlogs`
-  MODIFY `audit_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
-
---
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `returnproducts`
@@ -1424,7 +1342,7 @@ ALTER TABLE `session`
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `Supplier_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Supplier_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `targetsales`
@@ -1442,7 +1360,7 @@ ALTER TABLE `tax_info`
 -- AUTO_INCREMENT for table `transaction_history`
 --
 ALTER TABLE `transaction_history`
-  MODIFY `Transaction_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `Transaction_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `trucks`
