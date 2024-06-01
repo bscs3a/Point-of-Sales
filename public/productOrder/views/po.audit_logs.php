@@ -16,11 +16,13 @@
     <!-- Start: Dashboard -->
     <div class="flex h-screen bg-white">
 
+
         <div id="sidebar" class="flex h-full">
             <?php include "public/productOrder/views/components/po.sidebar.php" ?>
         </div>
 
         <div class="flex flex-col flex-1 h-full overflow-y-auto hide-scrollbar">
+
             <div class="flex items-center justify-between h-20 bg-white shadow-md px-4 py-2">
 
                 <!-- Start: Active Menu -->
@@ -50,7 +52,9 @@
 
 
                 <div class="container mx-auto px-4 sm:px-8">
+
                 <div class="py-3">
+
                     <div>
                         <h2 class="text-2xl font-semibold leading-tight">Audit Logs</h2>
                     </div>
@@ -116,7 +120,9 @@
                                 // require_once './../../../src/dbconn.php';
                                 $db = Database::getInstance();
                                 $pdo = $db->connect();
+
                                 $numberPerPage = 8;
+
                                 $offset = isset($_GET['page']) ? ($_GET['page'] - 1) * $numberPerPage : 0;
                                 $department = $_SESSION['user']['role'];
                                 $searchQuery = isset($_SESSION['postdata']['searchQueryAudit']) ? $_SESSION['postdata']['searchQueryAudit'] : '';
@@ -190,7 +196,9 @@
                         ?>
                             <li>
                                 <a route="<?php echo $link . $i ?>"
+
                                     class="block size-8 rounded border <?= $i == $page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-100 text-gray-900' ?> text-center leading-8">
+
                                     <?= $i ?>
                                 </a>
                             </li>

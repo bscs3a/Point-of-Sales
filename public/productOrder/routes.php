@@ -885,8 +885,10 @@ Router::post('/edit/editsupplier', function () {
     $status = $_POST['status'];
     $location = $_POST['Address'];
     $estimatedDelivery = $_POST['estimated-delivery-date'];
+    $shippingfee = $_POST['shipping-fee'];
+    $workingdays = $_POST['working-days'];
 
-    $stmt_supplier = $conn->prepare("UPDATE suppliers SET Supplier_Name = :supplierName, Contact_Name = :contactName, Contact_Number = :contactNum, Email = :email, Status = :status, Address = :location, Estimated_Delivery = :estimatedDelivery WHERE Supplier_ID = :supplierID");
+    $stmt_supplier = $conn->prepare("UPDATE suppliers SET Supplier_Name = :supplierName, Contact_Name = :contactName, Contact_Number = :contactNum, Email = :email, Status = :status, Address = :location, Estimated_Delivery = :estimatedDelivery, Shipping_Fee = :shippingfee, Working_days = :workingdays WHERE Supplier_ID = :supplierID");
     $stmt_supplier->bindParam(':supplierID', $supplierID);
     $stmt_supplier->bindParam(':supplierName', $supplierName);
     $stmt_supplier->bindParam(':contactName', $contactName);
@@ -895,6 +897,8 @@ Router::post('/edit/editsupplier', function () {
     $stmt_supplier->bindParam(':status', $status);
     $stmt_supplier->bindParam(':location', $location);
     $stmt_supplier->bindParam(':estimatedDelivery', $estimatedDelivery);
+    $stmt_supplier->bindParam(':shippingfee', $shippingfee);
+    $stmt_supplier->bindParam(':workingdays', $workingdays);
     $stmt_supplier->execute();
 
     // Update product information
@@ -907,6 +911,8 @@ Router::post('/edit/editsupplier', function () {
             $descriptionKey = 'product_description_' . $productID;
             $productWeightKey = 'product_weight_' . $productID;
             $availabilityKey = 'availability_' . $productID;
+            $unitofmeasurement = 'unitofmeasurement_' . $productID;
+            $taxrate = 'taxrate_' . $productID;
 
             // Update product information
             $productName = $_POST[$key];
@@ -916,8 +922,11 @@ Router::post('/edit/editsupplier', function () {
             $description = $_POST[$descriptionKey];
             $productWeight = $_POST[$productWeightKey];
             $availability = $_POST[$availabilityKey];
+            $unitofmeasurement = $_POST[$unitofmeasurement];
+            $taxrate = $_POST[$taxrate];
+            
 
-            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Supplier_Price =:retailprice, Description = :description, ProductWeight = :productWeight, Availability = :availability WHERE ProductID = :productID");
+            $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Supplier_Price =:retailprice, Description = :description, ProductWeight = :productWeight, Availability = :availability, UnitOfMeasurement = :unitofmeasurement, TaxRate = :taxrate WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
             $stmt_product->bindParam(':category', $category);
             $stmt_product->bindParam(':price', $price);
@@ -926,6 +935,8 @@ Router::post('/edit/editsupplier', function () {
             $stmt_product->bindParam(':productWeight', $productWeight);
             $stmt_product->bindParam(':availability', $availability);
             $stmt_product->bindParam(':productID', $productID);
+            $stmt_product->bindParam(':unitofmeasurement', $unitofmeasurement);
+            $stmt_product->bindParam(':taxrate', $taxrate);
             $stmt_product->execute();
         }
     }
