@@ -51,38 +51,16 @@
 
       <a route='/po/pondo/page=1' class="flex justify-between items-center px-4 py-2 hover:bg-slate-400 rounded-xl text-white cursor-pointer">
         <span class="flex items-center">
-          <i class="ri-history-line" style="font-size: 1.2em;"></i>
+          <source >
+          <i class="ri-wallet-3-line" style="font-size: 1.2em;"></i>
           <span class="mx-4 text-sm font-medium">Pondo</span>
         </span>
 
         <span>
           <i class="ri-arrow-right-s-line"></i>
         </span>
-      </a>
-
-      
-      
-
-    
-
-    
-
-   
-        <span>
-          <svg
-            class="h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-          </svg>
-        </span>
+      </a>   
+ 
       </a>
     </nav>
   </div>
