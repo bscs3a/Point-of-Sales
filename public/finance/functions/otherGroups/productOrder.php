@@ -55,4 +55,25 @@ function cancelOrder($id){
 
     return;
 }
+
+function cancelOrder($id){
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    $sql = "SELECT lt_id FROM funds_transaction WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchColumn();
+
+    $sql = "DELETE FROM funds_transaction WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$id]);
+
+    $sql = "DELETE FROM ledgertransaction WHERE LedgerXactID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$result]);
+
+    return;
+}
 ?>

@@ -19,11 +19,12 @@ function inputSalary($monthlySalary, $withHoldingTax, $isPending, $paymentMethod
     }
 
     $hrRemainingPondo = getRemainingHRPondo($paymentMethod);
-    if($hrRemainingPondo < $monthlySalary){
-        throw new Exception("HR Pondo is greater than the total salary");
-    }
+
     if(!is_bool($isPending)){
         throw new Exception("isPending must be a boolean");
+    }
+    if(!$isPending && $hrRemainingPondo < $totalSalary){
+        throw new Exception("HR Pondo is greater than the total salary");
     }
     if(!$isPending){
         addSalaryPondoHR($SALARY, $totalSalary, $paymentMethod);
@@ -53,5 +54,28 @@ function addSalaryPondoHR($account, $amount, $paymentMethod){
     // divide it to the 2; to avoid error
     addTransactionPondo($account, $paymentMethod, $amount, $department);
     return;
+}
+
+function paySalaryPayable($monthlySalary, $withHoldingTax, $paymentMethod){
+    $SALARY_PAYABLE = getLedgerCode("Salary Payable");
+    $WITHHOLDING_TAX_PAYABLE = getLedgerCode("Withholding Tax Payable");
+
+    $totalSalary = $monthlySalary - $withHoldingTax;
+
+    $remValue = getRemainingHRPondo($paymentMethod);
+    if($totalSalary <= 0){
+        throw new Exception("Total Salary is less than 0");
+    }
+
+    if($paymentMethod !== "Cash on hand" && $paymentMethod !== "Cash on bank" ){
+        throw new Exception("Payment must be cash on hand or cash on bank");
+    }
+    if($remValue < $totalSalary){
+        throw new Exception("HR Pondo is greater than the total salary");
+    }
+    addTransactionPondo($SALARY_PAYABLE, $paymentMethod, $totalSalary);
+    if($withHoldingTax > 0){
+        addTransactionPondo($WITHHOLDING_TAX_PAYABLE, $paymentMethod, $withHoldingTax);
+    }
 }
 ?>

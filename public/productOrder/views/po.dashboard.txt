@@ -45,6 +45,7 @@
             </div>
           </button>
 
+
           <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
           <form id="logout-form" action="/logout/user" method="POST">

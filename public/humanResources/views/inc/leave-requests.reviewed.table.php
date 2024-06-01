@@ -8,7 +8,6 @@
           <th scope="col" class="px-6 py-4 font-medium text-gray-900">Reason</th>
           <th scope="col" class="px-6 py-4 font-medium text-gray-900">Status</th>
           <th scope="col" class="px-6 py-4 font-medium text-gray-900">Action</th>
-          <!-- <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th> -->
         </tr>
       </thead>
       <?php foreach ($leaveRequests as $leaveRequest): ?>
@@ -76,18 +75,8 @@
           </td>
           <td class="px-6 py-4">
             <!-- ACTION -->
-              <a route="/hr/leave-requests/id=<?php echo htmlspecialchars($leaveRequest['id']); ?>"  class="font-medium text-indigo-600 hover:text-indigo-900">View</a>
+              <a route="/hr/leave-requests/details=<?php echo htmlspecialchars($leaveRequest['id']); ?>"  class="font-medium text-indigo-600 hover:text-indigo-900">View</a>
           </td>
-          <!-- <td class="px-6 py-4">
-            <div class="flex justify-end gap-4">
-              <a class="acceptButton" data-id="<?php echo $leaveRequest['id']; ?>" x-data="{ tooltip: 'Accept' }" href="#">   
-                <i class="ri-check-line"></i>     
-              </a>
-              <a class="rejectButton" data-id="<?php echo $leaveRequest['id']; ?>" x-data="{ tooltip: 'Reject' }" href="#">
-                <i class="ri-close-line"></i>     
-              </a>
-            </div>
-          </td> -->
         </tr>  
           <?php endforeach; ?>          
       </tbody>
