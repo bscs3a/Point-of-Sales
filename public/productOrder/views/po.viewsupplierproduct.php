@@ -205,12 +205,14 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
 
                     echo '<button type="submit" class="ml-3 bg-blue-500 hover:bg-blue-700 border-2 border-black text-white font-bold py-2 px-4 my-3 rounded">Order</button>';
 
-                    // Add the "Pay Using" dropdown
-                    echo '<label for="payment-method" class="ml-3 mt-3">Pay Using:</label>';
+                    // Add the "Pay Using" dropdown with a larger label
+                    echo '<label for="payment-method" class="ml-3 mt-3 text-lg font-bold">Pay Using:</label>';
                     echo '<select id="payment-method" name="paymentmethod" class="ml-3 mt-1 border-2 border-black rounded">';
-                    echo '<option value="Cash on hand">Cash on hand</option>';
-                    echo '<option value="Cash on bank">Cash on bank</option>';
+                    echo '<option value="Cash on hand">Cash on hand: ' . getRemainingProductOrderPondo('Cash on hand') . '</option>';
+                    echo '<option value="Cash on bank">Cash on bank: ' . getRemainingProductOrderPondo('Cash on bank') . '</option>';
                     echo '</select>';
+
+
 
                     echo '</form>';
                   } else {
