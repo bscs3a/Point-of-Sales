@@ -1,5 +1,7 @@
 <?php
 
+require_once "public/finance/functions/otherGroups/sales.php";
+
 // $_SESSION['user'] = 'admin';
 // $_SESSION['role'] = 'admin';
 // $_SESSION['employee_name'] = "Alfaro, Aian Louise";
@@ -17,6 +19,7 @@ $sls = [
     '/sls/POS/Checkout' => $basePath . "checkout.php",
     '/sls/POS/Receipt' => $basePath . "Receipt.php",
     '/sls/Audit-Trail' => $basePath . "AuditTrail.php",
+
     '/sls/Revenue' => $basePath . "Revenue.php",
     '/sls/Returns' => $basePath . "ReturnTable.php",
     '/sls/Sales-Management' => $basePath . "SalesManagement.php",
@@ -49,6 +52,19 @@ $sls = [
     // functions
     // can't recognize by the router logout can proceed
     '/sls/logout' => "./public/sales/views/function/logout.php",
+
+
+    '/sls/funds/Sales/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "pondo.php";
+    },
+
+    '/sls/Audit-Logs/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
+
+
 ];
 
 // // Get the current URL path
@@ -209,6 +225,16 @@ Router::post('/addSales', function () {
         }
     }
 
+    $paymentMode = $_POST['payment-mode'];
+
+    if ($paymentMode === 'cash') {
+        $paymentMode = 'Cash on hand';
+    } elseif ($paymentMode === 'card') {
+        $paymentMode = 'Cash on bank';
+    }
+
+    insertSalesLedger($_POST['totalAmount'], $_POST['totalAmount'] - $_POST['subtotal'], $paymentMode);
+
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/sls/POS/Receipt");
 });
@@ -253,6 +279,8 @@ Router::post('/returnProduct', function () {
 
     // Execute the statement
     $stmt->execute();
+
+    insertSalesReturn($paymentReturned, 'Cash on hand');
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/sls/Returns");

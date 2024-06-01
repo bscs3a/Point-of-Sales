@@ -12,6 +12,7 @@ function insertSalesLedger($salesAmount, $taxAmount, $salesPaymentMethod, $disco
         throw new Exception("Amount(tax or sales) must be greater than 0");
     }
     if($salesPaymentMethod !== "Cash on hand" && $salesPaymentMethod !== "Cash on bank" ){
+        echo $salesPaymentMethod;
         throw new Exception("Payment must be cash on hand or cash on bank");
     }
     if($discount < 0){
@@ -93,7 +94,7 @@ function amountOfSalesTax(){
 // wala kaming amount of transactions
 
 function totalSalesMinusTax(){
-    return amountOfRawSales() - amountOfSalesTax();
+    return amountOfRawSales() * -1 - amountOfSalesTax() * -1;
 }
 
 function totalReturns(){
@@ -101,6 +102,6 @@ function totalReturns(){
 }
 
 function totalSalesMinusTaxAndReturns(){
-    return totalSalesMinusTax() - totalReturns();
+    return totalSalesMinusTax() * -1 - totalReturns() * -1;
 }
 ?>
