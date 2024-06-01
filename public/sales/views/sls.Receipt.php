@@ -100,7 +100,7 @@
                     <div class="px-8 py-6 w-full">
 
                         <table id="cart-items" class="table-auto w-full text-left xl:border">
-                            <tr class=" text-gray-500 xl:text-xl text-md border-b text-justify">
+                            <tr class=" text-gray-500 sm:text-md xl:text-xl text-md border-b text-justify">
                                 <th class="p-2">Product</th>
                                 <th class="p-2">Quantity</th>
                                 <th class="p-2">Pcs Price</th>

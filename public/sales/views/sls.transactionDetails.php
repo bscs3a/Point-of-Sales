@@ -129,7 +129,7 @@
                             <div class="bg-gray-200 rounded-full p-2 text-center font-bold">Heavy</div>
                             <span class="p-2"><?php echo $deliveryOrder['StreetBarangayAddress'] . ', ' . $deliveryOrder['Municipality'] . ', ' . $deliveryOrder['Province']; ?></span>
                             <span class="p-2"><?php echo $deliveryOrder['DeliveryDate']; ?></span>
-                            <div class="flex justify-center items-center">
+                            <div class="flex">
                                 <span class="p-2 bg-gray-200 px-4 rounded-full font-bold flex flex-row items-center">
                                     <div changeColor class="size-4 rounded-full mr-2"></div>
                                     <?php echo $deliveryOrder['DeliveryStatus']; ?>
