@@ -6,7 +6,7 @@ $basePath = "$path/po.";
 $po = [
     // Sample Routes
     '/po/login' => $basePath . "login.php",
-    '/po/dashboard' => $basePath . "dashboard.php",
+    // '/po/dashboard' => $basePath . "dashboard.php",
     '/po/requestOrder' => $basePath . "requestOrder.php",
     '/po/suppliers' => $basePath . "suppliers.php",
     '/po/addsupplier' => $basePath . "addsupplier.php",
@@ -430,6 +430,7 @@ Router::post('/placeorder/supplier/', function () {
         $supplierID = $_POST['supplierID'];
         $paymentmethod = $_POST['paymentmethod'];
 
+
         // Check supplier status
         $statusQuery = "SELECT Status FROM suppliers WHERE Supplier_ID = :supplierID";
         $statusStmt = $conn->prepare($statusQuery);
@@ -446,8 +447,7 @@ Router::post('/placeorder/supplier/', function () {
         // Prepare SQL statement for inserting orders into order_details table
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
-        // Prepare SQL statement for inserting batch into batch_orders table
-        $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive')");
+     
 
         // Get Batch_ID
         $batchID = getNextBatchID($conn); // Function to get the next available batch ID
@@ -502,6 +502,7 @@ Router::post('/placeorder/supplier/', function () {
                 // Calculate total amount
                 $totalAmount += $quantity * $productPrice;
 
+
                 // Audit log for adding bulk items on a supplier
                 $user_id = $_SESSION['user']['username']; // Assuming you have a user session
 
@@ -540,12 +541,16 @@ Router::post('/placeorder/supplier/', function () {
         } else {
             // If total quantity is greater than 0, proceed with batch order insertion
             if ($totalQuantity > 0) {
-                recordBuyingInventory($totalAmount,$paymentmethod); // This will save the total amount in finance
+                  // Prepare SQL statement for inserting batch into batch_orders table
 
+                $fundsID = recordBuyingInventory($totalAmount,$paymentmethod);
+                $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status, Pay_Using, Funds_Transact_ID) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive', :paymentmethod, :fundsID)");
                 // Bind parameters for batch order insertion
                 $batchOrderStmt->bindParam(':supplierID', $supplierID);
                 $batchOrderStmt->bindParam(':itemsSubtotal', $totalQuantity);
                 $batchOrderStmt->bindParam(':totalAmount', $totalAmount);
+                $batchOrderStmt->bindParam(':paymentmethod', $paymentmethod);
+                $batchOrderStmt->bindParam(':fundsID', $fundsID);
 
                 // Execute the statement for batch order insertion
                 $batchOrderStmt->execute();
@@ -1240,12 +1245,15 @@ function updateOrderStatusToCancel()
             $stmt->execute();
 
             // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
-            $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status FROM batch_orders WHERE Batch_ID = :batchID");
+            $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status, Funds_Transact_ID FROM batch_orders WHERE Batch_ID = :batchID");
             $orderDetailsStmt->bindParam(':batchID', $batchID);
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetch(PDO::FETCH_ASSOC);
             $supplierID = $orderDetails['Supplier_ID'];
             $orderStatus = $orderDetails['Order_Status'];
+            $fundsID = $orderDetails['Funds_Transact_ID'];
+
+            cancelOrder($fundsID);
 
             // Insert data into transaction_history table
             $insertStmt = $conn->prepare("INSERT INTO transaction_history (Batch_ID, Supplier_ID, Order_Status) VALUES (:batchID, :supplierID, :orderStatus)");

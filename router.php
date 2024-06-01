@@ -82,7 +82,7 @@ class Router
         $_SESSION['pageNotFound'] = true;
         $base_url = 'Master'; // Define your base URL here
         if ($user == 'Product Order') {
-            header("Location: /$base_url/po/dashboard");
+            header("Location: /$base_url/po/audit_logs/page=1");
             exit();
         } 
         if ($user == 'Human Resources') {
