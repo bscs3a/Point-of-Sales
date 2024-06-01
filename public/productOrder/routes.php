@@ -885,6 +885,7 @@ Router::post('/edit/editsupplier', function () {
     $status = $_POST['status'];
     $location = $_POST['Address'];
     $estimatedDelivery = $_POST['estimated-delivery-date'];
+    $shippingfee = $_POST['shipping-fee'];
 
     $stmt_supplier = $conn->prepare("UPDATE suppliers SET Supplier_Name = :supplierName, Contact_Name = :contactName, Contact_Number = :contactNum, Email = :email, Status = :status, Address = :location, Estimated_Delivery = :estimatedDelivery WHERE Supplier_ID = :supplierID");
     $stmt_supplier->bindParam(':supplierID', $supplierID);
