@@ -123,7 +123,7 @@
                         </tbody>
                     </table>
 
-                    <div class="flex flex-col gap-4 justify-start items-start">
+                    <!-- <div class="flex flex-col gap-4 justify-start items-start">
 
                         <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
 
@@ -149,7 +149,7 @@
 
                         </div>
 
-                        <!-- <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
 
                             <div class="flex flex-col gap-5">
                                 <div>
@@ -158,8 +158,8 @@
                                 <div class="text-5xl font-semibold ml-5">53</div>
                                 <div class="text-sm font-medium ml-5 text-green-700">+10% more than average</div>
                             </div>
-                        </div> -->
-                    </div>
+                        </div>
+                    </div> -->
                 </div>
             </div>
         </div>

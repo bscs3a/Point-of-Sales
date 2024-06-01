@@ -3972,11 +3972,6 @@ video {
   color: rgb(220 38 38 / var(--tw-text-opacity));
 }
 
-.text-red-700{
-  --tw-text-opacity: 1;
-  color: rgb(185 28 28 / var(--tw-text-opacity));
-}
-
 .text-sidebar{
   --tw-text-opacity: 1;
   color: rgb(38 34 97 / var(--tw-text-opacity));

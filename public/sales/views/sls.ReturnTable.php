@@ -213,13 +213,12 @@
 
 
                     <div class="flex flex-col gap-4 justify-start items-start">
-                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-center text-lg">
                             <div class="flex flex-col gap-5">
                                 <div class="text-lg font-semibold text-gray-800">
                                     <i class="ri-shake-hands-fill text-lg mx-2"></i> Number of Returns
                                 </div>
                                 <div class="text-5xl font-semibold ml-5"><?php echo $count; ?></div>
-                                <div class="text-sm font-semibold ml-5 text-red-700">+10% more than average</div>
                             </div>
                         </div>
 
@@ -230,15 +229,22 @@
                             $stmt->execute();
                             $totalPaymentReturned = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
                         ?>
-                        
+
                         <!-- Display total PaymentReturned -->
-                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-start text-lg">
+                        <div class="bg-white shadow-md text-left size-44 w-64 font-bold p-4 border-gray-200 border rounded-md flex justify-start items-center text-lg">
                             <div class="flex flex-col gap-5">
                                 <div>
                                     <i class="ri-funds-line text-lg mx-2"></i>Payment Returned
                                 </div>
-                                <div class="text-5xl font-semibold ml-5"><?php echo $totalPaymentReturned; ?></div>
-                                <div class="text-sm font-medium ml-5 text-red-700">+10% more than average</div>
+                                <div class="font-semibold ml-5">
+                                    <?php 
+                                        if (strlen((string)$totalPaymentReturned) > 5) {
+                                            echo '<span class="text-4xl">₱' . $totalPaymentReturned . '</span>';
+                                        } else {
+                                            echo '<span class="text-5xl">₱' . $totalPaymentReturned . '</span>';
+                                        }
+                                    ?>
+                                </div>
                             </div>
                         </div>
 

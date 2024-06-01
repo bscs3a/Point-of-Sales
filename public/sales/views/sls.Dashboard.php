@@ -107,7 +107,7 @@
 
             <!-- Start: Profile -->
 
-            <?php require_once "components/logout/logout.php"?>
+            <?php require_once "components/logout/logout.php" ?>
 
             <!-- End: Profile -->
 
@@ -250,7 +250,7 @@
                         <!-- Card title -->
                         <div class="">
                             <div class="text-lg font-semibold text-gray-800" style="color: #262261;">
-                                <i class="ri-box-3-fill" style="font-size: 1.2em;"></i> Stocks: <span class="font-bold text-gray-400">200/500</span>
+                                <i class="ri-box-3-fill" style="font-size: 1.2em;"></i> Revenue</span>
                             </div>
 
                         </div>
@@ -408,6 +408,57 @@
         });
     </script>
 
+    <?php
+    // Check if the functions exist before calling them
+    if (function_exists('amountOfRawSales') && function_exists('amountOfSalesTax')) {
+        // Call the functions and store their return values
+        $salesAmount = amountOfRawSales();
+        $salesTaxAmount = amountOfSalesTax();
+
+        // Multiply the amounts by -1
+        $salesAmount *= -1;
+        $salesTaxAmount *= -1;
+
+        // Subtract the sales tax amount from the sales amount to get the total
+        $total = $salesAmount + $salesTaxAmount;
+    } else {
+        echo "Error: One of the functions does not exist.";
+    }
+    ?>
+
+    <script>
+        // Transfer the value of $total to JavaScript
+        var total = <?php echo json_encode($total); ?>;
+
+        // Show the value of total in the console
+        console.log(total);
+    </script>
+
+    <?php
+    // Check if the function exists before calling it
+    if (function_exists('totalReturns')) {
+        // Call the function and store its return value
+        $totalReturns = totalReturns();
+
+        // Check if the function returned a value
+        if ($totalReturns !== null) {
+            echo "₱" . $totalReturns;
+        } else {
+            echo "Error: totalReturns() returned null.";
+        }
+    } else {
+        echo "Error: totalReturns() function does not exist.";
+    }
+    ?>
+
+    <script>
+        // Transfer the value of $totalReturns to JavaScript
+        var totalReturns = <?php echo json_encode($totalReturns); ?>;
+
+        // Show the value of totalReturns in the console
+        console.log(totalReturns);
+    </script>
+
     <!-- Chart.js configurations -->
     <script>
         // Line Chart for Sales
@@ -441,25 +492,32 @@
             }
         });
 
+        // Transfer the value of $total and $totalReturns to JavaScript
+        var grossSales = <?php echo json_encode($total); ?>;
+        var totalReturns = <?php echo json_encode($totalReturns); ?>;
+
+        // Calculate the maximum value and round it up to the nearest whole number
+        var maxValue = Math.ceil(Math.max(grossSales, totalReturns) / 10000) * 10000;
+
         // Bar Chart for Stocks
         var ctx = document.getElementById('stocksChart').getContext('2d');
         var stocksChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Stocks'],
+                labels: ['Revenue'],
                 datasets: [{
-                        label: 'Sold',
-                        data: [300],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Remaining',
-                        data: [200],
+                        label: 'Gross Sales',
+                        data: [grossSales],
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Contra Revenue',
+                        data: [totalReturns],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
                     }
                 ]
             },
@@ -468,7 +526,10 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 500 // Set the maximum value of the y-axis to 500
+                        max: maxValue, // Set the maximum value of the y-axis based on the data
+                        ticks: {
+                            stepSize: 10000 // Set the step size to 10000
+                        }
                     }
                 }
             }

@@ -234,7 +234,7 @@
                         <tbody>
                             <tr>
                                 <td class="p-4 text-green-500">
-                                <?php
+                                    <?php
                                     // Check if the functions exist before calling them
                                     if (function_exists('amountOfRawSales') && function_exists('amountOfSalesTax')) {
                                         // Call the functions and store their return values
@@ -260,7 +260,7 @@
                                     ?>
                                 </td>
                                 <td class="p-4 text-red-500">
-                                <?php
+                                    <?php
                                     // Check if the function exists before calling it
                                     if (function_exists('totalReturns')) {
                                         // Call the function and store its return value
@@ -279,23 +279,23 @@
                                 </td>
                                 <td class="p-4 text-yellow-500">
                                     <?php
-                                        // Check if the function exists before calling it
-                                        if (function_exists('totalSalesMinusTaxAndReturns')) {
-                                            // Call the function and store its return value
-                                            $totalSalesMinusTaxAndReturns = totalSalesMinusTaxAndReturns();
-                                    
-                                            // Multiply the result by -1
-                                            $totalSalesMinusTaxAndReturns *= -1;
-                                    
-                                            // Check if the function returned a value
-                                            if ($totalSalesMinusTaxAndReturns !== null) {
-                                                echo "₱" . $totalSalesMinusTaxAndReturns;
-                                            } else {
-                                                echo "Error: totalSalesMinusTaxAndReturns() returned null.";
-                                            }
+                                    // Check if the function exists before calling it
+                                    if (function_exists('totalSalesMinusTaxAndReturns')) {
+                                        // Call the function and store its return value
+                                        $totalSalesMinusTaxAndReturns = totalSalesMinusTaxAndReturns();
+
+                                        // Multiply the result by -1
+                                        $totalSalesMinusTaxAndReturns *= -1;
+
+                                        // Check if the function returned a value
+                                        if ($totalSalesMinusTaxAndReturns !== null) {
+                                            echo "₱" . $totalSalesMinusTaxAndReturns;
                                         } else {
-                                            echo "Error: totalSalesMinusTaxAndReturns() function does not exist.";
+                                            echo "Error: totalSalesMinusTaxAndReturns() returned null.";
                                         }
+                                    } else {
+                                        echo "Error: totalSalesMinusTaxAndReturns() function does not exist.";
+                                    }
                                     ?>
                                 </td>
                             </tr>
