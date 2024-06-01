@@ -84,13 +84,13 @@ Router::post('/login', function(){
 
 Router::post('/logout', function(){
     session_destroy();
-    $base_url = 'Master'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
     header("Location: /$base_url/");
     exit();
 });
 
 
-// header("Location: /Master/");
+// header("Location: /master/");
 
 
 
