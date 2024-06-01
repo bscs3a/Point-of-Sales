@@ -116,7 +116,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       // Now $row contains the data for each row
                       // You can use $row here
                       // For example:
-                      echo '<a href="/master/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">';
+                      echo '<a href="/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">';
                       echo '<i class="ri-add-circle-line mr-3"></i>';
                       echo '<span>Add Product</span>';
                       echo '</a>';

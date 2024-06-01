@@ -444,6 +444,7 @@ Router::post('/placeorder/supplier/', function () {
             return;
         }
 
+      
         // Prepare SQL statement for inserting orders into order_details table
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
@@ -513,6 +514,8 @@ Router::post('/placeorder/supplier/', function () {
                 $supplierNameStmt->execute();
                 $supplierName = $supplierNameStmt->fetchColumn();
 
+
+
                 $action = "Placed an Order for Supplier: $supplierName";
                 $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
@@ -534,6 +537,15 @@ Router::post('/placeorder/supplier/', function () {
 
         // Add the shipping fee to the total amount
         $totalAmount += $shippingFee;
+
+      
+        $remaingvalue = getRemainingProductOrderPondo($paymentmethod);
+
+        if ($totalAmount > $remaingvalue) {
+            echo "<script>alert('You dont have enough Funds to proceed with the order');</script>";
+            echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+            return;
+        }
 
         // If any product is not available, halt the order processing
         if (!$allProductsAvailable) {
