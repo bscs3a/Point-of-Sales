@@ -442,6 +442,5 @@ Router::post("/auditlogSearch", function(){
     $_SESSION['postdata']['searchQueryAudit'] = $_POST['searchQueryAudit'];
     $page = $_POST['pageNumber'];
 
-    $rootFolder = dirname($_SERVER['PHP_SELF']);
-    header("Location: $rootFolder/fin/logs/page=$page");
+    header("Location: " . $_SERVER['HTTP_REFERER']);
 });

@@ -24,14 +24,27 @@ Router::post('/login', function(){
     $user = $stmt->fetch();
 
 
-    $base_url = 'Delivery'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
 
     if ($user && password_verify($password, $user['password'])) {
+    // if ($user && $password == $user['password']) { // ung passwords namin from HR di naka-hash HAUSHDASDH
         $_SESSION['user'] = array();
         // Password is correct
         $_SESSION['user']['account_id'] = $user['id'];
         $_SESSION['user']['username'] = $user['username'];
         $_SESSION['user']['employee_id'] = $user['employees_id'];
+        
+  // Insert log entry for successful login audit log
+            $user_id = $user['username'];
+            $action = "Logged In";
+            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+
+            $sql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':user_id', $user_id);
+            $stmt->bindValue(':action', $action);
+            $stmt->bindValue(':time_out', $time_out);
+            $stmt->execute();
 
         $stmt = $conn->prepare("SELECT department FROM employees WHERE id = :id");
         $stmt->bindParam(':id', $user['employees_id']);
@@ -74,14 +87,14 @@ Router::post('/login', function(){
 Router::post('/logout', function(){
     session_destroy();
 
-    $base_url = 'Delivery'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
 
     header("Location: /$base_url/");
     exit();
 });
 
 
-// header("Location: /Master/");
+// header("Location: /master/");
 
 
 

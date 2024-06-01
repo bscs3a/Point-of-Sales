@@ -31,13 +31,13 @@ $remainingPondo = $cashOnHand + $cashOnBank;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
 
-<body>
+<body class = "flex">
 
     <?php require_once "components/sidebar.php" ?>
 
     <!-- Start: Dashboard -->
 
-    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen transition-all main">
+    <main class="flex-1 transition-all main">
 
         <!-- Start: Header -->
 
@@ -45,7 +45,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
             <!-- Start: Active Menu -->
 
-            <button type="button" class="text-lg sidebar-toggle">
+            <button type="button" class="text-lg sidebar-toggle" id = 'toggleSidebar'>
                 <i class="ri-menu-line"></i>
             </button>
 
