@@ -154,6 +154,7 @@
                             <div>BSCS3A | SampleCode</div>
                             <div>Address: SampleAddress</div>
                             <div>Cashier: Name</div>
+                            <div>Cashier ID: 123</div>
                         </div>
 
                         <div class="<?= $sale_preferences == 'Delivery' ?> w-full flex justify-end">
