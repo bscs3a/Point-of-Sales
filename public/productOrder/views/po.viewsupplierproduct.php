@@ -19,7 +19,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
   <div class="flex h-screen bg-white">
     <!-- sidebar -->
     <div id="sidebar" class="flex h-screen">
-      <?php include "components/po.sidebar.php" ?>
+      <?php include "<public/productOrder/views/components/po.sidebar.php" ?>
     </div>
 
     <!-- Main Content -->
@@ -39,8 +39,8 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
-                <i class="ri-arrow-down-s-line"></i>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
+              <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
@@ -176,7 +176,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
 
                   // Check if there are any rows or results
                   if ($statement->rowCount() > 0) {
-                    echo '<form method="post" action="/master/placeorder/supplier/" id="orderform">';
+                    echo '<form method="post" action="/placeorder/supplier/" id="orderform">';
 
                     // Add hidden input for Supplier_ID
                     echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
@@ -204,6 +204,14 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                     }
 
                     echo '<button type="submit" class="ml-3 bg-blue-500 hover:bg-blue-700 border-2 border-black text-white font-bold py-2 px-4 my-3 rounded">Order</button>';
+
+                    // Add the "Pay Using" dropdown
+                    echo '<label for="payment-method" class="ml-3 mt-3">Pay Using:</label>';
+                    echo '<select id="payment-method" name="paymentmethod" class="ml-3 mt-1 border-2 border-black rounded">';
+                    echo '<option value="Cash on hand">Cash on hand</option>';
+                    echo '<option value="Cash on bank">Cash on bank</option>';
+                    echo '</select>';
+
                     echo '</form>';
                   } else {
                     echo "No products found for this supplier.";
@@ -225,6 +233,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
               ?>
 
             </tbody>
+
           </table>
         </div>
       </div>
@@ -273,36 +282,51 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Assuming the remaining funds for the department is available as a JavaScript variable
-        var remainingFunds = <?php echo getRemainingProductOrderPondo(); ?>;
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Define the remaining funds for each payment method
+      var remainingFundsForMethods = {
+        'Cash on hand': <?php echo json_encode(getRemainingProductOrderPondo("Cash on hand")); ?> // Example value for cash on hand
+        'Cash on bank': <?php echo json_encode(getRemainingProductOrderPondo("Cash on bank")); ?>  // Example value for cash on bank
+      };
 
-        var orderForm = document.getElementById("orderform");
-        orderForm.addEventListener("submit", function(event) {
-            var totalAmount = 0;
-            var quantityInputs = document.querySelectorAll(".quantity-input");
+      var orderForm = document.getElementById("orderform");
+      var paymentMethodSelect = document.getElementById("payment-method");
 
-            quantityInputs.forEach(function(input) {
-                var quantity = parseFloat(input.value);
-                var price = parseFloat(input.getAttribute('data-price'));
+      // Function to get remaining funds based on the selected payment method
+      function getRemainingFunds(paymentMethod) {
+        return remainingFundsForMethods[paymentMethod] || 0;
+      }
 
-                if (isNaN(quantity) || quantity < 0) {
-                    alert("Please enter a valid number for the quantity of all products.");
-                    event.preventDefault();
-                    return;
-                }
+      orderForm.addEventListener("submit", function (event) {
+        var totalAmount = 0;
+        event.preventDefault();
+        var quantityInputs = document.querySelectorAll(".quantity-input");
+        var paymentMethod = paymentMethodSelect.value;
+        var remainingFunds = getRemainingFunds(paymentMethod);
+        console.log(remainingFunds);
+        quantityInputs.forEach(function (input) {
+          var quantity = parseFloat(input.value);
+          var price = parseFloat(input.getAttribute('data-price'));
 
-                totalAmount += quantity * price;
-            });
+          if (isNaN(quantity) || quantity < 0) {
+            alert("Please enter a valid number for the quantity of all products.");
+            event.preventDefault();
+            return;
+          }
 
-            if (totalAmount > remainingFunds) {
-                alert("The total amount (" + totalAmount + ") exceeds the remaining funds for the department.");
-                event.preventDefault();
-            }
+          totalAmount += quantity * price;
         });
+
+        if (totalAmount > remainingFunds) {
+          alert("The total amount (" + totalAmount + ") exceeds the remaining funds for the department.");
+          event.preventDefault();
+        }
+
+        console.log("Selected Payment Method: " + paymentMethod);
+      });
     });
-</script>
+  </script>
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>
