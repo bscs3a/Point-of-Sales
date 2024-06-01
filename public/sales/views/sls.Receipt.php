@@ -84,7 +84,7 @@
                 <div id="receipt" class="bg-white rounded-xl shadow-md">
                     <div class="bg-green-800 text-white p-10">
                         <!-- Display the sale details -->
-                        <div class="flex justify-between text-4xl xl:text-6xl">
+                        <div class="flex justify-between sm:text-2xl md:text-4xl xl:text-6xl">
                             <h2 class="font-medium">Receipt</h2>
                             <h2 class="font-medium">₱<?= $total_price ?></h2>
                         </div>

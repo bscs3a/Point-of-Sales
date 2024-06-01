@@ -5181,6 +5181,11 @@ video {
     line-height: 2.5rem;
   }
 
+  .sm\:text-2xl{
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
   .sm\:underline{
     text-decoration-line: underline;
   }
@@ -5241,6 +5246,11 @@ video {
 
   .md\:pt-6{
     padding-top: 1.5rem;
+  }
+
+  .md\:text-4xl{
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 }
 
