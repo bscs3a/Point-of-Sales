@@ -7,8 +7,22 @@ $query = "SELECT e.id, e.first_name, e.last_name, e.middle_name, e.department, e
           FROM employees e
           JOIN salary_info s ON e.id = s.employees_id";
 
+$countQuery = "SELECT COUNT(*) FROM employees";
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+$displayPerPage = 7;
+$offset = ($page - 1) * $displayPerPage;
+$query .= " LIMIT $displayPerPage OFFSET $offset";
+
+$stmt = $conn->prepare($query);
 // Execute the query
 $stmt = $conn->query($query);
+
+$stmtCount = $conn->prepare($countQuery);
+$stmtCount->execute();
+$totalRecords = $stmtCount->fetchColumn();
+
+$totalPages = ceil( $totalRecords / $displayPerPage) ;
+
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +31,7 @@ $stmt = $conn->query($query);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
-  <link href="./../src/tailwind.css" rel="stylesheet">
+  <link href="./../../src/tailwind.css" rel="stylesheet">
   <title>Payroll</title>
 </head>
 <body class="text-gray-800 font-sans">
@@ -42,25 +56,38 @@ $stmt = $conn->query($query);
     </ul>
     <!-- require_once 'inc/logout.php' ?> -->
     <ul class="ml-auto flex items-center">
-      <li class="mr-1">
-  <?php
-  $username = $_SESSION['user']['username'];
-  ?>
-    <a href="#" class="text-[#151313] hover:text-gray-600 text-sm font-medium"><?php echo $username; ?></a>
-  </li>
-  <li class="mr-1 relative">
-    <button type="button" class="w-8 h-8 rounded justify-center hover:bg-gray-300 dropdown-btn"><i class="ri-arrow-down-s-line"></i></button>
-    <div class="dropdown-content hidden absolute right-0 mt-2 w-48 bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg">
-      <form method="post" action="/logout">
-          <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
-      </form>
-    </div>
-</li>
-  <script>
-      document.querySelector('.dropdown-btn').addEventListener('click', function() {
-          document.querySelector('.dropdown-content').classList.toggle('hidden');
-      });
-  </script>
+        <div class="relative inline-block text-left ml-4">
+                <div>
+                <a class="inline-flex justify-between w-full px-4 py-2 text-sm font-medium text-black bg-white rounded-md shadow-sm border-b-2 transition-all hover:bg-gray-200 focus:outline-none hover:cursor-pointer" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                    <div class="text-black font-medium mr-4 ">
+                    <i class="ri-user-3-fill mx-1"></i> <?= $_SESSION['user']['username']; ?>
+                    </div>
+                    <i class="ri-arrow-down-s-line"></i>
+                </a>
+            </div>
+
+            <div class="z-50 origin-top-right absolute right-0 mt-4 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <div class="py-1" role="none">
+                <form action="/logout" method="post">
+                    <button type="submit" class="w-full block px-4 py-2 text-md text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                        <i class="ri-logout-box-line"></i>
+                        Logout
+                    </button>
+                </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('options-menu').addEventListener('click', function() {
+                var dropdownMenu = document.getElementById('dropdown-menu');
+                if (dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.remove('hidden');
+                } else {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        </script>
     </ul>
     <!--  -->
   </div>
@@ -132,6 +159,57 @@ $stmt = $conn->query($query);
         </tbody>
       </table>
       <hr class="border-gray-200 my-4 mx-0">
+      
+<!-- PAGINATION -->
+<?php 
+            // PUT YOUR LINK HERE
+            $link = "/hr/generate-payslip/page=";
+            ?>
+            <ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
+                <!-- Next & Previous -->
+                <?php if ($page > 1): ?>
+                    <li>
+                        <!-- CHANGE THE ROUTE -->
+                        <a route="<?php echo $link . $page - 1 ?>"
+                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
+                            <span class="sr-only">Prev Page</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <!-- links for pages -->
+                <?php 
+                    $start = max(1, $page - 2);
+                    $end = min($totalPages, $page + 2);
+
+                    for ($i = $start; $i <= $end; $i++): 
+                ?>
+                    <li>
+                        <a route="<?php echo $link . $i ?>"
+                            class="block size-8 rounded border <?= $i == $page ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-100 bg-white text-gray-900' ?> text-center leading-8">
+                            <?= $i ?>
+                        </a>
+                    </li>
+                <?php endfor; ?>
+
+                <?php if ($page < $totalPages): ?>
+                    <li>
+                        <a route="<?php echo $link . $page + 1 ?>"
+                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180">
+                            <span class="sr-only">Next Page</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            </ol>
     </div>
   </div>
   <!-- END of Generate Payslip Form -->
@@ -211,7 +289,6 @@ $stmt = $conn->query($query);
     </div>
 </div>
 <!-- End Modal -->
-
 <script>
 function showModal(id, fullName, department, position, totalSalary, monthlySalary, totalDeductions) {
     document.getElementById('employee_id').value = id; // Set the value of the hidden input field for employee ID
@@ -280,8 +357,8 @@ document.getElementById('createPayslip').addEventListener('submit', function(eve
 
 </main>
 <!-- End Main Bar -->
-<script src="./../src/route.js"></script>
-<script src="./../src/form.js"></script>
+<script src="./../../src/route.js"></script>
+<script src="./../../src/form.js"></script>
 <script type="module" src="../public/humanResources/js/sidenav-active-inactive.js"></script>
 </body>
 </html>

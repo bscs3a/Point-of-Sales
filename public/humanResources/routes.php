@@ -6,17 +6,17 @@ $hr = [
     // Dashboard
     '/hr/dashboard' => $basePath . "dashboard.php",
     // employees
-    '/hr/employees' => $basePath . "employees.php",
+    // '/hr/employees' => $basePath . "employees.php",
     '/hr/employees/search' => $basePath . "employees.php",
     '/hr/employees/add' => $basePath . "employees.add.php",
     // departments
-    '/hr/employees/departments' => $basePath . "departments.php", // hr.departments.php
-    '/hr/departments/product-order' => $basePath . "departments.PO.php", // hr.departments.PO.php
-    '/hr/departments/inventory' => $basePath . "departments.inv.php", // hr.departments.inv.php
-    '/hr/departments/sales' => $basePath . "departments.POS.php", // hr.departments.POS.php
-    '/hr/departments/finance' => $basePath . "departments.fin.php", // hr.departments.fin.php
-    '/hr/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
-    '/hr/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
+    // '/hr/employees/departments' => $basePath . "departments.php", // hr.departments.php
+    // '/hr/departments/product-order' => $basePath . "departments.PO.php", // hr.departments.PO.php
+    // '/hr/departments/inventory' => $basePath . "departments.inv.php", // hr.departments.inv.php
+    // '/hr/departments/sales' => $basePath . "departments.POS.php", // hr.departments.POS.php
+    // '/hr/departments/finance' => $basePath . "departments.fin.php", // hr.departments.fin.php
+    // '/hr/departments/delivery' => $basePath . "departments.dlv.php", // hr.departments.dlv.php
+    // '/hr/departments/human-resources' => $basePath . "departments.HR.php", // hr.departments.HR.php
     // applicants
     '/hr/applicants' => $basePath . "applicants.php",
     '/hr/applicants/accept={id}' => function($id) use ($basePath) {
@@ -44,7 +44,12 @@ $hr = [
         $_SESSION['id'] = $id;
         include $basePath . "payslip.view.php";
     },
-    '/hr/generate-payslip' => $basePath . "payslip.generate.php",
+    // '/hr/generate-payslip' => $basePath . "payslip.generate.php",
+    
+    '/hr/generate-payslip/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "payslip.generate.php";
+    },
     '/hr/dtr' => $basePath . "daily-time-record.php",
     //view employee profile
     '/hr/employees/id={id}' => function($id) use ($basePath) {
@@ -69,6 +74,22 @@ $hr = [
     '/hr/departments/product-order/page={pageNumber}' => function($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "departments.PO.php";
+    },
+    '/hr/departments/inventory/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "departments.inv.php";
+    },
+    '/hr/departments/sales/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "departments.POS.php";
+    },
+    '/hr/departments/finance/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "departments.fin.php";
+    },
+    '/hr/departments/delivery/page={pageNumber}' => function($pageNumber) use ($basePath) {
+        $_GET['page'] = $pageNumber;
+        include $basePath . "departments.dlv.php";
     },
     '/hr/departments/human-resources/page={pageNumber}' => function($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
@@ -530,73 +551,73 @@ Router::post('/hr/employees/page=1', function () {
     include './public/humanResources/views/hr.employees.php';
 });
 // search employees in DEPARTMENTS : Product Order
-Router::post('/hr/departments/product-order', function () {
+Router::post('/hr/departments/product-order/page=1', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/departments/product-order");
+        header("Location: $rootFolder/hr/departments/product-order/page=1");
         return;
     }
     include './public/humanResources/views/hr.departments.PO.php';
 });
 // search employees in DEPARTMENTS : Inventory
-Router::post('/hr/departments/inventory', function () {
+Router::post('/hr/departments/inventory/page=1', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/departments/inventory");
+        header("Location: $rootFolder/hr/departments/inventory/page=1");
         return;
     }
     include './public/humanResources/views/hr.departments.inv.php';
 });
 // search employees in DEPARTMENTS : Point of Sales
-Router::post('/hr/departments/sales', function () {
+Router::post('/hr/departments/sales/page=1', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/departments/sales");
+        header("Location: $rootFolder/hr/departments/sales/page=1");
         return;
     }
     include './public/humanResources/views/hr.departments.POS.php';
 });
 // search employees in DEPARTMENTS : Finance
-Router::post('/hr/departments/finance', function () {
+Router::post('/hr/departments/finance/page=1', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/departments/finance");
+        header("Location: $rootFolder/hr/departments/finance/page=1");
         return;
     }
     include './public/humanResources/views/hr.departments.fin.php';
 });
 // search employees in DEPARTMENTS : Delivery
-Router::post('/hr/departments/delivery', function () {
+Router::post('/hr/departments/delivery/page=1', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/departments/delivery");
+        header("Location: $rootFolder/hr/departments/delivery/page=1");
         return;
     }
     include './public/humanResources/views/hr.departments.dlv.php';
 });
 // search employees in DEPARTMENTS : Human Resources
-Router::post('/hr/departments/human-resources', function () {
+Router::post('/hr/departments/human-resources/page=1', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
     $search = $_POST['search'];
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     if (empty($search)) {
-        header("Location: $rootFolder/hr/departments/human-resources");
+        header("Location: $rootFolder/hr/departments/human-resources/page=1");
         return;
     }
     include './public/humanResources/views/hr.departments.HR.php';
@@ -953,7 +974,7 @@ Router::post('/create/payslip', function () {
 
     inputSalary($monthly_salary, $withholding_tax, $isPending, $paymentMethod);
     
-    header("Location: $rootFolder/hr/generate-payslip");
+    header("Location: $rootFolder/hr/generate-payslip/page=1");
     exit();
 });
 // UPDATE PAYROLL STATUS FROM 'Pending' TO 'Paid'

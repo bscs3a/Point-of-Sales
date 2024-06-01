@@ -46,7 +46,7 @@
   </li>
   <!-- Departments -->
   <li class="mb-4">
-    <a route="/hr/departments/product-order" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Departments
+    <a route="/hr/departments/product-order/page=1" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Departments
         <i class="ri-arrow-right-s-line ml-auto"></i>
     </a>
   </li>
@@ -83,7 +83,7 @@
   </li>
   <!-- Generate Payslip -->
   <li class="mb-4">
-    <a route="/hr/generate-payslip" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Generate Payslip
+    <a route="/hr/generate-payslip/page=1" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Generate Payslip
         <i class="ri-arrow-right-s-line ml-auto"></i>
     </a>
 </ul>
