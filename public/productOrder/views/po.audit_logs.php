@@ -160,7 +160,7 @@
                 $totalPages = $stmt->fetchColumn();
                 
                 // PUT YOUR LINK HERE
-                $link = "/fin/logs/page=";
+                $link = "/po/audit_logs/page=";
                 ?>
                 <ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
                     <!-- Next & Previous -->
