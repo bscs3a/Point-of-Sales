@@ -221,7 +221,7 @@
                   echo '<td class="px-4 py-4">' . $transaction['Order_Status'] . '</td>';
                   // for VIEW order
                   echo '<td class="px-4 py-4">';
-                  echo '<a href="/master/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
+                  echo '<a route="/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
                   echo '</td>';
                   echo '</tr>';
                   echo '</tbody>';
