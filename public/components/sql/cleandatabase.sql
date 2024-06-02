@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2024 at 06:12 AM
+-- Generation Time: Jun 02, 2024 at 07:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -151,13 +151,6 @@ CREATE TABLE `audit_log` (
   `action` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `audit_log`
---
-
-INSERT INTO `audit_log` (`id`, `account_id`, `datetime`, `action`) VALUES
-(1, 7, '2024-06-02 06:10:56', 'POST: /master/logout');
-
 -- --------------------------------------------------------
 
 --
@@ -171,7 +164,9 @@ CREATE TABLE `batch_orders` (
   `Date_Ordered` date NOT NULL DEFAULT current_timestamp(),
   `Items_Subtotal` int(11) NOT NULL,
   `Total_Amount` int(11) NOT NULL,
-  `Order_Status` varchar(35) NOT NULL
+  `Order_Status` varchar(35) NOT NULL,
+  `Pay_Using` varchar(35) NOT NULL,
+  `Funds_Transact_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1188,7 +1183,7 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `audit_log`
 --
 ALTER TABLE `audit_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `batch_orders`
