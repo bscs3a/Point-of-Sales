@@ -24,7 +24,6 @@ Router::post('/login', function(){
     $stmt->execute();
     $user = $stmt->fetch();
 
-
     $base_url = 'master'; // Define your base URL here
 
     if ($user && password_verify($password, $user['password'])) {
@@ -34,10 +33,7 @@ Router::post('/login', function(){
         $_SESSION['user']['account_id'] = $user['id'];
         $_SESSION['user']['username'] = $user['username'];
         $_SESSION['user']['employee_id'] = $user['employees_id'];
-        
-
-  
-
+    
 
         $stmt = $conn->prepare("SELECT department FROM employees WHERE id = :id");
         $stmt->bindParam(':id', $user['employees_id']);
@@ -46,7 +42,7 @@ Router::post('/login', function(){
         $_SESSION['user']['role'] = $department['department'];
 
         Router::audit_log();
-        //redirects to the right page
+        // redirects to the right page
         if ($_SESSION['user']['role'] == 'Product Order') {
             header("Location: /$base_url/po/audit_logs/page=1");
             exit();
@@ -71,7 +67,8 @@ Router::post('/login', function(){
             header("Location: /$base_url/dlv/dashboard");
             exit();
         } 
-    } else {
+    } 
+    else {
         header("Location: /$base_url/?error=1");
         exit();
     }
