@@ -44,7 +44,7 @@
 
       <!-- New Form -->
       <div class="container mx-auto py-3">
-        <div class="max-w-6xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
+        <div class="h-full w-[90%] mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
           <div id="main" class="m-3 pt-6">
 
             <!-- Supplier Edit Form -->
@@ -122,15 +122,19 @@
                               class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                               value="<?php echo $supplier['Shipping_fee']; ?>" required>
                           </div>
-                          <div class="mb-4">
-                            <label for="working-days" class="block text-black font-semibold mb-2">Working Days</label>
-                            <input type="text" id="working-days" name="working-days"
-                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
-                              value="<?php echo $supplier['Working_days']; ?>" required>
-                          </div>
+
                           <!-- ... -->
                         </div>
+
                       </div>
+
+                      <div class="flex flex-col w-1/2 mx-auto mb-5">
+                        <label for="working-days" class="block text-black font-semibold mb-2">Working Days</label>
+                        <input type="text" id="working-days" name="working-days"
+                          class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                          value="<?php echo $supplier['Working_days']; ?>" required>
+                      </div>
+
                       <div>
                         <!-- Product table -->
                         <div class="overflow-x-auto rounded-lg border border-gray-400">
@@ -161,14 +165,14 @@
                               foreach ($products as $product) { ?>
                                 <tr>
                                   <!-- Product fields -->
-                                  <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                                <input type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
-                                <?php
-                                // Display current product image
-                                $imagePath = '../../' . $product['ProductImage'];
-                                echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
-                                ?>
-                            </td>
+                                  <td class="flex flex-col justify-center items-center gap-3 px-2 py-4 font-normal text-gray-900">
+                                    <input class="w-40" type="file" name="product_image_<?php echo $product['ProductID']; ?>" accept="image/*">
+                                    <?php
+                                    // Display current product image
+                                    $imagePath = '../../' . $product['ProductImage'];
+                                    echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover mr-4">';
+                                    ?>
+                                  </td>
                             <td class="px-4 py-4">
                                 <input type="text" name="product_name_<?php echo $product['ProductID']; ?>"
                                     value="<?php echo $product['ProductName']; ?>"
