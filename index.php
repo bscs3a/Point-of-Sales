@@ -12,7 +12,7 @@ require_once './router.php';
 require_once './web.php';
 
 
-Router::post('/login', function(){
+Router::post('/login', function () {
     $db = Database::getInstance();
     $conn = $db->connect();
 
@@ -66,15 +66,14 @@ Router::post('/login', function(){
         if ($_SESSION['user']['role'] == 'Delivery') {
             header("Location: /$base_url/dlv/dashboard");
             exit();
-        } 
-    } 
-    else {
+        }
+    } else {
         header("Location: /$base_url/?error=1");
         exit();
     }
 });
 
-Router::post('/logout', function(){
+Router::post('/logout', function () {
     session_destroy();
 
     $base_url = 'master'; // Define your base URL here
