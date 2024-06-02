@@ -128,7 +128,7 @@ if ($conn === null) {
                             </tr>
                             <tr>
                                 <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Name</td>
-                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['FirstName'] . ' ' . $order['LastName']; ?></td>
+                                <td class="border px-4 py-2" style="width: 70%;"><?php echo $order['Name']; ?></td>
                             </tr>
                             <tr>
                                 <td class="border font-bold px-4 py-2" style="width: 30%;">Customer Address</td>
