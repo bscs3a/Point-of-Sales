@@ -35,7 +35,6 @@ function getRemainingProductOrderPondo($paymentMethod){
     $remValue = getRemainingPondo($department, $paymentMethod);
     return $remValue;
 }
-
 function cancelOrder($id){
     $db = Database::getInstance();
     $conn = $db->connect();
@@ -56,4 +55,6 @@ function cancelOrder($id){
 
     return;
 }
+
+
 ?>

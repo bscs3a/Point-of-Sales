@@ -132,6 +132,18 @@
                               class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                               value="<?php echo $supplier['Estimated_Delivery']; ?>" required>
                           </div>
+                          <div class="mb-4">
+                            <label for="shipping-fee" class="block text-black font-semibold mb-2">Shipping Fee</label>
+                            <input type="text" id="estimated-delivery-date" name="shipping-fee"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Shipping_fee']; ?>" required>
+                          </div>
+                          <div class="mb-4">
+                            <label for="working-days" class="block text-black font-semibold mb-2">Working Days</label>
+                            <input type="text" id="working-days" name="working-days"
+                              class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
+                              value="<?php echo $supplier['Working_days']; ?>" required>
+                          </div>
                           <!-- ... -->
                         </div>
                       </div>
@@ -150,6 +162,7 @@
                               <th class="px-4 py-2 font-semibold">Description</th>
                               <th class="px-4 py-2 font-semibold">Product Weight (KG)</th>
                               <th class="px-4 py-2 font-semibold">Unit of Measurement</th>
+                              <th class="px-4 py-2 font-semibold">Tax Rate</th>
                               <th class="px-4 py-2 font-semibold"></th>
                               </tr>
                             </thead>
@@ -227,6 +240,14 @@
                             <td class="px-4 py-4">
                                 <textarea name="product_weight_<?php echo $product['ProductID']; ?>"
                                     class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['ProductWeight']; ?></textarea>
+                            </td>
+                            <td class="px-4 py-4">
+                                <textarea name="unitofmeasurement_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['UnitOfMeasurement']; ?></textarea>
+                            </td>
+                            <td class="px-4 py-4">
+                                <textarea name="taxrate_<?php echo $product['ProductID']; ?>"
+                                    class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"><?php echo $product['TaxRate']; ?></textarea>
                             </td>
                                   <!-- ... -->
                                   <td class="px-4 py-4">

@@ -1,6 +1,7 @@
 <?php
  session_start();
  // database conncetion
+//  session_destroy();
 require_once './src/dbconn.php';
 
 
@@ -34,8 +35,9 @@ Router::post('/login', function(){
         $_SESSION['user']['username'] = $user['username'];
         $_SESSION['user']['employee_id'] = $user['employees_id'];
         
-  // Insert log entry for successful login audit log
-           
+
+  
+
 
         $stmt = $conn->prepare("SELECT department FROM employees WHERE id = :id");
         $stmt->bindParam(':id', $user['employees_id']);
@@ -46,7 +48,7 @@ Router::post('/login', function(){
         Router::audit_log();
         //redirects to the right page
         if ($_SESSION['user']['role'] == 'Product Order') {
-            header("Location: /$base_url/po/dashboard");
+            header("Location: /$base_url/po/audit_logs/page=1");
             exit();
         } 
         if ($_SESSION['user']['role'] == 'Human Resources') {
