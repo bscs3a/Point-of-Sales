@@ -436,6 +436,13 @@ Router::post("/fin/genSearch", function(){
     header("Location: $rootFolder/fin/ledger/page=$page");
 });
 
+Router::post("/fin/fundSearch", function(){
+    $_SESSION['postdata']['generalLedgerSelected'] = $_POST['generalLedgerSelected'] == "" ? null : $_POST['generalLedgerSelected'];
+    $_SESSION['postdata']['recent'] = $_POST['recent'];
+
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+});
+
 Router::post("/auditlogSearch", function(){
     $_SESSION['postdata']['searchQueryAudit'] = $_POST['searchQueryAudit'];
     $page = $_POST['pageNumber'];
