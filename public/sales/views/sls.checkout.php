@@ -59,7 +59,7 @@
                 </div> -->
                 <!-- Checkout form -->
 
-                <div class="flex flex-row gap-6 mt-10">
+                <div class="flex flex-row gap-6 mt-10 w">
                     <div class="bg-white rounded-lg p-6 w-1/2">
                         <!-- Order summary -->
                         <div class="mb-4">
@@ -69,13 +69,15 @@
 
                                 <!-- Cart item rows -->
                                 <template x-for="(item, index) in cart" :key="index">
-                                    <li class="py-4 flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <div class="size-12 rounded-full shadow-lg bg-yellow-200 flex items-center justify-center">
-                                                <img class="object-contain" :src="'../../' + item.image" :alt="item.name">
+                                    <li class="py-4 flex justify-between">
+                                        <div class="flex items-center justify-between w-full">
+                                            <div class=" flex items-center">
+                                                <img class="object-contain size-12 rounded-full shadow-lg bg-yellow-200" :src="'../../' + item.image" :alt="item.name">
+                                                <span class="ml-2" x-text="item.quantity + ' x ' + item.name"></span>
                                             </div>
-                                            <span class="ml-2" x-text="item.quantity + ' x ' + item.name"></span>
+                                            <div class="">
                                             <span x-text="'₱' + ((item.quantity >= 50 ? item.priceWithTax * 0.9 : item.priceWithTax) * item.quantity).toFixed(2)"></span>
+                                            </div>
                                         </div>
                                     </li>
                                 </template>
