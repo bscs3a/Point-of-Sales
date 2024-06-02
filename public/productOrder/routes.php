@@ -8,6 +8,7 @@ $po = [
     '/po/login' => $basePath . "login.php",
     // '/po/dashboard' => $basePath . "dashboard.php",
     '/po/requestOrder' => $basePath . "requestOrder.php",
+    '/po/viewRequest' => $basePath . "viewRequest.php",
     '/po/suppliers' => $basePath . "suppliers.php",
     '/po/addsupplier' => $basePath . "addsupplier.php",
     '/po/viewsupplier' => $basePath . "viewsupplier.php",
@@ -1093,15 +1094,12 @@ Router::post('/delete/supplier', function () {
 
 
 
-// //function to show all the product details
+// Function to get product details
 // function getProductDetails($productID, $conn)
 // {
 //     try {
 //         // Prepare the SQL statement to fetch product details including the image path
-//         $query = "SELECT p.ProductImage, p.ProductName, p.Supplier, p.Category, p.Price, r.Product_Quantity, r.Product_Total_Price
-//                   FROM products p
-//                   INNER JOIN requests r ON p.ProductID = r.Product_ID
-//                   WHERE p.ProductID = :product_id";
+//         $query = "SELECT * FROM products WHERE Product_ID = :product_id";
 //         $statement = $conn->prepare($query);
 //         $statement->bindParam(':product_id', $productID);
 //         $statement->execute();
@@ -1582,3 +1580,38 @@ Router::post('/delete/product', function () {
 //     // Include the requestHistory.php file to display the search results
 //     include 'views/po.requestHistory.php';
 // });
+
+Router::post('/request/insert', function () {
+
+    // Get the database connection instance
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Get the submitted data
+    $productID = $_POST['productID'];
+    $quantity = $_POST['quantity'];
+
+    // Define the root folder for redirection
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    if (empty($quantity) || empty($productID)) {
+        // Redirect to the form page if the quantity or product ID is empty
+        header("Location: $rootFolder/po/requestOrder");
+        return;
+    }
+
+    try {
+        // Insert the request into the requests table
+        $query = "INSERT INTO requests (product_ID, quantity) VALUES (:productID, :quantity)";
+        $statement = $conn->prepare($query);
+        $statement->bindParam(':productID', $productID);
+        $statement->bindParam(':quantity', $quantity);
+        $statement->execute();
+
+        // Redirect after successful insertion
+        header("Location: $rootFolder/po/requestOrder");
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+});
+
