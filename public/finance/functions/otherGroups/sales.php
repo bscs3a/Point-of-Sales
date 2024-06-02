@@ -100,7 +100,11 @@ function totalReturns(){
     return getAccountBalanceV2("Returns");
 }
 
+function totalDiscount(){
+    return getAccountBalanceV2("Discount");
+}
+
 function totalSalesMinusTaxAndReturns(){
-    return totalSalesMinusTax() - totalReturns();
+    return totalSalesMinusTax() - totalReturns() - totalDiscount();
 }
 ?>
