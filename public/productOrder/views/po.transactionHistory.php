@@ -27,7 +27,7 @@
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
           </button>
-          <label class="text-black font-medium">Transaction History / View</label>
+          <label class="text-black font-medium">Transaction History</label>
         </div>
 
          <!-- dropdown -->
@@ -92,12 +92,13 @@
           $conn = $db->connect();
           $deliveredCount = countDelivered($conn);
           ?>
+          
 
-          <div class="flex flex-col pl-8 border border-gray-700 bg-white rounded-lg w-64 h-40 justify-center">
-            <a class="text-6xl ">
-              <?php echo $deliveredCount; ?>
-            </a>
-            <a class="text-lg">Total Delivery</a>
+          <div class="flex flex-col pl-8 border border-gray-700 bg-brightgreen rounded-lg w-64 h-40 justify-center">
+              <a class="text-6xl font-bold" style="color: green;">
+                  <?php echo $deliveredCount; ?>
+              </a>
+              <a class="text-lg" style="color: green;">Total Delivery</a>
           </div>
 
           <?php
@@ -164,11 +165,11 @@
           $conn = $db->connect();
           $cancelCount = countCancelled($conn);
           ?>
-          <div class="flex flex-col pl-8 border border-gray-700 bg-white rounded-lg w-64 h-40 justify-center">
-            <a class="text-6xl">
-              <?php echo $cancelCount; ?>
-            </a>
-            <a class="text-lg">Cancelled</a>
+          <div class="flex flex-col pl-8 border border-gray-700 bg-brightred rounded-lg w-64 h-40 justify-center">
+              <a class="text-6xl font-bold" style="color: red;">
+                  <?php echo $cancelCount; ?>
+              </a>
+              <a class="text-lg" style="color: red;">Cancelled</a>
           </div>
 
           
@@ -191,49 +192,51 @@
             </thead>
 
             <?php
-            function displayTransactionHistory()
-            {
-              try {
-                $db = Database::getInstance();
-                $conn = $db->connect();
-                // Query to retrieve data from transaction_history table
-                $query = "SELECT th.Transaction_ID, s.Supplier_Name, th.Date_Delivered, th.Time_Delivered, th.Order_Status, th.Batch_ID
+function displayTransactionHistory()
+{
+    try {
+        $db = Database::getInstance();
+        $conn = $db->connect();
+        // Query to retrieve data from transaction_history table
+        $query = "SELECT th.Transaction_ID, s.Supplier_Name, th.Date_Delivered, th.Time_Delivered, th.Order_Status, th.Batch_ID
               FROM transaction_history th
               JOIN suppliers s ON th.Supplier_ID = s.Supplier_ID
               ORDER BY th.Batch_ID ASC";
-                $statement = $conn->prepare($query);
-                $statement->execute();
-                $transactions = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $statement = $conn->prepare($query);
+        $statement->execute();
+        $transactions = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                // Loop through each transaction and display data in HTML table format
-                foreach ($transactions as $transaction) {
-                  echo '<tbody>';
-                  echo '<tr>';
-                  echo '<td class="px-4 py-4">' . $transaction['Batch_ID'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $transaction['Supplier_Name'] . '</td>';
-                  if ($transaction['Order_Status'] == 'Cancelled' || $transaction['Order_Status'] == 'Cancelled + Delayed') {
-                    echo '<td class="px-4 py-4">n/a</td>';
-                  echo '<td class="px-4 py-4">n/a</td>';
-                  } else {
-                  echo '<td class="px-4 py-4">' . $transaction['Date_Delivered'] . '</td>';
-                  echo '<td class="px-4 py-4">' . $transaction['Time_Delivered'] . '</td>';
-                  }
-                  echo '<td class="px-4 py-4">' . $transaction['Order_Status'] . '</td>';
-                  // for VIEW order
-                  echo '<td class="px-4 py-4">';
-                  echo '<a href="/master/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
-                  echo '</td>';
-                  echo '</tr>';
-                  echo '</tbody>';
-                }
-              } catch (PDOException $e) {
-                echo "Connection failed: " . $e->getMessage();
-              }
+        // Loop through each transaction and display data in HTML table format
+        foreach ($transactions as $transaction) {
+            echo '<tbody>';
+            echo '<tr>';
+            echo '<td class="px-4 py-4">' . $transaction['Batch_ID'] . '</td>';
+            echo '<td class="px-4 py-4">' . $transaction['Supplier_Name'] . '</td>';
+            if ($transaction['Order_Status'] == 'Cancelled' || $transaction['Order_Status'] == 'Cancelled + Delayed') {
+                echo '<td class="px-4 py-4">n/a</td>';
+                echo '<td class="px-4 py-4">n/a</td>';
+                echo '<td class="px-4 py-4" style="color: red; font-weight: bold;">' . $transaction['Order_Status'] . '</td>';
+            } else {
+                echo '<td class="px-4 py-4">' . $transaction['Date_Delivered'] . '</td>';
+                echo '<td class="px-4 py-4">' . $transaction['Time_Delivered'] . '</td>';
+                echo '<td class="px-4 py-4" style="color: green; font-weight: bold;">' . $transaction['Order_Status'] . '</td>';
             }
+            // for VIEW order
+            echo '<td class="px-4 py-4">';
+            echo '<a href="/master/po/viewtransaction/Batch=' . $transaction['Batch_ID'] . '">View</a>';
+            echo '</td>';
+            echo '</tr>';
+            echo '</tbody>';
+        }
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
+}
 
-            // Call the function to display transaction history
-            displayTransactionHistory();
-            ?>
+// Call the function to display transaction history
+displayTransactionHistory();
+?>
+
 
 
 
