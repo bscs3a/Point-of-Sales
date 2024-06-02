@@ -21,7 +21,7 @@
         <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-y-auto">
             <!-- header -->
-            <div class="flex items-center justify-between h-16 bg-gray-200 shadow-md px-4 py-1">
+            <div class="flex items-center justify-between h-16 shadow-md px-4 py-1">
                 <div class="flex items-center gap-4">
                     <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
                         <i class="ri-menu-line"></i>
@@ -30,27 +30,8 @@
                 </div>
 
                 <!-- dropdown -->
-                <div x-data="{ dropdownOpen: false }" class="relative my-32">
-                    <button @click="dropdownOpen = !dropdownOpen"
-                        class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
-                        <div class="flex items-center gap-4">
-                            <a class="flex-none text-sm dark:text-white"
-                                href="#"><?php echo $_SESSION['user']['username']; ?></a>
-                            <i class="ri-arrow-down-s-line"></i>
-                        </div>
-                    </button>
+                <?php require_once "public/productOrder/views/po.logout.php"?>
 
-                    <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10">
-                    </div>
-
-                    <form id="logout-form" action="/logout/user" method="POST">
-                        <div x-show="dropdownOpen"
-                            class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-                            <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log
-                                out</button>
-                        </div>
-                    </form>
-                </div>
             </div>
 
             <script>
@@ -61,7 +42,7 @@
             </script>
 
             <!-- New Form for add product -->
-            <div class="container mx-auto py-8 px-5">
+            <div class="container mx-auto my-auto py-8 px-5">
                 <div
                     class="max-w-5xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
 
@@ -286,14 +267,16 @@
                     ?>
 
                     </table>
+                    <div class="flex justify-end m-3">
+                        <button route='/po/orderDetail'
+                            class="py-2 px-6 border border-gray-600 bg-yellow-500 font-bold rounded-md">Back</button>
+                    </div>
                 </div>
 
+
             </div>
 
-            <div class="flex justify-end">
-                <button route='/po/orderDetail'
-                    class="py-2 px-6 border border-gray-600 bg-yellow-500 font-bold rounded-md">Back</button>
-            </div>
+
 
         </div>
     </div>

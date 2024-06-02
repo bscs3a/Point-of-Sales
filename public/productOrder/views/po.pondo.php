@@ -47,7 +47,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 <!-- sidebar -->
     <!-- Start: Dashboard -->
 
-    <div class="flex h-screen bg-white">
+    <div class="flex h-screen w-screen bg-white">
 
         <div id="sidebar" class="flex h-screen">
             <?php include "public/productOrder/views/components/po.sidebar.php" ?>
@@ -56,20 +56,23 @@ $remainingPondo = $cashOnHand + $cashOnBank;
         <div class="flex flex-col flex-1 overflow-y-auto hide-scrollbar">
         <!-- Start: Header -->
 
-            <div class="py-2 px-6 bg-white flex items-center shadow-md sticky top-0 left-0 z-30">
+            <div class="py-2 px-4 bg-white flex items-center h-16 shadow-md sticky top-0 left-0 z-30">
 
                 <!-- Start: Active Menu -->
 
-                <button type="button" class="text-lg sidebar-toggle">
-                    <i class="ri-menu-line"></i>
-                </button>
+                <div class="flex items-center gap-4">
+                    <button id="toggleSidebar" class="text-gray-500 focus:outline-none focus:text-gray-700">
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <label class="text-black font-medium">Department Fund Expenses</label>
+                </div>
 
-                <ul class="flex items-center text-md ml-4">
-
-                    <li class="mr-2">
-                        <p class="text-black font-medium">Department Fund Expenses</p>
-                    </li>
-                </ul>
+                <script>
+                    document.getElementById('toggleSidebar').addEventListener('click', function () {
+                    var sidebar = document.getElementById('sidebar');
+                    sidebar.classList.toggle('hidden', !sidebar.classList.contains('hidden'));
+                    });
+                </script>
 
                 <!-- End: Active Menu -->
 
@@ -100,7 +103,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                             $selected = isset($_SESSION['postdata']['generalLedgerSelected']) ? $_SESSION['postdata']['generalLedgerSelected'] : null;
                                             $recent = (isset($_SESSION['postdata']) && array_key_exists('recent', $_SESSION['postdata'])) ? $_SESSION['postdata']['recent'] : true;
                                         ?>
-                                        <label for="recent" id="recentLabel" class="border-r-5 border-black px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 min-w-12">
+                                        <label for="recent" id="recentLabel" class="border-r-5 border-black px-4 py-3 text-sm/none hover:bg-gray-300 text-gray-900 min-w-12">
                                             <span id="labelText"><?php echo $recent ? "Recent" : "Old"?></span>
                                             <input type="checkbox" name="recent" id="recent" class="hidden" <?php echo $recent ? "selected" : "" ?>>
                                         </label>
@@ -115,7 +118,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                             });
                                         </script>
                                         <!-- bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium text-sm  -->
-                                        <select class="border-e px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-500" name="generalLedgerSelected">
+                                        <select class="border-e px-4 py-2 text-sm/none hover:bg-gray-300 text-gray-900 border-gray-500" name="generalLedgerSelected">
                                             <option value="" <?php echo is_null($selected) ? "selected" : ""?>>Select</option>
                                             <?php 
                                             $select = getAllLedgerAccounts();
@@ -128,7 +131,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                         <input type="hidden" name="pageNumber" value = "<?php echo isset ($_GET['page']) ? (int) $_GET['page'] : 1?>">
                                         <button
                                             type ="submit"
-                                            class="px-4 py-2 text-sm/none bg-gray-200 hover:bg-gray-300 text-gray-900">
+                                            class="px-4 py-3 text-sm/none hover:bg-gray-300 text-gray-900">
                                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
                                             <svg fill="#000000" height="15px" width="15px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
                                                 viewBox="0 0 488.4 488.4" xml:space="preserve">
