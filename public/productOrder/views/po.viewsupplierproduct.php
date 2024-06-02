@@ -116,7 +116,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       // Now $row contains the data for each row
                       // You can use $row here
                       // For example:
-                      echo '<a href="/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">';
+                      echo '<a route="/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">';
                       echo '<i class="ri-add-circle-line mr-3"></i>';
                       echo '<span>Add Product</span>';
                       echo '</a>';
@@ -204,7 +204,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                     
                     echo '<div class="flex flex-row justify-between">';
                     echo '<div class="flex flex-row">';
-                    echo '<a href=\'/master/po/suppliers\' class="border-2 border-black font-bold py-2.5 px-4 ml-3 my-3 rounded">Back</a>';
+                    echo '<a route=\'/po/suppliers\' class="border-2 border-black font-bold py-2.5 px-4 ml-3 my-3 rounded">Back</a>';
                     echo '<button type="submit" class="ml-3 bg-blue-500 hover:bg-blue-700 border-2 border-black text-white font-bold py-2 px-4 my-3 rounded">Order</button>';
                     echo '</div>';
 
