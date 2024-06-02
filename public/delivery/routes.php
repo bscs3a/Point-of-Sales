@@ -31,6 +31,11 @@ $dlv = [
         $_GET['page'] = $pageNumber;
         include $basePath . "pondo.php";
     },
+
+    '/dlv/audit/page={pageNumber}' => function($pageNumber) use ($basePath){
+        $_GET['page'] = $pageNumber;
+        include $basePath . "audit_logs.php";
+    },
 ];
 
 Router::post('/statusupdateview', function () {

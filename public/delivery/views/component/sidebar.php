@@ -43,6 +43,14 @@
         </a>
     </li>
 
+    <li class="mb-1 hover:bg-slate-400 rounded-xl">
+        <a route='/dlv/audit/page=1' class="flex items-center py-2 px-4 text-white hover:text-black cursor-pointer">
+            <i class="ri-bank-line mr-3 text-lg"></i>
+            <span class="text-sm font-medium">Audit Logs</span>
+            <i class="ri-arrow-right-s-line ml-auto"></i>
+        </a>
+    </li>
+
 </div>
 
 <div class="fixed top-0 left-0 w-full h-full z-40 md:hidden sidebar-overlay"></div>
