@@ -193,7 +193,7 @@
                     {
                         // Prepare and execute SQL query to fetch data
                         $stmt = $conn->prepare("
-                            SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity
+                            SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity, bo.Pay_Using
                             FROM batch_orders bo
                             JOIN order_details od ON bo.Batch_ID = od.Batch_ID
                             JOIN products p ON od.Product_ID = p.ProductID
@@ -261,19 +261,16 @@
                                     <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                                     <!-- note: dont delete all of the products if the supplier has run out of items, instead just cancel the order -->
                                     
-                                    <th scope="col" class="px-6 py-4 ml-3 font-medium text-gray-900">
+                                    <th scope="col" class="px-4 py-4 ml-3 font-medium text-gray-900">
                                         <div class="flex flex-col text-sm gap-3">
-                                            <a class="font-bold">Items Subtotal:
-                                                <div class="font-medium">
-                                                    <?= $data['Items_Subtotal'] ?>
-
-                                                </div>
+                                            <a class="font-bold">Items Subtotal: Php <?= $data['Items_Subtotal'] ?>
+                                                
                                             </a>
-                                            <a class="font-bold">Total Amount:
-                                                <div class="font-medium"> Php
-                                                    <?= $data['Total_Amount'] ?>
-
-                                                </div>
+                                            <a class="font-bold">Total Amount: Php  <?= $data['Total_Amount'] ?>
+                                                
+                                            </a>
+                                            <a class="font-bold">Payment Method: <?= $data['Pay_Using'] ?>
+                                                
                                             </a>
                                         </div>
                                     </th>

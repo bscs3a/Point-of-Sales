@@ -26,7 +26,7 @@
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
           </button>
-          <label class="text-black font-medium">Order Detail / View</label>
+          <label class="text-black font-medium">Transaction / View</label>
         </div>
 
         <!-- dropdown -->
@@ -192,7 +192,7 @@
           {
             // Prepare and execute SQL query to fetch data
             $stmt = $conn->prepare("
-        SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity
+        SELECT p.*, bo.Items_Subtotal, bo.Total_Amount, bo.Order_Status, od.Product_Quantity, bo.Pay_Using
         FROM batch_orders bo
         JOIN order_details od ON bo.Batch_ID = od.Batch_ID
         JOIN products p ON od.Product_ID = p.ProductID
@@ -233,10 +233,9 @@
                   <td class="px-6 py-2">
                     <?= $data['Product_Quantity'] ?>
                   </td> <!-- Display status -->
-                  <td class="px-6 py-2">
-                    <?= $data['Order_Status'] ?>
-                  </td>
-
+                  <td class="px-6 py-2 <?= ($data['Order_Status'] === "Cancelled" || $data['Order_Status'] === "Cancelled + Delayed") ? 'text-red-700 font-bold' : 'text-green-900' ?>">
+                      <?= $data['Order_Status'] ?>
+                  </td> 
                 </tr>
                 <?php
 
@@ -252,19 +251,17 @@
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                   <th scope="col" class="px-0 py-4 ml-3 font-medium text-gray-900">
-                    <div class="flex flex-col text-sm gap-3">
-                      <a class="flex flex-row font-bold">Items Subtotal:
-                        <div class="ml-3 font-medium">
-                          <?= $data['Items_Subtotal'] ?>
-                        </div>
-                      </a>
-                      <a class="flex flex-row font-bold">Total Amount:
-                        <div class="ml-5 font-medium"> Php
-                          <?= $data['Total_Amount'] ?>
-
-                        </div>
-                      </a>
-                    </div>
+                  <div class="flex flex-col text-sm gap-3">
+                                            <a class="font-bold">Items Subtotal: Php <?= $data['Items_Subtotal'] ?>
+                                                
+                                            </a>
+                                            <a class="font-bold">Total Amount: Php  <?= $data['Total_Amount'] ?>
+                                                
+                                            </a>
+                                            <a class="font-bold">Payment Method: <?= $data['Pay_Using'] ?>
+                                                
+                                            </a>
+                                        </div>
                   </th>
                   <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
                 </tr>

@@ -90,8 +90,8 @@
             $conn = $db->connect();
             $deliveredCount = countDelivered($conn);
             ?>
-            <a class="text-6xl "> <?php echo $deliveredCount; ?></a>
-            <a class="text-lg">Total Delivery</a>
+              <a class="text-6xl font-bold" style="color: green;"><?php echo $deliveredCount; ?></a>
+              <a class="text-lg" style="color: green;">Total Delivery</a>
           </div>
 
 
@@ -136,8 +136,8 @@
               <tr>
                 <th class="px-4 py-2 font-semibold">Order #</th>
                 <th class="px-4 py-2 font-semibold">Supplier Name</th>
-                <th class="px-4 py-2 font-semibold">Date Order</th>
-                <th class="px-4 py-2 font-semibold">Time</th>
+                <th class="px-4 py-2 font-semibold">Date Ordered</th>
+                <th class="px-4 py-2 font-semibold">Time Ordered</th>
                 <th class="px-4 py-2 font-semibold">Location</th>
                 <th class="px-4 py-2 font-semibold">Estimated Delivery</th>
                 <th class="px-4 py-2 font-semibold">Actions</th>

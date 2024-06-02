@@ -901,6 +901,12 @@ Router::post('/edit/editsupplier', function () {
     $stmt_supplier->bindParam(':workingdays', $workingdays);
     $stmt_supplier->execute();
 
+    // Update Supplier name in the Products table
+    $stmt_update_products_supplier = $conn->prepare("UPDATE products SET Supplier = :supplierName WHERE Supplier_ID = :supplierID");
+    $stmt_update_products_supplier->bindParam(':supplierName', $supplierName);
+    $stmt_update_products_supplier->bindParam(':supplierID', $supplierID);
+    $stmt_update_products_supplier->execute();
+
     // Update product information
     foreach ($_POST as $key => $value) {
         if (strpos($key, 'product_name_') !== false) {
