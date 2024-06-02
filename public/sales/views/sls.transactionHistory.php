@@ -94,8 +94,7 @@
                                         Sales.SalePreference,
                                         Sales.PaymentMode,
                                         Sales.TotalAmount,
-                                        Customers.FirstName AS CustomerFirstName,
-                                        Customers.LastName AS CustomerLastName
+                                        Customers.Name AS CustomerName
                                     FROM 
                                         Sales
                                     JOIN 
@@ -110,7 +109,7 @@
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) :
                                 $saleId = $row['SaleID']; 
                                 echo "<tr class='border border-gray-200 bg-white' data-sale-id='{$saleId}'>";
-                                echo "<td class='px-4 py-2'>{$row['CustomerFirstName']} {$row['CustomerLastName']}</td>";
+                                echo "<td class='px-4 py-2'>{$row['CustomerName']}</td>";
                                 echo "<td class='px-4 py-2'>{$saleId}</td>";
                                 echo "<td class='px-4 py-2'>" . date('F j, Y, g:i a', strtotime($row['SaleDate'])) . "</td>";
                                 echo "<td class='px-4 py-2'>{$row['SalePreference']}</td>";
