@@ -90,14 +90,13 @@ $sls = [
 // START: Add Sales
 class Customer
 {
-    public function create($firstName, $lastName, $phone, $email)
+    public function create($name, $phone, $email)
     {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        $stmt = $conn->prepare("INSERT INTO Customers (FirstName, LastName, Phone, Email) VALUES (:firstName, :lastName, :phone, :email)");
-        $stmt->bindParam(':firstName', $firstName);
-        $stmt->bindParam(':lastName', $lastName);
+        $stmt = $conn->prepare("INSERT INTO Customers (Name, Phone, Email) VALUES (:name, :phone, :email)");
+        $stmt->bindParam(':name', $name);
         $stmt->bindParam(':phone', $phone);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
@@ -108,15 +107,15 @@ class Customer
 
 class Sale
 {
-    public function create($saleDate, $salePreference, $paymentMode, $totalAmount, $employeeId, $customerId, $cardNumber, $expiryDate, $cvv, $shippingFee)
+    public function create($saleDate, $salePreference, $paymentMode, $totalAmount, $employeeId, $customerId, $cardNumber, $expiryDate, $cvv, $shippingFee, $discount)
     {
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        // Add the shippingFee to the totalAmount
-        $totalAmount += $shippingFee;
+        // Remove the line that adds the shippingFee to the totalAmount
+        // $totalAmount += $shippingFee;
 
-        $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee)");
+        $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee, Discount) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee, :discount)");
         $stmt->bindParam(':saleDate', $saleDate);
         $stmt->bindParam(':salePreference', $salePreference);
         $stmt->bindParam(':paymentMode', $paymentMode);
@@ -126,6 +125,7 @@ class Sale
         $stmt->bindParam(':expiryDate', $expiryDate);
         $stmt->bindParam(':cvv', $cvv);
         $stmt->bindParam(':shippingFee', $shippingFee);
+        $stmt->bindParam(':discount', $discount);
         $stmt->execute();
 
         return $conn->lastInsertId();
@@ -201,12 +201,12 @@ class Product
 
 Router::post('/addSales', function () {
     $customer = new Customer();
-    $customerId = $customer->create($_POST['customerFirstName'], $_POST['customerLastName'], $_POST['customerPhone'], $_POST['customerEmail']);
+    $customerId = $customer->create($_POST['customerName'], $_POST['customerPhone'], $_POST['customerEmail']);
 
     date_default_timezone_set('Asia/Manila');
     $sale = new Sale();
-    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], '1', $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee']);
-
+    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], '1', $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee'], $_POST['discount']);
+    
     $saleDetail = new SaleDetail();
     $deliveryOrder = new DeliveryOrder();
     $product = new Product();

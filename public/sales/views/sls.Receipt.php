@@ -33,6 +33,7 @@
     $payment_method = $sale['PaymentMode'];
     $sale_preferences = $sale['SalePreference'];
     $shippingFee = $sale['ShippingFee'];
+    $discount = $sale['Discount'];
 
     // Query the database for the sale items
     $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, SaleDetails.TotalAmount, Products.ProductName, Products.TaxRate, Products.ProductImage 
@@ -42,15 +43,16 @@
     $stmtSaleItems = $pdo->query($sqlSaleItems);
     $sale_items = $stmtSaleItems->fetchAll(PDO::FETCH_ASSOC);
 
-    $sqlSale = 'SELECT Sales.*, Customers.FirstName, Customers.LastName, Customers.Phone, Customers.Email 
-            FROM Sales 
-            INNER JOIN Customers ON Sales.CustomerID = Customers.CustomerID 
-            ORDER BY SaleDate DESC LIMIT 1';
+    // Query the database for the latest sale
+    $sqlSale = 'SELECT Sales.*, Customers.Name, Customers.Phone, Customers.Email 
+                FROM Sales 
+                INNER JOIN Customers ON Sales.CustomerID = Customers.CustomerID 
+                ORDER BY SaleDate DESC LIMIT 1';
     $stmtSale = $pdo->query($sqlSale);
     $sale = $stmtSale->fetch(PDO::FETCH_ASSOC);
 
     // Query the database for the latest sale
-    $sqlSale = 'SELECT Sales.*, Customers.FirstName, Customers.LastName, Customers.Phone, Customers.Email, DeliveryOrders.Province, DeliveryOrders.Municipality, DeliveryOrders.StreetBarangayAddress 
+    $sqlSale = 'SELECT Sales.*, Customers.Name, Customers.Phone, Customers.Email, DeliveryOrders.Province, DeliveryOrders.Municipality, DeliveryOrders.StreetBarangayAddress 
                 FROM Sales 
                 INNER JOIN Customers ON Sales.CustomerID = Customers.CustomerID 
                 INNER JOIN DeliveryOrders ON Sales.SaleID = DeliveryOrders.SaleID
@@ -142,7 +144,11 @@
                                         <span class="xl:pr-6">₱<?= number_format($shippingFee, 2) ?></span>
                                     </div>
                                 <?php endif; ?>
-                                <div id="total" class="flex justify-between font-semibold border-b text-lg xl:text-xl pb-2 text-gray-400 mt-4">
+                                <div id="discount" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">
+                                    <span>Discount</span>
+                                    <span>₱<?= number_format($discount, 2) ?></span>
+                                </div>
+                                <div id="total" class="flex justify-between font-semibold border-b text-xl pb-2 text-gray-400 mt-4">
                                     <span>Total</span>
                                     <span class="text-green-800 font-semibold xl:pr-6">₱<?= $total_price ?></span>
                                 </div>
