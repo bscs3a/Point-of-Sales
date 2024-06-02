@@ -112,14 +112,15 @@ class Sale
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        // Remove the line that adds the shippingFee to the totalAmount
-        // $totalAmount += $shippingFee;
+        // Get the EmployeeID of the currently logged in user
+        $employeeId = $_SESSION['user']['account_id'];
 
-        $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee, Discount) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee, :discount)");
+        $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, EmployeeID, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee, Discount) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :employeeId, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee, :discount)");
         $stmt->bindParam(':saleDate', $saleDate);
         $stmt->bindParam(':salePreference', $salePreference);
         $stmt->bindParam(':paymentMode', $paymentMode);
         $stmt->bindParam(':totalAmount', $totalAmount);
+        $stmt->bindParam(':employeeId', $employeeId);
         $stmt->bindParam(':customerId', $customerId);
         $stmt->bindParam(':cardNumber', $cardNumber);
         $stmt->bindParam(':expiryDate', $expiryDate);
@@ -205,8 +206,8 @@ Router::post('/addSales', function () {
 
     date_default_timezone_set('Asia/Manila');
     $sale = new Sale();
-    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], '1', $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee'], $_POST['discount']);
-    
+    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], $_SESSION['user']['EmployeeID'], $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee'], $_POST['discount']);
+
     $saleDetail = new SaleDetail();
     $deliveryOrder = new DeliveryOrder();
     $product = new Product();
@@ -234,10 +235,10 @@ Router::post('/addSales', function () {
         $paymentMode = 'Cash on bank';
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $supplierPriceTotal = $_POST["supplierPriceTotal"];
-        recountInventory($supplierPriceTotal);
-    }
+    // if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //     $supplierPriceTotal = $_POST["supplierPriceTotal"];
+    //     recountInventory($supplierPriceTotal);
+    // }
 
     insertSalesLedger($_POST['totalAmount'], $_POST['totalAmount'] - $_POST['subtotal'], $paymentMode);
 

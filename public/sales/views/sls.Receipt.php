@@ -34,6 +34,15 @@
     $sale_preferences = $sale['SalePreference'];
     $shippingFee = $sale['ShippingFee'];
     $discount = $sale['Discount'];
+    $employeeId = $sale['EmployeeID'];
+
+    // Query the database for the employee details
+    $sqlEmployeeDetails = "SELECT first_name, last_name FROM Employees WHERE id = $employeeId";
+    $stmtEmployeeDetails = $pdo->query($sqlEmployeeDetails);
+    $employee = $stmtEmployeeDetails->fetch(PDO::FETCH_ASSOC);
+
+    $firstName = $employee['first_name'];
+    $lastName = $employee['last_name'];
 
     // Query the database for the sale items
     $sqlSaleItems = "SELECT SaleDetails.Quantity, SaleDetails.UnitPrice, SaleDetails.TotalAmount, Products.ProductName, Products.TaxRate, Products.ProductImage 
@@ -144,9 +153,9 @@
                                         <span class="xl:pr-6">₱<?= number_format($shippingFee, 2) ?></span>
                                     </div>
                                 <?php endif; ?>
-                                <div id="discount" class="flex justify-between border-b text-lg pb-2 mt-4 text-gray-400">
+                                <div id="discount" class="flex justify-between border-b text-sm xl:text-lg pb-2 mt-4 text-gray-400">
                                     <span>Discount</span>
-                                    <span>₱<?= number_format($discount, 2) ?></span>
+                                    <span class="xl:pr-6">₱<?= number_format($discount, 2) ?></span>
                                 </div>
                                 <div id="total" class="flex justify-between font-semibold border-b text-xl pb-2 text-gray-400 mt-4">
                                     <span>Total</span>
@@ -155,12 +164,13 @@
                             </div>
 
                     <div class="pt-10 flex justify-between md:pt-6">
+                        
                         <div class="grid gap-2 text-left w-full">
                             <div class="border-b text-gray-400 text-md xl:text-xl font-bold pb-2 mb-2">Store Address</div>
-                            <div>BSCS3A | SampleCode</div>
-                            <div>Address: Sample Address, Municipality</div>
-                            <div>Cashier: Name</div>
-                            <div>Cashier ID: 123</div>
+                            <div>BSCS 3A | DHVSU</div>
+                            <div>Address: Bacolor, Pampanga</div>
+                            <div>Cashier: <?php echo $firstName . ' ' . $lastName; ?></div>
+                            <div>Cashier ID: <?= $employeeId ?></div>
                         </div>
 
                         <div class="<?= $sale_preferences == 'Delivery' ?> w-full flex justify-end">
