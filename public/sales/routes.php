@@ -258,6 +258,21 @@ Router::post('/AddTarget', function () {
     $monthYear = $_POST['month_year'] . '-01';  // Append '-01' to make it a valid date
     $targetSales = $_POST['target_sales'];
 
+    // Prepare a select statement to check if the MonthYear already exists
+    $stmt = $conn->prepare("SELECT * FROM TargetSales WHERE MonthYear = :monthYear");
+    $stmt->bindParam(':monthYear', $monthYear);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Check if the MonthYear already exists
+    if ($stmt->fetchColumn()) {
+        $_SESSION['notification'] = "The target MonthYear already exists.";
+        $rootFolder = dirname($_SERVER['PHP_SELF']);
+        header("Location: $rootFolder/sls/Sales-Management");
+        return;
+    }
+
     $stmt = $conn->prepare("INSERT INTO TargetSales (MonthYear, TargetAmount) VALUES (:monthYear, :targetSales)");
     $stmt->bindParam(':monthYear', $monthYear);
     $stmt->bindParam(':targetSales', $targetSales);
