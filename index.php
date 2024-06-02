@@ -24,7 +24,7 @@ Router::post('/login', function(){
     $user = $stmt->fetch();
 
 
-    $base_url = 'delivery'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
 
     if ($user && password_verify($password, $user['password'])) {
     // if ($user && $password == $user['password']) { // ung passwords namin from HR di naka-hash HAUSHDASDH
@@ -78,7 +78,7 @@ Router::post('/login', function(){
 Router::post('/logout', function(){
     session_destroy();
 
-    $base_url = 'delivery'; // Define your base URL here
+    $base_url = 'master'; // Define your base URL here
 
     header("Location: /$base_url/");
     exit();
