@@ -1,4 +1,9 @@
 <?php require_once "public/finance/functions\generalFunctions.php"?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    import Swal from 'sweetalert2'
+
+    const Swal = require('sweetalert2')
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var divs = document.querySelectorAll('div[id*="payModal"]');
@@ -29,10 +34,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 var maxValue = validValue[ledgerNameValue];
                 
                 if (amountValue > maxValue || amountValue > currentInvestments) {
-                    amountInput.setCustomValidity('The amount exceeds the maximum value');
-                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Amount',
+                        text: 'The amount exceeds the maximum value'
+                    });
                 } else {
-                    amountInput.setCustomValidity('');
                     if(form.checkValidity()) {
                         form.submit();
                     }
