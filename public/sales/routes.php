@@ -239,10 +239,10 @@ Router::post('/addSales', function () {
         $paymentMode = 'Cash on bank';
     }
 
-    // if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //     $supplierPriceTotal = $_POST["supplierPriceTotal"];
-    //     recountInventory($supplierPriceTotal);
-    // }
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $supplierPriceTotal = $_POST["supplierPriceTotal"];
+        recountInventory($supplierPriceTotal);
+    }
 
     insertSalesLedger($_POST['totalAmount'], $totalTax, $paymentMode, $_POST['discount']);
 
