@@ -19,7 +19,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
   <div class="flex h-screen bg-white">
     <!-- sidebar -->
     <div id="sidebar" class="flex h-screen">
-      <?php include "components/po.sidebar.php" ?>
+      <?php include "<public/productOrder/views/components/po.sidebar.php" ?>
     </div>
 
     <!-- Main Content -->
@@ -39,8 +39,8 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
           <button @click="dropdownOpen = !dropdownOpen"
             class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
             <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
-                <i class="ri-arrow-down-s-line"></i>
+              <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
+              <i class="ri-arrow-down-s-line"></i>
             </div>
           </button>
 
@@ -116,7 +116,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       // Now $row contains the data for each row
                       // You can use $row here
                       // For example:
-                      echo '<a href="/master/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">';
+                      echo '<a href="/po/addbulk/Supplier=' . $row['Supplier_ID'] . '" class="items-end rounded-full px-3 py-2 bg-violet-950 text-white">';
                       echo '<i class="ri-add-circle-line mr-3"></i>';
                       echo '<span>Add Product</span>';
                       echo '</a>';
@@ -157,9 +157,8 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                 <th class="px-10 py-2 font-semibold text-center">Quantity</th>
               </tr>
             </thead>
-            <a href='/master/po/suppliers' class="border-2 border-black font-bold py-2.5 px-4 ml-3 my-3 rounded">Back
-            </a>
-            <tbody>
+
+            <tbody class="text-sm">
               <?php
               function displayProductsBySupplierID($supplierID)
               {
@@ -176,7 +175,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
 
                   // Check if there are any rows or results
                   if ($statement->rowCount() > 0) {
-                    echo '<form method="post" action="/master/placeorder/supplier/" id="orderform">';
+                    echo '<form method="post" action="/placeorder/supplier/" id="orderform">';
 
                     // Add hidden input for Supplier_ID
                     echo '<input type="hidden" name="supplierID" value="' . $supplierID . '">';
@@ -189,8 +188,8 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<img src="' . $imagePath . '" alt="" class="w-20 h-20 object-cover">';
                       echo '<div>' . $row['ProductName'] . '</div>';
                       echo '</td>';
-                      echo '<td class="px-20 py-4 text-center">' . $row['ProductID'] . '</td>';
-                      echo '<td class="px-10 py-4 text-center">' . $row['Supplier'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['ProductID'] . '</td>';
+                      echo '<td class="px-4 py-4 text-center">' . $row['Supplier'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['Category'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Price'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">Php ' . $row['Supplier_Price'] . '</td>';
@@ -198,12 +197,34 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                       echo '<td class="px-4 py-4 text-center">' . $row['Description'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['ProductWeight'] . '</td>';
                       echo '<td class="px-4 py-4 text-center">' . $row['UnitOfMeasurement'] . '</td>';
-                      echo '<td class="px-4 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input border-b-2 border-black text-center" data-price="' . $row['Supplier_Price'] . '"></td>';
+                      echo '<td class="px-3 py-4"><input type="number" name="quantity_' . $row['ProductID'] . '" value="0" class="quantity-input w-full border-b-2 border-black text-center" data-price="' . $row['Supplier_Price'] . '"></td>';
                       echo '</tr>';
                       echo '<input type="hidden" name="products[]" value="' . $row['ProductID'] . '">';
                     }
-
+                    
+                    echo '<div class="flex flex-row justify-between">';
+                    echo '<div class="flex flex-row">';
+                    echo '<a href=\'/master/po/suppliers\' class="border-2 border-black font-bold py-2.5 px-4 ml-3 my-3 rounded">Back</a>';
                     echo '<button type="submit" class="ml-3 bg-blue-500 hover:bg-blue-700 border-2 border-black text-white font-bold py-2 px-4 my-3 rounded">Order</button>';
+                    echo '</div>';
+
+                    // Add the "Pay Using" dropdown with a larger label
+                    echo '<div class="flex flex-row items-center gap-3 mr-3 my-auto">';
+                    echo '<label for="payment-method" class="ml-3 mt-3 text-lg font-bold">Pay Using:</label>';
+                    echo '<select id="payment-method" name="paymentmethod" class="ml-3 px-3 py-2 mt-1 border-2 border-black rounded">';
+                    echo '<option value="Cash on hand">Cash on hand: ' . getRemainingProductOrderPondo('Cash on hand') . '</option>';
+                    echo '<option value="Cash on bank">Cash on bank: ' . getRemainingProductOrderPondo('Cash on bank') . '</option>';
+                    echo '</div>';
+                    echo '</div>';
+                    // Add the "Pay Using" dropdown
+                    // echo '<label for="payment-method" class="ml-3 mt-3">Pay Using:</label>';
+                    // echo '<select id="payment-method" name="paymentmethod" class="ml-3 mt-1 px-2 py-1 border-2 border-black rounded">';
+                    // echo '<option value="Cash on hand">Cash on hand</option>';
+                    // echo '<option value="Cash on bank">Cash on bank</option>';
+                    // echo '</select>';
+
+
+
                     echo '</form>';
                   } else {
                     echo "No products found for this supplier.";
@@ -214,7 +235,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
                 // Close the database connection
                 $conn = null;
               }
-
+              
               // Check if Supplier_ID is provided via GET method
               if (isset($_GET['Supplier_ID'])) {
                 $supplierID = $_GET['Supplier_ID'];
@@ -225,6 +246,7 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
               ?>
 
             </tbody>
+
           </table>
         </div>
       </div>
@@ -273,36 +295,51 @@ require_once "public/finance/functions/otherGroups/productOrder.php";
     document.getElementById("filterSelect").addEventListener("change", filterAndSearch);
     document.getElementById("searchInput").addEventListener("input", filterAndSearch);
   </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Assuming the remaining funds for the department is available as a JavaScript variable
-        var remainingFunds = <?php echo getRemainingProductOrderPondo(); ?>;
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Define the remaining funds for each payment method
+      var remainingFundsForMethods = {
+        'Cash on hand': <?php echo json_encode(getRemainingProductOrderPondo("Cash on hand")); ?> // Example value for cash on hand
+        'Cash on bank': <?php echo json_encode(getRemainingProductOrderPondo("Cash on bank")); ?>  // Example value for cash on bank
+      };
 
-        var orderForm = document.getElementById("orderform");
-        orderForm.addEventListener("submit", function(event) {
-            var totalAmount = 0;
-            var quantityInputs = document.querySelectorAll(".quantity-input");
+      var orderForm = document.getElementById("orderform");
+      var paymentMethodSelect = document.getElementById("payment-method");
 
-            quantityInputs.forEach(function(input) {
-                var quantity = parseFloat(input.value);
-                var price = parseFloat(input.getAttribute('data-price'));
+      // Function to get remaining funds based on the selected payment method
+      function getRemainingFunds(paymentMethod) {
+        return remainingFundsForMethods[paymentMethod] || 0;
+      }
 
-                if (isNaN(quantity) || quantity < 0) {
-                    alert("Please enter a valid number for the quantity of all products.");
-                    event.preventDefault();
-                    return;
-                }
+      orderForm.addEventListener("submit", function (event) {
+        var totalAmount = 0;
+        event.preventDefault();
+        var quantityInputs = document.querySelectorAll(".quantity-input");
+        var paymentMethod = paymentMethodSelect.value;
+        var remainingFunds = getRemainingFunds(paymentMethod);
+        console.log(remainingFunds);
+        quantityInputs.forEach(function (input) {
+          var quantity = parseFloat(input.value);
+          var price = parseFloat(input.getAttribute('data-price'));
 
-                totalAmount += quantity * price;
-            });
+          if (isNaN(quantity) || quantity < 0) {
+            alert("Please enter a valid number for the quantity of all products.");
+            event.preventDefault();
+            return;
+          }
 
-            if (totalAmount > remainingFunds) {
-                alert("The total amount (" + totalAmount + ") exceeds the remaining funds for the department.");
-                event.preventDefault();
-            }
+          totalAmount += quantity * price;
         });
+
+        if (totalAmount > remainingFunds) {
+          alert("The total amount (" + totalAmount + ") exceeds the remaining funds for the department.");
+          event.preventDefault();
+        }
+
+        console.log("Selected Payment Method: " + paymentMethod);
+      });
     });
-</script>
+  </script>
   <script src="./../../src/form.js"></script>
   <script src="./../../src/route.js"></script>
 </body>

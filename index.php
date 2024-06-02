@@ -1,6 +1,7 @@
 <?php
  session_start();
  // database conncetion
+//  session_destroy();
 require_once './src/dbconn.php';
 
 
@@ -32,17 +33,7 @@ Router::post('/login', function(){
         $_SESSION['user']['username'] = $user['username'];
         $_SESSION['user']['employee_id'] = $user['employees_id'];
         
-  // Insert log entry for successful login audit log
-            $user_id = $user['username'];
-            $action = "Logged In";
-            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
-
-            $sql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':user_id', $user_id);
-            $stmt->bindValue(':action', $action);
-            $stmt->bindValue(':time_out', $time_out);
-            $stmt->execute();
+  
 
         $stmt = $conn->prepare("SELECT department FROM employees WHERE id = :id");
         $stmt->bindParam(':id', $user['employees_id']);
@@ -53,7 +44,7 @@ Router::post('/login', function(){
         Router::audit_log();
         //redirects to the right page
         if ($_SESSION['user']['role'] == 'Product Order') {
-            header("Location: /$base_url/po/dashboard");
+            header("Location: /$base_url/po/audit_logs/page=1");
             exit();
         } 
         if ($_SESSION['user']['role'] == 'Human Resources') {
