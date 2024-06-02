@@ -22,7 +22,7 @@
     <!-- Main Content -->
     <div class="flex flex-col flex-1 overflow-y-auto">
       <!-- header -->
-      <div class="flex items-center justify-between h-16 bg-gray-200 shadow-md px-4 py-1">
+      <div class="flex items-center justify-between h-16 shadow-md px-4 py-1">
         <div class="flex items-center gap-4">
           <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
             <i class="ri-menu-line"></i>
@@ -192,12 +192,12 @@ function displayPendingOrders()
             // Form for Delayed status
             if ($row['Order_Status'] == 'to receive + Delayed') {
                 // If status is already 'to receive + Delayed', set button color to purple
-                echo '<button type="button" class="rounded-full border border-purple-600 bg-purple-600 block px-7 py-1 text-sm font-semibold text-white focus:outline-none" disabled style="background-color: #8A2BE2;">Delayed</button>';
+                echo '<button type="button" class="rounded-full border border-purple-600 bg-purple-600 block px-6 py-1 text-sm font-semibold text-white focus:outline-none" disabled style="background-color: #8A2BE2;">Delayed</button>';
               } else {
                 // If status is not 'to receive + Delayed', render the button with blue color
                 echo '<form action="/master/delay/orderDetail" method="POST" enctype="multipart/form-data" class="pb-2" onsubmit="return confirm(\'Are you sure you want to mark this order as delayed?\');">';
                 echo '<input type="hidden" name="Batch_ID" value="' . $row['Batch_ID'] . '">';
-                echo '<button type="submit" class="rounded-full border border-blue-600 hover:bg-blue-600 bg-blue-200 border-b block px-7 py-1 text-sm font-semibold text-blue-900 hover:text-white focus:outline-none">Delayed</button>';
+                echo '<button type="submit" class="rounded-full border border-blue-600 hover:bg-blue-600 bg-blue-200 border-b block px-6 py-1 text-sm font-semibold text-blue-900 hover:text-white focus:outline-none">Delayed</button>';
                 echo '</form>';
             }
             echo '</td>';

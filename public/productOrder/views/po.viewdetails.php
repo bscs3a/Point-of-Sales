@@ -21,7 +21,7 @@
         <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-y-auto">
             <!-- header -->
-            <div class="flex items-center justify-between h-16 bg-gray-200 shadow-md px-4 py-1">
+            <div class="flex items-center justify-between h-16 shadow-md px-4 py-1">
                 <div class="flex items-center gap-4">
                     <button id="toggleSidebar" class="text-gray-900 focus:outline-none focus:text-gray-700">
                         <i class="ri-menu-line"></i>
@@ -61,7 +61,7 @@
             </script>
 
             <!-- New Form for add product -->
-            <div class="container mx-auto py-8 px-5">
+            <div class="container mx-auto my-auto py-8 px-5">
                 <div
                     class="max-w-5xl h-full mx-auto bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
 
@@ -286,14 +286,16 @@
                     ?>
 
                     </table>
+                    <div class="flex justify-end m-3">
+                        <button route='/po/orderDetail'
+                            class="py-2 px-6 border border-gray-600 bg-yellow-500 font-bold rounded-md">Back</button>
+                    </div>
                 </div>
 
+
             </div>
 
-            <div class="flex justify-end">
-                <button route='/po/orderDetail'
-                    class="py-2 px-6 border border-gray-600 bg-yellow-500 font-bold rounded-md">Back</button>
-            </div>
+
 
         </div>
     </div>

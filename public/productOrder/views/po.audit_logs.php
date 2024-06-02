@@ -23,19 +23,25 @@
 
         <div class="flex flex-col flex-1 h-full overflow-y-auto hide-scrollbar">
 
-            <div class="flex items-center justify-between h-20 bg-white shadow-md px-4 py-2">
+            <div class="flex items-center justify-between h-16 bg-white shadow-md px-4 py-2">
 
                 <!-- Start: Active Menu -->
 
-                <button type="button" class="text-lg sidebar-toggle">
-                    <i class="ri-menu-line"></i>
-                </button>
+                <ul class="flex items-center text-md">
 
-                <ul class="flex items-center text-md ml-4">
+                    <div class="flex items-center gap-4">
+                        <button id="toggleSidebar" class="text-gray-500 focus:outline-none focus:text-gray-700">
+                            <i class="ri-menu-line"></i>
+                        </button>
+                        <label class="text-black font-medium">Audit Logs</label>
+                    </div>
 
-                    <li class="mr-2">
-                        <p class="text-black font-medium">Audit Logs</p>
-                    </li>
+                    <script>
+                        document.getElementById('toggleSidebar').addEventListener('click', function () {
+                        var sidebar = document.getElementById('sidebar');
+                        sidebar.classList.toggle('hidden', !sidebar.classList.contains('hidden'));
+                        });
+                    </script>
 
                 </ul>
 
@@ -121,7 +127,7 @@
                                 $db = Database::getInstance();
                                 $pdo = $db->connect();
 
-                                $numberPerPage = 8;
+                                $numberPerPage = 10;
 
                                 $offset = isset($_GET['page']) ? ($_GET['page'] - 1) * $numberPerPage : 0;
                                 $department = $_SESSION['user']['role'];

@@ -123,19 +123,20 @@
                       class="border border-gray-400 p-2 w-full rounded-lg focus:outline-none focus:border-blue-400"
                       required>
                   </div>
-                  <div class="flex flex-col justify-center items-center mb-3">
-                    <label for="location" class="block text-black font-semibold mb-2">Working Days (Monday -
-                      Sunday)</label>
-                    <input type="text" id="workingday" name="workingday"
-                      class="border border-gray-400 p-2 w-3/4 text-center rounded-lg focus:outline-none focus:border-blue-400"
-                      required>
-                  </div>
+
                 </div>
 
 
 
             </div>
 
+            <div class="flex flex-col w-1/2 mx-auto mb-5">
+              <label for="location" class="block text-black font-semibold mb-2">Working Days (Monday -
+                Sunday)</label>
+              <input type="text" id="workingday" name="workingday"
+                class="border border-gray-400 p-2 w-full text-center rounded-lg focus:outline-none focus:border-blue-400"
+                required>
+            </div>
 
             <div class="overflow-x-auto rounded-lg border border-gray-400">
               <table id="productTable" class="min-w-full text-center mx-auto bg-white">
