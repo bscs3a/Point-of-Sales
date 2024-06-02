@@ -912,11 +912,6 @@ video {
   margin-bottom: 0.5rem;
 }
 
-.my-24{
-  margin-top: 6rem;
-  margin-bottom: 6rem;
-}
-
 .my-3{
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
@@ -942,9 +937,14 @@ video {
   margin-bottom: 2rem;
 }
 
+.my-auto{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+
 .-mb-px{
   margin-bottom: -1px;
-}
 
 .mb-1{
   margin-bottom: 0.25rem;
@@ -1140,6 +1140,14 @@ video {
 
 .mt-9{
   margin-top: 2.25rem;
+}
+
+.mr-auto{
+  margin-right: auto;
+}
+
+.mr-96{
+  margin-right: 24rem;
 }
 
 .box-border{

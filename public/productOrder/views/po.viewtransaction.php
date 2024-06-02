@@ -163,7 +163,7 @@
                           <th class="px-6 py-2 font-semibold">ProductName</th>
                           <th class="px-6 py-2 font-semibold">ProductID</th>
                           <th class="px-6 py-2 font-semibold">Category</th>
-                          <th class="px-6 py-2 font-semibold">Price</th>
+                          <th class="px-6 py-2 font-semibold">Supplier Price</th>
                           <th class="px-6 py-2 font-semibold">Quantity</th>
                           <th class="px-20 py-2 text-center font-semibold">Status</th>
                           <th class="px-6 py-2 font-semibold"></th>
@@ -228,7 +228,7 @@
                     <?= $data['Category'] ?>
                   </td> <!-- Display category -->
                   <td class="px-6 py-2">
-                    <?= $data['Price'] ?>
+                    <?= $data['Supplier_Price'] ?>
                   </td> <!-- Display price -->
                   <td class="px-6 py-2">
                     <?= $data['Product_Quantity'] ?>
