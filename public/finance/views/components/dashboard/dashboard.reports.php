@@ -71,7 +71,7 @@
             <!-- end -->
 
             <!-- modal for date selection -->
-            <div id = "dateSelector" class = "hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-4 bg-white p-6 border-2 text-center">
+            <div id = "dateSelector" class = "z-50 hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 grid grid-cols-4 gap-4 bg-white p-6 border-2 text-center">
                 <!-- for header year -->
                 <div class = "col-span-3 text-left font-bold text-[#F8B721]" id="yearDate"><?= date('Y'); ?></div>
                 <div>
