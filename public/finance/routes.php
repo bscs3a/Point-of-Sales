@@ -1,7 +1,9 @@
 <?php
 
 require_once "public/finance/functions/reportGeneration/TrialBalance.php";
+
 require_once "public/finance/functions/specialTransactions/investors.php";
+
 require_once "public/finance/functions/specialTransactions/payable.php";
 require_once "public/finance/functions/generalFunctions.php";
 
@@ -434,6 +436,13 @@ Router::post("/fin/genSearch", function(){
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/fin/ledger/page=$page");
+});
+
+Router::post("/fin/fundSearch", function(){
+    $_SESSION['postdata']['generalLedgerSelected'] = $_POST['generalLedgerSelected'] == "" ? null : $_POST['generalLedgerSelected'];
+    $_SESSION['postdata']['recent'] = $_POST['recent'];
+
+    header("Location: " . $_SERVER['HTTP_REFERER']);
 });
 
 Router::post("/auditlogSearch", function(){
