@@ -148,7 +148,7 @@ CREATE TABLE `audit_log` (
   `id` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
   `datetime` datetime NOT NULL,
-  `action` text NOT NULL
+  `action` text NOT NULLf
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
