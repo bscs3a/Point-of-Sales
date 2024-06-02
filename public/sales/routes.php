@@ -112,9 +112,6 @@ class Sale
         $db = Database::getInstance();
         $conn = $db->connect();
 
-        // Get the EmployeeID of the currently logged in user
-        $employeeId = $_SESSION['user']['account_id'];
-
         $stmt = $conn->prepare("INSERT INTO Sales (SaleDate, SalePreference, PaymentMode, TotalAmount, EmployeeID, CustomerID, CardNumber, ExpiryDate, CVV, ShippingFee, Discount) VALUES (:saleDate, :salePreference, :paymentMode, :totalAmount, :employeeId, :customerId, :cardNumber, :expiryDate, :cvv, :shippingFee, :discount)");
         $stmt->bindParam(':saleDate', $saleDate);
         $stmt->bindParam(':salePreference', $salePreference);
@@ -204,18 +201,25 @@ Router::post('/addSales', function () {
     $customer = new Customer();
     $customerId = $customer->create($_POST['customerName'], $_POST['customerPhone'], $_POST['customerEmail']);
 
+
+    // Get the EmployeeID of the currently logged in user
+    $employeeId = $_SESSION['user']['account_id'];
     date_default_timezone_set('Asia/Manila');
     $sale = new Sale();
-    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], $_SESSION['user']['EmployeeID'], $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee'], $_POST['discount']);
+    $saleId = $sale->create(date('Y-m-d H:i:s'), $_POST['SalePreference'], $_POST['payment-mode'], $_POST['totalAmount'], $employeeId, $customerId, $_POST['cardNumber'], $_POST['expiryDate'], $_POST['cvv'], $_POST['shippingFee'], $_POST['discount']);
 
     $saleDetail = new SaleDetail();
     $deliveryOrder = new DeliveryOrder();
     $product = new Product();
     $cart = json_decode($_POST['cartData'], true);
+    $totalTax = 0;
+
     foreach ($cart as $item) {
         $subtotal = $item['price'] * $item['quantity'];
-        $tax = $item['price'] * $item['TaxRate'];
-        $totalAmount = ($item['price'] + $tax) * $item['quantity'];
+        $tax = $subtotal * $item['TaxRate']; // Calculate the tax on the subtotal
+        $totalAmount = $subtotal + $tax; // Add the tax to the subtotal to get the total amount
+
+        $totalTax += $tax; // Add the tax of the current item to the total tax
 
         $productWeight = $product->getWeight($item['id']);
         $totalProductWeight = $productWeight * $item['quantity'];  // Calculate total weight of each product purchased
@@ -240,7 +244,7 @@ Router::post('/addSales', function () {
     //     recountInventory($supplierPriceTotal);
     // }
 
-    insertSalesLedger($_POST['totalAmount'], $_POST['totalAmount'] - $_POST['subtotal'], $paymentMode);
+    insertSalesLedger($_POST['totalAmount'], $totalTax, $paymentMode, $_POST['discount']);
 
     $rootFolder = dirname($_SERVER['PHP_SELF']);
     header("Location: $rootFolder/sls/POS/Receipt");

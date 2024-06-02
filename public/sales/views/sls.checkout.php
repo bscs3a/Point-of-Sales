@@ -388,7 +388,7 @@
             const discount = cart.reduce((total, item) => {
                 if (item.quantity >= 100) {
                     return total + item.price * 0.2 * item.quantity; // 20% discount for quantity >= 100
-                } else if (item.quantity >= 50) {
+                } else if (item.quantity >= 20) {
                     return total + item.price * 0.1 * item.quantity; // 10% discount for quantity >= 50
                 } else {
                     return total;
