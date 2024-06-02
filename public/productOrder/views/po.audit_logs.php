@@ -235,8 +235,8 @@
 
     </div>
     <!-- End: Dashboard -->
-    <script src="./../../src/route.js"></script>
-    <script src="./../../src/form.js"></script>
+    <script src="../../src/route.js"></script>
+    <script src="../../src/form.js"></script>
 </body>
 
 </html>
