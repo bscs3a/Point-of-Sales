@@ -2,10 +2,13 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var divs = document.querySelectorAll('div[id*="payModal"]');
-
+    
     divs.forEach(function(div) {
         var forms = div.querySelectorAll('form');
+        
         forms.forEach(function(form) {
+            
+
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
                 // Your code here
@@ -22,10 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Inventory' : <?php echo getAccountBalanceV2('Inventory')?>
                 };
 
+                let currentInvestments = document.querySelector('[name="totalAllowableValue"]').value;
                 var maxValue = validValue[ledgerNameValue];
                 
-                if (amountValue > maxValue) {
+                if (amountValue > maxValue || amountValue > currentInvestments) {
                     amountInput.setCustomValidity('The amount exceeds the maximum value');
+                    event.preventDefault();
                 } else {
                     amountInput.setCustomValidity('');
                     if(form.checkValidity()) {
