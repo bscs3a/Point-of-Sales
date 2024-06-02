@@ -392,6 +392,7 @@
             });
         });
     </script>
+    <?php require_once __DIR__ . "/..\javascript\payables.php"?>
     <script src = "./../../../public\finance\javascript\accountFilter.js"></script>
     <script src="./../../../src/form.js"></script>
     <script src="./../../../src/route.js"></script>
