@@ -36,13 +36,13 @@ $remainingPondo = $cashOnHand + $cashOnBank;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Department Fund Expenses</title>
-    <link href="./../../src/tailwind.css" rel="stylesheet">
+    <link href="./../../../src/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
 </head>
 
 <body>
 
-    <?php require_once "component/sidebar.php" ?>
+    <?php require_once "components/sidebar.php" ?>
 
     <!-- Start: Dashboard -->
 
@@ -69,7 +69,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
             <!-- Start: Profile -->
 
-            <?php require_once "logout.php" ?>
+            <?php require_once __DIR__ . "/components/logout/logout.php"?>
             <!-- End: Profile -->
 
         </div>
@@ -78,7 +78,6 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
         
         <div class="w-full p-6 bg-white">
-            
 
             <!-- for adding transaction -->
             <div class="w-full px-6 py-3 bg-white">
@@ -208,8 +207,10 @@ $remainingPondo = $cashOnHand + $cashOnBank;
                                             }
                                         }
 
-                                        document.getElementById('payUsing').addEventListener('change', function() {
+                                        window.addEventListener('DOMContentLoaded', function() {
+                                            document.getElementById('payUsing').addEventListener('change', function() {
                                             validateInput(document.getElementById('amount'));
+                                            });
                                         });
                                         </script>
                                         <!-- upto here -->
@@ -281,13 +282,13 @@ $remainingPondo = $cashOnHand + $cashOnBank;
             <!-- changes here -->
             <div class=" mb-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-6 ">
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
+                    <div class=" col-span-1 bg-green-800 rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Given Allowance This Month</h1>
                             <p class="mt-5 text-4xl font-medium"><?php echo pondoForEveryone($department)['total'];?></p>
                         </div>
                     </div>
-                    <div class=" col-span-1 bg-gradient-to-b from-[#F8B721] to-[#FBCF68] rounded-xl">
+                    <div class=" col-span-1 bg-red-600 rounded-xl">
                         <div class="mx-5 my-5 py-3 px-3 text-white">
                             <h1 class="text-2xl font-bold">Total Expenses This Month</h1>
                             <p class="mt-5 text-4xl font-medium"><?php echo $totalExpenses;?></p>
@@ -339,7 +340,7 @@ $remainingPondo = $cashOnHand + $cashOnBank;
             <!-- pages -->
             <?php 
             // PUT YOUR LINK HERE
-            $link = "/dlv/pondo/page=";
+            $link = "/sls/funds/Sales/page={pageNumber}";
             ?>
             <ol class="flex justify-end mr-8 gap-1 text-xs font-medium mt-5">
                 <!-- Next & Previous -->
@@ -390,8 +391,8 @@ $remainingPondo = $cashOnHand + $cashOnBank;
 
             
     </main>
-    <script src="./../../src/route.js"></script>
-    <script src="./../../src/form.js"></script>
+    <script src="./../../../src/route.js"></script>
+    <script src="./../../../src/form.js"></script>
     <!-- Start: Sidebar -->
     <!-- End: Dashboard -->
 </body>

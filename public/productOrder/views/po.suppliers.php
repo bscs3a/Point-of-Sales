@@ -120,7 +120,7 @@
                         <a class="text-1xl font-semibold">Supplier Name:</a>
                         <a class="ml-3 text-black-500"><?php echo $row['Supplier_Name']; ?></a>
                       </div>
-                      <a href="/master/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                      <a route="/po/editsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
                         class="bg-violet-950 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Edit</a>
                     </div>
                     <div class="flex flex-row">
@@ -134,9 +134,9 @@
                   </div>
                   <div class="flex justify-between items-center pt-3">
 
-                    <a href="/master/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                    <a route="/po/viewsupplier/Supplier=<?php echo $row['Supplier_ID']; ?>"
                       class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">View</a>
-                    <a href="/master/po/viewsupplierproduct/Supplier=<?php echo $row['Supplier_ID']; ?>"
+                    <a route="/po/viewsupplierproduct/Supplier=<?php echo $row['Supplier_ID']; ?>"
                       class="bg-violet-950 my-3 px-4 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer">Product
                       Lists/Order</a>
                   </div>

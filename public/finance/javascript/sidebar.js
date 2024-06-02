@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('toggleSidebar').addEventListener('click', function() {
-        var sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('hidden', !sidebar.classList.contains('hidden'));
+    document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+        document.getElementById('sidebar-menu').classList.toggle('hidden');
+        document.getElementById('sidebar-menu').classList.toggle('transform');
+        document.getElementById('sidebar-menu').classList.toggle('-translate-x-full');
+        document.getElementById('mainContent').classList.toggle('md:w-full');
+        document.getElementById('mainContent').classList.toggle('md:ml-64');
     });
 });
+
+
+
+
+

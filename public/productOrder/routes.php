@@ -1368,16 +1368,16 @@ function updateOrderStatusToDelay()
             // $insertStmt->execute();
 
             // Audit log for delaying an order
-            $user_id = $_SESSION['user']['username']; // Assuming you have a user session
-            $action = "Delayed Order #$batchID";
-            $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+            // $user_id = $_SESSION['user']['username']; // Assuming you have a user session
+            // $action = "Delayed Order #$batchID";
+            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-            $auditSql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            $auditStmt = $conn->prepare($auditSql);
-            $auditStmt->bindParam(':user_id', $user_id);
-            $auditStmt->bindParam(':action', $action);
-            $auditStmt->bindParam(':time_out', $time_out);
-            $auditStmt->execute();
+            // $auditSql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+            // $auditStmt = $conn->prepare($auditSql);
+            // $auditStmt->bindParam(':user_id', $user_id);
+            // $auditStmt->bindParam(':action', $action);
+            // $auditStmt->bindParam(':time_out', $time_out);
+            // $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -1416,16 +1416,16 @@ Router::post('/delete/product', function () {
     $stmt_delete_product->execute();
 
     // Audit log for cancelling an order
-    $user_id = $_SESSION['user']['username']; // Assuming you have a user session
-    $action = "Deleted a Product from Supplier: $supplierName";
-    $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
+    // $user_id = $_SESSION['user']['username']; // Assuming you have a user session
+    // $action = "Deleted a Product from Supplier: $supplierName";
+    // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
 
-    $auditSql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-    $auditStmt = $conn->prepare($auditSql);
-    $auditStmt->bindParam(':user_id', $user_id);
-    $auditStmt->bindParam(':action', $action);
-    $auditStmt->bindParam(':time_out', $time_out);
-    $auditStmt->execute();
+    // $auditSql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
+    // $auditStmt = $conn->prepare($auditSql);
+    // $auditStmt->bindParam(':user_id', $user_id);
+    // $auditStmt->bindParam(':action', $action);
+    // $auditStmt->bindParam(':time_out', $time_out);
+    // $auditStmt->execute();
 
     // Redirect back to the page with the supplier ID
     $rootFolder = dirname($_SERVER['PHP_SELF']);

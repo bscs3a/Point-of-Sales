@@ -558,13 +558,13 @@ video {
   width: 100%;
 }
 
-@media (min-width: 640px){
+@media (min-width: 480px){
   .\!container{
-    max-width: 640px !important;
+    max-width: 480px !important;
   }
 
   .container{
-    max-width: 640px;
+    max-width: 480px;
   }
 }
 
@@ -578,33 +578,23 @@ video {
   }
 }
 
-@media (min-width: 1024px){
+@media (min-width: 976px){
   .\!container{
-    max-width: 1024px !important;
+    max-width: 976px !important;
   }
 
   .container{
-    max-width: 1024px;
+    max-width: 976px;
   }
 }
 
-@media (min-width: 1280px){
+@media (min-width: 1440px){
   .\!container{
-    max-width: 1280px !important;
+    max-width: 1440px !important;
   }
 
   .container{
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px){
-  .\!container{
-    max-width: 1536px !important;
-  }
-
-  .container{
-    max-width: 1536px;
+    max-width: 1440px;
   }
 }
 
@@ -3538,10 +3528,6 @@ video {
   padding-bottom: 1.25rem;
 }
 
-.pb-6{
-  padding-bottom: 1.5rem;
-}
-
 .pb-8{
   padding-bottom: 2rem;
 }
@@ -3640,6 +3626,10 @@ video {
 
 .pt-6{
   padding-top: 1.5rem;
+}
+
+.pt-8{
+  padding-top: 2rem;
 }
 
 .text-left{
@@ -4033,11 +4023,6 @@ video {
 .text-red-600{
   --tw-text-opacity: 1;
   color: rgb(220 38 38 / var(--tw-text-opacity));
-}
-
-.text-red-700{
-  --tw-text-opacity: 1;
-  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
 .text-red-900{
@@ -4541,14 +4526,14 @@ video {
   image: $img|$width|$height|$type;
 }
 
-@media (min-width: 640px){
+@media (min-width: 480px){
   .sm\:container{
     width: 100%;
   }
 
-  @media (min-width: 640px){
+  @media (min-width: 480px){
     .sm\:container{
-      max-width: 640px;
+      max-width: 480px;
     }
   }
 
@@ -4558,21 +4543,15 @@ video {
     }
   }
 
-  @media (min-width: 1024px){
+  @media (min-width: 976px){
     .sm\:container{
-      max-width: 1024px;
+      max-width: 976px;
     }
   }
 
-  @media (min-width: 1280px){
+  @media (min-width: 1440px){
     .sm\:container{
-      max-width: 1280px;
-    }
-  }
-
-  @media (min-width: 1536px){
-    .sm\:container{
-      max-width: 1536px;
+      max-width: 1440px;
     }
   }
 }
@@ -4610,11 +4589,6 @@ video {
 .hover\:border-gray-300:hover{
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
-}
-
-.hover\:border-gray-500:hover{
-  --tw-border-opacity: 1;
-  border-color: rgb(107 114 128 / var(--tw-border-opacity));
 }
 
 .hover\:border-red-600:hover{
@@ -5061,7 +5035,7 @@ video {
   border-color: rgb(248 183 33 / var(--tw-border-opacity));
 }
 
-@media (min-width: 640px){
+@media (min-width: 480px){
   .sm\:not-sr-only{
     position: static;
     width: auto;
@@ -5107,6 +5081,10 @@ video {
 
   .sm\:flex-row{
     flex-direction: row;
+  }
+
+  .sm\:justify-between{
+    justify-content: space-between;
   }
 
   .sm\:space-x-4 > :not([hidden]) ~ :not([hidden]){
@@ -5167,6 +5145,10 @@ video {
     margin-left: 16rem;
   }
 
+  .md\:mt-2{
+    margin-top: 0.5rem;
+  }
+
   .md\:flex{
     display: flex;
   }
@@ -5198,9 +5180,18 @@ video {
   .md\:p-52{
     padding: 13rem;
   }
+
+  .md\:pt-6{
+    padding-top: 1.5rem;
+  }
+
+  .md\:text-4xl{
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
 }
 
-@media (min-width: 1024px){
+@media (min-width: 976px){
   .lg\:ml-40{
     margin-left: 10rem;
   }
@@ -5254,9 +5245,36 @@ video {
   }
 }
 
-@media (min-width: 1280px){
+@media (min-width: 1440px){
   .xl\:block{
     display: block;
+  }
+
+  .xl\:justify-between{
+    justify-content: space-between;
+  }
+
+  .xl\:border{
+    border-width: 1px;
+  }
+
+  .xl\:pr-6{
+    padding-right: 1.5rem;
+  }
+
+  .xl\:text-6xl{
+    font-size: 3.75rem;
+    line-height: 1;
+  }
+
+  .xl\:text-lg{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .xl\:text-xl{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 
@@ -5374,7 +5392,7 @@ video {
     --tw-ring-color: rgb(113 63 18 / var(--tw-ring-opacity));
   }
 
-  @media (min-width: 1024px){
+  @media (min-width: 976px){
     .dark\:lg\:hover\:\[paint-order\:markers\]:hover{
       paint-order: markers;
     }
