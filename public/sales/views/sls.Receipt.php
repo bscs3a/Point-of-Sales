@@ -167,7 +167,7 @@
                             <?php if ($sale_preferences != 'Pick-up') : ?>
                                 <div class="grid gap-2 text-right">
                                     <div class="border-b text-gray-400 text-md xl:text-xl font-bold pb-2 mb-2">Delivery Address</div>
-                                    <div>Name: <?= $sale['FirstName'] . ' ' . $sale['LastName'] ?></div>
+                                    <div>Name: <?= $sale['Name'] ?></div>
                                     <div>Address: <?= $sale['StreetBarangayAddress'] . ', ' . $sale['Municipality'] . ', ' . $sale['Province'] ?></div>
                                     <div>Phone: <?= $sale['Phone'] ?></div>
                                     <div>Email: <?= $sale['Email'] ?></div>
