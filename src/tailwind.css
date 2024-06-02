@@ -5067,10 +5067,6 @@ video {
     display: block;
   }
 
-  .sm\:hidden{
-    display: none;
-  }
-
   .sm\:w-\[780px\]{
     width: 780px;
   }
@@ -5157,10 +5153,6 @@ video {
     margin-top: 0.5rem;
   }
 
-  .md\:block{
-    display: block;
-  }
-
   .md\:flex{
     display: flex;
   }
@@ -5197,20 +5189,11 @@ video {
     font-size: 2.25rem;
     line-height: 2.5rem;
   }
-
-  .md\:text-gray-400{
-    --tw-text-opacity: 1;
-    color: rgb(156 163 175 / var(--tw-text-opacity));
-  }
 }
 
 @media (min-width: 976px){
   .lg\:ml-40{
     margin-left: 10rem;
-  }
-
-  .lg\:block{
-    display: block;
   }
 
   .lg\:flex{
