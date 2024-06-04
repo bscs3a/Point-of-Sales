@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Inventory' : <?php echo getAccountBalanceV2('Inventory')?>
                 };
 
-                let currentInvestments = document.querySelector('[name="totalAllowableValue"]').value;
+                let currentInvestments = form.querySelector('[name="totalAllowableValue"]').value;
                 var maxValue = validValue[ledgerNameValue];
                 
                 if (amountValue > maxValue || amountValue > currentInvestments) {
