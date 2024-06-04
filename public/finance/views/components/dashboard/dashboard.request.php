@@ -208,7 +208,8 @@
 
                         if ($stmt->rowCount() > 0) {
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<option value=\"{$row['name']}\">{$row['name']}</option>";
+                                $value = abs(getAccountBalanceV2($row['name']));
+                                echo "<option value=\"{$row['name']}\">{$row['name']} - {$value}</option>";
                             }
                         } else {
                             echo "0 results";
