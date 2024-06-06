@@ -1226,12 +1226,9 @@ Router::post('/delete/supplier', function () {
 //     // Call the function to update request status
 //     updateRequestStatusToAccepted();
 // });
-
-
-
-// Route to handle the update order status action
+// Route to handle the cancel order status action
 Router::post('/complete/orderDetail', function () {
-    // Call the function to update order status
+    // Call the function to cancel order status
     updateOrderStatusToCompleted();
 });
 
@@ -1248,7 +1245,7 @@ function updateOrderStatusToCompleted()
             $conn->beginTransaction();
 
             // Update the order status in the batch_orders table
-            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Completed', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND Order_Status LIKE 'to receive%'");
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Completed', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND (Order_Status = 'to receive' OR Order_Status = 'to receive + Delayed')");
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
@@ -1308,32 +1305,31 @@ function updateOrderStatusToCompleted()
                 $insertOrUpdateStmt->execute();
 
                 // Check if the product exists in inventoryorders and update its status if found
-                $checkInventoryOrderStmt = $conn->prepare("UPDATE inventoryorders SET status = 'Completed' WHERE product_id = :productID AND quantity = :quantity");
+                $checkInventoryOrderStmt = $conn->prepare("UPDATE inventoryorders SET status = 'Completed' WHERE product_id = :productID AND quantity = :quantity AND status = 'Pending' LIMIT 1");
                 $checkInventoryOrderStmt->bindParam(':productID', $productID);
                 $checkInventoryOrderStmt->bindParam(':quantity', $productQuantity);
                 $checkInventoryOrderStmt->execute();
+
                 if (!$checkInventoryOrderStmt->execute()) {
                     // Handle error here
-                    echo "Error updating inventoryorders status: " . $checkInventoryOrderStmt->errorInfo()[2];
+                    echo "Error updating inventory
+                    orders status: " . $checkInventoryOrderStmt->errorInfo()[2];
                 }
+                }
+                // Commit the transaction
+                $conn->commit();   
+                echo "Order status updated to 'Completed' for Order ID: $batchID";
+
+                $rootFolder = dirname($_SERVER['PHP_SELF']);
+                header("Location: $rootFolder/po/orderDetail");
+                exit();
             }
-            // Commit the transaction
-            $conn->commit();
-
-            echo "Order status updated to 'Completed' for Order ID: $batchID";
-
-            $rootFolder = dirname($_SERVER['PHP_SELF']);
-            header("Location: $rootFolder/po/orderDetail");
-            exit();
+        } catch (PDOException $e) {
+            // Rollback the transaction in case of error
+            $conn->rollBack();
+            echo "Error: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        // Rollback the transaction in case of error
-        $conn->rollBack();
-        echo "Error: " . $e->getMessage();
     }
-}
-
-
 
 
 
@@ -1361,9 +1357,22 @@ function updateOrderStatusToCancel()
             $conn->beginTransaction();
 
             // Update the order status in the batch_orders table
-            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Cancelled', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND Order_Status LIKE 'to receive%'");
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = 'Cancelled' WHERE Batch_ID = :batchID AND (Order_Status = 'to receive' OR Order_Status = 'to receive + Delayed')");
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
+
+            // Check if the products in order_details are the same as those in inventoryorders
+            $checkProductsStmt = $conn->prepare("SELECT COUNT(*) AS count FROM order_details od JOIN inventoryorders io ON od.Product_ID = io.product_id WHERE od.Batch_ID = :batchID AND io.status = 'Pending'");
+            $checkProductsStmt->bindParam(':batchID', $batchID);
+            $checkProductsStmt->execute();
+            $productCount = $checkProductsStmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+            if ($productCount > 0) {
+                // If there are matching products, cancel their statuses in inventoryorders
+                $cancelInventoryOrdersStmt = $conn->prepare("UPDATE inventoryorders SET status = 'Cancelled' WHERE product_id IN (SELECT Product_ID FROM order_details WHERE Batch_ID = :batchID) AND status = 'Pending'");
+                $cancelInventoryOrdersStmt->bindParam(':batchID', $batchID);
+                $cancelInventoryOrdersStmt->execute();
+            }
 
             // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
             $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status, Funds_Transact_ID FROM batch_orders WHERE Batch_ID = :batchID");
@@ -1374,6 +1383,7 @@ function updateOrderStatusToCancel()
             $orderStatus = $orderDetails['Order_Status'];
             $fundsID = $orderDetails['Funds_Transact_ID'];
 
+            // Call a function to handle cancellation of funds
             cancelOrder($fundsID);
 
             // Insert data into transaction_history table
@@ -1382,18 +1392,6 @@ function updateOrderStatusToCancel()
             $insertStmt->bindParam(':supplierID', $supplierID);
             $insertStmt->bindParam(':orderStatus', $orderStatus);
             $insertStmt->execute();
-
-            // Audit log for cancelling an order
-            // $user_id = $_SESSION['user']['username']; // Assuming you have a user session
-            // $action = "Cancelled Order #$batchID";
-            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
-
-            // $auditSql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            // $auditStmt = $conn->prepare($auditSql);
-            // $auditStmt->bindParam(':user_id', $user_id);
-            // $auditStmt->bindParam(':action', $action);
-            // $auditStmt->bindParam(':time_out', $time_out);
-            // $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -1410,6 +1408,9 @@ function updateOrderStatusToCancel()
         echo "Error: " . $e->getMessage();
     }
 }
+
+
+
 
 // Route to handle the delay order status action
 Router::post('/delay/orderDetail', function () {

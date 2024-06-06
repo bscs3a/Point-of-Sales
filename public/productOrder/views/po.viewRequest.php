@@ -84,7 +84,7 @@ function getAllInventoryOrders($conn) {
             echo "<td class='px-4 py-2'>" . $row['status'] . "</td>";
             echo "<td class='px-4 py-2'>" . $row['date_ordered'] . "</td>";
             echo '<td class="px-4 py-2">';
-            echo '<a route="/po/viewsupplierproduct/Supplier=' . $row['Supplier_ID'] . '&order_id=' . $row['order_id'] . '" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Go</a>';
+            echo '<a route="/po/viewsupplierproduct/Supplier=' . $row['Supplier_ID'] . '" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Go</a>';
             echo "</td>";
             echo "</tr>";
         }
