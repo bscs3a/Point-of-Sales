@@ -31,24 +31,8 @@
         </div>
 
         <!-- dropdown -->
-        <div x-data="{ dropdownOpen: false }" class="relative my-32">
-          <button @click="dropdownOpen = !dropdownOpen"
-            class="relative z-10 border border-gray-400 rounded-md bg-gray-100 p-2 focus:outline-none">
-            <div class="flex items-center gap-4">
-            <a class="flex-none text-sm dark:text-white" href="#"><?php echo $_SESSION['user']['username']; ?></a>
-              <i class="ri-arrow-down-s-line"></i>
-            </div>
-          </button>
+        <?php require_once "public/productOrder/views/po.logout.php"?>
 
-          <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
-
-          <form id="logout-form" action="/logout/user" method="POST">
-            <div x-show="dropdownOpen"
-              class="absolute right-0 mt-2 py-2 w-40 bg-gray-100 border border-gray-200 rounded-md shadow-lg z-20">
-              <button type="submit" class="block px-8 py-1 text-sm capitalize text-gray-700">Log out</button>
-            </div>
-          </form>
-        </div>
       </div>
 
       <script>
@@ -70,107 +54,51 @@
                 <th class="px-4 py-2 font-semibold">Supplier</th>
                 <th class="px-4 py-2 font-semibold">Category</th>
                 <th class="px-4 py-2 font-semibold">Price</th>
-                <th class="px-4 py-2 font-semibold">Weight</th>
-                <th class="px-4 py-2 font-semibold">Total</th>
-                <th class="px-4 py-2 font-semibold">Status</th>
+                <th class="px-4 py-2 font-semibold">Quantity</th>
+              
                 <th class="px-4 py-2 font-semibold"></th>
               </tr>
             </thead>
             <tbody>
 
-              <?php
-              try {
-                require_once 'dbconn.php';
-                // Query to retrieve all requests
-                $query = "SELECT * FROM requests WHERE request_Status = 'pending' OR request_Status = 'Ready to order'";
-                $statement = $conn->prepare($query);
-                $statement->execute();
-
-                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                  $requestID = $row['Request_ID'];
-                  $productID = $row['Product_ID']; // Assuming Product_ID is the correct column
-                  $productDetails = getProductDetails($productID, $conn);
-                  // Displaying the fetched data
-                  echo '<tr>';
-                  echo '<td class="px-4 py-10">' . $productID . '</td>';
-                  echo '<td>';
-                  echo '<div class="font-medium text-gray-700 text-sm flex items-center">';
-                  echo '<img src="../' . $productDetails['ProductImage'] . '" alt="Product Image" class="w-8 h-8 mr-2">';
-                  echo '<a>' . $productDetails['ProductName'] . '</a>';
-                  echo '</div>';
-                  echo '</td>';
-                  echo '<td class="px-4 py-10">' . $productDetails['Supplier'] . '</td>';
-                  echo '<td class="px-4 py-10">' . $productDetails['Category'] . '</td>';
-                  echo '<td class="px-4 py-10">' . $productDetails['Price'] . '</td>';
-                  echo '<td class="px-4 py-10">' . $row["Product_Quantity"] . '</td>';
-                  echo '<td class="px-4 py-10">' . $row["Product_Total_Price"] . '</td>';
-                  echo '<td class="px-4 py-10">' . $row["request_Status"] . '</td>';
-                  echo '<td class="px-4 py-10">';
-                  echo '<form action="/master/delete/requestOrder" method="POST" enctype="multipart/form-data">';
-                  echo '<input type="hidden" name="requestID" value="' . $requestID . '">';
-                  echo '<input type="submit" value="Delete"class="px-4 py-2 border border-red-600 text-red-600 rounded-md font-semibold tracking-wide cursor-pointer">';
-                  echo '</form>';
-                  echo '</td>';
-                  echo '</tr>';
-                }
-              } catch (PDOException $e) {
-                echo "Connection failed: " . $e->getMessage();
-              }
-
-              ?>
-            </tbody>
             <?php
-            try {
-              // Query to retrieve all requests and calculate total quantity and total price
-              $query = "SELECT SUM(Product_Quantity) AS total_quantity, SUM(Product_Total_Price) AS total_price FROM requests WHERE request_Status = 'pending'";
-              $statement = $conn->prepare($query);
-              $statement->execute();
-              $totals = $statement->fetch(PDO::FETCH_ASSOC);
+try {
+    require_once 'dbconn.php';
 
-              // Display total quantity and total price
-              $totalQuantity = $totals['total_quantity'];
-              $totalPrice = $totals['total_price'];
+    // Query to retrieve all products
+    $query = "SELECT * FROM products";
+    $statement = $conn->prepare($query);
+    $statement->execute();
 
-              echo '<tfoot class="text-left bg-gray-200">';
-              echo '<tr class="border-b border-y-gray-300">';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900">';
-              echo '<div class="flex flex-col font-medium text-gray-700 gap-3">';
-              echo '<a>Items Subtotal: ' . $totalQuantity . '</a>';
-              echo '<a>Total Amount: Php ' . $totalPrice . '</a>';
-              echo '</div>';
-              echo '</th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '<th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>';
-              echo '</tr>';
-              echo '</tfoot>';
-            } catch (PDOException $e) {
-              echo "Connection failed: " . $e->getMessage();
-            }
-            ?>
+    // Displaying the fetched products
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        echo "<tr>";
+        echo "<td>" . $row['ProductID'] . "</td>";
+        echo "<td>" . $row['ProductName'] . "</td>";
+        echo "<td>" . $row['Supplier'] . "</td>";
+        echo "<td>" . $row['Category'] . "</td>";
+        echo "<td>" . $row['Price'] . "</td>";
+        echo '<td>';
+        echo '<form action="/request/insert" method="POST">';
+        echo '<input type="hidden" name="productID" value="' . $row['ProductID'] . '">';
+        echo '<input type="number" name="quantity" value="1" min="1" class="px-2 py-1 border border-gray-400 rounded-md">';
+        echo '<input type="submit" value="Request" class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md font-semibold tracking-wide cursor-pointer ml-2">';
+        echo '</form>';
+        echo '</td>';
+        echo "</tr>";
+    }
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
 
+
+            </tbody>
+            
           </table>
         </div>
         <!-- View All Button -->
-        <div class="flex justify-end border-none">
-          <form action="/master/accept/requestOrder" method="POST" enctype="multipart/form-data">
-            <button type="submit" class="mr-5 py-3 px-4 border-2 border-black text-sm rounded-md bg-[#FFC955]">
-              Accept Request(For Finance)
-            </button>
-          </form>
-
-          <form action="/master/update/requestOrder" method="POST" enctype="multipart/form-data">
-            <button type="submit" class="mr-5 py-3 px-4 border-2 border-black text-sm rounded-md bg-[#FFC955]">
-              Order now
-            </button>
-          </form>
-
-        </div>
+      
       </div>
     </div>
     <script src="./../src/route.js"></script>

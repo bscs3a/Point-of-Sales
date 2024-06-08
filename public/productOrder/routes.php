@@ -8,6 +8,7 @@ $po = [
     '/po/login' => $basePath . "login.php",
     // '/po/dashboard' => $basePath . "dashboard.php",
     '/po/requestOrder' => $basePath . "requestOrder.php",
+    '/po/viewRequest' => $basePath . "viewRequest.php",
     '/po/suppliers' => $basePath . "suppliers.php",
     '/po/addsupplier' => $basePath . "addsupplier.php",
     '/po/viewsupplier' => $basePath . "viewsupplier.php",
@@ -29,13 +30,13 @@ $po = [
     // '/po/audit_logs' => $basePath . "audit_logs.php",
 
     //auditlogs
-    '/po/audit_logs/page={pageNumber}' => function($pageNumber) use ($basePath){
+    '/po/audit_logs/page={pageNumber}' => function ($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "audit_logs.php";
     },
 
     //funds
-    '/po/pondo/page={pageNumber}' => function($pageNumber) use ($basePath){
+    '/po/pondo/page={pageNumber}' => function ($pageNumber) use ($basePath) {
         $_GET['page'] = $pageNumber;
         include $basePath . "pondo.php";
     },
@@ -439,16 +440,39 @@ Router::post('/placeorder/supplier/', function () {
         $supplierStatus = $statusStmt->fetchColumn();
 
         if ($supplierStatus === 'Inactive') {
-            echo "<script>alert('This supplier is inactive and you cannot place orders with them.');</script>";
-            echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var message = 'This supplier is inactive and you cannot place orders with them.';
+                        var alertBox = document.createElement('div');
+                        alertBox.textContent = message;
+                        alertBox.style.backgroundColor = '#f8d7da'; // Red background color
+                        alertBox.style.color = '#721c24'; // Dark text color
+                        alertBox.style.padding = '30px'; // Padding
+                        alertBox.style.borderRadius = '12px'; // Rounded corners
+                        alertBox.style.position = 'fixed'; // Fixed position
+                        alertBox.style.top = '50%'; // Center vertically
+                        alertBox.style.left = '50%'; // Center horizontally
+                        alertBox.style.transform = 'translate(-50%, -50%)'; // Centering trick
+                        alertBox.style.zIndex = '9999'; // Ensure it's on top
+                        alertBox.style.border = '3px solid #f5c6cb'; // Border color
+                        alertBox.style.fontSize = '36px'; // Larger font size
+                        alertBox.style.fontWeight = 'bold'; // Bolder text
+                        document.body.appendChild(alertBox);
+                        setTimeout(function() {
+                            alertBox.parentNode.removeChild(alertBox);
+                            window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';
+                        }, 2000); // Close the alert after 2 seconds
+                    });
+                  </script>";
             return;
         }
 
-      
+
+
         // Prepare SQL statement for inserting orders into order_details table
         $orderStmt = $conn->prepare("INSERT INTO order_details (Supplier_ID, Product_ID, Product_Quantity, Date_Ordered, Batch_ID) VALUES (:supplierID, :productID, :quantity, NOW(), :batchID)");
 
-     
+
 
         // Get Batch_ID
         $batchID = getNextBatchID($conn); // Function to get the next available batch ID
@@ -476,8 +500,30 @@ Router::post('/placeorder/supplier/', function () {
                 // If product is not available, set flag to false and halt order processing
                 if ($availability === 'Not Available') {
                     $allProductsAvailable = false;
-                    echo "<script>alert('Product with ID $productID is not available and cannot be ordered.');</script>";
-                    echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+                    echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var message = 'Product with ID $productID is not available and cannot be ordered.';
+                        var alertBox = document.createElement('div');
+                        alertBox.textContent = message;
+                        alertBox.style.backgroundColor = '#f8d7da'; // Red background color
+                        alertBox.style.color = '#721c24'; // Dark text color
+                        alertBox.style.padding = '30px'; // Padding
+                        alertBox.style.borderRadius = '12px'; // Rounded corners
+                        alertBox.style.position = 'fixed'; // Fixed position
+                        alertBox.style.top = '50%'; // Center vertically
+                        alertBox.style.left = '50%'; // Center horizontally
+                        alertBox.style.transform = 'translate(-50%, -50%)'; // Centering trick
+                        alertBox.style.zIndex = '9999'; // Ensure it's on top
+                        alertBox.style.border = '3px solid #f5c6cb'; // Border color
+                        alertBox.style.fontSize = '36px'; // Larger font size
+                        alertBox.style.fontWeight = 'bold'; // Bolder text
+                        document.body.appendChild(alertBox);
+                        setTimeout(function() {
+                            alertBox.parentNode.removeChild(alertBox);
+                            window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';
+                        }, 2000); // Close the alert after 2 seconds
+                    });
+                </script>";
                     break; // Stop processing further products
                 }
 
@@ -505,14 +551,14 @@ Router::post('/placeorder/supplier/', function () {
 
 
                 // Audit log for adding bulk items on a supplier
-                $user_id = $_SESSION['user']['username']; // Assuming you have a user session
+                // $user_id = $_SESSION['user']['username']; // Assuming you have a user session
 
-                // Fetch Supplier_Name based on Supplier_ID
-                $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
-                $supplierNameStmt = $conn->prepare($supplierNameQuery);
-                $supplierNameStmt->bindParam(':supplierID', $supplierID);
-                $supplierNameStmt->execute();
-                $supplierName = $supplierNameStmt->fetchColumn();
+                // // Fetch Supplier_Name based on Supplier_ID
+                // $supplierNameQuery = "SELECT Supplier_Name FROM suppliers WHERE Supplier_ID = :supplierID";
+                // $supplierNameStmt = $conn->prepare($supplierNameQuery);
+                // $supplierNameStmt->bindParam(':supplierID', $supplierID);
+                // $supplierNameStmt->execute();
+                // $supplierName = $supplierNameStmt->fetchColumn();
 
 
 
@@ -538,24 +584,24 @@ Router::post('/placeorder/supplier/', function () {
         // Add the shipping fee to the total amount
         $totalAmount += $shippingFee;
 
-      
+
         $remaingvalue = getRemainingProductOrderPondo($paymentmethod);
 
         if ($totalAmount > $remaingvalue) {
             echo "<script>alert('You dont have enough Funds to proceed with the order');</script>";
             echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
-            return;
+
         }
 
         // If any product is not available, halt the order processing
         if (!$allProductsAvailable) {
-            echo "Order cannot be processed because one or more products are not available.<br>";
+            // echo "Order cannot be processed because one or more products are not available.<br>";
         } else {
             // If total quantity is greater than 0, proceed with batch order insertion
             if ($totalQuantity > 0) {
-                  // Prepare SQL statement for inserting batch into batch_orders table
+                // Prepare SQL statement for inserting batch into batch_orders table
 
-                $fundsID = recordBuyingInventory($totalAmount,$paymentmethod);
+                $fundsID = recordBuyingInventory($totalAmount, $paymentmethod);
                 $batchOrderStmt = $conn->prepare("INSERT INTO batch_orders (Supplier_ID, Items_Subtotal, Total_Amount, Order_Status, Pay_Using, Funds_Transact_ID) VALUES (:supplierID, :itemsSubtotal, :totalAmount, 'to receive', :paymentmethod, :fundsID)");
                 // Bind parameters for batch order insertion
                 $batchOrderStmt->bindParam(':supplierID', $supplierID);
@@ -577,8 +623,30 @@ Router::post('/placeorder/supplier/', function () {
             } else {
                 // Rollback the transaction if no products were ordered
                 $conn->rollBack();
-                echo "<script>alert('No products were ordered.');</script>";
-                echo "<script>window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';</script>";
+                echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var message = 'No products were ordered.';
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = message;
+                    alertBox.style.backgroundColor = '#f8d7da'; // Red background color
+                    alertBox.style.color = '#721c24'; // Dark text color
+                    alertBox.style.padding = '30px'; // Padding
+                    alertBox.style.borderRadius = '12px'; // Rounded corners
+                    alertBox.style.position = 'fixed'; // Fixed position
+                    alertBox.style.top = '50%'; // Center vertically
+                    alertBox.style.left = '50%'; // Center horizontally
+                    alertBox.style.transform = 'translate(-50%, -50%)'; // Centering trick
+                    alertBox.style.zIndex = '9999'; // Ensure it's on top
+                    alertBox.style.border = '3px solid #f5c6cb'; // Border color
+                    alertBox.style.fontSize = '36px'; // Larger font size
+                    alertBox.style.fontWeight = 'bold'; // Bolder text
+                    document.body.appendChild(alertBox);
+                    setTimeout(function() {
+                        alertBox.parentNode.removeChild(alertBox);
+                        window.location.href = '/master/po/viewsupplierproduct/Supplier=$supplierID';
+                    }, 2000); // Close the alert after 2 seconds
+                });
+            </script>";
             }
         }
     } catch (PDOException $e) {
@@ -597,7 +665,7 @@ Router::post('/placeorder/supplier/', function () {
 //function to delete view details
 Router::post('/delete/viewdetails', function () {
     // Check if the delete request was submitted
-    if (isset ($_POST['product_id']) && isset ($_POST['batch_id'])) {
+    if (isset($_POST['product_id']) && isset($_POST['batch_id'])) {
         $productID = $_POST['product_id'];
         $batchID = $_POST['batch_id'];
 
@@ -653,7 +721,7 @@ Router::post('/delete/viewdetails', function () {
             // Redirect back to the view details page
             $rootFolder = dirname($_SERVER['PHP_SELF']);
             header("Location: $rootFolder/po/viewdetails/Batch=$batchID");
-            exit ();
+            exit();
         } catch (PDOException $e) {
             // Rollback the transaction on error
             $conn->rollBack();
@@ -780,7 +848,7 @@ Router::post('/delete/requestOrder', function () {
         $conn = $db->connect();
 
         // Check if the requestID is provided in the POST data
-        if (isset ($_POST['requestID'])) {
+        if (isset($_POST['requestID'])) {
             $requestID = $_POST['requestID'];
 
             $stmt = $conn->prepare("DELETE FROM requests WHERE Request_ID = :requestID");
@@ -795,7 +863,7 @@ Router::post('/delete/requestOrder', function () {
                 // Redirect back to the request order page after successful deletion
                 $rootFolder = dirname($_SERVER['PHP_SELF']);
                 header("Location: $rootFolder/po/requestOrder");
-                exit (); // Ensure script execution stops after redirection
+                exit(); // Ensure script execution stops after redirection
             } else {
                 // No rows were affected, handle this case accordingly
                 echo "No rows were deleted.";
@@ -930,7 +998,7 @@ Router::post('/edit/editsupplier', function () {
             $availability = $_POST[$availabilityKey];
             $unitofmeasurement = $_POST[$unitofmeasurement];
             $taxrate = $_POST[$taxrate];
-            
+
 
             $stmt_product = $conn->prepare("UPDATE products SET ProductName = :productName, Category = :category, Price = :price, Supplier_Price =:retailprice, Description = :description, ProductWeight = :productWeight, Availability = :availability, UnitOfMeasurement = :unitofmeasurement, TaxRate = :taxrate WHERE ProductID = :productID");
             $stmt_product->bindParam(':productName', $productName);
@@ -1026,15 +1094,12 @@ Router::post('/delete/supplier', function () {
 
 
 
-// //function to show all the product details
+// Function to get product details
 // function getProductDetails($productID, $conn)
 // {
 //     try {
 //         // Prepare the SQL statement to fetch product details including the image path
-//         $query = "SELECT p.ProductImage, p.ProductName, p.Supplier, p.Category, p.Price, r.Product_Quantity, r.Product_Total_Price
-//                   FROM products p
-//                   INNER JOIN requests r ON p.ProductID = r.Product_ID
-//                   WHERE p.ProductID = :product_id";
+//         $query = "SELECT * FROM products WHERE Product_ID = :product_id";
 //         $statement = $conn->prepare($query);
 //         $statement->bindParam(':product_id', $productID);
 //         $statement->execute();
@@ -1161,16 +1226,12 @@ Router::post('/delete/supplier', function () {
 //     // Call the function to update request status
 //     updateRequestStatusToAccepted();
 // });
-
-
-
-// Route to handle the update order status action
+// Route to handle the cancel order status action
 Router::post('/complete/orderDetail', function () {
-    // Call the function to update order status
+    // Call the function to cancel order status
     updateOrderStatusToCompleted();
 });
 
-// Function to set the order status to complete and add data in the transaction history
 function updateOrderStatusToCompleted()
 {
     try {
@@ -1184,7 +1245,7 @@ function updateOrderStatusToCompleted()
             $conn->beginTransaction();
 
             // Update the order status in the batch_orders table
-            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Completed', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND Order_Status LIKE 'to receive%'");
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Completed', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND (Order_Status = 'to receive' OR Order_Status = 'to receive + Delayed')");
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
 
@@ -1209,16 +1270,21 @@ function updateOrderStatusToCompleted()
             $orderDetailsStmt->execute();
             $orderDetails = $orderDetailsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Update the Stocks column in the Products table
             foreach ($orderDetails as $detail) {
                 $productID = $detail['Product_ID'];
                 $productQuantity = $detail['Product_Quantity'];
 
-                // Fetch current stock
-                $stockStmt = $conn->prepare("SELECT Stocks FROM Products WHERE ProductID = :productID");
-                $stockStmt->bindParam(':productID', $productID);
-                $stockStmt->execute();
-                $currentStock = $stockStmt->fetchColumn();
+                // Fetch current stock and product details
+                $productStmt = $conn->prepare("SELECT Stocks, Price, ProductImage, ProductName, Category FROM Products WHERE ProductID = :productID");
+                $productStmt->bindParam(':productID', $productID);
+                $productStmt->execute();
+                $productInfo = $productStmt->fetch(PDO::FETCH_ASSOC);
+
+                $currentStock = $productInfo['Stocks'];
+                $productImage = $productInfo['ProductImage'];
+                $productName = $productInfo['ProductName'];
+                $productPrice = $productInfo['Price']; // Use actual product price
+                $category = $productInfo['Category'];
 
                 // Update stock
                 $newStock = $currentStock + $productQuantity;
@@ -1226,23 +1292,45 @@ function updateOrderStatusToCompleted()
                 $updateStockStmt->bindParam(':newStock', $newStock);
                 $updateStockStmt->bindParam(':productID', $productID);
                 $updateStockStmt->execute();
+
+                // Insert or update product details in inventory table
+                $insertOrUpdateStmt = $conn->prepare("INSERT INTO inventory (product_id, image, product, price, quantity, category) VALUES (:productID, :productImage, :productName, :productPrice, :quantity, :category) ON DUPLICATE KEY UPDATE quantity = quantity + :productQuantity");
+                $insertOrUpdateStmt->bindParam(':productID', $productID);
+                $insertOrUpdateStmt->bindParam(':productImage', $productImage);
+                $insertOrUpdateStmt->bindParam(':productName', $productName);
+                $insertOrUpdateStmt->bindParam(':productPrice', $productPrice);
+                $insertOrUpdateStmt->bindParam(':quantity', $productQuantity);
+                $insertOrUpdateStmt->bindParam(':category', $category);
+                $insertOrUpdateStmt->bindParam(':productQuantity', $productQuantity);
+                $insertOrUpdateStmt->execute();
+
+                // Check if the product exists in inventoryorders and update its status if found
+                $checkInventoryOrderStmt = $conn->prepare("UPDATE inventoryorders SET status = 'Completed' WHERE product_id = :productID AND quantity = :quantity AND status = 'Pending' LIMIT 1");
+                $checkInventoryOrderStmt->bindParam(':productID', $productID);
+                $checkInventoryOrderStmt->bindParam(':quantity', $productQuantity);
+                $checkInventoryOrderStmt->execute();
+
+                if (!$checkInventoryOrderStmt->execute()) {
+                    // Handle error here
+                    echo "Error updating inventory
+                    orders status: " . $checkInventoryOrderStmt->errorInfo()[2];
+                }
+                }
+                // Commit the transaction
+                $conn->commit();   
+                echo "Order status updated to 'Completed' for Order ID: $batchID";
+
+                $rootFolder = dirname($_SERVER['PHP_SELF']);
+                header("Location: $rootFolder/po/orderDetail");
+                exit();
             }
-
-            // Commit the transaction
-            $conn->commit();
-
-            echo "Order status updated to 'Completed' for Order ID: $batchID";
-
-            $rootFolder = dirname($_SERVER['PHP_SELF']);
-            header("Location: $rootFolder/po/orderDetail");
-            exit(); // Stop script execution after redirection
+        } catch (PDOException $e) {
+            // Rollback the transaction in case of error
+            $conn->rollBack();
+            echo "Error: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        // Rollback the transaction in case of error
-        $conn->rollBack();
-        echo "Error: " . $e->getMessage();
     }
-}
+
 
 
 
@@ -1269,9 +1357,22 @@ function updateOrderStatusToCancel()
             $conn->beginTransaction();
 
             // Update the order status in the batch_orders table
-            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = CONCAT('Cancelled', IF(Order_Status LIKE 'to receive + Delayed', ' + Delayed', '')) WHERE Batch_ID = :batchID AND Order_Status LIKE 'to receive%'");
+            $stmt = $conn->prepare("UPDATE batch_orders SET Order_Status = 'Cancelled' WHERE Batch_ID = :batchID AND (Order_Status = 'to receive' OR Order_Status = 'to receive + Delayed')");
             $stmt->bindParam(':batchID', $batchID);
             $stmt->execute();
+
+            // Check if the products in order_details are the same as those in inventoryorders
+            $checkProductsStmt = $conn->prepare("SELECT COUNT(*) AS count FROM order_details od JOIN inventoryorders io ON od.Product_ID = io.product_id WHERE od.Batch_ID = :batchID AND io.status = 'Pending'");
+            $checkProductsStmt->bindParam(':batchID', $batchID);
+            $checkProductsStmt->execute();
+            $productCount = $checkProductsStmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+            if ($productCount > 0) {
+                // If there are matching products, cancel their statuses in inventoryorders
+                $cancelInventoryOrdersStmt = $conn->prepare("UPDATE inventoryorders SET status = 'Cancelled' WHERE product_id IN (SELECT Product_ID FROM order_details WHERE Batch_ID = :batchID) AND status = 'Pending'");
+                $cancelInventoryOrdersStmt->bindParam(':batchID', $batchID);
+                $cancelInventoryOrdersStmt->execute();
+            }
 
             // Fetch supplier ID and order status from the batch_orders table based on Batch_ID
             $orderDetailsStmt = $conn->prepare("SELECT Supplier_ID, Order_Status, Funds_Transact_ID FROM batch_orders WHERE Batch_ID = :batchID");
@@ -1282,6 +1383,7 @@ function updateOrderStatusToCancel()
             $orderStatus = $orderDetails['Order_Status'];
             $fundsID = $orderDetails['Funds_Transact_ID'];
 
+            // Call a function to handle cancellation of funds
             cancelOrder($fundsID);
 
             // Insert data into transaction_history table
@@ -1290,18 +1392,6 @@ function updateOrderStatusToCancel()
             $insertStmt->bindParam(':supplierID', $supplierID);
             $insertStmt->bindParam(':orderStatus', $orderStatus);
             $insertStmt->execute();
-
-            // Audit log for cancelling an order
-            // $user_id = $_SESSION['user']['username']; // Assuming you have a user session
-            // $action = "Cancelled Order #$batchID";
-            // $time_out = "00:00:00"; // Set the time_out value to '00:00:00'
-
-            // $auditSql = "INSERT INTO poauditlogs (user, action, time_out) VALUES (:user_id, :action, :time_out)";
-            // $auditStmt = $conn->prepare($auditSql);
-            // $auditStmt->bindParam(':user_id', $user_id);
-            // $auditStmt->bindParam(':action', $action);
-            // $auditStmt->bindParam(':time_out', $time_out);
-            // $auditStmt->execute();
 
             // Commit the transaction
             $conn->commit();
@@ -1318,6 +1408,9 @@ function updateOrderStatusToCancel()
         echo "Error: " . $e->getMessage();
     }
 }
+
+
+
 
 // Route to handle the delay order status action
 Router::post('/delay/orderDetail', function () {
@@ -1515,3 +1608,38 @@ Router::post('/delete/product', function () {
 //     // Include the requestHistory.php file to display the search results
 //     include 'views/po.requestHistory.php';
 // });
+
+Router::post('/request/insert', function () {
+
+    // Get the database connection instance
+    $db = Database::getInstance();
+    $conn = $db->connect();
+
+    // Get the submitted data
+    $productID = $_POST['productID'];
+    $quantity = $_POST['quantity'];
+
+    // Define the root folder for redirection
+    $rootFolder = dirname($_SERVER['PHP_SELF']);
+
+    if (empty($quantity) || empty($productID)) {
+        // Redirect to the form page if the quantity or product ID is empty
+        header("Location: $rootFolder/po/requestOrder");
+        return;
+    }
+
+    try {
+        // Insert the request into the requests table
+        $query = "INSERT INTO requests (product_ID, quantity) VALUES (:productID, :quantity)";
+        $statement = $conn->prepare($query);
+        $statement->bindParam(':productID', $productID);
+        $statement->bindParam(':quantity', $quantity);
+        $statement->execute();
+
+        // Redirect after successful insertion
+        header("Location: $rootFolder/po/requestOrder");
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+});
+
